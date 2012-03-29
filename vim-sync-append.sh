@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Get current directory for future use in links
-VIM_SYNC_DIR=${pwd}
+VIM_SYNC_DIR=${PWD}
 
 # If a .vimrc_sync doesn't exist, link it
 if [[ ! ( -f ~/.vimrc_sync ) ]]; then
