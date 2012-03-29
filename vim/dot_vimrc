@@ -1,0 +1,45 @@
+"tab functionality
+"tabs inserted as 4 spaces
+"backspace deletes all spaces
+"autoindent enabled
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+filetype indent on
+
+"enable line numbers
+set nu
+
+"fixes arrow keys
+set nocompatible
+
+"Allows filetype detection
+filetype on
+
+"editing multiple files
+"Ctrl+j maximizes split below
+"Ctrl+k maximizes split above
+"allows size 0 splits
+"map <C-J> <C-W>j<C-W>_
+"map <C-K> <C-W>k<C-W>_
+"set wmh=0
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+map <C-l> <C-w>l
+map <C-h> <C-w>h
+
+"Class List
+nnoremap <silent> <F8> :TlistToggle<CR>
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Winwidth=30
+
+"Syntax Hightlighting
+syntax on
+
+"Toggle Line numbers with Ctrl+N double tap
+nmap <C-N><C-N> :set invnumber<CR>
+
+"Remap jk to esc
+inoremap jk <esc>
