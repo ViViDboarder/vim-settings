@@ -1,3 +1,6 @@
+"Allow arrow keys
+set nocompatible
+
 "tab functionality
 "tabs inserted as 4 spaces
 "backspace deletes all spaces
@@ -9,11 +12,24 @@ set softtabstop=4
 set autoindent
 filetype indent on
 
+set virtualedit=onemore 	   	" allow for cursor beyond last character
+set scrolljump=5 				" lines to scroll when cursor leaves screen
+set scrolloff=3 				" minimum lines to keep above and below cursor
+
+"Enable search highlighting
+set hls
+
+"Highlights the line the cursor is on
+set cursorline
+
 "enable line numbers
 set nu
 
-"fixes arrow keys
-set nocompatible
+"Toggle Line numbers with Ctrl+N double tap
+nmap <C-N><C-N> :set invnumber<CR>
+
+"Toggle line wrap with Ctrl+L double tap
+nmap <C-L><C-L> :set wrap!<CR>
 
 "Allows filetype detection
 filetype on
@@ -25,12 +41,14 @@ filetype on
 "map <C-J> <C-W>j<C-W>_
 "map <C-K> <C-W>k<C-W>_
 "set wmh=0
+
+"Move between splits using Ctrl+hjkl
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-l> <C-w>l
 map <C-h> <C-w>h
 
-"Class List
+"CTags List
 nnoremap <silent> <F8> :TlistToggle<CR>
 let Tlist_Exit_OnlyWindow=1
 let Tlist_Winwidth=30
@@ -38,8 +56,23 @@ let Tlist_Winwidth=30
 "Syntax Hightlighting
 syntax on
 
-"Toggle Line numbers with Ctrl+N double tap
-nmap <C-N><C-N> :set invnumber<CR>
-
 "Remap jk to esc
 inoremap jk <esc>
+
+"Remap Ctrl+Space for auto Complete
+inoremap <C-Space> <C-n>
+inoremap <Nul> <C-n>
+
+" Stupid shift key fixes
+cmap W w
+cmap WQ wq
+cmap wQ wq
+cmap Q q
+
+"clearing highlighted search
+nmap <silent> <leader>/ :nohlsearch<CR>
+
+" Change Working Directory to that of the current file
+cmap cwd lcd %:p:h
+cmap cd. lcd %:p:h
+
