@@ -21,15 +21,20 @@ set hls
 
 "Highlights the line the cursor is on
 set cursorline
+:hi CursorLine   cterm=NONE ctermbg=darkred guibg=darkred guifg=white
+"Toggle highlighting with \hr (highlight row)
+nnoremap <Leader>hr :set cursorline!<CR>
 
 "enable line numbers
 set nu
 
 "Toggle Line numbers with Ctrl+N double tap
 nmap <C-N><C-N> :set invnumber<CR>
+nmap <leader>ln :set invnumber<CR>
 
 "Toggle line wrap with Ctrl+L double tap
 nmap <C-L><C-L> :set wrap!<CR>
+nmap <leader>lw :set wrap!<CR>
 
 "Allows filetype detection
 filetype on
@@ -48,6 +53,12 @@ map <C-j> <C-w>j
 map <C-l> <C-w>l
 map <C-h> <C-w>h
 
+" map Shift+U to redo
+map <S-u> <C-r>
+
+" Buffet shortcut
+nnoremap <silent> <F2> :Bufferlist<CR>
+
 "CTags List
 nnoremap <silent> <F8> :TlistToggle<CR>
 let Tlist_Exit_OnlyWindow=1
@@ -64,10 +75,10 @@ inoremap <C-Space> <C-n>
 inoremap <Nul> <C-n>
 
 " Stupid shift key fixes
-cmap W w
+"cmap W w
 cmap WQ wq
-cmap wQ wq
-cmap Q q
+cmap Wq wq
+"cmap Q q
 
 "clearing highlighted search
 nmap <silent> <leader>/ :nohlsearch<CR>
