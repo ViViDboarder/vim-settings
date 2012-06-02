@@ -19,6 +19,8 @@ set scrolloff=3 				" minimum lines to keep above and below cursor
 "Enable search highlighting
 set hls
 
+"set theme
+:colorscheme vividchalk
 "Highlights the line the cursor is on
 set cursorline
 :hi CursorLine   cterm=NONE ctermbg=darkred guibg=darkred guifg=white
