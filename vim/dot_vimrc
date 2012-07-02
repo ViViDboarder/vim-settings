@@ -1,5 +1,46 @@
+" Vundle
+filetype off                   " required!
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
+
+" Rest of my bundles
+
+" File Nav
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'a.vim'
+Bundle 'file-line'
+" Needs Vim compiled with Ruby
+Bundle 'wincent/Command-T'
+Bundle 'tpope/vim-fugitive'
+
+" Buffer Nav
+Bundle 'kien/tabman.vim'
+Bundle 'sandeepcr529/Buffet.vim'
+" Needs Vim compiled with Ruby
+Bundle 'mutewinter/LustyJuggler'
+
+" Nav in file
+Bundle 'taglist.vim'
+
+" Text Manipulation
+Bundle 'tomtom/tcomment_vim'
+
+" GUI
+Bundle 'vividchalk.vim'
+Bundle 'gregsexton/MatchTag'
+
 "Allow arrow keys
 set nocompatible
+
+"Enable mouse input
+set mousehide
+set mouse=a
 
 "tab functionality
 "tabs inserted as 4 spaces
@@ -10,14 +51,17 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set autoindent
-filetype indent on
+filetype plugin indent on
 
 set virtualedit=onemore 	   	" allow for cursor beyond last character
 set scrolljump=5 				" lines to scroll when cursor leaves screen
 set scrolloff=3 				" minimum lines to keep above and below cursor
 
-"Enable search highlighting
-set hls
+"Set backup dirs
+set backup
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+
 
 "set theme
 :colorscheme vividchalk
@@ -61,6 +105,14 @@ map <S-u> <C-r>
 " Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
 
+"LustyJugler settings
+let g:LustyJugglerShowKeys=1 "Show numbers for Lusty Buffers
+let g:LustyJugglerSuppressRubyWarning=1
+
+"NERDTree
+nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+
 "CTags List
 nnoremap <silent> <F8> :TlistToggle<CR>
 let Tlist_Exit_OnlyWindow=1
@@ -78,10 +130,13 @@ inoremap <Nul> <C-n>
 
 " Stupid shift key fixes
 "cmap W w
-cmap WQ wq
-cmap Wq wq
-"cmap Q q
+cmap WQ<CR> wq<CR>
+cmap Wq<CR> wq<CR>
+cmap W<CR> w<CR>
+cmap Q<CR> q<CR>
 
+"Enable search highlighting
+set hls
 "clearing highlighted search
 nmap <silent> <leader>/ :nohlsearch<CR>
 
@@ -89,3 +144,61 @@ nmap <silent> <leader>/ :nohlsearch<CR>
 cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
 
+" ---------------
+" Command T and ctrlp.vim
+" Snagged from mutewinter @ https://github.com/mutewinter/dot_vim
+" ---------------
+" Ensure Ctrl-P isn't bound by default
+let g:ctrlp_map = ''
+
+" Ensure max height isn't too large. (for performance)
+let g:ctrlp_max_height = 10
+let g:CommandTMaxHeight = 10
+
+" Set the default escape keybinding to, you guessed it, escape.
+let g:CommandTCancelMap = '<esc>'
+
+" Dynamically use Command T or ctrlp.vim based on availability of Ruby.
+" We do this because Command T is much faster than ctrlp.vim.
+if has('ruby')
+  " --------
+  " Use Command T since we've got Ruby
+  " --------
+
+  " Conditional Mappings
+  if has('unix')
+    nnoremap <silent><C-t> :CommandT<CR>
+  else
+    nnoremap <silent><M-t> :CommandT<CR>
+  endif
+
+  " Leader Commands
+  nnoremap <leader>t :CommandT<CR>
+else
+  " --------
+  " Use ctrlp.vim since we don't have Ruby
+  " --------
+
+  " Conditional Mappings
+  if has('unix')
+    let g:ctrlp_map = '<C-t>'
+  else
+    let g:ctrlp_map = '<M-t>'
+  endif
+
+  " Leader Commands
+  nnoremap <leader>t :CtrlPRoot<CR>
+  nnoremap <leader>b :CtrlPBuffer<CR>
+endif
+
+" Always use CtrlP for most recently used files and relative dierctory.
+if has('unix')
+  nnoremap <silent><C-u> :CtrlPCurFile<CR>
+else
+  nnoremap <silent><M-u> :CtrlPCurFile<CR>
+endif
+
+" Also map leader commands
+nnoremap <leader>u :CtrlPCurFile<CR>
+nnoremap <leader>m :CtrlPMRUFiles<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
