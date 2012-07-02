@@ -102,14 +102,18 @@ map <C-h> <C-w>h
 "Overwrites Make Uppercase
 map <S-u> <C-r> 
 
-" Buffet shortcut
+"Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
+
+"Tab Man shortcut
+nnoremap <silent> <F3> :TMToggle<CR>
 
 "LustyJugler settings
 let g:LustyJugglerShowKeys=1 "Show numbers for Lusty Buffers
 let g:LustyJugglerSuppressRubyWarning=1
 
 "NERDTree
+nnoremap <silent> <F4> :NERDTreeToggle<CR>
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 
@@ -192,11 +196,11 @@ else
 endif
 
 " Always use CtrlP for most recently used files and relative dierctory.
-if has('unix')
-  nnoremap <silent><C-u> :CtrlPCurFile<CR>
-else
-  nnoremap <silent><M-u> :CtrlPCurFile<CR>
-endif
+"if has('unix')
+"  nnoremap <silent><C-u> :CtrlPCurFile<CR>
+"else
+"  nnoremap <silent><M-u> :CtrlPCurFile<CR>
+"endif
 
 " Also map leader commands
 nnoremap <leader>u :CtrlPCurFile<CR>
