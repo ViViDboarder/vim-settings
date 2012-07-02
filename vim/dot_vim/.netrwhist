@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/ianfijolek/Dropbox/linux_home/vim/vim/doc'
-let g:netrw_dirhist_2='/home/ianfijolek'
-let g:netrw_dirhist_3='/home'
-let g:netrw_dirhist_4='/'
-let g:netrw_dirhist_5='/home/ianfijolek'

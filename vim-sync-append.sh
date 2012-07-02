@@ -1,7 +1,17 @@
+############################
+# Vim Settings Setup script by ViViDboarder (Ian)
+# http://github.com/ViViDboarder/Vim-Settings
+############################
 #! /bin/bash
 
 # Get current directory for future use in links
 VIM_SYNC_DIR=${PWD}
+
+# Verify git is installed (although needed to checkout
+command -v git >/dev/null 2>&1 || { 
+    echo "Error: git required for install"; 
+    exit 1;
+}
 
 # Clone vundle
 mkdir -p ~/.vim/bundle
@@ -28,7 +38,7 @@ if [[ ( ! -f ~/.vimrc ) ]]; then
 fi
 
 # if not already sourcing the synced version, source it
-if ! ( grep -q 'source .vimrc_sync' ~/.vimrc ); then
+if ! ( grep -q 'source ~/.vimrc_sync' ~/.vimrc ); then
 	echo '' >> ~/.vimrc
 	echo '"import vimrc from synced' >> ~/.vimrc
 	echo 'source ~/.vimrc_sync' >> ~/.vimrc
@@ -43,8 +53,28 @@ fi
 # Install all bundles
 vim +BundleInstall! +qall
 
+# Compile CommandT if possible
+# See if ruby is installed
+if command -v ruby >/dev/null 2>&1; then
+    # Make sure GCC is installed
+    if command -v gcc >/dev/null 2>&1; then
+        # Use system ruby
+        command -v rvm >/dev/null 2>&1 && { rvm use system; }
+        cd ~/.vim/bundle/Command-T/ruby/command-t
+        ruby extconf.rb
+        make
+    fi
+fi
+
+vim --version | grep -q '\+ruby' || { echo "Warning: Default vim does not include ruby as needed for Command T"; }
+command -v ruby >/dev/null 2>&1 || { echo "Warning: ruby required for Command T"; }
+command -v gcc >/dev/null 2>&1 || { echo "Warning: gcc required for Command T"; }
+
 # Execute vim's update of the helptags
 vim +"helptags ~/.vim/doc" +"q"
 
-echo "Should install ctags with sudo apt-get install ctags"
+# Warn if ctags does not exist
+command -v ctags >/dev/null 2>&1 || { echo "Warning: ctags required for Tag List
+--- Debian: apt-get install ctags
+--- OSX (MacPorts): port install ctags"; }
 

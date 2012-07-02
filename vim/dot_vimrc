@@ -15,9 +15,9 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'a.vim'
 Bundle 'file-line'
+Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
 Bundle 'wincent/Command-T'
-Bundle 'tpope/vim-fugitive'
 
 " Buffer Nav
 Bundle 'kien/tabman.vim'
@@ -37,6 +37,9 @@ Bundle 'gregsexton/MatchTag'
 
 "Allow arrow keys
 set nocompatible
+
+"Use more convenient leader
+let mapleader=","
 
 "Enable mouse input
 set mousehide
@@ -61,7 +64,6 @@ set scrolloff=3 				" minimum lines to keep above and below cursor
 set backup
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
-
 
 "set theme
 try
@@ -90,22 +92,15 @@ nmap <leader>lw :set wrap!<CR>
 "Allows filetype detection
 filetype on
 
-"editing multiple files
-"Ctrl+j maximizes split below
-"Ctrl+k maximizes split above
-"allows size 0 splits
-"map <C-J> <C-W>j<C-W>_
-"map <C-K> <C-W>k<C-W>_
-"set wmh=0
-
 "Move between splits using Ctrl+hjkl
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-l> <C-w>l
 map <C-h> <C-w>h
 
-" map Shift+U to redo
-map <S-u> <C-r>
+"map Shift+U to redo
+"Overwrites Make Uppercase
+map <S-u> <C-r> 
 
 " Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
