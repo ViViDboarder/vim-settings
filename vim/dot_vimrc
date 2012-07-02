@@ -64,7 +64,12 @@ set directory=~/.vim/tmp
 
 
 "set theme
-:colorscheme vividchalk
+try
+    colorscheme vividchalk
+catch /^Vim\%((\a\+)\)\=:E185/
+        " deal with it
+endtry
+
 "Highlights the line the cursor is on
 set cursorline
 :hi CursorLine   cterm=NONE ctermbg=darkred guibg=darkred guifg=white
