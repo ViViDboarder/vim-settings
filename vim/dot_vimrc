@@ -99,8 +99,7 @@ map <C-l> <C-w>l
 map <C-h> <C-w>h
 
 "map Shift+U to redo
-"Overwrites Make Uppercase
-map <S-u> <C-r> 
+nnoremap <S-u> <C-r> 
 
 "Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
