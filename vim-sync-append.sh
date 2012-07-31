@@ -4,6 +4,11 @@
 ############################
 #! /bin/bash
 
+# Try to load .bashrc to load rvm functions
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+
 # Get current directory for future use in links
 VIM_SYNC_DIR=${PWD}
 
