@@ -30,10 +30,14 @@ Bundle 'taglist.vim'
 
 " Text Manipulation
 Bundle 'tomtom/tcomment_vim'
+Bundle 'pdurbin/vim-tsv'
 
 " GUI
 Bundle 'vividchalk.vim'
 Bundle 'gregsexton/MatchTag'
+
+" Filetypes
+Bundle 'ejholmes/vim-forcedotcom'
 
 "Allow arrow keys
 set nocompatible
@@ -128,6 +132,7 @@ syntax on
 
 "Remap jk to esc
 inoremap jk <esc>
+"vnoremap jk <esc> "Makes it difficult to select lines as j is common
 
 "Remap Ctrl+Space for auto Complete
 inoremap <C-Space> <C-n>
