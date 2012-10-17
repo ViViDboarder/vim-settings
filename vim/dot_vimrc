@@ -116,6 +116,8 @@ nnoremap <silent> <F3> :TMToggle<CR>
 "LustyJugler settings
 let g:LustyJugglerShowKeys=1 "Show numbers for Lusty Buffers
 let g:LustyJugglerSuppressRubyWarning=1
+nnoremap <silent> <C-L><C-J> :LustyJuggler<CR>
+nnoremap <leader>. :LustyJugglePrevious<CR>
 
 "NERDTree
 nnoremap <silent> <F4> :NERDTreeToggle<CR>
@@ -148,7 +150,8 @@ cmap Q<CR> q<CR>
 "Enable search highlighting
 set hls
 "clearing highlighted search
-nmap <silent> <leader>/ :nohlsearch<CR>
+nmap <silent> <leader>/ :set hlsearch! hlsearch?<CR>
+noremap <C-h><C-s> :set hlsearch! hlsearch?<CR>
 
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
@@ -184,6 +187,7 @@ if has('ruby')
 
   " Leader Commands
   nnoremap <leader>t :CommandT<CR>
+  nnoremap <leader>b :CommandTBuffer<CR>
 else
   " --------
   " Use ctrlp.vim since we don't have Ruby
@@ -201,14 +205,7 @@ else
   nnoremap <leader>b :CtrlPBuffer<CR>
 endif
 
-" Always use CtrlP for most recently used files and relative dierctory.
-"if has('unix')
-"  nnoremap <silent><C-u> :CtrlPCurFile<CR>
-"else
-"  nnoremap <silent><M-u> :CtrlPCurFile<CR>
-"endif
-
 " Also map leader commands
 nnoremap <leader>u :CtrlPCurFile<CR>
 nnoremap <leader>m :CtrlPMRUFiles<CR>
-nnoremap <leader>b :CtrlPBuffer<CR>
+
