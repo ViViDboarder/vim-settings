@@ -10,7 +10,9 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # Get current directory for future use in links
-VIM_SYNC_DIR=${PWD}
+VIM_SYNC_DIR=$(dirname $0)
+cd $VIM_SYNC_DIR
+VIM_SYNC_DIR=$(pwd)
 
 # Verify git is installed (although needed to checkout
 command -v git >/dev/null 2>&1 || { 
