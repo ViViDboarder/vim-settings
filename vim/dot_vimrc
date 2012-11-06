@@ -37,7 +37,7 @@ Bundle 'vividchalk.vim'
 Bundle 'gregsexton/MatchTag'
 
 " Filetypes
-Bundle 'ejholmes/vim-forcedotcom'
+Bundle 'vividboarder/vim-forcedotcom'
 
 "Allow arrow keys
 set nocompatible
