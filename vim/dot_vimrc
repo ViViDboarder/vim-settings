@@ -102,10 +102,10 @@ nmap <leader>lw :set wrap!<CR>
 filetype on
 
 "Move between splits using Ctrl+hjkl
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-map <C-l> <C-w>l
-map <C-h> <C-w>h
+"map <C-k> <C-w>k
+"map <C-j> <C-w>j
+"map <C-l> <C-w>l
+"map <C-h> <C-w>h
 
 "map Shift+U to redo
 nnoremap <S-u> <C-r> 
