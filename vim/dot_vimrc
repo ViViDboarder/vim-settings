@@ -34,6 +34,7 @@ Bundle 'pdurbin/vim-tsv'
 
 " GUI
 Bundle 'vividchalk.vim'
+Bundle 'vim-scripts/Wombat'
 Bundle 'gregsexton/MatchTag'
 
 " Filetypes
@@ -76,16 +77,25 @@ set directory=~/.vim/tmp
 
 "set theme
 try
-    colorscheme vividchalk
+    if !empty($VIM_COLOR)
+        colorscheme $VIM_COLOR
+    else
+        if has("gui_running")
+            colorscheme wombat
+        else
+            colorscheme vividchalk
+        endif
+    endif
 catch /^Vim\%((\a\+)\)\=:E185/
-        " deal with it
+        " Colorschemes not installed yet
+        " This happens when first installing bundles
 endtry
 
 "Highlights the line the cursor is on
 set cursorline
 :hi CursorLine   cterm=NONE ctermbg=darkred guibg=darkred guifg=white
 "Toggle highlighting with \hr (highlight row)
-nnoremap <Leader>hr :set cursorline!<CR>
+nnoremap <leader>hr :set cursorline!<CR>
 
 "enable line numbers
 set nu
