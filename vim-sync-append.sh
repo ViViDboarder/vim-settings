@@ -97,3 +97,6 @@ command -v ctags >/dev/null 2>&1 || { echo "Warning: ctags required for Tag List
 --- Debian: apt-get install ctags
 --- OSX (MacPorts): port install ctags"; }
 
+echo "All done!"
+exit 0
+
