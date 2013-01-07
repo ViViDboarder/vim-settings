@@ -17,7 +17,7 @@ Bundle 'a.vim'
 Bundle 'file-line'
 Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
-Bundle 'wincent/Command-T'
+Bundle 'wincent/Command-T' 
 
 " Buffer Nav
 Bundle 'kien/tabman.vim'
@@ -34,7 +34,9 @@ Bundle 'pdurbin/vim-tsv'
 
 " GUI
 Bundle 'vividchalk.vim'
-Bundle 'vim-scripts/Wombat'
+" Can probably drop this for wombat256
+Bundle 'vim-scripts/Wombat' 
+Bundle 'wombat256.vim'
 Bundle 'gregsexton/MatchTag'
 
 " Filetypes
