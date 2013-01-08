@@ -10,7 +10,7 @@ Bundle 'gmarik/vundle'
 
 " Rest of my bundles
 
-" File Nav
+" -- File Nav --
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'a.vim'
@@ -19,28 +19,35 @@ Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
 Bundle 'wincent/Command-T' 
 
-" Buffer Nav
+" -- Buffer Nav --
 Bundle 'kien/tabman.vim'
 Bundle 'sandeepcr529/Buffet.vim'
 " Needs Vim compiled with Ruby
 Bundle 'mutewinter/LustyJuggler'
 
-" Nav in file
+" -- Nav in file --
 Bundle 'taglist.vim'
 
-" Text Manipulation
+" -- Text Manipulation --
 Bundle 'tomtom/tcomment_vim'
-Bundle 'pdurbin/vim-tsv'
+" Surround for wrapping text
+Bundle 'tpope/vim-surround'
 
-" GUI
+" -- GUI --
 Bundle 'vividchalk.vim'
 " Can probably drop this for wombat256
 Bundle 'vim-scripts/Wombat' 
 Bundle 'wombat256.vim'
 Bundle 'gregsexton/MatchTag'
+" Custom Status Line
+Bundle 'Lokaltog/vim-powerline'
+"Powerline Config
+"If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts 
+"let g:Powerline_symbols = 'fancy'
 
-" Filetypes
+" -- Filetypes --
 Bundle 'ViViDboarder/vim-forcedotcom'
+Bundle 'pdurbin/vim-tsv'
 
 "Allow arrow keys
 set nocompatible
