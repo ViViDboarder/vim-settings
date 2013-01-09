@@ -13,7 +13,7 @@ Bundle 'gmarik/vundle'
 " -- File Nav --
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdtree'
-Bundle 'a.vim'
+Bundle 'ViViDboarder/a.vim'
 Bundle 'file-line'
 Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
