@@ -27,6 +27,12 @@ Bundle 'mutewinter/LustyJuggler'
 
 " -- Nav in file --
 Bundle 'taglist.vim'
+" Syntax checking
+Bundle 'scrooloose/syntastic'
+" Project Searching
+Bundle 'mileszs/ack.vim'
+" Easy Toggle of QuickFix window
+Bundle 'sunaku/QFixToggle'
 
 " -- Text Manipulation --
 Bundle 'tomtom/tcomment_vim'
@@ -235,4 +241,14 @@ nnoremap <leader>m :CtrlPMRUFiles<CR>
 nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gb :Gblame<CR>
+
+" Bind Make to F5 like other IDEs
+nnoremap <F5> :make<CR>
+
+" Toggle QuickFix window
+nnoremap <silent> <F6> :QFix<CR>
+
+nmap <leader>a :Ack<Space>
+nmap <leader>* :Ack<Space><c-r><c-W><CR>
+"nnoremap ** :Ack<Space><c-r><c-W><CR>
 
