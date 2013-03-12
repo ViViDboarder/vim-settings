@@ -209,8 +209,10 @@ if has('ruby')
   " Conditional Mappings
   if has('unix')
     nnoremap <silent><C-t> :CommandT<CR>
+    nnoremap <C-r><C-t> :CommandTFlush<CR>
   else
     nnoremap <silent><M-t> :CommandT<CR>
+    nnoremap <M-r><M-t> :CommandTFlush<CR>
   endif
 
   " Leader Commands
