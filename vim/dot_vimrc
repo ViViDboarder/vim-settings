@@ -112,6 +112,10 @@ set cursorline
 "Toggle highlighting with \hr (highlight row)
 nnoremap <leader>hr :set cursorline!<CR>
 
+if has("gui_win32")       
+	set guifont=Consolas:h10:b
+endif
+
 "enable line numbers
 set nu
 
