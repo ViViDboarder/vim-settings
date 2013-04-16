@@ -90,7 +90,15 @@ command -v ruby >/dev/null 2>&1 || { echo "Warning: ruby required for Command T"
 command -v gcc >/dev/null 2>&1 || { echo "Warning: gcc required for Command T"; }
 
 # Execute vim's update of the helptags
-vim +"helptags ~/.vim/doc" +"q"
+VIM_RESULT=$(vim +"helptags ~/.vim/doc" +"q")
+
+if [[ "$VIM_RESULT" == *SEGV* ]]; then
+	echo "Seg Faulted. Retry with different ruby"
+	cd ~/.vim/bundle/Command-T/ruby/command-t && /opt/local/bin/ruby* extconf.rb && make && cd -
+	
+	# Retry
+	vim +"helptags ~/.vim/doc" +"q"
+fi
 
 # Warn if ctags does not exist
 command -v ctags >/dev/null 2>&1 || { echo "Warning: ctags required for Tag List
@@ -98,9 +106,7 @@ command -v ctags >/dev/null 2>&1 || { echo "Warning: ctags required for Tag List
 --- OSX (MacPorts): port install ctags"; }
 
 echo "Note: If VIM Segfaults try the following:"
-echo "    cd ~/.vim/bundle/Command-T/ruby/command-t"
-echo "    /opt/local/bin/ruby extconf.rb"
-echo "    make"
+echo "    cd ~/.vim/bundle/Command-T/ruby/command-t && /opt/local/bin/ruby* extconf.rb && make && cd -"
 echo ""
 
 echo "All done!"
