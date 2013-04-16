@@ -90,7 +90,7 @@ set backup
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 
-"set theme
+"set theme based on $VIM_COLOR variable
 try
     if !empty($VIM_COLOR)
         colorscheme $VIM_COLOR

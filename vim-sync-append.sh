@@ -97,6 +97,12 @@ command -v ctags >/dev/null 2>&1 || { echo "Warning: ctags required for Tag List
 --- Debian: apt-get install ctags
 --- OSX (MacPorts): port install ctags"; }
 
+echo "Note: If VIM Segfaults try the following:"
+echo "    cd ~/.vim/bundle/Command-T/ruby/command-t"
+echo "    /opt/local/bin/ruby extconf.rb"
+echo "    make"
+echo ""
+
 echo "All done!"
 exit 0
 
