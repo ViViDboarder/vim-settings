@@ -11,33 +11,46 @@ Bundle 'gmarik/vundle'
 " Rest of my bundles
 
 " -- File Nav --
+" Quick find files in project
 Bundle 'kien/ctrlp.vim'
+" File tree navigation
 Bundle 'scrooloose/nerdtree'
-Bundle 'ViViDboarder/a.vim'
+" Switch to alternate file
+Bundle 'a.vim'
+" Allow opening to a line from file name using :
 Bundle 'file-line'
+" Git integration
 Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
+" Quick find files in project
 Bundle 'wincent/Command-T' 
 
 " -- Buffer Nav --
-Bundle 'kien/tabman.vim'
+" Tree view for managing tabs
+"Bundle 'kien/tabman.vim'
+" Quick buffer switching
 Bundle 'sandeepcr529/Buffet.vim'
 " Needs Vim compiled with Ruby
-Bundle 'mutewinter/LustyJuggler'
+" Buffer toggler
+"Bundle 'mutewinter/LustyJuggler'
 
 " -- Nav in file --
+" Ctags file parsing
 Bundle 'taglist.vim'
 " Syntax checking
 Bundle 'scrooloose/syntastic'
 " Project Searching
 Bundle 'mileszs/ack.vim'
 " Easy Toggle of QuickFix window
-Bundle 'sunaku/QFixToggle'
+Bundle 'ViViDboarder/QFixToggle'
 
 " -- Text Manipulation --
+" Easy comments
 Bundle 'tomtom/tcomment_vim'
 " Surround for wrapping text
 Bundle 'tpope/vim-surround'
+" Multi cursor
+Bundle 'terryma/vim-multiple-cursors'
 
 " -- GUI --
 Bundle 'vividchalk.vim'
@@ -127,6 +140,9 @@ nmap <leader>ln :set invnumber<CR>
 nmap <C-L><C-L> :set wrap!<CR>
 nmap <leader>lw :set wrap!<CR>
 
+"Toggle White Space
+nmap <leader>ws :set list!<CR>
+
 "Allows filetype detection
 filetype on
 
@@ -141,25 +157,31 @@ nnoremap <S-u> <C-r>
 
 "Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
+nnoremap <leader>bl :Bufferlist<CR>
 
 "Tab Man shortcut
-nnoremap <silent> <F3> :TMToggle<CR>
+"nnoremap <silent> <F3> :TMToggle<CR>
 
 "LustyJugler settings
-let g:LustyJugglerShowKeys=1 "Show numbers for Lusty Buffers
-let g:LustyJugglerSuppressRubyWarning=1
-nnoremap <silent> <C-L><C-J> :LustyJuggler<CR>
-nnoremap <leader>. :LustyJugglePrevious<CR>
+"let g:LustyJugglerShowKeys=1 "Show numbers for Lusty Buffers
+"let g:LustyJugglerSuppressRubyWarning=1
+"nnoremap <silent> <C-L><C-J> :LustyJuggler<CR>
+"nnoremap <leader>. :LustyJugglePrevious<CR>
 
 "NERDTree
 nnoremap <silent> <F4> :NERDTreeToggle<CR>
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 
+"NERDComments
+nnoremap // :TComment<CR>
+vnoremap // :TCommentBlock<CR>
+
 "CTags List
-nnoremap <silent> <F8> :TlistToggle<CR>
-let Tlist_Exit_OnlyWindow=1
-let Tlist_Winwidth=30
+"nnoremap <silent> <F8> :TlistToggle<CR>
+"let Tlist_Exit_OnlyWindow=1
+"let Tlist_Winwidth=30
+nnoremap <silent> <F8> :TagbarToggle<CR>
 
 "Syntax Hightlighting
 syntax on
@@ -221,7 +243,13 @@ if has('ruby')
 
   " Leader Commands
   nnoremap <leader>t :CommandT<CR>
-  nnoremap <leader>b :CommandTBuffer<CR>
+  nnoremap <leader>tb :CommandTBuffer<CR>
+  nnoremap <leader>tt :CommandTTag<CR>
+
+  if has("gui_macvim")
+      "macmenu &File.New\ Tab key=<nop>
+      "map <D-t> :CommandT<CR>
+  endif
 else
   " --------
   " Use ctrlp.vim since we don't have Ruby
@@ -235,7 +263,7 @@ else
   endif
 
   " Leader Commands
-  nnoremap <leader>t :CtrlPRoot<CR>
+  "nnoremap <leader>t :CtrlPRoot<CR>
   nnoremap <leader>b :CtrlPBuffer<CR>
 endif
 
