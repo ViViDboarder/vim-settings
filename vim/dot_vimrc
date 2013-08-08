@@ -152,8 +152,7 @@ if has("gui_running")
         set guifont=Consolas:h10:b
     elseif has("gui_macvim")
         try
-            "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
-            set guifont=ERROR\ Sans\ Mono\ for\ Powerline:h11
+            set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
         catch
             " Failed to set font
         endtry
