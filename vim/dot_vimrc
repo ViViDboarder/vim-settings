@@ -1,5 +1,5 @@
-" Vundle
-filetype off                   " required!
+" Install Vundle Packages
+filetype off
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
@@ -36,7 +36,8 @@ Bundle 'sandeepcr529/Buffet.vim'
 
 " -- Nav in file --
 " Ctags file parsing
-Bundle 'taglist.vim'
+"Bundle 'taglist.vim'
+Bundle 'majutsushi/tagbar'
 " Syntax checking
 Bundle 'scrooloose/syntastic'
 " Project Searching
@@ -59,7 +60,7 @@ Bundle 'vim-scripts/Wombat'
 Bundle 'wombat256.vim'
 Bundle 'gregsexton/MatchTag'
 " Custom Status Line
-Bundle 'Lokaltog/vim-powerline'
+"Bundle 'Lokaltog/vim-powerline'
 "Powerline Config
 "If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts 
 "let g:Powerline_symbols = 'fancy'
@@ -68,42 +69,68 @@ Bundle 'Lokaltog/vim-powerline'
 Bundle 'ViViDboarder/vim-forcedotcom'
 Bundle 'pdurbin/vim-tsv'
 
-"Allow arrow keys
+" ***************************
+" Built in settings
+" ***************************
+
+"Allows filetype detection
+filetype on
+
+" Set settings values
+filetype plugin indent on
+
+" Allow arrow keys
 set nocompatible
 
-"Use more convenient leader
+" Use more convenient leader
 let mapleader=","
 
-"Enable mouse input
+" Enable mouse input
 set mousehide
 set mouse=a
 
-"tab functionality
-"tabs inserted as 4 spaces
-"backspace deletes all spaces
-"autoindent enabled
+" Tab functionality
 set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set autoindent
-"Ensure backspace actually works
+" Ensure backspace actually works
 set backspace=2
-filetype plugin indent on
-
-set virtualedit=onemore 	   	" allow for cursor beyond last character
-set scrolljump=5 				" lines to scroll when cursor leaves screen
-set scrolloff=3 				" minimum lines to keep above and below cursor
+"
+" allow for cursor beyond last character
+set virtualedit=onemore
+" lines to scroll when cursor leaves screen
+set scrolljump=5
+" minimum lines to keep above and below cursor
+set scrolloff=3
 
 " Display filename at bottom of window
 set ls=2
 
-"Set backup dirs
+" Set backup dirs
 set backup
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 
-"set theme based on $VIM_COLOR variable
+"enable line numbers
+set nu
+
+" Highlights the line the cursor is on
+set cursorline
+:hi CursorLine   cterm=NONE ctermbg=darkred guibg=darkred guifg=white
+
+" Syntax Hightlighting
+syntax on
+
+"Enable search highlighting
+set hls
+
+" ********************************
+" GUI SETTINGS
+" *****************************
+
+" Set theme based on $VIM_COLOR variable
 try
     if !empty($VIM_COLOR)
         colorscheme $VIM_COLOR
@@ -119,97 +146,109 @@ catch /^Vim\%((\a\+)\)\=:E185/
         " This happens when first installing bundles
 endtry
 
-"Highlights the line the cursor is on
-set cursorline
-:hi CursorLine   cterm=NONE ctermbg=darkred guibg=darkred guifg=white
-"Toggle highlighting with \hr (highlight row)
-nnoremap <leader>hr :set cursorline!<CR>
-
-if has("gui_win32")       
-	set guifont=Consolas:h10:b
+" Set gui fonts
+if has("gui_running")
+    if has("gui_win32")       
+        set guifont=Consolas:h10:b
+    elseif has("gui_macvim")
+        try
+            "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
+            set guifont=ERROR\ Sans\ Mono\ for\ Powerline:h11
+        catch
+            " Failed to set font
+        endtry
+    endif
 endif
 
-"enable line numbers
-set nu
+" Set xterm title, and inform vim of screen/tmux's syntax for doing the same
+set titlestring=vim\ %{expand(\"%t\")}
+if &term =~ "^screen"
+    " pretend this is xterm.  it probably is anyway, but if term is left as
+    " `screen`, vim doesn't understand ctrl-arrow.
+    if &term == "screen-256color"
+        set term=xterm-256color
+    else
+        set term=xterm
+    endif
 
-"Toggle Line numbers with Ctrl+N double tap
-nmap <C-N><C-N> :set invnumber<CR>
-nmap <leader>ln :set invnumber<CR>
+    " gotta set these *last*, since `set term` resets everything
+    set t_ts=k
+    set t_fs=\
+endif
+set title
 
-"Toggle line wrap with Ctrl+L double tap
-nmap <C-L><C-L> :set wrap!<CR>
-nmap <leader>lw :set wrap!<CR>
+" ********************************
+" SET HOTKEYS
+" ********************************
 
-"Toggle White Space
-nmap <leader>ws :set list!<CR>
-
-"Allows filetype detection
-filetype on
-
-"Move between splits using Ctrl+hjkl
-"map <C-k> <C-w>k
-"map <C-j> <C-w>j
-"map <C-l> <C-w>l
-"map <C-h> <C-w>h
-
-"map Shift+U to redo
-nnoremap <S-u> <C-r> 
-
-"Buffet shortcut
-nnoremap <silent> <F2> :Bufferlist<CR>
-nnoremap <leader>bl :Bufferlist<CR>
-
-"Tab Man shortcut
-"nnoremap <silent> <F3> :TMToggle<CR>
-
-"LustyJugler settings
-"let g:LustyJugglerShowKeys=1 "Show numbers for Lusty Buffers
-"let g:LustyJugglerSuppressRubyWarning=1
-"nnoremap <silent> <C-L><C-J> :LustyJuggler<CR>
-"nnoremap <leader>. :LustyJugglePrevious<CR>
-
-"NERDTree
-nnoremap <silent> <F4> :NERDTreeToggle<CR>
-nnoremap <leader>nn :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFind<CR>
-
-"NERDComments
-nnoremap // :TComment<CR>
-vnoremap // :TCommentBlock<CR>
-
-"CTags List
-"nnoremap <silent> <F8> :TlistToggle<CR>
-"let Tlist_Exit_OnlyWindow=1
-"let Tlist_Winwidth=30
-nnoremap <silent> <F8> :TagbarToggle<CR>
-
-"Syntax Hightlighting
-syntax on
-
-"Remap jk to esc
+" Remap jk to esc
 inoremap jk <esc>
-"vnoremap jk <esc> "Makes it difficult to select lines as j is common
 
-"Remap Ctrl+Space for auto Complete
+" Bind Make to F5 like other IDEs
+nnoremap <F5> :make<CR>
+
+" Remap Ctrl+Space for auto Complete
 inoremap <C-Space> <C-n>
 inoremap <Nul> <C-n>
 
+" Toggle highlighting with \hr (highlight row)
+nnoremap <leader>hr :set cursorline!<CR>
+
+" Toggle Line numbers with Ctrl+N double tap
+nmap <C-N><C-N> :set invnumber<CR>
+nmap <leader>ln :set invnumber<CR>
+
+" Toggle line wrap with Ctrl+L double tap
+nmap <C-L><C-L> :set wrap!<CR>
+nmap <leader>lw :set wrap!<CR>
+
+" Toggle White Space
+nmap <leader>ws :set list!<CR>
+
+" Map Shift+U to redo
+nnoremap <S-u> <C-r> 
+
 " Stupid shift key fixes
-"cmap W w
 cmap WQ<CR> wq<CR>
 cmap Wq<CR> wq<CR>
 cmap W<CR> w<CR>
 cmap Q<CR> q<CR>
+cmap Q!<CR> q!<CR>
 
-"Enable search highlighting
-set hls
-"clearing highlighted search
+" Clearing highlighted search
 nmap <silent> <leader>/ :set hlsearch! hlsearch?<CR>
 noremap <C-h><C-s> :set hlsearch! hlsearch?<CR>
+" Clear search 
+nmap <silent> <leader>cs :nohlsearch<CR>
+
+" Code fold
+nmap <leader>cf ?{<CR>zf%<ESC>:nohlsearch<CR>
 
 " Change Working Directory to that of the current file
 cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
+
+" ********************************
+" PLUGIN SETTINGS
+" ********************************
+
+" Buffet shortcut
+nnoremap <silent> <F2> :Bufferlist<CR>
+nnoremap <leader>bl :Bufferlist<CR>
+
+" NERDTree
+nnoremap <silent> <F4> :NERDTreeToggle<CR>
+nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+
+" NERDComments
+nnoremap // :TComment<CR>
+vnoremap // :TCommentBlock<CR>
+
+" CTags List
+nnoremap <silent> <F8> :TagbarToggle<CR>
+" Autofocus tagbar
+let g:tagbar_autofocus = 1
 
 " ---------------
 " Command T and ctrlp.vim
@@ -228,61 +267,38 @@ let g:CommandTCancelMap = '<esc>'
 " Dynamically use Command T or ctrlp.vim based on availability of Ruby.
 " We do this because Command T is much faster than ctrlp.vim.
 if has('ruby')
-  " --------
-  " Use Command T since we've got Ruby
-  " --------
+    " Use Command T since we've got Ruby
 
-  " Conditional Mappings
-  if has('unix')
+    " Mappings
     nnoremap <silent><C-t> :CommandT<CR>
-    nnoremap <C-r><C-t> :CommandTFlush<CR>
-  else
-    nnoremap <silent><M-t> :CommandT<CR>
-    nnoremap <M-r><M-t> :CommandTFlush<CR>
-  endif
 
-  " Leader Commands
-  nnoremap <leader>t :CommandT<CR>
-  nnoremap <leader>tb :CommandTBuffer<CR>
-  nnoremap <leader>tt :CommandTTag<CR>
-
-  if has("gui_macvim")
-      "macmenu &File.New\ Tab key=<nop>
-      "map <D-t> :CommandT<CR>
-  endif
+    " Leader Commands
+    nnoremap <leader>t :CommandT<CR>
+    nnoremap <leader>b :CommanTBuffer<CR>
+    nnoremap <leader>tt :CommandTTag<CR>
 else
-  " --------
-  " Use ctrlp.vim since we don't have Ruby
-  " --------
+    " Use ctrlp.vim since we don't have Ruby
 
-  " Conditional Mappings
-  if has('unix')
+    " Conditional Mappings
     let g:ctrlp_map = '<C-t>'
-  else
-    let g:ctrlp_map = '<M-t>'
-  endif
 
-  " Leader Commands
-  "nnoremap <leader>t :CtrlPRoot<CR>
-  nnoremap <leader>b :CtrlPBuffer<CR>
+    " Leader Commands
+    nnoremap <leader>b :CtrlPBuffer<CR>
 endif
 
 " Also map leader commands
 nnoremap <leader>u :CtrlPCurFile<CR>
 nnoremap <leader>m :CtrlPMRUFiles<CR>
 
+" fugitive 
 " Add some shortcuts for git commands
 nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gb :Gblame<CR>
-
-" Bind Make to F5 like other IDEs
-nnoremap <F5> :make<CR>
 
 " Toggle QuickFix window
 nnoremap <silent> <F6> :QFix<CR>
 
 nmap <leader>a :Ack<Space>
 nmap <leader>* :Ack<Space><c-r><c-W><CR>
-"nnoremap ** :Ack<Space><c-r><c-W><CR>
 
