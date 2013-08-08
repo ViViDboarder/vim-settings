@@ -123,8 +123,12 @@ set cursorline
 " Syntax Hightlighting
 syntax on
 
-"Enable search highlighting
+" Enable search highlighting
 set hls
+
+" Change Working Directory to that of the current file
+cmap cwd lcd %:p:h
+cmap cd. lcd %:p:h
 
 " ********************************
 " GUI SETTINGS
@@ -223,10 +227,6 @@ nmap <silent> <leader>cs :nohlsearch<CR>
 " Code fold
 nmap <leader>cf ?{<CR>zf%<ESC>:nohlsearch<CR>
 
-" Change Working Directory to that of the current file
-cmap cwd lcd %:p:h
-cmap cd. lcd %:p:h
-
 " ********************************
 " PLUGIN SETTINGS
 " ********************************
@@ -301,3 +301,10 @@ nnoremap <silent> <F6> :QFix<CR>
 nmap <leader>a :Ack<Space>
 nmap <leader>* :Ack<Space><c-r><c-W><CR>
 
+" Syntastic settings
+let g:syntastic_html_tidy_ignore_errors = [
+    \ 'proprietary attribute "ng-show"',
+    \ 'proprietary attribute "ng-controller"',
+    \ 'proprietary attribute "ng-repeat"',
+    \ 'proprietary attribute "ng-app"'
+\ ]
