@@ -60,10 +60,10 @@ Bundle 'vim-scripts/Wombat'
 Bundle 'wombat256.vim'
 Bundle 'gregsexton/MatchTag'
 " Custom Status Line
-"Bundle 'Lokaltog/vim-powerline'
+Bundle 'bling/vim-airline'
 "Powerline Config
 "If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts 
-"let g:Powerline_symbols = 'fancy'
+"let g:airline_powerline_fonts = 1
 
 " -- Filetypes --
 Bundle 'ViViDboarder/vim-forcedotcom'
