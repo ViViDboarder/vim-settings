@@ -23,7 +23,7 @@ Bundle 'file-line'
 Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
 " Quick find files in project
-Bundle 'wincent/Command-T' 
+Bundle 'wincent/Command-T'
 
 " -- Buffer Nav --
 " Tree view for managing tabs
@@ -54,20 +54,31 @@ Bundle 'tpope/vim-surround'
 Bundle 'terryma/vim-multiple-cursors'
 
 " -- GUI --
-Bundle 'vividchalk.vim'
-" Can probably drop this for wombat256
-Bundle 'vim-scripts/Wombat' 
-Bundle 'wombat256.vim'
 Bundle 'gregsexton/MatchTag'
 " Custom Status Line
 Bundle 'bling/vim-airline'
 "Powerline Config
-"If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts 
+"If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts
 "let g:airline_powerline_fonts = 1
+
+" -- Themes --
+Bundle 'vividchalk.vim'
+Bundle 'wombat256.vim'
+"Bundle 'BusyBee.vim'
+Bundle 'nanotech/jellybeans.vim'
+"Bundle 'github.vim'
+Bundle 'candy.vim'
+Bundle 'therubymug/vim-pyte'
+Bundle 'eclipse.vim'
+Bundle 'summerfruit256.vim'
+Bundle 'nuvola.vim'
+Bundle 'altercation/vim-colors-solarized'
 
 " -- Filetypes --
 Bundle 'ViViDboarder/vim-forcedotcom'
 Bundle 'pdurbin/vim-tsv'
+"Bundle 'chrisbra/csv.vim'
+Bundle 'pangloss/vim-javascript'
 
 " ***************************
 " Built in settings
@@ -140,19 +151,24 @@ try
         colorscheme $VIM_COLOR
     else
         if has("gui_running")
-            colorscheme wombat
+            colorscheme wombat256mod
         else
             colorscheme vividchalk
         endif
     endif
 catch /^Vim\%((\a\+)\)\=:E185/
-        " Colorschemes not installed yet
-        " This happens when first installing bundles
+    " Colorschemes not installed yet
+    " This happens when first installing bundles
 endtry
+
+" Set Airline theme
+if g:colors_name == 'github'
+    let g:airline_theme = 'solarized'
+endif
 
 " Set gui fonts
 if has("gui_running")
-    if has("gui_win32")       
+    if has("gui_win32")
         set guifont=Consolas:h10:b
     elseif has("gui_macvim")
         try
@@ -209,7 +225,7 @@ nmap <leader>lw :set wrap!<CR>
 nmap <leader>ws :set list!<CR>
 
 " Map Shift+U to redo
-nnoremap <S-u> <C-r> 
+nnoremap <S-u> <C-r>
 
 " Stupid shift key fixes
 cmap WQ<CR> wq<CR>
@@ -217,11 +233,16 @@ cmap Wq<CR> wq<CR>
 cmap W<CR> w<CR>
 cmap Q<CR> q<CR>
 cmap Q!<CR> q!<CR>
+" Stupid semicolon files
+cnoremap w; w
+cnoremap W; w
+cnoremap q; q
+cnoremap Q; q
 
 " Clearing highlighted search
 nmap <silent> <leader>/ :set hlsearch! hlsearch?<CR>
 noremap <C-h><C-s> :set hlsearch! hlsearch?<CR>
-" Clear search 
+" Clear search
 nmap <silent> <leader>cs :nohlsearch<CR>
 
 " Code fold
@@ -230,6 +251,29 @@ nmap <leader>cf ?{<CR>zf%<ESC>:nohlsearch<CR>
 " ********************************
 " PLUGIN SETTINGS
 " ********************************
+
+" Airline config
+" Use short-form mode text
+let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'n'  : 'N',
+    \ 'i'  : 'I',
+    \ 'R'  : 'R',
+    \ 'c'  : 'C',
+    \ 'v'  : 'V',
+    \ 'V'  : 'V',
+    \ '' : 'V',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ '' : 'S',
+    \ }
+let g:airline#extensions#whitespace#trailing_format = 'tw[%s]'
+let g:airline#extensions#whitespace#mixed_indent_format = 'i[%s]'
+let g:airline_left_sep=''
+let g:airline_left_alt_sep=''
+let g:airline_right_sep=''
+let g:airline_right_alt_sep=''
+let g:airline#extensions#tabline#enabled = 1
 
 " Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
@@ -289,7 +333,7 @@ endif
 nnoremap <leader>u :CtrlPCurFile<CR>
 nnoremap <leader>m :CtrlPMRUFiles<CR>
 
-" fugitive 
+" fugitive
 " Add some shortcuts for git commands
 nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gc :Gcommit<CR>
