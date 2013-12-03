@@ -42,6 +42,7 @@ Bundle 'majutsushi/tagbar'
 Bundle 'scrooloose/syntastic'
 " Project Searching
 Bundle 'mileszs/ack.vim'
+Bundle 'rking/ag.vim'
 " Easy Toggle of QuickFix window
 Bundle 'ViViDboarder/QFixToggle'
 
@@ -352,3 +353,6 @@ let g:syntastic_html_tidy_ignore_errors = [
     \ 'proprietary attribute "ng-repeat"',
     \ 'proprietary attribute "ng-app"'
 \ ]
+" Command to display TODO tags in project
+command Todo Ag! TODO
+
