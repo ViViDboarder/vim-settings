@@ -160,6 +160,7 @@ try
 catch /^Vim\%((\a\+)\)\=:E185/
     " Colorschemes not installed yet
     " This happens when first installing bundles
+    colorscheme default
 endtry
 
 " Set Airline theme
