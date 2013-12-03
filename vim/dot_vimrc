@@ -247,7 +247,7 @@ noremap <C-h><C-s> :set hlsearch! hlsearch?<CR>
 nmap <silent> <leader>cs :nohlsearch<CR>
 
 " Code fold
-nmap <leader>cf ?{<CR>zf%<ESC>:nohlsearch<CR>
+nmap <leader>cf va{<ESC>zf%<ESC>:nohlsearch<CR>
 
 " ********************************
 " PLUGIN SETTINGS
