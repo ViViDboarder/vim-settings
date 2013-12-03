@@ -353,8 +353,10 @@ let g:syntastic_html_tidy_ignore_errors = [
     \ 'proprietary attribute "ng-show"',
     \ 'proprietary attribute "ng-controller"',
     \ 'proprietary attribute "ng-repeat"',
-    \ 'proprietary attribute "ng-app"'
+    \ 'proprietary attribute "ng-app"',
+    \ 'proprietary attribute "ng-click"'
 \ ]
+
 " Command to display TODO tags in project
 command Todo Ag! TODO
 
