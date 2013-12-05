@@ -56,6 +56,10 @@ Bundle 'bling/vim-airline'
 "If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts
 "let g:airline_powerline_fonts = 1
 
+" -- Sytem --
+" Allow async make
+Bundle 'tpope/vim-dispatch'
+
 " -- Themes --
 Bundle 'vividchalk.vim'
 Bundle 'wombat256.vim'
@@ -201,7 +205,7 @@ set title
 inoremap jk <esc>
 
 " Bind Make to F5 like other IDEs
-nnoremap <F5> :make<CR>
+nnoremap <F5> :Make<CR>
 
 " Remap Ctrl+Space for auto Complete
 inoremap <C-Space> <C-n>
