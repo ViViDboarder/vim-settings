@@ -26,17 +26,11 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'wincent/Command-T'
 
 " -- Buffer Nav --
-" Tree view for managing tabs
-"Bundle 'kien/tabman.vim'
 " Quick buffer switching
 Bundle 'sandeepcr529/Buffet.vim'
-" Needs Vim compiled with Ruby
-" Buffer toggler
-"Bundle 'mutewinter/LustyJuggler'
 
 " -- Nav in file --
 " Ctags file parsing
-"Bundle 'taglist.vim'
 Bundle 'majutsushi/tagbar'
 " Syntax checking
 Bundle 'scrooloose/syntastic'
