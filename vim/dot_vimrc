@@ -195,6 +195,7 @@ if &term =~ "^screen"
     " gotta set these *last*, since `set term` resets everything
     set t_ts=k
     set t_fs=\
+    set t_ut=
 endif
 set title
 
