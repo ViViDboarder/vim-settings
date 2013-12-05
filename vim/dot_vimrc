@@ -11,8 +11,6 @@ Bundle 'gmarik/vundle'
 " Rest of my bundles
 
 " -- File Nav --
-" Quick find files in project
-Bundle 'kien/ctrlp.vim'
 " File tree navigation
 Bundle 'scrooloose/nerdtree'
 " Switch to alternate file
@@ -22,8 +20,13 @@ Bundle 'file-line'
 " Git integration
 Bundle 'tpope/vim-fugitive'
 " Needs Vim compiled with Ruby
-" Quick find files in project
-Bundle 'wincent/Command-T'
+if has('ruby')
+    " Quick find files in project
+    Bundle 'wincent/Command-T'
+else
+    " Quick find files in project
+    Bundle 'kien/ctrlp.vim'
+end
 
 " -- Buffer Nav --
 " Quick buffer switching
@@ -75,6 +78,7 @@ Bundle 'altercation/vim-colors-solarized'
 
 " -- Filetypes --
 Bundle 'ViViDboarder/vim-forcedotcom'
+Bundle 'ViViDboarder/vim-abuse-the-force'
 Bundle 'pdurbin/vim-tsv'
 "Bundle 'chrisbra/csv.vim'
 Bundle 'pangloss/vim-javascript'
@@ -277,6 +281,14 @@ let g:airline_right_alt_sep=''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" AbuseTheForce
+" Set foreground if using tmux, otherwise background
+if exists("$TMUX") || ( has("gui_running") && has("gui_macvim") )
+    let g:abusetheforce_dispatch_background = 0
+else
+    let g:abusetheforce_dispatch_background = 1
+end
 
 " Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
