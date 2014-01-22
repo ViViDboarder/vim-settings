@@ -362,8 +362,8 @@ nnoremap <leader>gb :Gblame<CR>
 " Toggle QuickFix window
 nnoremap <silent> <F6> :QFix<CR>
 
-nmap <leader>a :Ack<Space>
-nmap <leader>* :Ack<Space><c-r><c-W><CR>
+nmap <leader>a :Ag<Space>
+nmap <leader>* :Ag<Space>'\b<c-r><c-W>\b'<CR>
 
 " Syntastic settings
 let g:syntastic_html_tidy_ignore_errors = [
