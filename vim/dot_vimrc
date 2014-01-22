@@ -82,6 +82,7 @@ Bundle 'ViViDboarder/vim-abuse-the-force'
 Bundle 'pdurbin/vim-tsv'
 "Bundle 'chrisbra/csv.vim'
 Bundle 'pangloss/vim-javascript'
+Bundle 'PreserveNoEOL'
 
 " ***************************
 " Built in settings
@@ -302,6 +303,9 @@ nnoremap <leader>nf :NERDTreeFind<CR>
 " NERDComments
 nnoremap // :TComment<CR>
 vnoremap // :TCommentBlock<CR>
+
+" PreserveNoEOL
+let g:PreserveNoEOL = 1
 
 " CTags List
 nnoremap <silent> <F8> :TagbarToggle<CR>
