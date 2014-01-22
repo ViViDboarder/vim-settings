@@ -333,10 +333,11 @@ if has('ruby')
 
     " Mappings
     nnoremap <silent><C-t> :CommandT<CR>
+    nnoremap <silent><C-b> :CommandTBuffer<CR>
 
     " Leader Commands
     nnoremap <leader>t :CommandT<CR>
-    nnoremap <leader>b :CommanTBuffer<CR>
+    nnoremap <leader>b :CommandTBuffer<CR>
     nnoremap <leader>tt :CommandTTag<CR>
 else
     " Use ctrlp.vim since we don't have Ruby
