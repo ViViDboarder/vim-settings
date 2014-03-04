@@ -255,6 +255,10 @@ nmap <silent> <leader>cs :nohlsearch<CR>
 " Code fold
 nmap <leader>cf va{<ESC>zf%<ESC>:nohlsearch<CR>
 
+" Paste over
+vnoremap pp p
+vnoremap po "_dP
+
 " ********************************
 " PLUGIN SETTINGS
 " ********************************
