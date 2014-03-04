@@ -371,6 +371,7 @@ nnoremap <leader>gw :Gwrite<CR>
 nnoremap <silent> <F6> :QFix<CR>
 
 nmap <leader>a :Ag<Space>
+nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
 nmap <leader>* :Ag<Space>'\b<c-r><c-W>\b'<CR>
 
 " Syntastic settings
