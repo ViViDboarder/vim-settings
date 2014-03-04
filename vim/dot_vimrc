@@ -75,6 +75,7 @@ Bundle 'eclipse.vim'
 Bundle 'summerfruit256.vim'
 Bundle 'nuvola.vim'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'morhetz/gruvbox'
 
 " -- Filetypes --
 Bundle 'ViViDboarder/vim-forcedotcom'
