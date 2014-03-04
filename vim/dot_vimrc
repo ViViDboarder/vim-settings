@@ -361,9 +361,11 @@ endif
 
 " fugitive
 " Add some shortcuts for git commands
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gw :Gwrite<CR>
 
 " Toggle QuickFix window
 nnoremap <silent> <F6> :QFix<CR>
