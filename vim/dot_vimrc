@@ -19,8 +19,11 @@ Bundle 'a.vim'
 Bundle 'file-line'
 " Git integration
 Bundle 'tpope/vim-fugitive'
+if ! exists('use_command_t')
+    let use_command_t = 1
+end
 " Needs Vim compiled with Ruby
-if has('ruby')
+if use_command_t == 1 && has('ruby')
     " Quick find files in project
     Bundle 'wincent/Command-T'
 else
@@ -324,7 +327,7 @@ let g:tagbar_autofocus = 1
 
 " Dynamically use Command T or ctrlp.vim based on availability of Ruby.
 " We do this because Command T is much faster than ctrlp.vim.
-if has('ruby')
+if use_command_t == 1 && has('ruby')
     " Use Command T since we've got Ruby
 
     " Set the default escape keybinding to, you guessed it, escape.
