@@ -308,7 +308,7 @@ nnoremap <silent> <F4> :NERDTreeToggle<CR>
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 
-" NERDComments
+" TComment
 nnoremap // :TComment<CR>
 vnoremap // :TCommentBlock<CR>
 
