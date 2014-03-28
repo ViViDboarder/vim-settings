@@ -41,7 +41,7 @@ Bundle 'majutsushi/tagbar'
 " Syntax checking
 Bundle 'scrooloose/syntastic'
 " Project Searching
-Bundle 'mileszs/ack.vim'
+"Bundle 'mileszs/ack.vim'
 Bundle 'rking/ag.vim'
 " Easy Toggle of QuickFix window
 Bundle 'ViViDboarder/QFixToggle'
