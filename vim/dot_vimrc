@@ -6,87 +6,80 @@ call vundle#rc()
 
 " let Vundle manage Vundle
 " required!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " Rest of my bundles
 
 " -- File Nav --
-" File tree navigation
-Bundle 'scrooloose/nerdtree'
-" Switch to alternate file
-Bundle 'a.vim'
-" Allow opening to a line from file name using :
-Bundle 'file-line'
-" Git integration
-Bundle 'tpope/vim-fugitive'
+Plugin 'scrooloose/nerdtree' " File tree navigation
+Plugin 'a.vim' " Switch to alternate file
+Plugin 'file-line' " Allow opening to a line from file name using :
+Plugin 'tpope/vim-fugitive' " Git integration
+
+" -- Fuzzy Finders --
 if ! exists('use_command_t')
     let use_command_t = 1
 end
 " Needs Vim compiled with Ruby
+" Quick find files in project
 if use_command_t == 1 && has('ruby')
-    " Quick find files in project
-    Bundle 'wincent/Command-T'
+    Plugin 'wincent/Command-T'
 else
-    " Quick find files in project
-    Bundle 'kien/ctrlp.vim'
+    Plugin 'kien/ctrlp.vim'
 end
 
 " -- Buffer Nav --
-" Quick buffer switching
-Bundle 'sandeepcr529/Buffet.vim'
+Plugin 'sandeepcr529/Buffet.vim' " Quick buffer switching
 
 " -- Nav in file --
-" Ctags file parsing
-Bundle 'majutsushi/tagbar'
-" Syntax checking
-Bundle 'scrooloose/syntastic'
-" Project Searching
-"Bundle 'mileszs/ack.vim'
-Bundle 'rking/ag.vim'
-" Easy Toggle of QuickFix window
-Bundle 'ViViDboarder/QFixToggle'
+Plugin 'majutsushi/tagbar' " Ctags file parsing
+Plugin 'scrooloose/syntastic' " Syntax checking
+Plugin 'rking/ag.vim' " Project searching
+Plugin 'ViViDboarder/QFixToggle' " Easy Toggle of QuickFix window
+"Plugin 'mileszs/ack.vim' " Project Searching
 
 " -- Text Manipulation --
 " Easy comments
-Bundle 'tomtom/tcomment_vim'
-" Surround for wrapping text
-Bundle 'tpope/vim-surround'
-" Multi cursor
-Bundle 'terryma/vim-multiple-cursors'
+Plugin 'tomtom/tcomment_vim'
+Plugin 'tpope/vim-surround' " Surround for wrapping text
+Plugin 'terryma/vim-multiple-cursors' " Multi cursor
 
 " -- GUI --
-Bundle 'gregsexton/MatchTag'
-" Custom Status Line
-Bundle 'bling/vim-airline'
+Plugin 'gregsexton/MatchTag'
+Plugin 'bling/vim-airline' " Custom Status Line
 "Powerline Config
 "If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts
 "let g:airline_powerline_fonts = 1
 
 " -- Sytem --
 " Allow async make
-Bundle 'tpope/vim-dispatch'
+Plugin 'tpope/vim-dispatch'
 
 " -- Themes --
-Bundle 'vividchalk.vim'
-Bundle 'wombat256.vim'
-"Bundle 'BusyBee.vim'
-Bundle 'nanotech/jellybeans.vim'
-"Bundle 'github.vim'
-Bundle 'candy.vim'
-Bundle 'therubymug/vim-pyte'
-Bundle 'eclipse.vim'
-Bundle 'summerfruit256.vim'
-Bundle 'nuvola.vim'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'morhetz/gruvbox'
+Plugin 'vividchalk.vim'
+Plugin 'wombat256.vim'
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'candy.vim'
+Plugin 'therubymug/vim-pyte'
+Plugin 'eclipse.vim'
+Plugin 'summerfruit256.vim'
+Plugin 'nuvola.vim'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'morhetz/gruvbox'
+"Plugin 'BusyBee.vim'
+"Plugin 'github.vim'
 
 " -- Filetypes --
-Bundle 'ViViDboarder/vim-forcedotcom'
-Bundle 'ViViDboarder/vim-abuse-the-force'
-Bundle 'pdurbin/vim-tsv'
-"Bundle 'chrisbra/csv.vim'
-Bundle 'pangloss/vim-javascript'
-Bundle 'PreserveNoEOL'
+Plugin 'ViViDboarder/vim-forcedotcom'
+Plugin 'pdurbin/vim-tsv'
+Plugin 'pangloss/vim-javascript'
+Plugin 'jnwhiteh/vim-golang'
+Plugin 'PreserveNoEOL'
+Plugin 'ViViDboarder/vim-android'
+Plugin 'groovy.vim'
+Plugin 'tfnico/vim-gradle'
+"Plugin 'ViViDboarder/vim-abuse-the-force'
+"Plugin 'chrisbra/csv.vim'
 
 " ***************************
 " Built in settings
