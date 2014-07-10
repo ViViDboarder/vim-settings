@@ -207,7 +207,7 @@ set title
 inoremap jk <esc>
 
 " Bind Make to F5 like other IDEs
-nnoremap <F5> :Make<CR>
+nnoremap <F5> :Make!<CR>
 
 " Remap Ctrl+Space for auto Complete
 inoremap <C-Space> <C-n>
