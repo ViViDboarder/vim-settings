@@ -349,6 +349,10 @@ else
     " Conditional Mappings
     let g:ctrlp_map = '<C-t>'
 
+    " Allow ctrl p to open over the initial nerdtree window
+    "let g:ctrlp_dont_split = 'NERD_tree_2'
+    let g:ctrlp_dont_split = 'NERD'
+
     " Leader Commands
     nnoremap <leader>b :CtrlPBuffer<CR>
     nnoremap <leader>u :CtrlPCurFile<CR>
