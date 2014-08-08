@@ -42,7 +42,7 @@ Plugin 'ViViDboarder/QFixToggle' " Easy Toggle of QuickFix window
 " Easy comments
 Plugin 'tomtom/tcomment_vim'
 Plugin 'tpope/vim-surround' " Surround for wrapping text
-Plugin 'terryma/vim-multiple-cursors' " Multi cursor
+"Plugin 'terryma/vim-multiple-cursors' " Multi cursor
 
 " -- GUI --
 Plugin 'gregsexton/MatchTag'
@@ -54,6 +54,11 @@ Plugin 'bling/vim-airline' " Custom Status Line
 " -- Sytem --
 " Allow async make
 Plugin 'tpope/vim-dispatch'
+Plugin 'Shougo/neocomplcache.vim'
+Plugin 'tpope/vim-rsi'
+Plugin 'tpope/vim-repeat'
+" Needs to be compiled
+Plugin 'Shougo/vimproc.vim'
 
 " -- Themes --
 Plugin 'vividchalk.vim'
@@ -78,6 +83,7 @@ Plugin 'PreserveNoEOL'
 Plugin 'ViViDboarder/vim-android'
 Plugin 'groovy.vim'
 Plugin 'tfnico/vim-gradle'
+Plugin 'dart-lang/dart-vim-plugin'
 "Plugin 'ViViDboarder/vim-abuse-the-force'
 "Plugin 'chrisbra/csv.vim'
 
