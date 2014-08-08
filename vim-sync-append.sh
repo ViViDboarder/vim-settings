@@ -36,13 +36,13 @@ mkdir -p ~/.vim/doc
 # If a .vimrc_sync doesn't exist, link it
 if [[ ! ( -f ~/.vimrc_sync ) ]]; then
     echo "Linking sync'd vimrc"
-    ln -s $VIM_SYNC_DIR/vim/dot_vimrc ~/.vimrc_sync
+    ln -s $VIM_SYNC_DIR/vimrc ~/.vimrc_sync
 fi
 
 # If a .vim_drpobox dir doesn't exist, link it
 if [[ ! ( -d ~/.vim_sync ) ]]; then
     echo "Linking sync'd vim runtime"
-    ln -s $VIM_SYNC_DIR/vim/dot_vim ~/.vim_sync
+    ln -s $VIM_SYNC_DIR/vim ~/.vim_sync
 fi
 
 # if there is no .vimrc file already, make a blank one
