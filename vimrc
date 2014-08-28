@@ -11,7 +11,8 @@ Plugin 'gmarik/vundle'
 " Rest of my bundles
 
 " -- File Nav --
-Plugin 'scrooloose/nerdtree' " File tree navigation
+"Plugin 'scrooloose/nerdtree' " File tree navigation
+Plugin 'tpope/vim-vinegar' " Simple file navigation
 Plugin 'a.vim' " Switch to alternate file
 Plugin 'file-line' " Allow opening to a line from file name using :
 Plugin 'tpope/vim-fugitive' " Git integration
@@ -25,7 +26,7 @@ end
 if use_command_t == 1 && has('ruby')
     Plugin 'wincent/Command-T'
 else
-    Plugin 'kien/ctrlp.vim'
+    Plugin 'ctrlpvim/ctrlp.vim'
 end
 
 " -- Buffer Nav --
@@ -34,8 +35,9 @@ Plugin 'sandeepcr529/Buffet.vim' " Quick buffer switching
 " -- Nav in file --
 Plugin 'majutsushi/tagbar' " Ctags file parsing
 Plugin 'scrooloose/syntastic' " Syntax checking
-Plugin 'rking/ag.vim' " Project searching
 Plugin 'ViViDboarder/QFixToggle' " Easy Toggle of QuickFix window
+" TODO: detect if Ag or Ack is installed
+Plugin 'rking/ag.vim' " Project searching
 "Plugin 'mileszs/ack.vim' " Project Searching
 
 " -- Text Manipulation --
@@ -51,14 +53,13 @@ Plugin 'bling/vim-airline' " Custom Status Line
 "If using a patched font: https://github.com/Lokaltog/vim-powerline/wiki/Patched-fonts
 "let g:airline_powerline_fonts = 1
 
-" -- Sytem --
-" Allow async make
-Plugin 'tpope/vim-dispatch'
-Plugin 'Shougo/neocomplcache.vim'
-Plugin 'tpope/vim-rsi'
-Plugin 'tpope/vim-repeat'
+" -- System --
+Plugin 'tpope/vim-dispatch' " Allow async make
+Plugin 'Shougo/neocomplcache.vim' " Autocomplete
+Plugin 'tpope/vim-rsi' " emacs bindinds in insert
+Plugin 'tpope/vim-repeat' " Repeat mapped commands with .
 " Needs to be compiled
-Plugin 'Shougo/vimproc.vim'
+Plugin 'Shougo/vimproc.vim' " Async for plugins
 
 " -- Themes --
 Plugin 'vividchalk.vim'
@@ -303,9 +304,9 @@ nnoremap <silent> <F2> :Bufferlist<CR>
 nnoremap <leader>bl :Bufferlist<CR>
 
 " NERDTree
-nnoremap <silent> <F4> :NERDTreeToggle<CR>
-nnoremap <leader>nn :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFind<CR>
+" nnoremap <silent> <F4> :NERDTreeToggle<CR>
+"nnoremap <leader>nn :NERDTreeToggle<CR>
+"nnoremap <leader>nf :NERDTreeFind<CR>
 
 " TComment
 nnoremap // :TComment<CR>
@@ -357,7 +358,15 @@ else
 
     " Allow ctrl p to open over the initial nerdtree window
     "let g:ctrlp_dont_split = 'NERD_tree_2'
-    let g:ctrlp_dont_split = 'NERD'
+    "let g:ctrlp_dont_split = 'NERD'
+    let g:ctrlp_dont_split = 'netrw'
+
+    " Support tag jumping
+    let g:ctrlp_extensions = ['tag', 'buffertag']
+    " Support Apex language
+    let g:ctrlp_buftag_types = {
+    \ 'apex'     : '--language-force=c#',
+    \ }
 
     " Leader Commands
     nnoremap <leader>b :CtrlPBuffer<CR>
@@ -375,6 +384,13 @@ nnoremap <leader>gw :Gwrite<CR>
 
 " Toggle QuickFix window
 nnoremap <silent> <F6> :QFix<CR>
+
+" NeoComplCache
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_max_list = 10
+"let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_fuzzy_completion = 1
 
 nmap <leader>a :Ag<Space>
 nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>

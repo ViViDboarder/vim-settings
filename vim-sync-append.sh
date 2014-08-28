@@ -70,6 +70,10 @@ fi
 echo "Install all bundles"
 vim +BundleInstall! +qall
 
+echo "Compile vimproc"
+cd ~/.vim/bundle/vimproc.vim && make
+cd -
+
 # Compile CommandT if possible
 # See if ruby is installed
 if command -v ruby >/dev/null 2>&1; then
