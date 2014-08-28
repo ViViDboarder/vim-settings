@@ -301,7 +301,6 @@ end
 
 " Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
-nnoremap <leader>bl :Bufferlist<CR>
 
 " NERDTree
 " nnoremap <silent> <F4> :NERDTreeToggle<CR>
@@ -370,6 +369,8 @@ else
 
     " Leader Commands
     nnoremap <leader>b :CtrlPBuffer<CR>
+    nnoremap <leader>t :CtrlPBufTag<CR>
+    nnoremap <leader>r :CtrlPTag<CR>
     nnoremap <leader>u :CtrlPCurFile<CR>
     nnoremap <leader>m :CtrlPMRUFiles<CR>
 endif
