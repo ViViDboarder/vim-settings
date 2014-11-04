@@ -34,10 +34,8 @@ else
 endif
 
 " -- Text Manipulation --
-" Easy comments
-Plugin 'tomtom/tcomment_vim'
+Plugin 'tomtom/tcomment_vim' " Easy comments
 Plugin 'tpope/vim-surround' " Surround for wrapping text
-"Plugin 'terryma/vim-multiple-cursors' " Multi cursor
 
 " -- GUI --
 Plugin 'gregsexton/MatchTag'
@@ -79,10 +77,11 @@ Plugin 'pdurbin/vim-tsv'
 Plugin 'pangloss/vim-javascript'
 Plugin 'fatih/vim-go'
 Plugin 'PreserveNoEOL'
-Plugin 'ViViDboarder/vim-android'
+Plugin 'hsanson/vim-android'
 Plugin 'groovy.vim'
 Plugin 'tfnico/vim-gradle'
 Plugin 'dart-lang/dart-vim-plugin'
+"Plugin 'ViViDboarder/force-vim'
 "Plugin 'ViViDboarder/vim-abuse-the-force'
 "Plugin 'chrisbra/csv.vim'
 
@@ -303,7 +302,7 @@ if exists("$TMUX") || ( has("gui_running") && has("gui_macvim") )
     let g:abusetheforce_dispatch_background = 0
 else
     let g:abusetheforce_dispatch_background = 1
-end
+endif
 
 " Buffet shortcut
 nnoremap <silent> <F2> :Bufferlist<CR>
