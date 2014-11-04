@@ -16,6 +16,7 @@ Plugin 'tpope/vim-vinegar' " Simple file navigation
 Plugin 'a.vim' " Switch to alternate file
 Plugin 'file-line' " Allow opening to a line from file name using :
 Plugin 'tpope/vim-fugitive' " Git integration
+Plugin 'christoomey/vim-tmux-navigator'
 
 " -- Fuzzy Finders --
 Plugin 'ctrlpvim/ctrlp.vim' " Quick find files in project
