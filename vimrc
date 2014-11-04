@@ -260,6 +260,14 @@ nmap <leader>cf va{<ESC>zf%<ESC>:nohlsearch<CR>
 vnoremap pp p
 vnoremap po "_dP
 
+" Buffer nav
+nmap gb :bn<CR>
+nmap gB :bp<CR>
+
+set notitle
+
+command TagsUpdate Dispatch ctags -R .
+
 " ********************************
 " PLUGIN SETTINGS
 " ********************************
