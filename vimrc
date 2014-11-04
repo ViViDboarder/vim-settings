@@ -27,9 +27,11 @@ Plugin 'sandeepcr529/Buffet.vim' " Quick buffer switching
 Plugin 'majutsushi/tagbar' " Ctags file parsing
 Plugin 'scrooloose/syntastic' " Syntax checking
 Plugin 'ViViDboarder/QFixToggle' " Easy Toggle of QuickFix window
-" TODO: detect if Ag or Ack is installed
-Plugin 'rking/ag.vim' " Project searching
-"Plugin 'mileszs/ack.vim' " Project Searching
+if executable('ag')
+    Plugin 'rking/ag.vim' " Project searching
+else
+    Plugin 'mileszs/ack.vim' " Project Searching
+endif
 
 " -- Text Manipulation --
 " Easy comments
@@ -338,6 +340,15 @@ nnoremap <leader>t :CtrlPBufTag<CR>
 nnoremap <leader>r :CtrlPTag<CR>
 nnoremap <leader>u :CtrlPCurFile<CR>
 nnoremap <leader>m :CtrlPMRUFiles<CR>
+
+" Special stuff for The Silver Searcher
+if executable('ag')
+    " use ag
+    set grepprg=ag\ --nogroup\ --nocolor
+    " use ag for CtrlP
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    " ag is fast enough we don't need cache
+    let g:ctrlp_use_caching = 0
 endif
 
 " fugitive
