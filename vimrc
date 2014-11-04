@@ -46,11 +46,16 @@ Plugin 'bling/vim-airline' " Custom Status Line
 
 " -- System --
 Plugin 'tpope/vim-dispatch' " Allow async make
-Plugin 'Shougo/neocomplcache.vim' " Autocomplete
 Plugin 'tpope/vim-rsi' " emacs bindinds in insert
 Plugin 'tpope/vim-repeat' " Repeat mapped commands with .
 " Needs to be compiled
 Plugin 'Shougo/vimproc.vim' " Async for plugins
+
+if has('lua')
+    Plugin 'Shougo/neocomplete.vim' " Autocomplete
+else
+    Plugin 'Shougo/neocomplcache.vim' " Autocomplete
+end
 
 " -- Themes --
 Plugin 'vividchalk.vim'
@@ -346,12 +351,20 @@ nnoremap <leader>gw :Gwrite<CR>
 " Toggle QuickFix window
 nnoremap <silent> <F6> :QFix<CR>
 
-" NeoComplCache
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_max_list = 10
-"let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_fuzzy_completion = 1
+" neocomplete / neocomplcache
+if has('lua')
+    let g:acp_enableAtStartup = 0
+    let g:neocomplete#enable_at_startup = 1
+    "let g:neocomplete#enable_smart_case = 1
+    let g:neocomlete#max_list=10
+else
+    " NeoComplCache
+    let g:neocomplcache_enable_at_startup = 1
+    "let g:neocomplcache_enable_smart_case = 1
+    let g:neocomplcache_max_list = 10
+    "let g:neocomplcache_enable_camel_case_completion = 1
+    let g:neocomplcache_enable_fuzzy_completion = 1
+endif
 
 nmap <leader>a :Ag<Space>
 nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
