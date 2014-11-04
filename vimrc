@@ -18,16 +18,7 @@ Plugin 'file-line' " Allow opening to a line from file name using :
 Plugin 'tpope/vim-fugitive' " Git integration
 
 " -- Fuzzy Finders --
-if ! exists('use_command_t')
-    let use_command_t = 1
-end
-" Needs Vim compiled with Ruby
-" Quick find files in project
-if use_command_t == 1 && has('ruby')
-    Plugin 'wincent/Command-T'
-else
-    Plugin 'ctrlpvim/ctrlp.vim'
-end
+Plugin 'ctrlpvim/ctrlp.vim' " Quick find files in project
 
 " -- Buffer Nav --
 Plugin 'sandeepcr529/Buffet.vim' " Quick buffer switching
@@ -319,60 +310,29 @@ nnoremap <silent> <F8> :TagbarToggle<CR>
 " Autofocus tagbar
 let g:tagbar_autofocus = 1
 
-" ---------------
-" Command T and ctrlp.vim
-" Snagged from mutewinter @ https://github.com/mutewinter/dot_vim
-" ---------------
-
-" Dynamically use Command T or ctrlp.vim based on availability of Ruby.
-" We do this because Command T is much faster than ctrlp.vim.
-if use_command_t == 1 && has('ruby')
-    " Use Command T since we've got Ruby
-
-    " Set the default escape keybinding to, you guessed it, escape.
-    let g:CommandTCancelMap = '<esc>'
-
-    " Ensure Ctrl-P isn't bound by default
-    let g:ctrlp_map = ''
-
-    " Ensure max height isn't too large. (for performance)
-    let g:CommandTMaxHeight = 10
-
-    " Mappings
-    nnoremap <silent><C-t> :CommandT<CR>
-    nnoremap <silent><C-b> :CommandTBuffer<CR>
-
-    " Leader Commands
-    nnoremap <leader>t :CommandT<CR>
-    nnoremap <leader>b :CommandTBuffer<CR>
-    nnoremap <leader>tt :CommandTTag<CR>
-else
-    " Use ctrlp.vim since we don't have Ruby
-
-    " Ensure max height isn't too large. (for performance)
-    let g:ctrlp_max_height = 10
-
-    " Conditional Mappings
-    let g:ctrlp_map = '<C-t>'
-
-    " Allow ctrl p to open over the initial nerdtree window
-    "let g:ctrlp_dont_split = 'NERD_tree_2'
-    "let g:ctrlp_dont_split = 'NERD'
-    let g:ctrlp_dont_split = 'netrw'
-
-    " Support tag jumping
-    let g:ctrlp_extensions = ['tag', 'buffertag']
-    " Support Apex language
-    let g:ctrlp_buftag_types = {
-    \ 'apex'     : '--language-force=c#',
-    \ }
-
-    " Leader Commands
-    nnoremap <leader>b :CtrlPBuffer<CR>
-    nnoremap <leader>t :CtrlPBufTag<CR>
-    nnoremap <leader>r :CtrlPTag<CR>
-    nnoremap <leader>u :CtrlPCurFile<CR>
-    nnoremap <leader>m :CtrlPMRUFiles<CR>
+" CtrlP settings
+" Ensure max height isn't too large. (for performance)
+let g:ctrlp_max_height = 10
+" Conditional Mappings
+let g:ctrlp_map = '<C-t>'
+" Allow ctrl p to open over the initial nerdtree window
+let g:ctrlp_dont_split = 'netrw'
+" Support tag jumping
+let g:ctrlp_extensions = ['tag', 'buffertag']
+" Support Apex language
+let g:ctrlp_buftag_types = {
+        \ 'apex'  : '--language-force=c#',
+        \ 'go'    : {
+            \ 'bin' : 'gotags',
+            \ 'args' : '-sort -silent',
+        \}
+    \}
+" Leader Commands
+nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>t :CtrlPBufTag<CR>
+nnoremap <leader>r :CtrlPTag<CR>
+nnoremap <leader>u :CtrlPCurFile<CR>
+nnoremap <leader>m :CtrlPMRUFiles<CR>
 endif
 
 " fugitive
