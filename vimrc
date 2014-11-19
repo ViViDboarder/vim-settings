@@ -210,6 +210,8 @@ set title
 
 " Remap jk to esc
 inoremap jk <esc>
+inoremap `` <esc>
+vnoremap `` <esc>
 
 " Bind Make to F5 like other IDEs
 nnoremap <F5> :Make!<CR>
