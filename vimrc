@@ -301,7 +301,7 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 
 " AbuseTheForce
 " Set foreground if using tmux, otherwise background
-if exists("$TMUX") || ( has("gui_running") && has("gui_macvim") )
+if ! exists('g:abusetheforce_dispatch_background') && (exists("$TMUX") || ( has("gui_running") && has("gui_macvim") ) )
     let g:abusetheforce_dispatch_background = 0
 else
     let g:abusetheforce_dispatch_background = 1
