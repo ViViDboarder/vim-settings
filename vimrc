@@ -73,7 +73,6 @@ Plugin 'morhetz/gruvbox'
 "Plugin 'github.vim'
 
 " -- Filetypes --
-Plugin 'ViViDboarder/vim-forcedotcom'
 Plugin 'pdurbin/vim-tsv'
 Plugin 'pangloss/vim-javascript'
 Plugin 'fatih/vim-go'
@@ -82,9 +81,17 @@ Plugin 'hsanson/vim-android'
 Plugin 'groovy.vim'
 Plugin 'tfnico/vim-gradle'
 Plugin 'dart-lang/dart-vim-plugin'
+Plugin 'avakhov/vim-yaml'
+"Plugin 'chrisbra/csv.vim'
+" SFDC
+Plugin 'ViViDboarder/vim-forcedotcom'
 "Plugin 'ViViDboarder/force-vim'
 "Plugin 'ViViDboarder/vim-abuse-the-force'
-"Plugin 'chrisbra/csv.vim'
+" Python
+Plugin 'klen/python-mode'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'alfredodeza/pytest.vim'
+Plugin 'alfredodeza/coveragepy.vim'
 
 " ***************************
 " Built in settings
@@ -268,7 +275,13 @@ nmap gB :bp<CR>
 
 set notitle
 
+" Easy update tags
 command TagsUpdate Dispatch ctags -R .
+
+" Command to display TODO tags in project
+command Todo Ag! TODO
+
+au BufRead,BufNewFile *.md set syntax=markdown
 
 " ********************************
 " PLUGIN SETTINGS
@@ -385,7 +398,24 @@ else
     let g:neocomplcache_max_list = 10
     "let g:neocomplcache_enable_camel_case_completion = 1
     let g:neocomplcache_enable_fuzzy_completion = 1
+    if !exists('g:neocomplcache_force_omni_patterns')
+        let g:neocomplcache_force_omni_patterns = {}
+    endif
+    let g:neocomplcache_force_omni_patterns.python =
+        \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+        " alternative pattern: '\h\w*\|[^. \t]\.\w*'
 endif
+"
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+" Skip python because we have jedi-vim
+"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType python setlocal omnifunc=jedi#completions
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
 
 nmap <leader>a :Ag<Space>
 nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
@@ -399,7 +429,20 @@ let g:syntastic_html_tidy_ignore_errors = [
     \ 'proprietary attribute "ng-app"',
     \ 'proprietary attribute "ng-click"'
 \ ]
+let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_python_flake8_args='--max-line-length=80'
+" let g:syntastic_python_checkers = ['pep8']
+" let g:syntastic_python_pep8_args='--ignore=E501'
 
-" Command to display TODO tags in project
-command Todo Ag! TODO
+" Pymode
+let g:pymode_lint = 1
+let g:pymode_lint_on_write = 0
+let g:pymode_lint_checkers = ['flake8']
+let g:pymode_rope = 0
+let g:pymode_rope_completion = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_breakpoint = 0
 
+" jedi-vim
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
