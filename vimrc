@@ -255,6 +255,8 @@ cnoremap w; w
 cnoremap W; w
 cnoremap q; q
 cnoremap Q; q
+" Avoid accidental Ex-mode
+:map Q <Nop>
 
 " Clearing highlighted search
 nmap <silent> <leader>/ :set hlsearch! hlsearch?<CR>
@@ -369,7 +371,7 @@ if executable('ag')
     " use ag
     set grepprg=ag\ --nogroup\ --nocolor
     " use ag for CtrlP
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup -g ""'
     " ag is fast enough we don't need cache
     let g:ctrlp_use_caching = 0
 endif
@@ -433,6 +435,8 @@ let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_python_flake8_args='--max-line-length=80'
 " let g:syntastic_python_checkers = ['pep8']
 " let g:syntastic_python_pep8_args='--ignore=E501'
+" let g:syntastic_python_checkers = ['jshint']
+" let g:syntastic_javascript_jshint_args='--ignore=E501'
 
 " Pymode
 let g:pymode_lint = 1
