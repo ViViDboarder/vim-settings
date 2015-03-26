@@ -13,7 +13,7 @@ function! s:smart_source_rc(name)
 endfunction
 
 function! s:source_rc(path)
-  let l:f_path = fnameescape(expand('~/.vim_sync/rc/' . a:path))
+  let l:f_path = fnameescape(expand('~/.vim/rc/' . a:path))
   if filereadable(l:f_path)
       execute 'source' . l:f_path
   endif
