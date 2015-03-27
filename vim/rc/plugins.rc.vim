@@ -1,55 +1,25 @@
 " Navigation {{
 Plug 'file-line'
 Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-fugitive', { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] } " {{
+Plug 'tpope/vim-fugitive', { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
+" {{
     nnoremap <leader>gb :Gblame<CR>
     nnoremap <leader>gc :Gcommit<CR>
     nnoremap <leader>gd :Gdiff<CR>
     nnoremap <leader>gs :Gstatus<CR>
     nnoremap <leader>gw :Gwrite<CR>
-    " }}
+" }}
 Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
 " {{
     nnoremap <silent> <F2> :Bufferlist<CR>
 " }}
-Plug 'ctrlpvim/ctrlp.vim'
-" {{
-    " Ensure max height isn't too large. (for performance)
-    let g:ctrlp_max_height = 10
-    " Conditional Mappings
-    let g:ctrlp_map = '<C-t>'
-    " Allow ctrl p to open over the initial nerdtree window
-    let g:ctrlp_dont_split = 'netrw'
-    " Support tag jumping
-    let g:ctrlp_extensions = ['tag', 'buffertag']
-    " Support Apex language
-    let g:ctrlp_buftag_types = {
-            \ 'apex'  : '--language-force=c#',
-            \ 'go'    : {
-                \ 'bin' : 'gotags',
-                \ 'args' : '-sort -silent',
-            \}
-        \}
-    " Leader Commands
-    nnoremap <leader>b :CtrlPBuffer<CR>
-    nnoremap <leader>t :CtrlPBufTag<CR>
-    nnoremap <leader>r :CtrlPTag<CR>
-    nnoremap <leader>u :CtrlPCurFile<CR>
-    nnoremap <leader>m :CtrlPMRUFiles<CR>
-
-    " Special stuff for The Silver Searcher
-    if executable('ag')
-        " use ag
-        set grepprg=ag\ --nogroup\ --nocolor
-        " use ag for CtrlP
-        let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup -g ""'
-        " ag is fast enough we don't need cache
-        let g:ctrlp_use_caching = 0
-    endif
-    " }}
 " }}
 
-" Search {{
+
+Plug 'ctrlpvim/ctrlp.vim'
+call g:source_rc('plugins/ctrlp.rc.vim')
+
+" ag / ack {{
 if executable('ag')
     Plug 'rking/ag.vim'
     " {{
@@ -106,36 +76,43 @@ end
 " }}
 
 " Programming {{
-Plug 'majutsushi/tagbar' " {{
+Plug 'majutsushi/tagbar'
+" {{
     nnoremap <silent> <F8> :TagbarToggle<CR>
     " Autofocus tagbar
     let g:tagbar_autofocus = 1
-    " }}
-Plug 'scrooloose/syntastic' " {{
-    let g:syntastic_html_tidy_ignore_errors = [
-        \ 'proprietary attribute "ng-show"',
-        \ 'proprietary attribute "ng-controller"',
-        \ 'proprietary attribute "ng-repeat"',
-        \ 'proprietary attribute "ng-app"',
-        \ 'proprietary attribute "ng-click"'
-        \ ]
-    let g:syntastic_python_checkers = ['flake8']
-    let g:syntastic_python_flake8_args='--max-line-length=80'
-    " let g:syntastic_python_checkers = ['pep8']
-    " " let g:syntastic_python_pep8_args='--ignore=E501'
-    " " let g:syntastic_python_checkers = ['jshint']
-    " " let g:syntastic_javascript_jshint_args='--ignore=E501'
-    "
 " }}
-Plug 'tomtom/tcomment_vim', { 'on': ['TComment', 'TCommentBlock'] } " {{
+" syntastic {{
+if !has('nvim')
+    " Only use if not neovim, on neovim we have Neomake
+    Plug 'scrooloose/syntastic' " {{
+        let g:syntastic_html_tidy_ignore_errors = [
+            \ 'proprietary attribute "ng-show"',
+            \ 'proprietary attribute "ng-controller"',
+            \ 'proprietary attribute "ng-repeat"',
+            \ 'proprietary attribute "ng-app"',
+            \ 'proprietary attribute "ng-click"'
+            \ ]
+        let g:syntastic_python_checkers = ['flake8']
+        let g:syntastic_python_flake8_args='--max-line-length=80'
+        " let g:syntastic_python_checkers = ['pep8']
+        " " let g:syntastic_python_pep8_args='--ignore=E501'
+        " " let g:syntastic_python_checkers = ['jshint']
+        " " let g:syntastic_javascript_jshint_args='--ignore=E501'
+        "
+    " }}
+endif
+" }}
+Plug 'tomtom/tcomment_vim', { 'on': ['TComment', 'TCommentBlock'] }
+" {{
     nnoremap // :TComment<CR>
     vnoremap // :TCommentBlock<CR>
-    " }}
-Plug 'benekastah/neomake'
+" }}
 " }}
 
 " GUI {{
-Plug 'bling/vim-airline' " {{
+Plug 'bling/vim-airline'
+" {{
     " Use short-form mode text
     let g:airline_mode_map = {
         \ '__' : '-',
@@ -159,15 +136,16 @@ Plug 'bling/vim-airline' " {{
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#left_sep = ' '
     let g:airline#extensions#tabline#left_alt_sep = '|'
-    " }}
+" }}
 Plug 'gregsexton/MatchTag'
 Plug 'rizzatti/dash.vim', { 'on': 'Dash'}
 " }}
 
 " Filetypes {{
-Plug 'PreserveNoEOL' " {{
+Plug 'PreserveNoEOL'
+" {{
     let g:PreserveNoEOL = 1
-    " }}
+" }}
 Plug 'ViViDboarder/vim-forcedotcom'
 Plug 'avakhov/vim-yaml'
 Plug 'dart-lang/dart-vim-plugin'
@@ -177,25 +155,26 @@ Plug 'hsanson/vim-android'
 Plug 'pangloss/vim-javascript'
 Plug 'pdurbin/vim-tsv'
 Plug 'tfnico/vim-gradle'
+" }}
+
 " Python {{
-    Plug 'alfredodeza/coveragepy.vim'
-    Plug 'alfredodeza/pytest.vim'
-    Plug 'davidhalter/jedi-vim'
-    " {{
-        let g:jedi#completions_enabled = 0
-        let g:jedi#auto_vim_configuration = 0
-    " }}
-    Plug 'klen/python-mode'
-    " {{
-        let g:pymode_lint = 1
-        let g:pymode_lint_on_write = 0
-        let g:pymode_lint_checkers = ['flake8']
-        let g:pymode_rope = 0
-        let g:pymode_rope_completion = 0
-        let g:pymode_rope_complete_on_dot = 0
-        let g:pymode_breakpoint = 0
-        "}}
-    " }}
+Plug 'alfredodeza/coveragepy.vim'
+Plug 'alfredodeza/pytest.vim'
+Plug 'davidhalter/jedi-vim'
+" {{
+    let g:jedi#completions_enabled = 0
+    let g:jedi#auto_vim_configuration = 0
+" }}
+Plug 'klen/python-mode'
+" {{
+    let g:pymode_lint = 1
+    let g:pymode_lint_on_write = 0
+    let g:pymode_lint_checkers = ['flake8']
+    let g:pymode_rope = 0
+    let g:pymode_rope_completion = 0
+    let g:pymode_rope_complete_on_dot = 0
+    let g:pymode_breakpoint = 0
+    "}}
 " }}
 
 " Themes {{
@@ -212,8 +191,31 @@ Plug 'wombat256.vim'
 " }}
 
 " System {{
+" neomake / vim-dispatch {{
+if has('nvim')
+    Plug 'benekastah/neomake'
+    " {{
+        let g:neomake_apex_force_maker = {
+            \ 'exe': 'force',
+            \ 'args': ['push'],
+            \ 'errorformat': &errorformat,
+            \ }
+
+        let g:neomake_apex_atf_maker = {
+            \ 'exe': 'atf deploy file',
+            \ 'args': [],
+            \ 'errorformat': &errorformat,
+            \ }
+
+        let g:neomake_apex_enabled_makers = ['force']
+        " let g:neomake_apex_enabled_makers = ['atf']
+        let g:neomake_python_makers = ['flake8']
+    " }}
+else
+    Plug 'tpope/vim-dispatch'
+endif
+" }}
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-repeat'
 " emacs bindinds in insert
 Plug 'tpope/vim-rsi'

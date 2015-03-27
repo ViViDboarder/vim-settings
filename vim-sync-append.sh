@@ -4,15 +4,15 @@
 ############################
 #! /bin/bash
 
-if [ -d ~/.vim  ] || [ -f ~/.vimrc ]; then
-    echo "Vim files already exist. Please backup or remove .vim and .vimrc"
+if [ -d ~/.vim  ] || [ -f ~/.vimrc ] || [ -d ~/.nvim  ] || [ -f ~/.nvimrc ]; then
+    echo "Vim files already exist. Please backup or remove .(n)vim and .(n)vimrc"
     exit 1
 fi
 
 # Try to load .bashrc to load rvm functions
-if [ -f ~/.bashrc ]; then
-    . ~/.bashrc
-fi
+# if [ -f ~/.bashrc ]; then
+    # . ~/.bashrc
+# fi
 
 # Get current directory for future use in links
 VIM_SYNC_DIR=$(dirname $0)
@@ -20,8 +20,13 @@ cd $VIM_SYNC_DIR
 VIM_SYNC_DIR=$(pwd)
 
 
+# Vim
 ln -s $VIM_SYNC_DIR/vimrc ~/.vimrc
 ln -s $VIM_SYNC_DIR/vim ~/.vim
+
+# Neovim
+ln -s $VIM_SYNC_DIR/vimrc ~/.nvimrc
+ln -s $VIM_SYNC_DIR/vim ~/.nvim
 
 # # Download and install vim-plug
 # curl -fLo ~/.vim/autoload/plug.vim https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -29,6 +34,7 @@ ln -s $VIM_SYNC_DIR/vim ~/.vim
 # Install all bundles
 echo "Install all bundles"
 vim +PlugInstall +qall
+nvim +PlugInstall +qall
 
 vim --version | grep -q '\+ruby' || { echo "Warning: Default vim does not include ruby."; }
 vim --version | grep -q '\+python' || { echo "Warning: Default vim does not include python"; }

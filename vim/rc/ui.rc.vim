@@ -42,9 +42,9 @@ endif
 if has("gui_running")
     if has("gui_win32")
         set guifont=Consolas:h10:b
-    elseif has("gui_macvim")
+    elseif IsMac() && (has("gui_macvim") || has('nvim'))
         try
-            set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
+            " set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
         catch
             " Failed to set font
         endtry
@@ -53,7 +53,6 @@ endif
 " }}
 
 " Set xterm and screen/tmux's title {{
-set notitle
 set titlestring=vim\ %{expand(\"%t\")}
 if &term =~ "^screen"
     " pretend this is xterm.  it probably is anyway, but if term is left as
@@ -69,5 +68,6 @@ if &term =~ "^screen"
     set t_fs=\
     set t_ut=
 endif
-set title
+set notitle
+" set title
 " }}

@@ -3,7 +3,13 @@
 default: install
 
 install:
-	./vim-sync-append.sh
+	sh ./vim-sync-append.sh
+
+uninstall:
+	rm ~/.vimrc
+	rm ~/.nvimrc
+	rm -fr ~/.vim
+	rm -fr ~/.nvim
 
 clean:
 	rm -fr ./vim/plugged
