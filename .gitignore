@@ -1,6 +1,7 @@
+vim/.netrwhist
 vim/autoload/plug.vim
+vim/backup/*~
 vim/plugged/*
 vim/rc/*.local.rc.vim
-vim/tmp/*.swp
 vim/tmp/*.swo
-vim/.netrwhist
+vim/tmp/*.swp

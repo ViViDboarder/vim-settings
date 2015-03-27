@@ -1,3 +1,15 @@
+function! s:smart_source_rc(name)
+    call s:source_rc(a:name . '.rc.vim')
+    call s:source_rc(a:name . '.local.rc.vim')
+endfunction
+
+function! s:source_rc(path)
+  let l:f_path = fnameescape(expand('~/.vim/rc/' . a:path))
+  if filereadable(l:f_path)
+      execute 'source' . l:f_path
+  endif
+endfunction
+
 " Navigation {{
 Plug 'file-line'
 Plug 'tpope/vim-vinegar'
@@ -17,7 +29,7 @@ Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
 
 
 Plug 'ctrlpvim/ctrlp.vim'
-call g:source_rc('plugins/ctrlp.rc.vim')
+call s:source_rc('plugins/ctrlp.rc.vim')
 
 " ag / ack {{
 if executable('ag')

@@ -7,12 +7,12 @@ if &compatible
   set nocompatible
 endif
 
-function! g:smart_source_rc(name)
-    call g:source_rc(a:name . '.rc.vim')
-    call g:source_rc(a:name . '.local.rc.vim')
+function! s:smart_source_rc(name)
+    call s:source_rc(a:name . '.rc.vim')
+    call s:source_rc(a:name . '.local.rc.vim')
 endfunction
 
-function! g:source_rc(path)
+function! s:source_rc(path)
   let l:f_path = fnameescape(expand('~/.vim/rc/' . a:path))
   if filereadable(l:f_path)
       execute 'source' . l:f_path
@@ -43,12 +43,12 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall
 endif
 
-call g:source_rc('init.rc.vim')
+call s:source_rc('init.rc.vim')
 
 call plug#begin()
-call g:smart_source_rc('plugins')
+call s:smart_source_rc('plugins')
 call plug#end()
 
-call g:smart_source_rc('edit')
-call g:smart_source_rc('keymap')
-call g:smart_source_rc('ui')
+call s:smart_source_rc('edit')
+call s:smart_source_rc('keymap')
+call s:smart_source_rc('ui')
