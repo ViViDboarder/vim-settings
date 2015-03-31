@@ -13,7 +13,7 @@ endfunction
 " Navigation {{
 Plug 'file-line'
 Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-fugitive', { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
+Plug 'tpope/vim-fugitive' " , { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
 " {{
     nnoremap <leader>gb :Gblame<CR>
     nnoremap <leader>gc :Gcommit<CR>
@@ -154,7 +154,7 @@ Plug 'rizzatti/dash.vim', { 'on': 'Dash'}
 " }}
 
 " Filetypes {{
-Plug 'PreserveNoEOL'
+" Plug 'PreserveNoEOL'
 " {{
     let g:PreserveNoEOL = 1
 " }}
@@ -167,6 +167,7 @@ Plug 'hsanson/vim-android'
 Plug 'pangloss/vim-javascript'
 Plug 'pdurbin/vim-tsv'
 Plug 'tfnico/vim-gradle'
+Plug 'tmux-plugins/vim-tmux'
 " }}
 
 " Python {{
@@ -207,20 +208,7 @@ Plug 'wombat256.vim'
 if has('nvim')
     Plug 'benekastah/neomake'
     " {{
-        let g:neomake_apex_force_maker = {
-            \ 'exe': 'force',
-            \ 'args': ['push'],
-            \ 'errorformat': &errorformat,
-            \ }
-
-        let g:neomake_apex_atf_maker = {
-            \ 'exe': 'atf deploy file',
-            \ 'args': [],
-            \ 'errorformat': &errorformat,
-            \ }
-
-        let g:neomake_apex_enabled_makers = ['force']
-        " let g:neomake_apex_enabled_makers = ['atf']
+        nmap <leader>nm :Neomake<CR>
         let g:neomake_python_makers = ['flake8']
     " }}
 else
