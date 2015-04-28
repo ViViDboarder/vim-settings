@@ -10,7 +10,6 @@ let g:ctrlp_dont_split = 'netrw'
 let g:ctrlp_extensions = ['tag', 'buffertag']
 " Support Apex language
 let g:ctrlp_buftag_types = {
-        \ 'apex'  : '--language-force=c#',
         \ 'go'    : {
             \ 'bin' : 'gotags',
             \ 'args' : '-sort -silent',

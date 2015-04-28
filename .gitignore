@@ -1,5 +1,8 @@
+*.log
+tags
 vim/.netrwhist
 vim/autoload/plug.vim
+vim/autoload/plug.vim.old
 vim/backup/*~
 vim/plugged/*
 vim/rc/*.local.rc.vim

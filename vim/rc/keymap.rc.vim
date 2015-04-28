@@ -9,7 +9,7 @@ cmap cwd lcd %:p:h
 cmap cd. lcd %:p:h
 
 " Bind Make to F5 like other IDEs
-nnoremap <F5> :Make!<CR>
+nnoremap <F5> :make<CR>
 
 " Remap Ctrl+Space for auto Complete
 inoremap <C-Space> <C-n>
@@ -64,8 +64,8 @@ nmap gb :bn<CR>
 nmap gB :bp<CR>
 
 " Command to display TODO tags in project
-command Todo Ag! TODO
+command Todo grep TODO
 
 " Easy update tags
-command TagsUpdate Dispatch ctags -R .
+command TagsUpdate !ctags -R .
 

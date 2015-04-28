@@ -44,11 +44,9 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call s:source_rc('init.rc.vim')
-
+call s:smart_source_rc('keymap')
 call plug#begin()
 call s:smart_source_rc('plugins')
 call plug#end()
-
 call s:smart_source_rc('edit')
-call s:smart_source_rc('keymap')
 call s:smart_source_rc('ui')

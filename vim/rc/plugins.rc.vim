@@ -29,7 +29,7 @@ Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
 
 
 Plug 'ctrlpvim/ctrlp.vim'
-call s:source_rc('plugins/ctrlp.rc.vim')
+call s:smart_source_rc('plugins/ctrlp')
 
 " ag / ack {{
 if executable('ag')
@@ -38,13 +38,15 @@ if executable('ag')
         nmap <leader>a :Ag<Space>
         nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
         nmap <leader>* :Ag<Space>'\b<c-r><c-W>\b'<CR>
+        command! Todo Ag! TODO
     " }}
-else
+elseif executable('ack')
     Plug 'mileszs/ack.vim'
     " {{
         nmap <leader>a :Ack<Space>
         nmap <leader>i* :Ack<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
         nmap <leader>* :Ack<Space>'\<<c-r><c-W>\>'<CR>
+        command! Todo Ack! TODO
     " }}
 endif
 " }}
@@ -52,40 +54,11 @@ endif
 " Autocomplete {{
 if has('lua')
     Plug 'Shougo/neocomplete.vim'
-    " {{
-        let g:acp_enableAtStartup = 0
-        let g:neocomplete#enable_at_startup = 1
-        "let g:neocomplete#enable_smart_case = 1
-        let g:neocomlete#max_list=10
-    " }}
+    call s:smart_source_rc('plugins/neocomps')
 else
     Plug 'Shougo/neocomplcache.vim'
-    " {{
-        let g:neocomplcache_enable_at_startup = 1
-        "let g:neocomplcache_enable_smart_case = 1
-        let g:neocomplcache_max_list = 10
-        "let g:neocomplcache_enable_camel_case_completion = 1
-        let g:neocomplcache_enable_fuzzy_completion = 1
-        if !exists('g:neocomplcache_force_omni_patterns')
-            let g:neocomplcache_force_omni_patterns = {}
-        endif
-        let g:neocomplcache_force_omni_patterns.python =
-            \ '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
-            " alternative pattern: '\h\w*\|[^. \t]\.\w*'
-    " }}
+    call s:smart_source_rc('plugins/neocomps')
 end
-" {{
-    " Enable omni completion.
-    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-    " Skip python because we have jedi-vim
-    "autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-    autocmd FileType python setlocal omnifunc=jedi#completions
-    autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" }}
 
 " Programming {{
 Plug 'majutsushi/tagbar'
@@ -97,30 +70,18 @@ Plug 'majutsushi/tagbar'
 " syntastic {{
 if !has('nvim')
     " Only use if not neovim, on neovim we have Neomake
-    Plug 'scrooloose/syntastic' " {{
-        let g:syntastic_html_tidy_ignore_errors = [
-            \ 'proprietary attribute "ng-show"',
-            \ 'proprietary attribute "ng-controller"',
-            \ 'proprietary attribute "ng-repeat"',
-            \ 'proprietary attribute "ng-app"',
-            \ 'proprietary attribute "ng-click"'
-            \ ]
-        let g:syntastic_python_checkers = ['flake8']
-        let g:syntastic_python_flake8_args='--max-line-length=80'
-        " let g:syntastic_python_checkers = ['pep8']
-        " " let g:syntastic_python_pep8_args='--ignore=E501'
-        " " let g:syntastic_python_checkers = ['jshint']
-        " " let g:syntastic_javascript_jshint_args='--ignore=E501'
-        "
-    " }}
+    Plug 'scrooloose/syntastic'
+    call s:smart_source_rc('plugins/syntastic')
 endif
 " }}
-Plug 'tomtom/tcomment_vim', { 'on': ['TComment', 'TCommentBlock'] }
+Plug 'tomtom/tcomment_vim'
+" , { 'on': ['TComment', 'TCommentBlock'] }
 " {{
     nnoremap // :TComment<CR>
     vnoremap // :TCommentBlock<CR>
 " }}
 " }}
+Plug 'tpope/vim-surround'
 
 " GUI {{
 Plug 'bling/vim-airline'
@@ -209,10 +170,14 @@ if has('nvim')
     Plug 'benekastah/neomake'
     " {{
         nmap <leader>nm :Neomake<CR>
+        nnoremap <F5> :Neomake<CR>
         let g:neomake_python_makers = ['flake8']
+
     " }}
 else
     Plug 'tpope/vim-dispatch'
+    nnoremap <F5> :Make<CR>
+    command! TagsUpdate Dispatch ctags -R .
 endif
 " }}
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
