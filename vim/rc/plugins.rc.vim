@@ -30,6 +30,7 @@ Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
 
 Plug 'ctrlpvim/ctrlp.vim'
 call s:smart_source_rc('plugins/ctrlp')
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 
 " ag / ack {{
 if executable('ag')
