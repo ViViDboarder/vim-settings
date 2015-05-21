@@ -185,9 +185,9 @@ Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'tpope/vim-repeat'
 " emacs bindinds in insert
 Plug 'tpope/vim-rsi'
-Plug 'ViViDboarder/QFixToggle'
+Plug 'milkypostman/vim-togglelist'
 " {{
-    " Toggle QuickFix window
-    nnoremap <silent> <F6> :QFix<CR>
+    nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
+    nnoremap <silent> <F7> :call ToggleLocationList()<CR>
 " }}
 " }}
