@@ -3,6 +3,10 @@
 " Note: Skip initialization for vim-tiny or vim-small.
 if !1 | finish | endif
 
+if &shell =~# 'fish$'
+    set shell=sh
+endif
+
 if &compatible
   set nocompatible
 endif
