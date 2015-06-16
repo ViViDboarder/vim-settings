@@ -59,6 +59,23 @@ nmap <leader>cf va{<ESC>zf%<ESC>:nohlsearch<CR>
 vnoremap pp p
 vnoremap po "_dP
 
+if has('nvim')
+    " make term exiting easier
+    tnoremap <c-q> <c-\><c-n>
+
+    " Add bash related term commands
+    command Bash e term://bash
+    command VBash vsp term://bash
+    command SBash sp term://bash
+    command TBash tabedit term://bash
+
+    " Add fish related term commands
+    command Fish e term://fish
+    command VFish vsp term://fish
+    command SFish sp term://fish
+    command TFish tabedit term://fish
+endif
+
 " Buffer nav
 nmap gb :bn<CR>
 nmap gB :bp<CR>
@@ -68,4 +85,3 @@ command Todo grep TODO
 
 " Easy update tags
 command TagsUpdate !ctags -R .
-
