@@ -112,7 +112,12 @@ Plug 'bling/vim-airline'
     let g:airline#extensions#tabline#left_alt_sep = '|'
 " }}
 Plug 'gregsexton/MatchTag'
-Plug 'rizzatti/dash.vim', { 'on': 'Dash'}
+Plug 'rizzatti/dash.vim'
+nmap <silent> <leader>d <Plug>DashSearch
+let g:dash_map = {
+    \ 'apex' : 'apex',
+    \ 'visualforce' : 'vf',
+    \ }
 " }}
 
 " Filetypes {{
