@@ -122,6 +122,7 @@ Plug 'rizzatti/dash.vim', { 'on': 'Dash'}
 " }}
 Plug 'ViViDboarder/vim-forcedotcom'
 Plug 'avakhov/vim-yaml'
+Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'fatih/vim-go'
 Plug 'groovy.vim'
@@ -183,6 +184,7 @@ endif
 " }}
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-endwise'
 " emacs bindinds in insert
 Plug 'tpope/vim-rsi'
 Plug 'milkypostman/vim-togglelist'
