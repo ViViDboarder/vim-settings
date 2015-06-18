@@ -55,10 +55,10 @@ endif
 " Autocomplete {{
 if has('lua')
     Plug 'Shougo/neocomplete.vim'
-    call s:smart_source_rc('plugins/neocomps')
+    call s:smart_source_rc('plugins/neocomplete')
 else
     Plug 'Shougo/neocomplcache.vim'
-    call s:smart_source_rc('plugins/neocomps')
+    call s:smart_source_rc('plugins/neocomplcache')
 end
 
 " Programming {{
