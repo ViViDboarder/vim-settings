@@ -1,3 +1,4 @@
+" Functions {{
 function! s:smart_source_rc(name)
     call s:source_rc(a:name . '.rc.vim')
     call s:source_rc(a:name . '.local.rc.vim')
@@ -9,48 +10,70 @@ function! s:source_rc(path)
       execute 'source' . l:f_path
   endif
 endfunction
+" }} Functions
 
 " Navigation {{
 Plug 'file-line'
 Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-fugitive' " , { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
-" {{
-    nnoremap <leader>gb :Gblame<CR>
-    nnoremap <leader>gc :Gcommit<CR>
-    nnoremap <leader>gd :Gdiff<CR>
-    nnoremap <leader>gs :Gstatus<CR>
-    nnoremap <leader>gw :Gwrite<CR>
-" }}
 Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
-" {{
+" Buffet {{
     nnoremap <silent> <F2> :Bufferlist<CR>
-" }}
-" }}
+" }} Buffet
+
+" }} Navigation
+
+" Git {{
+Plug 'tpope/vim-fugitive' " , { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
+" vim-fugitive {{
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gw :Gwrite<CR>
+" }} vim-fugitive
+
+Plug 'airblade/vim-gitgutter'
+" vim-gitgutter {{
+let g:gitgutter_enabled = 1
+" Will toggle signs when I want them
+let g:gitgutter_signs = 0
+" Already using Fugitive, don't need more mappings
+let g:gitgutter_map_keys = 0
+" Make it more passive
+let g:gitgutter_eager = 0
+let g:gitgutter_realtime = 0
+" Quick leader command to toggle git-gutter
+nmap <leader>gg :GitGutterSignsToggle<CR>
+" }} vim-gitgutter
+
+" }} Git
 
 
+" Fuzzy Find {{
 Plug 'ctrlpvim/ctrlp.vim'
 call s:smart_source_rc('plugins/ctrlp')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-
 " ag / ack {{
 if executable('ag')
     Plug 'rking/ag.vim'
-    " {{
-        nmap <leader>a :Ag<Space>
-        nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
-        nmap <leader>* :Ag<Space>'\b<c-r><c-W>\b'<CR>
-        command! Todo Ag! TODO
-    " }}
+    " ag.vim {{
+    nmap <leader>a :Ag<Space>
+    nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
+    nmap <leader>* :Ag<Space>'\b<c-r><c-W>\b'<CR>
+    command! Todo Ag! TODO
+    " }} ag.vim
 elseif executable('ack')
     Plug 'mileszs/ack.vim'
-    " {{
-        nmap <leader>a :Ack<Space>
-        nmap <leader>i* :Ack<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
-        nmap <leader>* :Ack<Space>'\<<c-r><c-W>\>'<CR>
-        command! Todo Ack! TODO
-    " }}
+    " ack.vim {{
+    nmap <leader>a :Ack<Space>
+    nmap <leader>i* :Ack<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
+    nmap <leader>* :Ack<Space>'\<<c-r><c-W>\>'<CR>
+    command! Todo Ack! TODO
+    " }} ack.vim
 endif
-" }}
+" }} ag /ack
+
+" }} Fuzzy Find
 
 " Autocomplete {{
 if has('lua')
@@ -63,68 +86,72 @@ end
 
 " Programming {{
 Plug 'majutsushi/tagbar'
-" {{
-    nnoremap <silent> <F8> :TagbarToggle<CR>
-    " Autofocus tagbar
-    let g:tagbar_autofocus = 1
-" }}
-" syntastic {{
+" tagbar {{
+nnoremap <silent> <F8> :TagbarToggle<CR>
+let g:tagbar_autofocus = 1 " Autofocus tagbar
+" }} tagbar
+Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
+Plug 'tpope/vim-surround'
+Plug 'tomtom/tcomment_vim' " , { 'on': ['TComment', 'TCommentBlock'] }
+" tcomment_vim {{
+nnoremap // :TComment<CR>
+vnoremap // :TCommentBlock<CR>
+" }} tcomment_vim
 if !has('nvim')
     " Only use if not neovim, on neovim we have Neomake
     Plug 'scrooloose/syntastic'
     call s:smart_source_rc('plugins/syntastic')
 endif
 " }}
-Plug 'tomtom/tcomment_vim'
-" , { 'on': ['TComment', 'TCommentBlock'] }
-" {{
-    nnoremap // :TComment<CR>
-    vnoremap // :TCommentBlock<CR>
-" }}
-" }}
-Plug 'tpope/vim-surround'
 
 " GUI {{
 Plug 'bling/vim-airline'
-" {{
-    " Use short-form mode text
-    let g:airline_mode_map = {
-        \ '__' : '-',
-        \ 'n'  : 'N',
-        \ 'i'  : 'I',
-        \ 'R'  : 'R',
-        \ 'c'  : 'C',
-        \ 'v'  : 'V',
-        \ 'V'  : 'V',
-        \ '' : 'V',
-        \ 's'  : 'S',
-        \ 'S'  : 'S',
-        \ '' : 'S',
-        \ }
-    let g:airline#extensions#whitespace#trailing_format = 'tw[%s]'
-    let g:airline#extensions#whitespace#mixed_indent_format = 'i[%s]'
-    let g:airline_left_sep=''
-    let g:airline_left_alt_sep=''
-    let g:airline_right_sep=''
-    let g:airline_right_alt_sep=''
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_sep = ' '
-    let g:airline#extensions#tabline#left_alt_sep = '|'
-" }}
+" vim-airline {{
+" Use short-form mode text
+let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'n'  : 'N',
+    \ 'i'  : 'I',
+    \ 'R'  : 'R',
+    \ 'c'  : 'C',
+    \ 'v'  : 'V',
+    \ 'V'  : 'V',
+    \ '' : 'V',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ '' : 'S',
+    \ }
+" abbreviate trailing whitespace and mixed indent
+let g:airline#extensions#whitespace#trailing_format = 'tw[%s]'
+let g:airline#extensions#whitespace#mixed_indent_format = 'i[%s]'
+" Vertical separators for all
+let g:airline_left_sep=''
+let g:airline_left_alt_sep=''
+let g:airline_right_sep=''
+let g:airline_right_alt_sep=''
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+" }} vim-airline
+" Highlight matching tags
 Plug 'gregsexton/MatchTag'
+" Integrate with Dash
 Plug 'rizzatti/dash.vim'
+" dash.vim {{
 nmap <silent> <leader>d <Plug>DashSearch
 let g:dash_map = {
     \ 'apex' : 'apex',
     \ 'visualforce' : 'vf',
     \ }
-" }}
+" }} dash.vim
+
+" }} GUI
 
 " Filetypes {{
 " Plug 'PreserveNoEOL'
-" {{
-    let g:PreserveNoEOL = 1
-" }}
+" noeol {{
+" let g:PreserveNoEOL = 1
+" }} noeol
 Plug 'ViViDboarder/vim-forcedotcom'
 Plug 'avakhov/vim-yaml'
 Plug 'dag/vim-fish'
@@ -148,13 +175,13 @@ Plug 'davidhalter/jedi-vim'
 " }}
 Plug 'klen/python-mode'
 " {{
-    let g:pymode_lint = 1
-    let g:pymode_lint_on_write = 0
-    let g:pymode_lint_checkers = ['flake8']
-    let g:pymode_rope = 0
-    let g:pymode_rope_completion = 0
-    let g:pymode_rope_complete_on_dot = 0
     let g:pymode_breakpoint = 0
+    let g:pymode_lint = 0
+    let g:pymode_lint_checkers = ['flake8']
+    let g:pymode_lint_on_write = 0
+    let g:pymode_rope = 0
+    let g:pymode_rope_complete_on_dot = 0
+    let g:pymode_rope_completion = 0
     "}}
 " }}
 
@@ -178,7 +205,7 @@ if has('nvim')
     " {{
         nmap <leader>nm :Neomake<CR>
         nnoremap <F5> :Neomake<CR>
-        let g:neomake_python_makers = ['flake8']
+        let g:neomake_python_enabled_makers = ['flake8']
 
     " }}
 else
