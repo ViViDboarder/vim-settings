@@ -4,8 +4,8 @@
 let g:ctrlp_max_height = 10
 " Conditional Mappings
 let g:ctrlp_map = '<C-t>'
-" Allow ctrl p to open over the initial nerdtree window
-let g:ctrlp_dont_split = 'netrw'
+" Allow ctrl p to open over startify
+let g:ctrlp_reuse_window = 'startify'
 " Support tag jumping
 let g:ctrlp_extensions = ['tag', 'buffertag']
 " Support Apex language

@@ -105,6 +105,8 @@ endif
 " }}
 
 " GUI {{
+Plug 'mhinz/vim-startify'
+call s:smart_source_rc('plugins/startify')
 Plug 'bling/vim-airline'
 " vim-airline {{
 " Use short-form mode text
@@ -169,20 +171,21 @@ Plug 'tmux-plugins/vim-tmux'
 Plug 'alfredodeza/coveragepy.vim'
 Plug 'alfredodeza/pytest.vim'
 Plug 'davidhalter/jedi-vim'
-" {{
-    let g:jedi#completions_enabled = 0
-    let g:jedi#auto_vim_configuration = 0
-" }}
+" jedi-vim {{
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+" }} jedi-vim
 Plug 'klen/python-mode'
-" {{
-    let g:pymode_breakpoint = 0
-    let g:pymode_lint = 0
-    let g:pymode_lint_checkers = ['flake8']
-    let g:pymode_lint_on_write = 0
-    let g:pymode_rope = 0
-    let g:pymode_rope_complete_on_dot = 0
-    let g:pymode_rope_completion = 0
-    "}}
+" python-mode {{
+let g:pymode_breakpoint = 0
+let g:pymode_lint = 0
+let g:pymode_lint_checkers = ['flake8']
+let g:pymode_lint_on_write = 0
+let g:pymode_rope = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_rope_completion = 0
+" }} python-mode
+
 " }}
 
 " Themes {{
@@ -202,12 +205,11 @@ Plug 'wombat256.vim'
 " neomake / vim-dispatch {{
 if has('nvim')
     Plug 'benekastah/neomake'
-    " {{
-        nmap <leader>nm :Neomake<CR>
-        nnoremap <F5> :Neomake<CR>
-        let g:neomake_python_enabled_makers = ['flake8']
-
-    " }}
+    " neomake {{
+    nmap <leader>nm :Neomake<CR>
+    nnoremap <F5> :Neomake<CR>
+    let g:neomake_python_enabled_makers = ['flake8']
+    " }} neomake
 else
     Plug 'tpope/vim-dispatch'
     nnoremap <F5> :Make<CR>
@@ -220,8 +222,9 @@ Plug 'tpope/vim-endwise'
 " emacs bindinds in insert
 Plug 'tpope/vim-rsi'
 Plug 'milkypostman/vim-togglelist'
-" {{
-    nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
-    nnoremap <silent> <F7> :call ToggleLocationList()<CR>
-" }}
+" vim-togglelist {{
+nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
+nnoremap <silent> <F7> :call ToggleLocationList()<CR>
+" }} vim-togglelist
+
 " }}

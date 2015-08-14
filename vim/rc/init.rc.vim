@@ -18,6 +18,7 @@ set mouse=a
 set backup
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
+set viminfo='100,n~/.vim/tmp/viminfo
 
 " Filetype extension
 au BufRead,BufNewFile *.md set syntax=markdown

@@ -7,5 +7,7 @@ vim/autoload/plug.vim.old
 vim/backup/*~
 vim/plugged/*
 vim/rc/*.local.rc.vim
+vim/rc/plugins/*.local.rc.vim
 vim/tmp/*.swo
 vim/tmp/*.swp
+vim/tmp/viminfo
