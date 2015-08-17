@@ -85,6 +85,7 @@ else
 end
 
 " Programming {{
+Plug 'kassio/neoterm'
 Plug 'majutsushi/tagbar'
 " tagbar {{
 nnoremap <silent> <F8> :TagbarToggle<CR>
