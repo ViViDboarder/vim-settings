@@ -170,6 +170,11 @@ Plug 'tmux-plugins/vim-tmux'
 " Python {{
 Plug 'alfredodeza/coveragepy.vim'
 Plug 'alfredodeza/pytest.vim'
+" pytest.vim {{
+nmap <silent><leader>ptp <Esc>:Pytest project<CR>
+nmap <silent><leader>ptf <Esc>:Pytest file<CR>
+nmap <silent><leader>ptm <Esc>:Pytest method<CR>
+" }} pytest.vim
 Plug 'davidhalter/jedi-vim'
 " jedi-vim {{
 let g:jedi#completions_enabled = 0
