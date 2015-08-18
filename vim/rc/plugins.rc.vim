@@ -123,6 +123,7 @@ let g:airline_mode_map = {
     \ 's'  : 'S',
     \ 'S'  : 'S',
     \ '' : 'S',
+    \ 't'  : 'T',
     \ }
 " abbreviate trailing whitespace and mixed indent
 let g:airline#extensions#whitespace#trailing_format = 'tw[%s]'
