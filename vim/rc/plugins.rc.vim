@@ -49,30 +49,31 @@ nmap <leader>gg :GitGutterSignsToggle<CR>
 " }} Git
 
 
-" Fuzzy Find {{
+" Searching {{
 Plug 'ctrlpvim/ctrlp.vim'
 call s:smart_source_rc('plugins/ctrlp')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-" ag / ack {{
+Plug 'mhinz/vim-grepper'
+" vim-grepper {{
+let g:grepper = {
+            \ 'dispatch': 1,
+            \ 'quickfix': 1,
+            \ 'open': 1,
+            \ 'switch': 0,
+            \ 'jump': 0,
+            \ 'tools': ['ag', 'ack', 'git', 'pt', 'grep']
+            \ }
+command! -nargs=* -complete=file Grep Grepper! -tool ag -query <args>
+nmap <leader>* :Grep<Space>'\b<c-r><c-W>\b'<CR>
 if executable('ag')
-    Plug 'rking/ag.vim'
-    " ag.vim {{
-    nmap <leader>a :Ag<Space>
-    nmap <leader>i* :Ag<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
-    nmap <leader>* :Ag<Space>'\b<c-r><c-W>\b'<CR>
-    command! Todo Ag! TODO
-    " }} ag.vim
-elseif executable('ack')
-    Plug 'mileszs/ack.vim'
-    " ack.vim {{
-    nmap <leader>a :Ack<Space>
-    nmap <leader>i* :Ack<Space>-i<Space>'\b<c-r><c-W>\b'<CR>
-    nmap <leader>* :Ack<Space>'\<<c-r><c-W>\>'<CR>
-    command! Todo Ack! TODO
-    " }} ack.vim
+    command! -nargs=* -complete=file Ag Grepper! -tool ag -query <args>
 endif
-" }} ag /ack
-
+if executable('ack')
+    nmap <leader>* :Grep<Space>'\<<c-r><c-W>\>'<CR>
+    command! -nargs=* -complete=file Ack Grepper! -tool ack -query <args>
+endif
+command! Todo Grep TODO
+" }} vim-grepper
 " }} Fuzzy Find
 
 " Autocomplete {{
