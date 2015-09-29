@@ -33,10 +33,14 @@ echo "Install all bundles"
 vim +PlugInstall +qall
 if hash nvim 2>/dev/null; then
     nvim +PlugInstall +qall
+    nvim +UpdateRemotePlugins +qall
 fi
 
+vim --version | grep -q '\+lua' || { echo "Warning: Default vim does not include lua"; }
 vim --version | grep -q '\+ruby' || { echo "Warning: Default vim does not include ruby."; }
 vim --version | grep -q '\+python' || { echo "Warning: Default vim does not include python"; }
+
+echo "If using Neovim, install the python modules"
 
 echo "All done!"
 exit 0

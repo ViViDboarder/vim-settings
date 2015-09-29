@@ -79,9 +79,16 @@ command! Todo Grep TODO
 " }} Fuzzy Find
 
 " Autocomplete {{
+call s:smart_source_rc('plugins/omnicompletion')
 if (has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
     Plug 'Shougo/neocomplete.vim'
     call s:smart_source_rc('plugins/neocomplete')
+elseif has('nvim') && has('python3')
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'Shougo/neoinclude.vim'
+    Plug 'Shougo/neco-syntax'
+    call s:smart_source_rc('plugins/deoplete')
+    " Remember :UpdateRemotePlugins
 else
     Plug 'Shougo/neocomplcache.vim'
     call s:smart_source_rc('plugins/neocomplcache')
@@ -184,8 +191,9 @@ nmap <silent><leader>ptm <Esc>:Pytest method<CR>
 " }} pytest.vim
 Plug 'davidhalter/jedi-vim'
 " jedi-vim {{
-let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#smart_auto_mappings = 0
 " }} jedi-vim
 Plug 'klen/python-mode'
 " python-mode {{
