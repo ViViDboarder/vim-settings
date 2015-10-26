@@ -1,10 +1,13 @@
-au VimEnter,BufRead,BufNewFile *.py
-    \ if executable('ipython') |
-    \   call neoterm#repl#set('ipython') |
-    \ endif |
-    \ if executable('pytest') |
-    \   call neoterm#test#libs#add('pytest') |
-    \ endif
+if has('nvim')
+    au VimEnter,BufRead,BufNewFile *.py
+        \ if executable('ipython') |
+        \   call neoterm#repl#set('ipython') |
+        \ endif |
+        \ if executable('pytest') |
+        \   call neoterm#test#libs#add('pytest') |
+        \ endif
+    command! Tox :T tox<CR>
+endif
 
 let g:neomake_python_pytest_maker = {
     \ 'exe': 'py.test',
