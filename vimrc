@@ -4,7 +4,7 @@
 if !1 | finish | endif
 
 if &shell =~# 'fish$'
-    set shell=sh
+    set shell=bash
 endif
 
 if &compatible
