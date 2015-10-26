@@ -62,6 +62,7 @@ vnoremap po "_dP
 if has('nvim')
     " make term exiting easier
     tnoremap <c-q> <c-\><c-n>
+    tnoremap <c-\><c-\> <c-\><c-n>
 
     " Add bash related term commands
     command Bash e term://bash
