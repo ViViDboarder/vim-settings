@@ -77,7 +77,7 @@ command! Todo Grep TODO
 " }} Fuzzy Find
 
 " Autocomplete {{
-if has('lua')
+if (has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
     Plug 'Shougo/neocomplete.vim'
     call s:smart_source_rc('plugins/neocomplete')
 else
