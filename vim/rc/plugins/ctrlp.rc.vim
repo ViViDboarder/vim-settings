@@ -24,8 +24,6 @@ nnoremap <leader>m :CtrlPMRUFiles<CR>
 
 " Special stuff for The Silver Searcher
 if executable('ag')
-    " use ag
-    set grepprg=ag\ --nogroup\ --nocolor
     " use ag for CtrlP
     let g:ctrlp_user_command = 'ag %s -l --nocolor --nogroup -g ""'
     " ag is fast enough we don't need cache

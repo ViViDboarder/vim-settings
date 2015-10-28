@@ -65,13 +65,14 @@ let g:grepper = {
             \ }
 command! -nargs=* -complete=file Grep Grepper! -tool ag -query <args>
 nmap <leader>* :Grep<Space>'\b<c-r><c-W>\b'<CR>
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --nocolor
+    command! -nargs=* -complete=file Ag Grepper! -tool ag -query <args>
+    nmap <leader>* :Ag<Space>'\<<c-r><c-W>\>'<CR>
+endif
 if executable('ack')
     command! -nargs=* -complete=file Ack Grepper! -tool ack -query <args>
     nmap <leader>* :Ack<Space>'\b<c-r><c-W>\b'<CR>
-endif
-if executable('ag')
-    command! -nargs=* -complete=file Ag Grepper! -tool ag -query <args>
-    nmap <leader>* :Ag<Space>'\<<c-r><c-W>\>'<CR>
 endif
 command! Todo Grep TODO
 " }} vim-grepper
