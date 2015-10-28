@@ -88,7 +88,9 @@ else
 end
 
 " Programming {{
-Plug 'kassio/neoterm'
+if has('nvim')
+    Plug 'kassio/neoterm'
+endif
 Plug 'majutsushi/tagbar'
 " tagbar {{
 nnoremap <silent> <F8> :TagbarToggle<CR>
