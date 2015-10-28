@@ -1,8 +1,9 @@
+#! /bin/bash
+
 ############################
 # Vim Settings Setup script by ViViDboarder (Ian)
 # http://github.com/ViViDboarder/Vim-Settings
 ############################
-#! /bin/bash
 
 if [ -d ~/.vim  ] || [ -f ~/.vimrc ] || [ -d ~/.nvim  ] || [ -f ~/.nvimrc ] || [ -d ~/.config/nvim  ]; then
     echo "Vim files already exist. Please backup or remove .(n)vim and .(n)vimrc and .config/nvim"
