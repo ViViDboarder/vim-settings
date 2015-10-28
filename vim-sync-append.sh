@@ -4,15 +4,10 @@
 ############################
 #! /bin/bash
 
-if [ -d ~/.vim  ] || [ -f ~/.vimrc ] || [ -d ~/.nvim  ] || [ -f ~/.nvimrc ]; then
-    echo "Vim files already exist. Please backup or remove .(n)vim and .(n)vimrc"
+if [ -d ~/.vim  ] || [ -f ~/.vimrc ] || [ -d ~/.nvim  ] || [ -f ~/.nvimrc ] || [ -d ~/.config/nvim  ]; then
+    echo "Vim files already exist. Please backup or remove .(n)vim and .(n)vimrc and .config/nvim"
     exit 1
 fi
-
-# Try to load .bashrc to load rvm functions
-# if [ -f ~/.bashrc ]; then
-    # . ~/.bashrc
-# fi
 
 # Get current directory for future use in links
 VIM_SYNC_DIR=$(dirname $0)
@@ -21,16 +16,15 @@ VIM_SYNC_DIR=$(pwd)
 
 
 # Vim
-ln -s $VIM_SYNC_DIR/vimrc ~/.vimrc
+ln -s $VIM_SYNC_DIR/vim/init.vim ~/.vimrc
 ln -s $VIM_SYNC_DIR/vim ~/.vim
 
 # Neovim legacy
-ln -s $VIM_SYNC_DIR/vimrc ~/.nvimrc
+ln -s $VIM_SYNC_DIR/vim/init.vim ~/.nvimrc
 ln -s $VIM_SYNC_DIR/vim ~/.nvim
 
 # Neovim new
 mkdir -p ${XDG_CONFIG_HOME:=$HOME/.config}
-ln -s $VIM_SYNC_DIR/vimrc $XDG_CONFIG_HOME/nvim/init.vim
 ln -s $VIM_SYNC_DIR/vim $XDG_CONFIG_HOME/nvim
 
 # Install all bundles
