@@ -24,9 +24,14 @@ VIM_SYNC_DIR=$(pwd)
 ln -s $VIM_SYNC_DIR/vimrc ~/.vimrc
 ln -s $VIM_SYNC_DIR/vim ~/.vim
 
-# Neovim
+# Neovim legacy
 ln -s $VIM_SYNC_DIR/vimrc ~/.nvimrc
 ln -s $VIM_SYNC_DIR/vim ~/.nvim
+
+# Neovim new
+mkdir -p ${XDG_CONFIG_HOME:=$HOME/.config}
+ln -s $VIM_SYNC_DIR/vimrc $XDG_CONFIG_HOME/nvim/init.vim
+ln -s $VIM_SYNC_DIR/vim $XDG_CONFIG_HOME/nvim
 
 # Install all bundles
 echo "Install all bundles"
