@@ -20,7 +20,7 @@ try
     if !empty($VIM_COLOR)
         colorscheme $VIM_COLOR
     else
-        if has("gui_running")
+        if has("gui_running") || exists("neovim_dot_app")
             colorscheme wombat256mod
         else
             colorscheme vividchalk
@@ -39,12 +39,12 @@ endif
 " }}
 
 " Set gui fonts {{
-if has("gui_running")
+if has("gui_running") || exists("neovim_dot_app")
     if has("gui_win32")
         set guifont=Consolas:h10:b
-    elseif IsMac() && (has("gui_macvim") || has('nvim'))
+    elseif IsMac() && (has("gui_macvim") || exists("neovim_dot_app"))
         try
-            " set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
+            set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
         catch
             " Failed to set font
         endtry
