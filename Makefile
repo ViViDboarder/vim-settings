@@ -10,6 +10,7 @@ uninstall:
 	rm ~/.nvimrc
 	rm -fr ~/.vim
 	rm -fr ~/.nvim
+	rm -fr ~/.config/nvim
 
 clean:
 	rm -fr ./vim/plugged
