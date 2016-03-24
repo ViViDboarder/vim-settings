@@ -1,11 +1,6 @@
 "Allows filetype detection
 filetype on
-
-" Set settings values
 filetype plugin indent on
-
-" Allow arrow keys
-set nocompatible
 
 " Use more convenient leader
 let mapleader=","
