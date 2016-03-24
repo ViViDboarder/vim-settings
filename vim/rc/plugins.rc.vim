@@ -63,18 +63,16 @@ let g:grepper = {
             \ 'jump': 0,
             \ 'tools': ['ag', 'ack', 'git', 'pt', 'grep']
             \ }
-command! -nargs=* -complete=file Grep Grepper! -tool ag -query <args>
-nmap <leader>* :Grep<Space>'\b<c-r><c-W>\b'<CR>
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+nmap <leader>* :Grepper -cword -noprompt<cr>
+command! Todo Grepper -noprompt -query TODO
 if executable('ag')
     set grepprg=ag\ --nogroup\ --nocolor
-    command! -nargs=* -complete=file Ag Grepper! -tool ag -query <args>
-    nmap <leader>* :Ag<Space>'\<<c-r><c-W>\>'<CR>
 endif
 if executable('ack')
-    command! -nargs=* -complete=file Ack Grepper! -tool ack -query <args>
-    nmap <leader>* :Ack<Space>'\b<c-r><c-W>\b'<CR>
+    set grepprg=ack
 endif
-command! Todo Grep TODO
 " }} vim-grepper
 " }} Fuzzy Find
 
