@@ -120,7 +120,8 @@ endif
 " GUI {{
 Plug 'mhinz/vim-startify'
 call s:smart_source_rc('plugins/startify')
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 " vim-airline {{
 " Use short-form mode text
 let g:airline_mode_map = {
