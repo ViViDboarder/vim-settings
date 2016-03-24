@@ -87,6 +87,8 @@ elseif has('nvim') && has('python3')
     Plug 'Shougo/deoplete.nvim'
     Plug 'Shougo/neoinclude.vim'
     Plug 'Shougo/neco-syntax'
+    Plug 'zchee/deoplete-jedi'
+    Plug 'zchee/deoplete-go'
     call s:smart_source_rc('plugins/deoplete')
     " Remember :UpdateRemotePlugins
 else
