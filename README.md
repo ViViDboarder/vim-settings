@@ -14,7 +14,10 @@ Install
 
     git clone https://github.com/ViViDboarder/vim-settings.git
     cd vim-settings
-    ./vim-sync-append.sh
+    make install
+
+You can also remove any installed plugins or completely uninstall this configuration using either
+`make clean` or `make uninstall` respectively.
 
 Project Layout
 ==============
