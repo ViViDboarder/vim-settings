@@ -9,7 +9,7 @@ let g:ctrlp_reuse_window = 'startify'
 " Support tag jumping
 let g:ctrlp_extensions = ['tag', 'buffertag']
 " Don't search right away
-let g:ctrlp_lazy_update = 100
+let g:ctrlp_lazy_update = 50
 " Quick exiting with <bs>
 let g:ctrlp_brief_prompt = 1
 " Support golang tags
