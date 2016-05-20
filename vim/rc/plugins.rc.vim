@@ -103,7 +103,9 @@ Plug 'majutsushi/tagbar'
 nnoremap <silent> <F8> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1 " Autofocus tagbar
 " }} tagbar
-Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
+if (v:version > 703)
+    Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
+end
 Plug 'tpope/vim-surround'
 Plug 'tomtom/tcomment_vim' " , { 'on': ['TComment', 'TCommentBlock'] }
 " tcomment_vim {{
