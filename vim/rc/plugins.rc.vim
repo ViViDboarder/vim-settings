@@ -23,7 +23,7 @@ Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
 " }} Navigation
 
 " Git {{
-Plug 'tpope/vim-fugitive' " , { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
+Plug 'tpope/vim-fugitive', { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
 " vim-fugitive {{
 nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gc :Gcommit<CR>
@@ -32,7 +32,7 @@ nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gw :Gwrite<CR>
 " }} vim-fugitive
 
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'on': ['GitGutterSignsToggle'] }
 " vim-gitgutter {{
 let g:gitgutter_enabled = 1
 " Will toggle signs when I want them
@@ -124,34 +124,7 @@ Plug 'mhinz/vim-startify'
 call s:smart_source_rc('plugins/startify')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" vim-airline {{
-" Use short-form mode text
-let g:airline_mode_map = {
-    \ '__' : '-',
-    \ 'n'  : 'N',
-    \ 'i'  : 'I',
-    \ 'R'  : 'R',
-    \ 'c'  : 'C',
-    \ 'v'  : 'V',
-    \ 'V'  : 'V',
-    \ '' : 'V',
-    \ 's'  : 'S',
-    \ 'S'  : 'S',
-    \ '' : 'S',
-    \ 't'  : 'T',
-    \ }
-" abbreviate trailing whitespace and mixed indent
-let g:airline#extensions#whitespace#trailing_format = 'tw[%s]'
-let g:airline#extensions#whitespace#mixed_indent_format = 'i[%s]'
-" Vertical separators for all
-let g:airline_left_sep=''
-let g:airline_left_alt_sep=''
-let g:airline_right_sep=''
-let g:airline_right_alt_sep=''
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-" }} vim-airline
+call s:smart_source_rc('plugins/airline')
 " Highlight matching tags
 Plug 'gregsexton/MatchTag'
 " Integrate with Dash
@@ -167,10 +140,6 @@ let g:dash_map = {
 " }} GUI
 
 " Filetypes {{
-" Plug 'PreserveNoEOL'
-" noeol {{
-" let g:PreserveNoEOL = 1
-" }} noeol
 Plug 'ViViDboarder/vim-forcedotcom'
 Plug 'avakhov/vim-yaml'
 Plug 'dag/vim-fish'
@@ -229,11 +198,9 @@ Plug 'wombat256.vim'
 " neomake / vim-dispatch {{
 if has('nvim')
     Plug 'benekastah/neomake'
-    " neomake {{
-    nmap <leader>nm :Neomake<CR>
     nnoremap <F5> :Neomake<CR>
     let g:neomake_python_enabled_makers = ['flake8']
-    " }} neomake
+    command! TagsUpdate NeomakeSh ctags -R .
 else
     Plug 'tpope/vim-dispatch'
     nnoremap <F5> :Make<CR>
@@ -241,8 +208,9 @@ else
 endif
 " }}
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-repeat'
 " emacs bindinds in insert
 Plug 'tpope/vim-rsi'
 Plug 'milkypostman/vim-togglelist'
