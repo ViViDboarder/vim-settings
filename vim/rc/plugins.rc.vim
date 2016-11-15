@@ -17,35 +17,15 @@ Plug 'file-line'
 Plug 'tpope/vim-vinegar'
 Plug 'sandeepcr529/Buffet.vim', { 'on': 'Bufferlist' }
 " Buffet {{
-    nnoremap <silent> <F2> :Bufferlist<CR>
+nnoremap <silent> <F2> :Bufferlist<CR>
 " }} Buffet
-
 " }} Navigation
 
 " Git {{
 Plug 'tpope/vim-fugitive', { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
-" vim-fugitive {{
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <leader>gc :Gcommit<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gw :Gwrite<CR>
-" }} vim-fugitive
-
+call s:smart_source_rc('plugins/fugitive')
 Plug 'airblade/vim-gitgutter', { 'on': ['GitGutterSignsToggle'] }
-" vim-gitgutter {{
-let g:gitgutter_enabled = 1
-" Will toggle signs when I want them
-let g:gitgutter_signs = 0
-" Already using Fugitive, don't need more mappings
-let g:gitgutter_map_keys = 0
-" Make it more passive
-let g:gitgutter_eager = 0
-let g:gitgutter_realtime = 0
-" Quick leader command to toggle git-gutter
-nmap <leader>gg :GitGutterSignsToggle<CR>
-" }} vim-gitgutter
-
+call s:smart_source_rc('plugins/gitgutter')
 " }} Git
 
 
@@ -56,26 +36,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 Plug 'mhinz/vim-grepper'
-" vim-grepper {{
-let g:grepper = {
-            \ 'dispatch': 1,
-            \ 'quickfix': 1,
-            \ 'open': 1,
-            \ 'switch': 0,
-            \ 'jump': 0,
-            \ 'tools': ['ag', 'ack', 'git', 'pt', 'grep']
-            \ }
-nmap gs <plug>(GrepperOperator)
-xmap gs <plug>(GrepperOperator)
-nmap <leader>* :Grepper -cword -noprompt<cr>
-command! Todo Grepper -noprompt -query TODO
-if executable('ag')
-    set grepprg=ag\ --nogroup\ --nocolor
-endif
-if executable('ack')
-    set grepprg=ack
-endif
-" }} vim-grepper
+call s:smart_source_rc('plugins/grepper')
 " }} Fuzzy Find
 
 " Autocomplete {{
@@ -95,6 +56,7 @@ else
     Plug 'Shougo/neocomplcache.vim'
     call s:smart_source_rc('plugins/neocomplcache')
 end
+" }} Autocomplete
 
 " Programming {{
 if has('nvim')
@@ -148,11 +110,6 @@ Plug 'ViViDboarder/vim-forcedotcom'
 Plug 'avakhov/vim-yaml'
 Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
-Plug 'fatih/vim-go'
-" vim-go {
-let g:go_def_mapping_enabled = 0
-" }
-
 Plug 'groovy.vim'
 Plug 'hsanson/vim-android'
 Plug 'udalov/kotlin-vim'
@@ -160,33 +117,14 @@ Plug 'pangloss/vim-javascript'
 Plug 'pdurbin/vim-tsv'
 Plug 'tfnico/vim-gradle'
 Plug 'tmux-plugins/vim-tmux'
+Plug 'fatih/vim-go'
+" vim-go {
+let g:go_def_mapping_enabled = 0
+" }
 " }}
 
 " Python {{
-Plug 'alfredodeza/coveragepy.vim'
-Plug 'alfredodeza/pytest.vim'
-" pytest.vim {{
-nmap <silent><leader>ptp <Esc>:Pytest project<CR>
-nmap <silent><leader>ptf <Esc>:Pytest file<CR>
-nmap <silent><leader>ptm <Esc>:Pytest method<CR>
-" }} pytest.vim
-Plug 'davidhalter/jedi-vim'
-" jedi-vim {{
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#smart_auto_mappings = 0
-" }} jedi-vim
-Plug 'klen/python-mode'
-" python-mode {{
-let g:pymode_breakpoint = 0
-let g:pymode_lint = 0
-let g:pymode_lint_checkers = ['flake8']
-let g:pymode_lint_on_write = 0
-let g:pymode_rope = 0
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_rope_completion = 0
-" }} python-mode
-
+call s:smart_source_rc('plugins/python')
 " }}
 
 " Themes {{
@@ -226,5 +164,4 @@ Plug 'milkypostman/vim-togglelist'
 nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
 nnoremap <silent> <F7> :call ToggleLocationList()<CR>
 " }} vim-togglelist
-
 " }}
