@@ -31,10 +31,11 @@ let g:ctrlp_user_command = {
     \}
 " Leader Commands
 nnoremap <leader>b :CtrlPBuffer<CR>
-nnoremap <leader>t :CtrlPBufTag<CR>
-nnoremap <leader>r :CtrlPTag<CR>
-nnoremap <leader>u :CtrlPCurFile<CR>
 nnoremap <leader>m :CtrlPMRUFiles<CR>
+nnoremap <leader>p :CtrlP<CR>
+nnoremap <leader>r :CtrlPTag<CR>
+nnoremap <leader>t :CtrlPBufTag<CR>
+nnoremap <leader>u :CtrlPCurFile<CR>
 
 " Special stuff for The Silver Searcher
 if executable('ag')

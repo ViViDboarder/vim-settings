@@ -53,6 +53,8 @@ nmap <leader>gg :GitGutterSignsToggle<CR>
 Plug 'ctrlpvim/ctrlp.vim'
 call s:smart_source_rc('plugins/ctrlp')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
+let g:fzf_command_prefix = 'Fzf'
 Plug 'mhinz/vim-grepper'
 " vim-grepper {{
 let g:grepper = {
@@ -124,6 +126,8 @@ Plug 'mhinz/vim-startify'
 call s:smart_source_rc('plugins/startify')
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'edkolev/tmuxline.vim' " Removed because this can fail on some machines
+" let g:tmuxline_powerline_separators = 0
 call s:smart_source_rc('plugins/airline')
 " Highlight matching tags
 Plug 'gregsexton/MatchTag'
@@ -145,6 +149,10 @@ Plug 'avakhov/vim-yaml'
 Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'fatih/vim-go'
+" vim-go {
+let g:go_def_mapping_enabled = 0
+" }
+
 Plug 'groovy.vim'
 Plug 'hsanson/vim-android'
 Plug 'udalov/kotlin-vim'
