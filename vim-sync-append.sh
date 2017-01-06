@@ -30,18 +30,19 @@ ln -s $VIM_SYNC_DIR/vim $XDG_CONFIG_HOME/nvim
 
 # Install all bundles
 echo "Install all bundles"
-vim +PlugInstall +qall
 if hash nvim 2>/dev/null; then
+    if hash pip 2>/dev/null; then
+        echo 'Installing neovim python module in $HOME'
+        pip install --user neovim
+    fi
+    echo "If using Neovim, install the python modules in your environment"
     nvim +PlugInstall +qall
-    nvim +UpdateRemotePlugins +qall
 fi
+vim +PlugInstall +qall
 
 vim --version | grep -q '\+lua' || { echo "Warning: Default vim does not include lua"; }
 vim --version | grep -q '\+ruby' || { echo "Warning: Default vim does not include ruby."; }
 vim --version | grep -q '\+python' || { echo "Warning: Default vim does not include python"; }
 
-echo "If using Neovim, install the python modules"
-
 echo "All done!"
 exit 0
-
