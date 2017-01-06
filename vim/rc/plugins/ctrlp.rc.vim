@@ -1,4 +1,5 @@
-" Configurationf or ctrlp.vim
+Plug 'ctrlpvim/ctrlp.vim'
+" Configuration for ctrlp.vim
 
 " Ensure max height isn't too large. (for performance)
 let g:ctrlp_max_height = 10

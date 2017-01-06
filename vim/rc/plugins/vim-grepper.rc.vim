@@ -1,3 +1,4 @@
+Plug 'mhinz/vim-grepper'
 " Grepper settings and shortcuts
 let g:grepper = {
             \ 'dispatch': 1,

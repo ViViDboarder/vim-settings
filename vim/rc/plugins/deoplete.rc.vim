@@ -1,3 +1,10 @@
+" Install plugins
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neoinclude.vim'
+Plug 'Shougo/neco-syntax'
+Plug 'zchee/deoplete-jedi'
+Plug 'zchee/deoplete-go'
+
 inoremap <silent><expr> <C-Space> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 inoremap <silent><expr> <nul> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 

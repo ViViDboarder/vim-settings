@@ -12,7 +12,7 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#smart_auto_mappings = 0
 " }} jedi-vim
-Plug 'klen/python-mode'
+Plug 'klen/python-mode', { 'for': 'python' }
 " python-mode {{
 " A lot is disabled, what I'm using:
 "   breakpoints, virtualenv, motions, syntax,
