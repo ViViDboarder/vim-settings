@@ -1,4 +1,5 @@
 " Both these plugins work well together for distraction free editing
+command Zen :Goyo
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 function! s:goyo_enter()
