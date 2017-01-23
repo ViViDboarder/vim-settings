@@ -72,6 +72,7 @@ call s:smart_source_rc('plugins/startify')
 Plug 'ViViDboarder/force-vim', { 'for': ['apex', 'visualforce'] }
 Plug 'ViViDboarder/vim-forcedotcom'
 Plug 'avakhov/vim-yaml'
+Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'fatih/vim-go'
