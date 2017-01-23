@@ -13,8 +13,10 @@ xmap gs <plug>(GrepperOperator)
 nmap <leader>* :Grepper -cword -noprompt<cr>
 command! Todo Grepper -noprompt -query TODO
 if executable('ag')
+    command -nargs=+ Ag :GrepperAg <args>
     set grepprg=ag\ --nogroup\ --nocolor
 endif
 if executable('ack')
     set grepprg=ack
+    command -nargs=+ Ack :GrepperAck <args>
 endif
