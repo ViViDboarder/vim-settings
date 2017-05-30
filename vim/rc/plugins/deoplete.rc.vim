@@ -2,8 +2,8 @@
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim'
 Plug 'Shougo/neco-syntax'
-Plug 'zchee/deoplete-jedi'
-Plug 'zchee/deoplete-go'
+Plug 'zchee/deoplete-jedi', { 'for': 'python' }
+Plug 'zchee/deoplete-go', { 'do': 'make' }
 
 inoremap <silent><expr> <C-Space> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
 inoremap <silent><expr> <nul> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
@@ -20,11 +20,12 @@ endif
 
 " Set allowed sources
 let g:deoplete#sources._ = ['buffer', 'member', 'file', 'tag'] ", 'omni']
+let g:deoplete#sources.go = ['buffer', 'member', 'file', 'omni']
 let g:deoplete#sources.python = ['buffer', 'member', 'file', 'omni']
 " Set default keyword pattern (vim regex)
 let g:deoplete#keyword_patterns['default'] = '\h\w*'
 " Set omni patters for deoplete (python3 regex)
-let g:deoplete#omni#input_patterns.go = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:deoplete#omni#input_patterns.go = '([^. \t](\.|->))\w*'
 let g:deoplete#omni#input_patterns.python = '([^. \t]\.|^\s*@|^\s*from\s.+ import |^\s*from |^\s*import )\w*'
 
 " Default settings

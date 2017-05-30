@@ -75,7 +75,7 @@ Plug 'avakhov/vim-yaml'
 Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
-Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'groovy.vim'
 Plug 'hsanson/vim-android'
 Plug 'pangloss/vim-javascript'

@@ -1,12 +1,12 @@
 " All Python plugins and settings
-Plug 'alfredodeza/coveragepy.vim'
-Plug 'alfredodeza/pytest.vim'
+Plug 'alfredodeza/coveragepy.vim', { 'for': 'python' }
+Plug 'alfredodeza/pytest.vim', { 'for': 'python' }
 " pytest.vim {{
 nmap <silent><leader>ptp <Esc>:Pytest project<CR>
 nmap <silent><leader>ptf <Esc>:Pytest file<CR>
 nmap <silent><leader>ptm <Esc>:Pytest method<CR>
 " }} pytest.vim
-Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 " jedi-vim {{
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
