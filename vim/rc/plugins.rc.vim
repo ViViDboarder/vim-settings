@@ -13,7 +13,7 @@ endfunction
 " }} Functions
 
 " Navigation {{
-Plug 'file-line'
+Plug 'vim-scripts/file-line'
 Plug 'tpope/vim-vinegar'
 call s:smart_source_rc('plugins/Buffet')
 " }} Navigation
@@ -76,7 +76,7 @@ Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'groovy.vim'
+Plug 'vim-scripts/groovy.vim'
 Plug 'hsanson/vim-android'
 Plug 'pangloss/vim-javascript'
 Plug 'pdurbin/vim-tsv'
@@ -96,15 +96,15 @@ call s:smart_source_rc('plugins/python')
 
 " Themes {{
 Plug 'altercation/vim-colors-solarized'
-Plug 'candy.vim'
-Plug 'eclipse.vim'
+Plug 'vim-scripts/candy.vim'
+Plug 'vim-scripts/eclipse.vim'
 Plug 'morhetz/gruvbox'
 Plug 'nanotech/jellybeans.vim'
-Plug 'nuvola.vim'
-Plug 'summerfruit256.vim'
+Plug 'vim-scripts/nuvola.vim'
+Plug 'vim-scripts/summerfruit256.vim'
 Plug 'therubymug/vim-pyte'
-Plug 'vividchalk.vim'
-Plug 'wombat256.vim'
+Plug 'vim-scripts/vividchalk.vim'
+Plug 'vim-scripts/wombat256.vim'
 " }}
 call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
 
