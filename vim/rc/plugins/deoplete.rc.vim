@@ -5,8 +5,17 @@ Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
 
-inoremap <silent><expr> <C-Space> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
-inoremap <silent><expr> <nul> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+" inoremap <silent><expr> <nul> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+inoremap <silent><expr> <C-Space>
+		\ pumvisible() ? "\<C-n>" :
+		\ <SID>check_back_space() ? "\<C-Space>" :
+		\ deoplete#manual_complete()
+
+function! s:check_back_space() abort "{{{
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+"}}}
 
 if !exists('g:deoplete#sources')
     let g:deoplete#sources = {}

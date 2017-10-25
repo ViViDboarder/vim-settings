@@ -10,3 +10,4 @@ vim/rc/*.local.rc.vim
 vim/rc/plugins/*.local.rc.vim
 vim/tmp/*
 vim/tmp/viminfo.*
+.DS_Store
