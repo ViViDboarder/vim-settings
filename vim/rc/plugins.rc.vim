@@ -50,8 +50,11 @@ if (v:version > 703)
 end
 if has('nvim')
     Plug 'kassio/neoterm'
+endif
+if (has('nvim') || v:version >= 800)
+    call s:smart_source_rc('plugins/neomake')
 else
-    " Only use if not neovim, on neovim we have Neomake
+    call s:smart_source_rc('plugins/vim-dispatch')
     call s:smart_source_rc('plugins/syntastic')
 endif
 " }}
@@ -110,14 +113,6 @@ call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
 
 " System {{
 
-" neomake / vim-dispatch {{
-if has('nvim')
-    call s:smart_source_rc('plugins/neomake')
-else
-    call s:smart_source_rc('plugins/vim-dispatch')
-endif
-" }}
-"
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
