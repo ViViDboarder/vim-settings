@@ -1,6 +1,8 @@
 Plug 'ctrlpvim/ctrlp.vim'
 " Configuration for ctrlp.vim
 
+let g:ctrlp_in_use = 1
+
 " Ensure max height isn't too large. (for performance)
 let g:ctrlp_max_height = 10
 " Conditional Mappings
