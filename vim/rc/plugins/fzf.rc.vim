@@ -12,6 +12,14 @@ let g:fzf_action = {
 " Ctrl-T to launch standard file search
 nnoremap <C-t> :FZF<CR>
 
+" Override BTags to attempt to include gotags as well
+command! -bang -nargs=* FZFBTags
+  \  if &filetype == 'go'
+  \|   call fzf#vim#buffer_tags(<q-args>, printf('gotags -silent -sort %s | sed /^!_TAG_/d', shellescape(expand('%'))), <bang>0)
+  \| else
+  \|   call fzf#vim#buffer_tags(<q-args>, <bang>0)
+  \| endif
+
 " Leader Commands
 
 " Find buffers
