@@ -49,7 +49,7 @@ if (v:version > 703)
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
 end
 if has('nvim')
-    Plug 'kassio/neoterm'
+    Plug 'kassio/neoterm', { 'on': ['TREPLSend', 'TREPLSendFile', 'T'] }
     command! Tig :T tig<CR>
     command! Tox :T tox<CR>
 endif
