@@ -40,6 +40,12 @@ function! IsMac()
       \     system('uname') =~? '^darwin'))
 endfunction
 
+function! IsGuiApp()
+    return has("gui_running") || exists("neovim_dot_app")
+                \ || has("gui_win32") || has("gui_macvim")
+                \ || has("gui_vimr")
+endfunction
+
 " Auto install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs

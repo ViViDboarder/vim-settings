@@ -13,24 +13,25 @@ syntax on
 " Enable search highlighting
 set hls
 
-
 " Color Schemes {{
 " Set theme based on $VIM_COLOR variable
 try
     if !empty($VIM_COLOR)
         colorscheme $VIM_COLOR
     else
-        if has("gui_running") || exists("neovim_dot_app")
-            colorscheme wombat256mod
-        else
-            colorscheme vividchalk
-        endif
+        " Prefered default colorscheme
+        colorscheme wombat256mod
     endif
 catch /^Vim\%((\a\+)\)\=:E185/
     " Colorschemes not installed yet
     " This happens when first installing bundles
     colorscheme default
 endtry
+
+" Override gui colorscheme
+if IsGuiApp()
+    colorscheme wombat256mod
+endif
 
 " Set Airline theme
 if g:colors_name == 'github'
@@ -39,10 +40,10 @@ endif
 " }}
 
 " Set gui fonts {{
-if has("gui_running") || exists("neovim_dot_app")
-    if has("gui_win32")
+if IsGuiApp()
+    if IsWindows()
         set guifont=Consolas:h10:b
-    elseif IsMac() && (has("gui_macvim") || exists("neovim_dot_app"))
+    elseif IsMac()
         try
             set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
         catch
