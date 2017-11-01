@@ -26,3 +26,9 @@ let g:airline_right_alt_sep=''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
+" Slimmer section z
+let g:airline_section_z = '%2l/%L:%2v'
+" Skip most common encoding
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+" If UTF-8 symbols don't work, use ASCII
+" let g:airline_symbols_ascii = 1
