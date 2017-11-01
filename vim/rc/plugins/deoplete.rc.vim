@@ -5,17 +5,20 @@ Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
 
-" inoremap <silent><expr> <nul> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+" Auto complete with C-Space
 inoremap <silent><expr> <C-Space>
-		\ pumvisible() ? "\<C-n>" :
-		\ <SID>check_back_space() ? "\<C-Space>" :
-		\ deoplete#manual_complete()
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<C-Space>" :
+        \ deoplete#manual_complete()
 
 function! s:check_back_space() abort "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 "}}}
+
+" Auto close preview when done
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 if !exists('g:deoplete#sources')
     let g:deoplete#sources = {}
@@ -48,5 +51,5 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
-let g:jedi#show_call_signatures = 0 
+let g:jedi#show_call_signatures = 0
 let g:jedi#smart_auto_mappings = 0
