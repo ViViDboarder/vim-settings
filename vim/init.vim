@@ -47,7 +47,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall
 endif
 
-call s:source_rc('init.rc.vim')
+call s:smart_source_rc('init')
 call s:smart_source_rc('keymap')
 call plug#begin()
 call s:smart_source_rc('plugins')
