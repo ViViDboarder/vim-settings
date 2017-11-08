@@ -50,6 +50,8 @@ if (v:version > 703)
 end
 if has('nvim')
     Plug 'kassio/neoterm'
+    command! Tig :T tig<CR>
+    command! Tox :T tox<CR>
 endif
 if (has('nvim') || v:version >= 800)
     call s:smart_source_rc('plugins/neomake')
