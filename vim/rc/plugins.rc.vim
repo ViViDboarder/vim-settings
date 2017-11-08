@@ -79,14 +79,15 @@ Plug 'cespare/vim-toml'
 Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
-Plug 'vim-scripts/groovy.vim'
 Plug 'hsanson/vim-android'
 Plug 'pangloss/vim-javascript'
 Plug 'pdurbin/vim-tsv'
 Plug 'tfnico/vim-gradle'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'udalov/kotlin-vim'
+Plug 'vim-scripts/groovy.vim'
 let g:go_def_mapping_enabled = 0
+let g:go_version_warning = 0
 " }}
 
 " Python {{
