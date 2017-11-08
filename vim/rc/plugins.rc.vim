@@ -63,8 +63,6 @@ endif
 
 " GUI {{
 Plug 'gregsexton/MatchTag'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 call s:smart_source_rc('plugins/airline')
 call s:smart_source_rc('plugins/dash')
 call s:smart_source_rc('plugins/startify')
