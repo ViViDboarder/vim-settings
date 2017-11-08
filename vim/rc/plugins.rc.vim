@@ -32,10 +32,10 @@ call s:smart_source_rc('plugins/vim-grepper')
 
 " Autocomplete {{
 call s:smart_source_rc('plugins/omnicompletion')
-if (has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
-    call s:smart_source_rc('plugins/neocomplete')
-elseif has('nvim') && has('python3')
+if has('nvim') && has('python3')
     call s:smart_source_rc('plugins/deoplete')
+elseif (has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
+    call s:smart_source_rc('plugins/neocomplete')
 else
     call s:smart_source_rc('plugins/neocomplcache')
 end
