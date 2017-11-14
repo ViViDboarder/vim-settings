@@ -24,9 +24,10 @@ call s:smart_source_rc('plugins/gitgutter')
 " }} Git
 
 " Searching {{
-" call s:smart_source_rc('plugins/ctrlp')
+if !executable('fzf')
+    call s:smart_source_rc('plugins/ctrlp')
+endif
 call s:smart_source_rc('plugins/fzf')
-" call s:smart_source_rc('plugins/incsearch')
 call s:smart_source_rc('plugins/vim-grepper')
 " }} Searching
 
