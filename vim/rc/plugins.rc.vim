@@ -15,7 +15,6 @@ endfunction
 " Navigation {{
 Plug 'vim-scripts/file-line'
 Plug 'tpope/vim-vinegar'
-call s:smart_source_rc('plugins/Buffet')
 " }} Navigation
 
 " Git {{

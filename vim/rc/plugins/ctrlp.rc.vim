@@ -39,6 +39,7 @@ nnoremap <leader>p :CtrlP<CR>
 nnoremap <leader>r :CtrlPTag<CR>
 nnoremap <leader>t :CtrlPBufTag<CR>
 nnoremap <leader>u :CtrlPCurFile<CR>
+nnoremap <silent> <F2> :CtrlPBuffer<CR>
 
 " Special stuff for The Silver Searcher
 if executable('ag')

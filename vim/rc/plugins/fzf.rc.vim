@@ -24,6 +24,7 @@ if !exists('g:ctrlp_in_use')
     " Leader Commands
     " Find buffers
     nnoremap <leader>b :FZFBuffers<CR>
+    nnoremap <silent> <F2> :FZFBuffers<CR>
     " Find text in files
     nnoremap <leader>f :FZFAg<CR>
     " Find tags
