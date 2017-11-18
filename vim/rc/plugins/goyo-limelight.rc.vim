@@ -2,6 +2,7 @@
 command Zen :Goyo
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
+let g:goyo_width = 120
 function! s:goyo_enter()
     Limelight
 endfunction
