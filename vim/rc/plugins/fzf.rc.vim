@@ -8,6 +8,8 @@ let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit' }
+" Override git log to show authors
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h %an: %s%d %C(black)%C(bold)%cr"'
 
 " Override BTags to attempt to include gotags as well
 command! -bang -nargs=* FZFBTags
