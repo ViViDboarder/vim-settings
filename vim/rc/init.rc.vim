@@ -2,9 +2,6 @@
 filetype on
 filetype plugin indent on
 
-" Use more convenient leader
-let mapleader="\<Space>"
-
 " Enable mouse input
 set mousehide
 set mouse=a

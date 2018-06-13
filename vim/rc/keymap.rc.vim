@@ -1,3 +1,6 @@
+" Use more convenient leader
+let mapleader="\<Space>"
+
 " Remap jk to esc
 inoremap jk <esc>
 " Easy esc on TEX Yoda
@@ -48,7 +51,6 @@ cnoremap Q; q
 
 " Clearing highlighted search
 nmap <silent> <leader>/ :set hlsearch! hlsearch?<CR>
-noremap <C-h><C-s> :set hlsearch! hlsearch?<CR>
 " Clear search
 nmap <silent> <leader>cs :nohlsearch<CR>
 
@@ -61,7 +63,8 @@ vnoremap po "_dP
 
 if has('nvim')
     " make term exiting easier
-    tnoremap <c-q> <c-\><c-n>
+    tnoremap <c-W> <c-\><c-n>
+    tnoremap <c-W>. <c-W>
     tnoremap <c-\><c-\> <c-\><c-n>
 
     " Add bash related term commands
