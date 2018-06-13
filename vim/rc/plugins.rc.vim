@@ -23,16 +23,20 @@ call s:smart_source_rc('plugins/gitgutter')
 " }} Git
 
 " Searching {{
-if !executable('fzf')
-    call s:smart_source_rc('plugins/ctrlp')
+if !exists('g:gui_oni')
+    if !executable('fzf')
+        call s:smart_source_rc('plugins/ctrlp')
+    endif
+    call s:smart_source_rc('plugins/fzf')
+    call s:smart_source_rc('plugins/vim-grepper')
 endif
-call s:smart_source_rc('plugins/fzf')
-call s:smart_source_rc('plugins/vim-grepper')
 " }} Searching
 
 " Autocomplete {{
 call s:smart_source_rc('plugins/omnicompletion')
-if has('nvim') && has('python3')
+if exists('g:gui_oni')
+    " We'll keep Oni's autocomplete with Language Server
+elseif has('nvim') && has('python3')
     call s:smart_source_rc('plugins/deoplete')
 elseif (has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
     call s:smart_source_rc('plugins/neocomplete')
@@ -45,7 +49,7 @@ end
 Plug 'tpope/vim-surround'
 call s:smart_source_rc('plugins/tagbar')
 call s:smart_source_rc('plugins/tcomment_vim')
-if (v:version > 703)
+if (v:version > 703) && !exists('g:gui_oni')
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
 end
 if has('nvim')
@@ -63,9 +67,13 @@ endif
 
 " GUI {{
 Plug 'gregsexton/MatchTag'
-call s:smart_source_rc('plugins/airline')
+if !exists('g:gui_oni')
+    call s:smart_source_rc('plugins/airline')
+endif
 call s:smart_source_rc('plugins/dash')
-call s:smart_source_rc('plugins/startify')
+if !exists('g:gui_oni')
+    call s:smart_source_rc('plugins/startify')
+endif
 " Plug 'edkolev/tmuxline.vim' " Removed because this can fail on some machines
 " let g:tmuxline_powerline_separators = 0
 
