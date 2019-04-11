@@ -41,6 +41,10 @@ cmap Wq<CR> wq<CR>
 cmap W<CR> w<CR>
 cmap Q<CR> q<CR>
 cmap Q!<CR> q!<CR>
+cmap Qa<CR> qa<CR>
+cmap Qa!<CR> qa!<CR>
+cmap QA<CR> qa<CR>
+cmap QA!<CR> qa!<CR>
 " Stupid semicolon files
 cnoremap w; w
 cnoremap W; w

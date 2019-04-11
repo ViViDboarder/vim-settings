@@ -4,6 +4,7 @@ Plug 'Shougo/neoinclude.vim'
 Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'zchee/deoplete-go', { 'do': 'make' }
+Plug 'landaire/deoplete-swift'
 
 " Auto complete with C-Space
 inoremap <silent><expr> <C-Space>

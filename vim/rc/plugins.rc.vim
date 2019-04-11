@@ -88,14 +88,18 @@ Plug 'dag/vim-fish'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'hsanson/vim-android'
+Plug 'keith/swift.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'pdurbin/vim-tsv'
 Plug 'tfnico/vim-gradle'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'udalov/kotlin-vim'
 Plug 'vim-scripts/groovy.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'rust-lang/rust.vim'
 let g:go_def_mapping_enabled = 0
 let g:go_version_warning = 0
+let g:rustfmt_autosave = 1
 " }}
 
 " Python {{
