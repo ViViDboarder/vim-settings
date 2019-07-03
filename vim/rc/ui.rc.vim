@@ -72,3 +72,39 @@ endif
 set notitle
 " set title
 " }}
+
+" Function and command to update colors based on light and dark mode
+function! UpdateColors()
+    "If not a mac, let's get out of here
+    if !IsMac()
+        return
+    endif
+    " Get the light color or default to VIM_COLOR
+    let light_color = $VIM_COLOR
+    if !empty($VIM_COLOR_LIGHT)
+        let light_color = $VIM_COLOR_LIGHT
+    endif
+    " Get the dark color or default to VIM_COLOR
+    let dark_color = $VIM_COLOR
+    if !empty($VIM_COLOR_DARK)
+        let dark_color = $VIM_COLOR_DARK
+    endif
+    " Find out if macOS is in dark mode
+    let cmd = "osascript
+        \ -e 'tell application \"System Events\"'
+            \ -e 'tell appearance preferences'
+                \ -e 'return dark mode'
+            \ -e 'end tell'
+        \ -e 'end tell'"
+    let dark_mode = substitute(system(cmd), '\n', '', 'g')
+    " Set colorscheme and background based on mode
+    if dark_mode == 'true'
+        execute 'colorscheme ' . dark_color
+        set background=dark
+    else
+        execute 'colorscheme ' . light_color
+        set background=light
+    endif
+endfunction
+command! UpdateColors call UpdateColors()
+call UpdateColors()
