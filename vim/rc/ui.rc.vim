@@ -15,6 +15,7 @@ set hls
 
 " Color Schemes {{
 " Set theme based on $VIM_COLOR variable
+" TODO: move other colorscheme detection block up
 try
     if !empty($VIM_COLOR)
         colorscheme $VIM_COLOR
@@ -27,27 +28,18 @@ catch /^Vim\%((\a\+)\)\=:E185/
     " This happens when first installing bundles
     colorscheme default
 endtry
-
-" Override gui colorscheme
-if IsGuiApp()
-    colorscheme wombat256mod
-endif
-
-" Set Airline theme
-if g:colors_name == 'github'
-    let g:airline_theme = 'solarized'
-endif
 " }}
 
-" Set gui fonts {{
+" Set gui specific values {{
 if IsGuiApp()
+    colorscheme wombat256mod
     if IsWindows()
         set guifont=Consolas:h10:b
     elseif IsMac()
         try
             set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
         catch
-            " Failed to set font
+            " Failed to set font, ok with default
         endtry
     endif
 endif
@@ -70,7 +62,6 @@ if &term =~ "^screen"
     set t_ut=
 endif
 set notitle
-" set title
 " }}
 
 " Function and command to update colors based on light and dark mode

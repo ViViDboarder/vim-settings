@@ -65,6 +65,7 @@ nmap <leader>cf va{<ESC>zf%<ESC>:nohlsearch<CR>
 vnoremap pp p
 vnoremap po "_dP
 
+" TODO: Versions of this for vim8
 if has('nvim')
     " make term exiting easier
     tnoremap <c-W> <c-\><c-n>

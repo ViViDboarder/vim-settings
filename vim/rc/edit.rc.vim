@@ -1,3 +1,4 @@
+" TODO: Maybe consolodate into the init.rc.vim
 " Tab functionality
 set expandtab
 set tabstop=4

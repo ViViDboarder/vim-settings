@@ -1,7 +1,9 @@
+" TODO: Should this go in the original init?
 "Allows filetype detection
 filetype on
 filetype plugin indent on
 
+" TODO: Myabe rename keymap and move this
 " Enable mouse input
 set mousehide
 set mouse=a
@@ -18,5 +20,6 @@ else
     set viminfo='100,n~/.vim/tmp/viminfo.vim
 endif
 
+" TODO: Should this go somewhere else?
 " Filetype extension
 au BufRead,BufNewFile *.md set syntax=markdown

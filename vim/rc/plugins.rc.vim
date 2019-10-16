@@ -32,6 +32,10 @@ if !exists('g:gui_oni')
 endif
 " }} Searching
 
+" TODO: Maybe replace with coc.nvim. If I'm doing a lot of development, I will
+" have latest versions of vim or nvim
+" Only need one fallback, maybe neocomplcache
+
 " Autocomplete {{
 call s:smart_source_rc('plugins/omnicompletion')
 if exists('g:gui_oni')
@@ -52,11 +56,16 @@ call s:smart_source_rc('plugins/tcomment_vim')
 if (v:version > 703) && !exists('g:gui_oni')
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
 end
+
+" TODO: Probably remove
 if has('nvim')
     Plug 'kassio/neoterm', { 'on': ['TREPLSend', 'TREPLSendFile', 'T'] }
     command! Tig :T tig<CR>
     command! Tox :T tox<CR>
 endif
+
+" TODO: Maybe ALE. Similar reason as coc.nvim. Probably only using latest vim
+" if developing seriously
 if (has('nvim') || v:version >= 800)
     call s:smart_source_rc('plugins/neomake')
 else
@@ -112,13 +121,6 @@ call s:smart_source_rc('plugins/python')
 
 " Themes {{
 Plug 'altercation/vim-colors-solarized'
-Plug 'vim-scripts/candy.vim'
-Plug 'vim-scripts/eclipse.vim'
-Plug 'morhetz/gruvbox'
-Plug 'nanotech/jellybeans.vim'
-Plug 'vim-scripts/nuvola.vim'
-Plug 'vim-scripts/summerfruit256.vim'
-Plug 'therubymug/vim-pyte'
 Plug 'vim-scripts/vividchalk.vim'
 Plug 'vim-scripts/wombat256.vim'
 " }}
@@ -126,7 +128,9 @@ call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
 
 " System {{
 
+" TODO: Do I need this?
 Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+" Definitely using these.
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-repeat'

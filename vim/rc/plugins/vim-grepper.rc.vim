@@ -20,3 +20,4 @@ if executable('ack')
     set grepprg=ack
     command -nargs=+ Ack :GrepperAck <args>
 endif
+" TODO: Add rg

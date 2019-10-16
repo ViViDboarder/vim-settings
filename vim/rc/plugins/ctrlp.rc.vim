@@ -48,3 +48,4 @@ if executable('ag')
     " ag is fast enough we don't need cache
     let g:ctrlp_use_caching = 0
 endif
+" TODO: Add rg support
