@@ -32,35 +32,33 @@ if !exists('g:gui_oni')
 endif
 " }} Searching
 
+" Programming {{
+
 " TODO: Maybe replace with coc.nvim. If I'm doing a lot of development, I will
 " have latest versions of vim or nvim
 " Only need one fallback, maybe neocomplcache
-
-" Autocomplete {{
 call s:smart_source_rc('plugins/omnicompletion')
-if exists('g:gui_oni')
+if !g:vim_as_an_ide || g:gui.has_autocomplete_features
     " We'll keep Oni's autocomplete with Language Server
-elseif has('nvim') && has('python3')
+elseif (has('nvim') || v:version >= 800) && has('python3')
     call s:smart_source_rc('plugins/deoplete')
-elseif (has('lua') && (v:version > 703 || v:version == 703 && has('patch885')))
-    call s:smart_source_rc('plugins/neocomplete')
 else
     call s:smart_source_rc('plugins/neocomplcache')
 end
-" }} Autocomplete
 
-" Programming {{
-Plug 'tpope/vim-surround'
-call s:smart_source_rc('plugins/tagbar')
 call s:smart_source_rc('plugins/tcomment_vim')
-if (v:version > 703) && !exists('g:gui_oni')
+
+if g:vim_as_an_ide && (v:version > 703) && !g:gui.has_ctags_features
+    call s:smart_source_rc('plugins/tagbar')
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
     command! TagsUpdate :GutentagsUpdate<CR>
 end
 
 " TODO: Maybe ALE. Similar reason as coc.nvim. Probably only using latest vim
 " if developing seriously
-if (has('nvim') || v:version >= 800)
+if !g:vim_as_an_ide
+    " Do nothing
+elseif (has('nvim') || v:version >= 800)
     call s:smart_source_rc('plugins/neomake')
 else
     call s:smart_source_rc('plugins/syntastic')
@@ -69,11 +67,9 @@ endif
 
 " GUI {{
 Plug 'gregsexton/MatchTag'
-if !exists('g:gui_oni')
-    call s:smart_source_rc('plugins/airline')
-endif
 call s:smart_source_rc('plugins/dash')
-if !exists('g:gui_oni')
+if !g:gui.has_buffer_features
+    call s:smart_source_rc('plugins/airline')
     call s:smart_source_rc('plugins/startify')
 endif
 " Plug 'edkolev/tmuxline.vim' " Removed because this can fail on some machines
@@ -108,18 +104,15 @@ let g:rustfmt_autosave = 1
 call s:smart_source_rc('plugins/python')
 " }}
 
-" if (v:version > 703)
-"     Plug 'Yggdroot/indentLine', { 'for': ['python', 'yaml'] }
-" endif
-
 " Themes {{
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/vividchalk.vim'
 Plug 'vim-scripts/wombat256.vim'
-" }}
 call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
+" }}
 
 " System {{
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-repeat'
