@@ -3,6 +3,7 @@
 " Note: Skip initialization for vim-tiny or vim-small.
 if !1 | finish | endif
 
+" Don't use fish as the default shell. This makes things weird
 if &shell =~# 'fish$'
     set shell=bash
 endif
@@ -29,10 +30,13 @@ let s:is_sudo = $SUDO_USER !=# '' && $USER !=# $SUDO_USER
       \ && $HOME !=# expand('~'.$USER)
       \ && $HOME ==# expand('~'.$SUDO_USER)
 
+
+" IsWindows determines if this instances is running on Windows
 function! IsWindows()
   return s:is_windows
 endfunction
 
+" IsMac determines if this instance is running on macOS
 function! IsMac()
   return !s:is_windows && !s:is_cygwin
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
@@ -40,11 +44,19 @@ function! IsMac()
       \     system('uname') =~? '^darwin'))
 endfunction
 
+" IsGuiApp determines if (n)vim is running in a GUI
 function! IsGuiApp()
     return has("gui_running") || exists("neovim_dot_app")
                 \ || has("gui_win32") || has("gui_macvim")
                 \ || has("gui_vimr") || exists('g:gui_oni')
 endfunction
+
+" Some GUI applications provide built in support for certain features
+let g:gui = {}
+let g:gui.has_buffer_features = exists('g:gui_oni')
+let g:gui.has_autocomplete_features = exists('g:gui_oni')
+let g:gui.has_linter_features = exists('g:gui_oni')
+let g:gui.has_ctags_features = exists('g:gui_oni')
 
 " Auto install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
