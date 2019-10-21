@@ -1,7 +1,6 @@
 Plug 'mhinz/vim-grepper'
 " Grepper settings and shortcuts
 let g:grepper = {
-            \ 'dispatch': 1,
             \ 'quickfix': 1,
             \ 'open': 1,
             \ 'switch': 0,

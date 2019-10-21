@@ -69,7 +69,6 @@ endif
 if (has('nvim') || v:version >= 800)
     call s:smart_source_rc('plugins/neomake')
 else
-    call s:smart_source_rc('plugins/vim-dispatch')
     call s:smart_source_rc('plugins/syntastic')
 endif
 " }}
