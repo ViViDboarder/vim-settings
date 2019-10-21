@@ -58,13 +58,6 @@ if (v:version > 703) && !exists('g:gui_oni')
     command! TagsUpdate :GutentagsUpdate<CR>
 end
 
-" TODO: Probably remove
-if has('nvim')
-    Plug 'kassio/neoterm', { 'on': ['TREPLSend', 'TREPLSendFile', 'T'] }
-    command! Tig :T tig<CR>
-    command! Tox :T tox<CR>
-endif
-
 " TODO: Maybe ALE. Similar reason as coc.nvim. Probably only using latest vim
 " if developing seriously
 if (has('nvim') || v:version >= 800)
