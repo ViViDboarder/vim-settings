@@ -85,13 +85,12 @@ nmap <leader>cf va{<ESC>zf%<ESC>:nohlsearch<CR>
 vnoremap pp p
 vnoremap po "_dP
 
-" TODO: Versions of this for vim8
+" Terminal mode
+" Make switching to normal mode a bit easier
+if has('nvim') || has('terminal')
+    tnoremap <c-W><esc> <c-W>N
+endif
 if has('nvim')
-    " make term exiting easier
-    tnoremap <c-W> <c-\><c-n>
-    tnoremap <c-W>. <c-W>
-    tnoremap <c-\><c-\> <c-\><c-n>
-
     " Add bash related term commands
     command Bash e term://bash
     command VBash vsp term://bash
@@ -103,6 +102,18 @@ if has('nvim')
     command VFish vsp term://fish
     command SFish sp term://fish
     command TFish tabedit term://fish
+elseif has('terminal')
+    " Add bash related term commands
+    command Bash :terminal ++curwin bash
+    command VBash vsp|:terminal ++curwin bash
+    command SBash sp|:terminal ++curwin bash
+    command TBash tabedit|:terminal ++curwin bash
+
+    " Add fish related term commands
+    command Fish :terminal ++curwin fish
+    command VFish vsp|:terminal ++curwin fish
+    command SFish sp|:terminal ++curwin fish
+    command TFish tabedit|:terminal ++curwin fish
 endif
 
 " Buffer nav
