@@ -6,18 +6,23 @@ let g:grepper = {
             \ 'open': 1,
             \ 'switch': 0,
             \ 'jump': 0,
-            \ 'tools': ['ag', 'ack', 'git', 'pt', 'grep']
+            \ 'tools': ['git', 'rg', 'ag', 'ack', 'pt', 'grep'],
+            \ 'dir': 'repo,cwd'
             \ }
 nmap gs <plug>(GrepperOperator)
 xmap gs <plug>(GrepperOperator)
 nmap <leader>* :Grepper -cword -noprompt<cr>
-command! Todo Grepper -noprompt -query TODO
+
+" Override Todo command to use Grepper
+command! Todo :Grepper -noprompt -query TODO
+
+" Make some shortands for various grep programs
+if executable('rg')
+    command -nargs=+ Rg :GrepperRg <args>
+endif
 if executable('ag')
     command -nargs=+ Ag :GrepperAg <args>
-    set grepprg=ag\ --nogroup\ --nocolor
 endif
 if executable('ack')
-    set grepprg=ack
     command -nargs=+ Ack :GrepperAck <args>
 endif
-" TODO: Add rg

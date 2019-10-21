@@ -124,4 +124,3 @@ elseif executable('ag')
 elseif executable('ack')
     set grepprg=ack
 endif
-" TODO: Add rg
