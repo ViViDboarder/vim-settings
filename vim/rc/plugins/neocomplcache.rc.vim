@@ -1,4 +1,5 @@
 " Install plugins
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Shougo/neocomplcache.vim'
 
 " Set configuration

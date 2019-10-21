@@ -120,10 +120,6 @@ Plug 'vim-scripts/wombat256.vim'
 call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
 
 " System {{
-
-" TODO: Do I need this?
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
-" Definitely using these.
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-repeat'
