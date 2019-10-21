@@ -129,8 +129,8 @@ command Todo grep TODO
 command TagsUpdate !ctags -R .
 
 " Set grepprg
-if executable("rg")
-    set grepprg=rg\ --vimgrep\ --no-heading
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading\ --color=never
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 elseif executable('ag')
     set grepprg=ag\ --vimgrep\ --nogroup\ --nocolor

@@ -41,11 +41,13 @@ nnoremap <leader>t :CtrlPBufTag<CR>
 nnoremap <leader>u :CtrlPCurFile<CR>
 nnoremap <silent> <F2> :CtrlPBuffer<CR>
 
-" Special stuff for The Silver Searcher
-if executable('ag')
-    " use ag for CtrlP
+" Use custom search command
+if executable('rg')
+    let g:ctrlp_user_command['fallback'] = 'rg %s --files --color=never --glob ""'
+    " rg is fast enough we don't need cache
+    let g:ctrlp_use_caching = 0
+elseif executable('ag')
     let g:ctrlp_user_command['fallback'] = 'ag %s -l --depth 5 --nocolor --nogroup -g ""'
     " ag is fast enough we don't need cache
     let g:ctrlp_use_caching = 0
 endif
-" TODO: Add rg support
