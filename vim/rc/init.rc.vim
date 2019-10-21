@@ -1,12 +1,6 @@
-" TODO: Should this go in the original init?
 "Allows filetype detection
 filetype on
 filetype plugin indent on
-
-" TODO: Myabe rename keymap and move this
-" Enable mouse input
-set mousehide
-set mouse=a
 
 " Set backup dirs
 set backup

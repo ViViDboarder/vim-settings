@@ -1,3 +1,23 @@
+" Tab functionality
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set autoindent
+" Ensure backspace actually works
+set backspace=2
+"
+" allow for cursor beyond last character
+set virtualedit=onemore
+" lines to scroll when cursor leaves screen
+set scrolljump=5
+" minimum lines to keep above and below cursor
+set scrolloff=3
+
+" Enable mouse input
+set mousehide
+set mouse=a
+
 " Use more convenient leader
 let mapleader="\<Space>"
 
@@ -94,3 +114,14 @@ command Todo grep TODO
 
 " Easy update tags
 command TagsUpdate !ctags -R .
+
+" Set grepprg
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+elseif executable('ag')
+    set grepprg=ag\ --vimgrep\ --nogroup\ --nocolor
+elseif executable('ack')
+    set grepprg=ack
+endif
+" TODO: Add rg
