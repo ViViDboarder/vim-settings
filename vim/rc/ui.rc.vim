@@ -15,7 +15,6 @@ set hls
 
 " Color Schemes {{
 " Set theme based on $VIM_COLOR variable
-" TODO: move other colorscheme detection block up
 try
     if !empty($VIM_COLOR)
         colorscheme $VIM_COLOR
@@ -28,41 +27,6 @@ catch /^Vim\%((\a\+)\)\=:E185/
     " This happens when first installing bundles
     colorscheme default
 endtry
-" }}
-
-" Set gui specific values {{
-if IsGuiApp()
-    colorscheme wombat256mod
-    if IsWindows()
-        set guifont=Consolas:h10:b
-    elseif IsMac()
-        try
-            set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
-        catch
-            " Failed to set font, ok with default
-        endtry
-    endif
-endif
-" }}
-
-" Set xterm and screen/tmux's title {{
-set titlestring=vim\ %{expand(\"%t\")}
-if &term =~ "^screen"
-    " pretend this is xterm.  it probably is anyway, but if term is left as
-    " `screen`, vim doesn't understand ctrl-arrow.
-    if &term == "screen-256color"
-        set term=xterm-256color
-    else
-        set term=xterm
-    endif
-
-    " gotta set these *last*, since `set term` resets everything
-    set t_ts=k
-    set t_fs=\
-    set t_ut=
-endif
-set notitle
-" }}
 
 " Function and command to update colors based on light and dark mode
 function! UpdateColors()
@@ -100,3 +64,38 @@ endfunction
 command! UpdateColors call UpdateColors()
 " au BufEnter *.* call UpdateColors()
 call UpdateColors()
+" }}
+
+" Set gui specific values {{
+if IsGuiApp()
+    colorscheme wombat256mod
+    if IsWindows()
+        set guifont=Consolas:h10:b
+    elseif IsMac()
+        try
+            set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
+        catch
+            " Failed to set font, ok with default
+        endtry
+    endif
+endif
+" }}
+
+" Set xterm and screen/tmux's title {{
+set titlestring=vim\ %{expand(\"%t\")}
+if &term =~ "^screen"
+    " pretend this is xterm.  it probably is anyway, but if term is left as
+    " `screen`, vim doesn't understand ctrl-arrow.
+    if &term == "screen-256color"
+        set term=xterm-256color
+    else
+        set term=xterm
+    endif
+
+    " gotta set these *last*, since `set term` resets everything
+    set t_ts=k
+    set t_fs=\
+    set t_ut=
+endif
+set notitle
+" }}
