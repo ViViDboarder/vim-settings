@@ -55,6 +55,7 @@ call s:smart_source_rc('plugins/tagbar')
 call s:smart_source_rc('plugins/tcomment_vim')
 if (v:version > 703) && !exists('g:gui_oni')
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
+    command! TagsUpdate :GutentagsUpdate<CR>
 end
 
 " TODO: Probably remove

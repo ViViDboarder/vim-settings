@@ -121,9 +121,11 @@ nmap gb :bn<CR>
 nmap gB :bp<CR>
 
 " Command to display TODO tags in project
+" Generally, this is overriden in vim-grepper
 command Todo grep TODO
 
 " Easy update tags
+" Generally this is overriden by Gutentags
 command TagsUpdate !ctags -R .
 
 " Set grepprg
