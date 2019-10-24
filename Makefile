@@ -34,7 +34,7 @@ $(PRE_COMMIT_ENV_BIN)/pre-commit: $(PRE_COMMIT_ENV)
 
 .PHONY: install-hooks
 install-hooks: $(PRE_COMMIT_ENV_BIN)/pre-commit
-	$(PRE_COMMIT_ENV_BIN)/pre-commit install-hooks
+	$(PRE_COMMIT_ENV_BIN)/pre-commit install --install-hooks
 
 # Checks files for encryption
 .PHONY: check
