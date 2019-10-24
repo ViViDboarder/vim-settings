@@ -2,7 +2,7 @@ PRE_COMMIT_ENV ?= .pre_commit_env
 PRE_COMMIT_ENV_BIN ?= $(PRE_COMMIT_ENV)/bin
 
 .PHONY: default
-default: install
+default: check
 
 .PHONY: install
 install:

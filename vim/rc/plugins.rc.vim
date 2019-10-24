@@ -12,6 +12,15 @@ function! s:source_rc(path)
 endfunction
 " }} Functions
 
+" Saving and loading specific versions of plugins
+call s:source_rc('plug-snapshot')
+function! s:save_snapshot()
+  let l:f_path = fnameescape(expand('~/.vim/rc/plug-snapshot.rc.vim'))
+  execute 'PlugSnapshot!' . l:f_path
+endfunction
+command! SavePlugSnapshot call s:save_snapshot()
+
+
 " Navigation {{
 Plug 'vim-scripts/file-line'
 Plug 'tpope/vim-vinegar'
