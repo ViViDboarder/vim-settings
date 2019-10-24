@@ -1,13 +1,12 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v1.2.3
+    rev: v2.3.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
-  # After merging, this should change to the upstream and point to master
-  - repo: https://github.com/ViViDboarder/vint
-    rev: pre-commit-support
+  - repo: https://github.com/Kuniwak/vint
+    rev: 9a239b20be279324ced3b34ed71f84a63edfd4fb
     hooks:
       - id: vint
         exclude: >
