@@ -17,19 +17,6 @@ syntax on
 set hlsearch
 
 " Color Schemes {{
-" Set theme based on $VIM_COLOR variable
-try
-    if !empty($VIM_COLOR)
-        colorscheme $VIM_COLOR
-    else
-        " Prefered default colorscheme
-        colorscheme wombat256mod
-    endif
-catch /^Vim\%((\a\+)\)\=:E185/
-    " Colorschemes not installed yet
-    " This happens when first installing bundles
-    colorscheme default
-endtry
 
 " Function and command to update colors based on light and dark mode
 function! UpdateColors()
@@ -65,8 +52,21 @@ function! UpdateColors()
     endif
 endfunction
 command! UpdateColors call UpdateColors()
-" au BufEnter *.* call UpdateColors()
-call UpdateColors()
+
+" Set theme based on $VIM_COLOR variable
+try
+    if !empty($VIM_COLOR)
+        colorscheme $VIM_COLOR
+    else
+        " Prefered default colorscheme
+        colorscheme wombat256mod
+    endif
+    call UpdateColors()
+catch /^Vim\%((\a\+)\)\=:E185/
+    " Colorschemes not installed yet
+    " This happens when first installing bundles
+    colorscheme default
+endtry
 " }}
 
 " Set gui specific values {{
