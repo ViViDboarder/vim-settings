@@ -12,3 +12,4 @@ vim/tmp/*
 vim/tmp/viminfo.*
 .DS_Store
 vim/view/
+.pre_commit_env/
