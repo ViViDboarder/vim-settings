@@ -34,9 +34,16 @@ cmap cd. lcd %:p:h
 " Bind Make to F5 like other IDEs
 nnoremap <F5> :make<CR>
 
-" Remap Ctrl+Space for auto Complete
-inoremap <C-Space> <C-n>
-inoremap <Nul> <C-n>
+" Ctrl-Space for omnicompletions
+inoremap <silent><expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
+        \ "\<lt>C-n>" :
+        \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
+        \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
+        \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
+imap <C-@> <C-Space>
+augroup close_docs
+    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+augroup end
 
 " Toggle highlighting with \hr (highlight row)
 nnoremap <leader>hr :set cursorline!<CR>

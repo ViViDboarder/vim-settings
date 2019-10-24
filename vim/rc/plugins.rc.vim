@@ -33,36 +33,79 @@ endif
 " }} Searching
 
 " Programming {{
+Plug 'FooSoft/vim-argwrap'
 
-" TODO: Maybe replace with coc.nvim. If I'm doing a lot of development, I will
-" have latest versions of vim or nvim
-" Only need one fallback, maybe neocomplcache
-call s:smart_source_rc('plugins/omnicompletion')
-if !g:vim_as_an_ide || g:gui.has_autocomplete_features
-    " We'll keep Oni's autocomplete with Language Server
-elseif (has('nvim') || v:version >= 800) && has('python3')
-    call s:smart_source_rc('plugins/deoplete')
-else
-    call s:smart_source_rc('plugins/neocomplcache')
+Plug 'tomtom/tcomment_vim', { 'on': ['TComment', 'TCommentBlock'] }
+nnoremap // :TComment<CR>
+vnoremap // :TCommentBlock<CR>
+
+" Install ALE
+if !g:vim_as_an_ide || g:gui.has_linter_features
+    " We'll keep skip adding any of these features
+elseif has('nvim') || v:version >= 800
+    Plug 'dense-analysis/ale'
+    set omnifunc=ale#completion#OmniFunc
+    let g:airline#extensions#ale#enabled = 1
+    let g:ale_lint_on_enter = 0
+
+    " TODO: Maybe move this to something per language
+    " TODO: Handle installing of language servers on setup (see ./install-language-servers.sh)
+    " NOTE: Some of these are installed when bootstrapping environment,
+    " outside of vim setup
+    let g:ale_linters = {
+        \   'python': ['pyls', 'flake8', 'mypy', 'pylint'],
+        \   'go': ['gopls', 'golint', 'gometalinter'],
+        \   'rust': ['rls', 'cargo'],
+        \   'sh': ['language_server', 'shell', 'shellcheck'],
+    \}
+    let g:ale_fixers = {
+        \   'go': ['gofmt', 'goimports'],
+        \   'rust': ['rustfmt'],
+    \}
+
+    " Auto-complete from ALE, possible alternative to asyncomplete
+    " let g:ale_completion_enabled = 1
+
+    " Enable asyncomplete
+    Plug 'prabirshrestha/asyncomplete.vim'
+    " Add ALE to asyncomplete
+    augroup acomp_setup
+        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
+                    \ 'priority': 10,
+                    \ }))
+    augroup end
+
+    " let g:asyncomplete_auto_popup = 0
+    " Make asyncomplete manually triggered
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~? '\s'
+    endfunction
+
+    inoremap <silent><expr> <C-Space>
+                \ pumvisible() ? "\<C-n>" :
+                \ <SID>check_back_space() ? "\<TAB>" :
+                \ asyncomplete#force_refresh()
 end
 
-call s:smart_source_rc('plugins/tcomment_vim')
+" TODO: Figure out if this is needed or if the ale completions are sufficient
+" call s:smart_source_rc('plugins/omnicompletion')
 
 if g:vim_as_an_ide && (v:version > 703) && !g:gui.has_ctags_features
     call s:smart_source_rc('plugins/tagbar')
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
-    command! TagsUpdate :GutentagsUpdate<CR>
+    command! TagsUpdate :GutentagsUpdate
 end
 
 " TODO: Maybe ALE. Similar reason as coc.nvim. Probably only using latest vim
 " if developing seriously
-if !g:vim_as_an_ide
-    " Do nothing
-elseif (has('nvim') || v:version >= 800)
-    call s:smart_source_rc('plugins/neomake')
-else
-    call s:smart_source_rc('plugins/syntastic')
-endif
+" if !g:vim_as_an_ide || g:ale_completion_enabled
+"     " Do nothing
+" elseif (has('nvim') || v:version >= 800)
+"     call s:smart_source_rc('plugins/neomake')
+" else
+"     call s:smart_source_rc('plugins/syntastic')
+" endif
 " }}
 
 " GUI {{
