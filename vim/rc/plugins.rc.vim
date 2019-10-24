@@ -70,6 +70,7 @@ elseif has('nvim') || v:version >= 800
     let g:ale_fixers = {
         \   'go': ['gofmt', 'goimports'],
         \   'rust': ['rustfmt'],
+        \   'markdown': ['trim_whitespace'],
     \}
 
     " Auto-complete from ALE, possible alternative to asyncomplete
