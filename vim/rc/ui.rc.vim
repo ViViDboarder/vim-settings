@@ -1,7 +1,10 @@
+" Add encoding for multibyte chars
+scriptencoding utf-8
+
 " Display filename at bottom of window
-set ls=2
+set laststatus=2
 "enable line numbers
-set nu
+set number
 
 " Highlights the line the cursor is on
 set cursorline
@@ -11,7 +14,7 @@ set cursorline
 syntax on
 
 " Enable search highlighting
-set hls
+set hlsearch
 
 " Color Schemes {{
 " Set theme based on $VIM_COLOR variable
@@ -41,7 +44,7 @@ function! UpdateColors()
         let dark_color = $VIM_COLOR_DARK
     endif
     " Detect using an env variable
-    let cmd = "echo $IS_DARKMODE"
+    let cmd = 'echo $IS_DARKMODE'
     " On macOS we can do something a bit more fancy
     if IsMac()
         let cmd = "osascript
@@ -53,7 +56,7 @@ function! UpdateColors()
     endif
     let dark_mode = substitute(system(cmd), '\n', '', 'g')
     " Set colorscheme and background based on mode
-    if dark_mode == 'true'
+    if dark_mode ==# 'true'
         execute 'colorscheme ' . dark_color
         set background=dark
     else
@@ -83,10 +86,10 @@ endif
 
 " Set xterm and screen/tmux's title {{
 set titlestring=vim\ %{expand(\"%t\")}
-if &term =~ "^screen"
+if &term =~# '^screen'
     " pretend this is xterm.  it probably is anyway, but if term is left as
     " `screen`, vim doesn't understand ctrl-arrow.
-    if &term == "screen-256color"
+    if &term ==# 'screen-256color'
         set term=xterm-256color
     else
         set term=xterm

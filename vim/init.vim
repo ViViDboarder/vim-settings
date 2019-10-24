@@ -8,10 +8,6 @@ if &shell =~# 'fish$'
     set shell=bash
 endif
 
-if &compatible
-  set nocompatible
-endif
-
 function! s:smart_source_rc(name)
     call s:source_rc(a:name . '.rc.vim')
     call s:source_rc(a:name . '.local.rc.vim')
@@ -46,9 +42,9 @@ endfunction
 
 " IsGuiApp determines if (n)vim is running in a GUI
 function! IsGuiApp()
-    return has("gui_running") || exists("neovim_dot_app")
-                \ || has("gui_win32") || has("gui_macvim")
-                \ || has("gui_vimr") || exists('g:gui_oni')
+    return has('gui_running') || exists('neovim_dot_app')
+                \ || has('gui_win32') || has('gui_macvim')
+                \ || has('gui_vimr') || exists('g:gui_oni')
 endfunction
 
 " Some GUI applications provide built in support for certain features
@@ -62,7 +58,9 @@ let g:gui.has_ctags_features = exists('g:gui_oni')
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
                 \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall
+    augroup pluginstall
+        autocmd VimEnter * PlugInstall
+    augroup end
 endif
 
 call s:smart_source_rc('init')
