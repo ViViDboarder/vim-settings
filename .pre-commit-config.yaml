@@ -10,3 +10,7 @@ repos:
     rev: pre-commit-support
     hooks:
       - id: vint
+        exclude: >
+          (?x)^(
+            vim/colors/.*\.vim
+          )$
