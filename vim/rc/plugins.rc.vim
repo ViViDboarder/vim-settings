@@ -62,15 +62,17 @@ elseif has('nvim') || v:version >= 800
     " NOTE: Some of these are installed when bootstrapping environment,
     " outside of vim setup
     let g:ale_linters = {
-        \   'python': ['pyls', 'flake8', 'mypy', 'pylint'],
         \   'go': ['gopls', 'golint', 'gometalinter'],
+        \   'python': ['pyls', 'flake8', 'mypy', 'pylint'],
         \   'rust': ['rls', 'cargo'],
         \   'sh': ['language_server', 'shell', 'shellcheck'],
     \}
     let g:ale_fixers = {
         \   'go': ['gofmt', 'goimports'],
+        \   'json': ['prettier', 'remove_trailing_lines'],
+        \   'markdown': ['trim_whitespace', 'remove_trailing_lines'],
         \   'rust': ['rustfmt'],
-        \   'markdown': ['trim_whitespace'],
+        \   'yaml': ['prettier', 'remove_trailing_lines'],
     \}
 
     " Auto-complete from ALE, possible alternative to asyncomplete
