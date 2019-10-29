@@ -1,3 +1,4 @@
+.PHONY: all test
 PRE_COMMIT_ENV ?= .pre_commit_env
 PRE_COMMIT_ENV_BIN ?= $(PRE_COMMIT_ENV)/bin
 
@@ -11,6 +12,10 @@ install:
 .PHONY: update
 update:
 	sh ./update-plugins.sh
+
+.PHONY: install-language-servers
+install-language-servers:
+	sh ./install-language-servers.sh
 
 .PHONY: uninstall
 uninstall:
