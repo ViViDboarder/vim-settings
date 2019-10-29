@@ -31,6 +31,11 @@ pip3 install --user vim-vint
 pip install --user yamllint
 pip3 install --user yamllint
 
+# Text / Markdown
+npm install -g alex
+pip install --user proselint
+pip3 install --user proselint
+
 # Makefile
 # https://github.com/mrtazz/checkmake
 

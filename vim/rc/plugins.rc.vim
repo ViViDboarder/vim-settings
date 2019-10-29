@@ -62,29 +62,34 @@ elseif has('nvim') || v:version >= 800
     " NOTE: Some of these are installed when bootstrapping environment,
     " outside of vim setup
     let g:ale_linters = {
-        \   'go': ['gopls', 'golint', 'gometalinter'],
-        \   'python': ['pyls', 'flake8', 'mypy', 'pylint'],
-        \   'rust': ['rls', 'cargo'],
-        \   'sh': ['language_server', 'shell', 'shellcheck'],
+        \ 'go': ['gopls', 'golint', 'gometalinter'],
+        \ 'python': ['pyls', 'flake8', 'mypy', 'pylint'],
+        \ 'rust': ['rls', 'cargo'],
+        \ 'sh': ['language_server', 'shell', 'shellcheck'],
+        \ 'text': ['proselint', 'alex'],
     \}
+    let g:ale_linter_aliases = {
+        \ 'markdown': ['text'],
+    \}
+    " More than a few languages use the same fixers
+    let s:ale_pretty_trim_fixer = ['prettier', 'trim_whitespace', 'remove_trailing_lines']
     let g:ale_fixers = {
-        \   'go': ['gofmt', 'goimports'],
-        \   'json': ['prettier', 'remove_trailing_lines'],
-        \   'markdown': ['trim_whitespace', 'remove_trailing_lines'],
-        \   'rust': ['rustfmt'],
-        \   'yaml': ['prettier', 'remove_trailing_lines'],
+        \ 'go': ['gofmt', 'goimports'],
+        \ 'json': s:ale_pretty_trim_fixer,
+        \ 'rust': ['rustfmt'],
+        \ 'markdown': s:ale_pretty_trim_fixer,
+        \ 'yaml': ['prettier', 'remove_trailing_lines'],
+        \ 'css':  s:ale_pretty_trim_fixer,
+        \ 'javascript': s:ale_pretty_trim_fixer,
     \}
-
-    " Auto-complete from ALE, possible alternative to asyncomplete
-    " let g:ale_completion_enabled = 1
 
     " Enable asyncomplete
     Plug 'prabirshrestha/asyncomplete.vim'
     " Add ALE to asyncomplete
     augroup acomp_setup
         au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
-                    \ 'priority': 10,
-                    \ }))
+            \ 'priority': 10,
+        \ }))
     augroup end
 
     " let g:asyncomplete_auto_popup = 0
