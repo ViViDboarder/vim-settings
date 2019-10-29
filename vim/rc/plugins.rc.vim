@@ -113,16 +113,6 @@ if g:vim_as_an_ide && (v:version > 703) && !g:gui.has_ctags_features
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
     command! TagsUpdate :GutentagsUpdate
 end
-
-" TODO: Maybe ALE. Similar reason as coc.nvim. Probably only using latest vim
-" if developing seriously
-" if !g:vim_as_an_ide || g:ale_completion_enabled
-"     " Do nothing
-" elseif (has('nvim') || v:version >= 800)
-"     call s:smart_source_rc('plugins/neomake')
-" else
-"     call s:smart_source_rc('plugins/syntastic')
-" endif
 " }}
 
 " GUI {{
