@@ -1,4 +1,6 @@
 *.log
+.DS_Store
+.pre_commit_env/
 tags
 vim/.netrwhist
 vim/UltiSnips
@@ -8,8 +10,7 @@ vim/backup/
 vim/plugged/
 vim/rc/*.local.rc.vim
 vim/rc/plugins/*.local.rc.vim
+vim/spell/
 vim/tmp/
 vim/tmp/viminfo.*
-.DS_Store
 vim/view/
-.pre_commit_env/

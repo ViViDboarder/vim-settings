@@ -144,3 +144,6 @@ elseif executable('ag')
 elseif executable('ack')
     set grepprg=ack
 endif
+
+" Easily toggle spelling
+command Spell setlocal spell! spelllang=en_us
