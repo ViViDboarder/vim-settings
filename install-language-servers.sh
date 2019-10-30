@@ -1,5 +1,4 @@
 #! /bin/bash
-
 set -e
 
 # Determines if a command exists or not
@@ -89,6 +88,7 @@ function main() {
     install_language_servers
     install_linters
     install_fixers
+
     echo ""
     echo "DONE"
 }
