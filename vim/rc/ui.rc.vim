@@ -16,62 +16,8 @@ syntax on
 " Enable search highlighting
 set hlsearch
 
-" Color Schemes {{
-
-" Function and command to update colors based on light and dark mode
-function! UpdateColors()
-    " Get the light color or default to VIM_COLOR
-    let light_color = $VIM_COLOR
-    if !empty($VIM_COLOR_LIGHT)
-        let light_color = $VIM_COLOR_LIGHT
-    endif
-    " Get the dark color or default to VIM_COLOR
-    let dark_color = $VIM_COLOR
-    if !empty($VIM_COLOR_DARK)
-        let dark_color = $VIM_COLOR_DARK
-    endif
-    " Detect using an env variable
-    let cmd = 'echo $IS_DARKMODE'
-    " On macOS we can do something a bit more fancy
-    if IsMac()
-        let cmd = "osascript
-            \ -e 'tell application \"System Events\"'
-                \ -e 'tell appearance preferences'
-                    \ -e 'return dark mode'
-                \ -e 'end tell'
-            \ -e 'end tell'"
-    endif
-    let dark_mode = substitute(system(cmd), '\n', '', 'g')
-    " Set colorscheme and background based on mode
-    if dark_mode ==# 'true'
-        execute 'colorscheme ' . dark_color
-        set background=dark
-    else
-        execute 'colorscheme ' . light_color
-        set background=light
-    endif
-endfunction
-command! UpdateColors call UpdateColors()
-
-" Set theme based on $VIM_COLOR variable
-try
-    if !empty($VIM_COLOR)
-        colorscheme $VIM_COLOR
-    else
-        " Prefered default colorscheme
-        colorscheme wombat256mod
-    endif
-    call UpdateColors()
-catch /^Vim\%((\a\+)\)\=:E185/
-    " Colorschemes not installed yet
-    " This happens when first installing bundles
-    colorscheme default
-endtry
-" }}
-
-" Set gui specific values {{
+" Set fonts for gui apps {{
 if IsGuiApp()
-    colorscheme wombat256mod
     if IsWindows()
         set guifont=Consolas:h10:b
     elseif IsMac()
@@ -82,6 +28,69 @@ if IsGuiApp()
         endtry
     endif
 endif
+" }}
+
+" Color Schemes {{
+
+" Set a default color scheme to use
+let g:default_color = 'wombat256mod'
+
+" Gets the value of an env or returns a default
+function s:val_default(env, default)
+    return !empty(a:env) ? a:env : a:default
+endfunction
+
+" Get color schemes from env variables
+let s:env_color = s:val_default($VIM_COLOR, g:default_color)
+let s:env_color_light = s:val_default($VIM_COLOR_LIGHT, s:env_color)
+let s:env_color_dark = s:val_default($VIM_COLOR_DARK, s:env_color)
+
+" Override colors for gui apps
+if IsGuiApp()
+    let g:default_color = 'solarized'
+    let s:env_color = 'solarized'
+    let s:env_color_light = 'solarized'
+    let s:env_color_dark = 'solarized'
+endif
+
+" Function and command to update colors based on light and dark mode
+function! UpdateColors()
+    " Detect using an env variable
+    let cmd = 'echo $IS_DARKMODE'
+    " On macOS we can do something a bit more fancy
+    if IsMac()
+        let cmd = 'defaults read -g AppleInterfaceStyle'
+    endif
+    let dark_mode = substitute(system(cmd), '\n', '', 'g')
+    " Set colorscheme and background based on mode
+    if dark_mode ==# 'Dark'
+        set background=dark
+        if g:colors_name !=# s:env_color_dark
+            execute 'colorscheme ' . s:env_color_dark
+        endif
+    else
+        set background=light
+        if g:colors_name !=# s:env_color_light
+            execute 'colorscheme ' . s:env_color_light
+        endif
+    endif
+endfunction
+command! UpdateColors call UpdateColors()
+nnoremap <leader>cc :UpdateColors<CR>
+
+" Disabled because this is slow...
+augroup AutoColors
+    autocmd FocusGained * call UpdateColors()
+augroup END
+
+try
+    execute 'colorscheme ' . s:env_color
+    " Disabled because this slows startup
+    call UpdateColors()
+catch /^Vim\%((\a\+)\)\=:E185/
+    " Colorschemes not installed yet
+    " This happens when first installing bundles
+endtry
 " }}
 
 " Set xterm and screen/tmux's title {{
