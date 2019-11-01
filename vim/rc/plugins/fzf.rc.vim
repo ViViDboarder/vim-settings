@@ -28,7 +28,11 @@ if !exists('g:ctrlp_in_use')
     nnoremap <leader>b :FZFBuffers<CR>
     nnoremap <silent> <F2> :FZFBuffers<CR>
     " Find text in files
-    nnoremap <leader>f :FZFAg<CR>
+    if executable('rg')
+        nnoremap <leader>f :FZFRg<CR>
+    elseif executable('ag')
+        nnoremap <leader>f :FZFAg<CR>
+    endif
     " Find tags
     nnoremap <leader>r :FZFTags<CR>
     " Find buffer tags
