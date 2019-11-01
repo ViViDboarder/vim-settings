@@ -83,6 +83,9 @@ elseif has('nvim') || v:version >= 800
         \ 'javascript': s:ale_pretty_trim_fixer,
     \}
 
+    " Create shortcut for ALEFix
+    nnoremap <F4> :ALEFix<CR>
+
     " Enable asyncomplete
     Plug 'prabirshrestha/asyncomplete.vim'
     " Add ALE to asyncomplete
