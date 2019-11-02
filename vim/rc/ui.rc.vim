@@ -36,7 +36,7 @@ endif
 let g:default_color = 'wombat256mod'
 
 " Gets the value of an env or returns a default
-function s:val_default(env, default)
+function! s:val_default(env, default)
     return !empty(a:env) ? a:env : a:default
 endfunction
 
@@ -53,6 +53,14 @@ if IsGuiApp()
     let s:env_color_dark = 'solarized'
 endif
 
+" Set the colorscheme if it's different than the current
+function! s:maybe_set_color(colorscheme_name)
+    " On some versions of vim, g:colors_name doesn't seem to exist on start
+    if !exists('g:colors_name') || g:colors_name !=# a:colorscheme_name
+        execute 'colorscheme ' . a:colorscheme_name
+    endif
+endfunction
+
 " Function and command to update colors based on light and dark mode
 function! UpdateColors()
     " Detect using an env variable
@@ -65,14 +73,10 @@ function! UpdateColors()
     " Set colorscheme and background based on mode
     if dark_mode ==# 'Dark'
         set background=dark
-        if g:colors_name !=# s:env_color_dark
-            execute 'colorscheme ' . s:env_color_dark
-        endif
+        call s:maybe_set_color(s:env_color_dark)
     else
         set background=light
-        if g:colors_name !=# s:env_color_light
-            execute 'colorscheme ' . s:env_color_light
-        endif
+        call s:maybe_set_color(s:env_color_light)
     endif
 endfunction
 command! UpdateColors call UpdateColors()
