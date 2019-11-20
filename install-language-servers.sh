@@ -1,6 +1,9 @@
 #! /bin/bash
 set -e
 
+# Clear explicit PYTHONPATH since this gets confused between py2 and py3
+export PYTHONPATH=""
+
 # Determines if a command exists or not
 function command_exist() {
   command -v "$1" > /dev/null 2>&1;
@@ -10,6 +13,7 @@ function command_exist() {
 function maybe_run() {
     if command_exist "$1" ;then
         echo "> $*"
+        # shellcheck disable=2048,2086
         eval $*
     else
         echo "ERROR: $1 does not exist. Could not run $*"
@@ -31,7 +35,7 @@ function install_language_servers() {
     maybe_run pip3 install --user python-language-server
 
     # Rust
-    maybe_run rustup component add rls rust-analysis rust-src
+    maybe_run rustup component add rls rustfmt rust-analysis rust-src
 
     echo ""
 }
