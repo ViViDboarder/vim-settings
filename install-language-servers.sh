@@ -79,7 +79,7 @@ function install_fixers() {
 
     # Python
     maybe_run pip install --user autopep8 reorder-python-imports
-    maybe_run pip install --user black || echo "WARNING: mypy is py3 only"
+    maybe_run pip install --user black || echo "WARNING: black is py3 only"
     maybe_run pip3 install --user black autopep8 reorder-python-imports
 
     # Rust
