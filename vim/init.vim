@@ -5,7 +5,7 @@ if !1 | finish | endif
 
 " Don't use fish as the default shell. This makes things weird
 if &shell =~# 'fish$'
-    set shell=bash
+    set shell=sh
 endif
 
 function! s:smart_source_rc(name)
