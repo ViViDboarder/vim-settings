@@ -47,10 +47,11 @@ Plug 'tomtom/tcomment_vim', { 'on': ['TComment', 'TCommentBlock'] }
 nnoremap // :TComment<CR>
 vnoremap // :TCommentBlock<CR>
 
-" Install ALE
-if !g:vim_as_an_ide || g:gui.has_linter_features
-    " We'll keep skip adding any of these features
-elseif has('nvim') || v:version >= 800
+" IDE stuff
+
+" Lint and completion
+if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version >= 800)
+    " Install ALE
     Plug 'dense-analysis/ale'
     let g:airline#extensions#ale#enabled = 1
     " Speed up first load time
@@ -70,9 +71,13 @@ elseif has('nvim') || v:version >= 800
     " More than a few languages use the same fixers
     let s:ale_pretty_trim_fixer = ['prettier', 'trim_whitespace', 'remove_trailing_lines']
     let g:ale_fixers = {
+        \ '*': ['trim_whitespace', 'remove_trailing_lines'],
         \ 'go': ['gofmt', 'goimports'],
         \ 'json': s:ale_pretty_trim_fixer,
         \ 'rust': ['rustfmt'],
+        \ 'python': [
+        \ 'autopep8', 'reorder-python-imports',
+        \ 'remove_trailing_lines', 'trim_whitespace'],
         \ 'markdown': s:ale_pretty_trim_fixer,
         \ 'yaml': ['prettier', 'remove_trailing_lines'],
         \ 'css':  s:ale_pretty_trim_fixer,
@@ -82,33 +87,34 @@ elseif has('nvim') || v:version >= 800
     " Create shortcut for ALEFix
     nnoremap <F4> :ALEFix<CR>
 
-    " Set ale completion as omni-func
-    set omnifunc=ale#completion#OmniFunc
-    " Enable asyncomplete
-    Plug 'prabirshrestha/asyncomplete.vim'
-    " Add ALE to asyncomplete
-    augroup acomp_setup
-        au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
-            \ 'priority': 10,
-        \ }))
-    augroup end
+    " Enable autocomplete from ale and asyncomplete
+    if !g:gui.has_autocomplete_features
+        set omnifunc=ale#completion#OmniFunc
+        " Set ale completion as omni-func
+        " Enable asyncomplete
+        Plug 'prabirshrestha/asyncomplete.vim'
+        " Add ALE to asyncomplete
+        augroup acomp_setup
+            au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
+                        \ 'priority': 10,
+                        \ }))
+        augroup end
 
-    " let g:asyncomplete_auto_popup = 0
-    " Make asyncomplete manually triggered
-    function! s:check_back_space() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~? '\s'
-    endfunction
+        let g:asyncomplete_auto_popup = 0
+        " Make asyncomplete manually triggered
+        function! s:check_back_space() abort
+            let col = col('.') - 1
+            return !col || getline('.')[col - 1]  =~? '\s'
+        endfunction
 
-    inoremap <silent><expr> <C-Space>
-                \ pumvisible() ? "\<C-n>" :
-                \ <SID>check_back_space() ? "\<TAB>" :
-                \ asyncomplete#force_refresh()
+        inoremap <silent><expr> <C-Space>
+                    \ pumvisible() ? "\<C-n>" :
+                    \ <SID>check_back_space() ? "\<TAB>" :
+                    \ asyncomplete#force_refresh()
+    end
 end
 
-" TODO: Figure out if this is needed or if the ale completions are sufficient
-" call s:smart_source_rc('plugins/omnicompletion')
-
+" Programming Tag navigation
 if g:vim_as_an_ide && (v:version > 703) && !g:gui.has_ctags_features
     call s:smart_source_rc('plugins/tagbar')
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files

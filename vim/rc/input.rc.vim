@@ -35,12 +35,17 @@ cmap cd. lcd %:p:h
 nnoremap <F5> :make<CR>
 
 " Ctrl-Space for omnicompletions
+inoremap <C-Space> <C-n>
+inoremap <Nul> <C-n>
 inoremap <silent><expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
         \ "\<lt>C-n>" :
         \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
         \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
         \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
 imap <C-@> <C-Space>
+
+" Enable preview window
+set completeopt+=preview
 augroup close_docs
     autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 augroup end
