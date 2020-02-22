@@ -151,7 +151,7 @@ Plug 'rust-lang/rust.vim'
 call s:smart_source_rc('plugins/python')
 
 " Disable polyglog for languages with more robust plugins
-let g:polyglot_disabled = ['python', 'go', 'rust']
+let g:polyglot_disabled = ['go', 'rust']
 Plug 'sheerun/vim-polyglot'
 
 " Languages not in polyglot
