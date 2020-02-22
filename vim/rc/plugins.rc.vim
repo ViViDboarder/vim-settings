@@ -5,33 +5,44 @@ function! s:smart_source_rc(name)
 endfunction
 
 function! s:source_rc(path)
-  let l:f_path = fnameescape(expand('~/.vim/rc/' . a:path))
-  if filereadable(l:f_path)
-      execute 'source' . l:f_path
-  endif
+    let l:f_path = fnameescape(expand('~/.vim/rc/' . a:path))
+    if filereadable(l:f_path)
+        execute 'source' . l:f_path
+    endif
 endfunction
 " }} Functions
 
 " Saving and loading specific versions of plugins
 call s:source_rc('plug-snapshot')
 function! s:save_snapshot()
-  let l:f_path = fnameescape(expand('~/.vim/rc/plug-snapshot.rc.vim'))
-  execute 'PlugSnapshot!' . l:f_path
+    let l:f_path = fnameescape(expand('~/.vim/rc/plug-snapshot.rc.vim'))
+    execute 'PlugSnapshot!' . l:f_path
 endfunction
 command! SavePlugSnapshot call s:save_snapshot()
 
 
-" Navigation {{
-Plug 'vim-scripts/file-line'
+" General
+Plug 'godlygeek/tabular' " Tabular spacing
+Plug 'gregsexton/MatchTag'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rsi' " emacs bindinds in insert
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-vinegar'
-" }} Navigation
+Plug 'vim-scripts/file-line'
+if !g:gui.has_buffer_features
+    call s:smart_source_rc('plugins/airline')
+    call s:smart_source_rc('plugins/startify')
+endif
+Plug 'milkypostman/vim-togglelist'
+nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
+nnoremap <silent> <F7> :call ToggleLocationList()<CR>
+" Plug 'edkolev/tmuxline.vim' " Removed because this can fail on some machines
+" let g:tmuxline_powerline_separators = 0
+call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
 
-" Git {{
-call s:smart_source_rc('plugins/fugitive')
-call s:smart_source_rc('plugins/gitgutter')
-" }} Git
-
-" Searching {{
+" Searching
 if !exists('g:gui_oni')
     if !executable('fzf')
         call s:smart_source_rc('plugins/ctrlp')
@@ -39,13 +50,20 @@ if !exists('g:gui_oni')
     call s:smart_source_rc('plugins/fzf')
     call s:smart_source_rc('plugins/vim-grepper')
 endif
-" }} Searching
 
-" Programming {{
+" Git / Version control
+call s:smart_source_rc('plugins/fugitive')
+call s:smart_source_rc('plugins/gitgutter')
+
+" Programming
 Plug 'FooSoft/vim-argwrap'
+nnoremap <silent> <leader>a :ArgWrap<CR>
 Plug 'tomtom/tcomment_vim', { 'on': ['TComment', 'TCommentBlock'] }
 nnoremap // :TComment<CR>
 vnoremap // :TCommentBlock<CR>
+Plug 'rizzatti/dash.vim', { 'on': 'DashSearch' }
+nmap <silent> <leader>d <Plug>DashSearch
+let g:dash_map = { 'apex' : 'apex', 'visualforce' : 'vf' }
 
 " IDE stuff
 
@@ -59,30 +77,28 @@ if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version 
 
     " NOTE: Some of these are installed when bootstrapping environment, outside of vim setup
     let g:ale_linters = {
-        \ 'go': ['gopls', 'golint', 'gometalinter'],
-        \ 'python': ['pyls', 'flake8', 'mypy', 'pylint'],
-        \ 'rust': ['rls', 'cargo'],
-        \ 'sh': ['language_server', 'shell', 'shellcheck'],
-        \ 'text': ['proselint', 'alex'],
-    \}
+                \ 'go': ['gopls', 'golint', 'gometalinter'],
+                \ 'python': ['pyls', 'flake8', 'mypy', 'pylint'],
+                \ 'rust': ['rls', 'cargo'],
+                \ 'sh': ['language_server', 'shell', 'shellcheck'],
+                \ 'text': ['proselint', 'alex'],
+                \}
     let g:ale_linter_aliases = {
-        \ 'markdown': ['text'],
-    \}
+                \ 'markdown': ['text'],
+                \}
     " More than a few languages use the same fixers
     let s:ale_pretty_trim_fixer = ['prettier', 'trim_whitespace', 'remove_trailing_lines']
     let g:ale_fixers = {
-        \ '*': ['trim_whitespace', 'remove_trailing_lines'],
-        \ 'go': ['gofmt', 'goimports'],
-        \ 'json': s:ale_pretty_trim_fixer,
-        \ 'rust': ['rustfmt'],
-        \ 'python': [
-        \ 'autopep8', 'reorder-python-imports',
-        \ 'remove_trailing_lines', 'trim_whitespace'],
-        \ 'markdown': s:ale_pretty_trim_fixer,
-        \ 'yaml': ['prettier', 'remove_trailing_lines'],
-        \ 'css':  s:ale_pretty_trim_fixer,
-        \ 'javascript': s:ale_pretty_trim_fixer,
-    \}
+                \ '*': ['trim_whitespace', 'remove_trailing_lines'],
+                \ 'go': ['gofmt', 'goimports'],
+                \ 'json': s:ale_pretty_trim_fixer,
+                \ 'rust': ['rustfmt'],
+                \ 'python': [ 'autopep8', 'reorder-python-imports', 'remove_trailing_lines', 'trim_whitespace'],
+                \ 'markdown': s:ale_pretty_trim_fixer,
+                \ 'yaml': ['prettier', 'remove_trailing_lines'],
+                \ 'css':  s:ale_pretty_trim_fixer,
+                \ 'javascript': s:ale_pretty_trim_fixer,
+                \}
 
     " Create shortcut for ALEFix
     nnoremap <F4> :ALEFix<CR>
@@ -120,21 +136,8 @@ if g:vim_as_an_ide && (v:version > 703) && !g:gui.has_ctags_features
     Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
     command! TagsUpdate :GutentagsUpdate
 end
-" }}
 
-" GUI {{
-Plug 'gregsexton/MatchTag'
-call s:smart_source_rc('plugins/dash')
-if !g:gui.has_buffer_features
-    call s:smart_source_rc('plugins/airline')
-    call s:smart_source_rc('plugins/startify')
-endif
-" Plug 'edkolev/tmuxline.vim' " Removed because this can fail on some machines
-" let g:tmuxline_powerline_separators = 0
-
-" }} GUI
-
-" Filetypes {{
+" Filetype configuration
 
 " Languages with custom configuration
 " Custom go
@@ -158,21 +161,6 @@ Plug 'hsanson/vim-android'
 Plug 'pdurbin/vim-tsv'
 " }}
 
-" Themes {{
+" Themes
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/wombat256.vim'
-call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
-" }}
-
-" System {{
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi' " emacs bindinds in insert
-Plug 'godlygeek/tabular' " Tabular spacing
-
-Plug 'milkypostman/vim-togglelist'
-nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
-nnoremap <silent> <F7> :call ToggleLocationList()<CR>
-" }}
