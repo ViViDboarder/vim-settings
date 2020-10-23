@@ -13,7 +13,7 @@ endfunction
 " }} Functions
 
 " Saving and loading specific versions of plugins
-call s:source_rc('plug-snapshot')
+call s:smart_source_rc('plug-snapshot')
 function! s:save_snapshot()
     let l:f_path = fnameescape(expand('~/.vim/rc/plug-snapshot.rc.vim'))
     execute 'PlugSnapshot!' . l:f_path
