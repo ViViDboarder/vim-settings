@@ -78,7 +78,7 @@ if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version 
     " NOTE: Some of these are installed when bootstrapping environment, outside of vim setup
     let g:ale_linters = {
                 \ 'go': ['gopls', 'golint', 'gometalinter'],
-                \ 'python': ['pyls', 'flake8', 'mypy', 'pylint'],
+                \ 'python': ['pyls', 'mypy'],
                 \ 'rust': ['rls', 'cargo'],
                 \ 'sh': ['language_server', 'shell', 'shellcheck'],
                 \ 'text': ['proselint', 'alex'],
@@ -93,12 +93,13 @@ if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version 
                 \ 'go': ['gofmt', 'goimports'],
                 \ 'json': s:ale_pretty_trim_fixer,
                 \ 'rust': ['rustfmt'],
-                \ 'python': [ 'autopep8', 'reorder-python-imports', 'remove_trailing_lines', 'trim_whitespace'],
+                \ 'python': [ 'black', 'autopep8', 'reorder-python-imports', 'remove_trailing_lines', 'trim_whitespace'],
                 \ 'markdown': s:ale_pretty_trim_fixer,
                 \ 'yaml': ['prettier', 'remove_trailing_lines'],
                 \ 'css':  s:ale_pretty_trim_fixer,
                 \ 'javascript': s:ale_pretty_trim_fixer,
                 \}
+    let g:ale_python_flake8_options = '--max-line-length 80'
 
     " Create shortcut for ALEFix
     nnoremap <F4> :ALEFix<CR>
