@@ -152,3 +152,5 @@ endif
 
 " Easily toggle spelling
 command Spell setlocal spell! spelllang=en_us
+" Pop spell completion word under cursor
+nmap <leader>s viw<esc>a<c-x>s
