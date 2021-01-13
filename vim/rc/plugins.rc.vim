@@ -77,7 +77,7 @@ if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version 
 
     " NOTE: Some of these are installed when bootstrapping environment, outside of vim setup
     let g:ale_linters = {
-                \ 'go': ['gopls', 'golint', 'gometalinter'],
+                \ 'go': ['gopls', 'golint', 'golangci-lint'],
                 \ 'python': ['pyls', 'mypy'],
                 \ 'rust': ['rls', 'cargo'],
                 \ 'sh': ['language_server', 'shell', 'shellcheck'],
