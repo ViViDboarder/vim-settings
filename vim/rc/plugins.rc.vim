@@ -154,6 +154,11 @@ call s:smart_source_rc('plugins/python')
 " Disable polyglog for languages with more robust plugins
 let g:polyglot_disabled = ['go', 'rust']
 Plug 'sheerun/vim-polyglot'
+" Custom rule for ansible playbook detection
+augroup ansible_playbook
+    au BufRead,BufNewFile */playbooks/*.yml set filetype=yaml.ansible
+    au BufRead,BufNewFile */playbooks/*.yaml set filetype=yaml.ansible
+augroup end
 
 " Languages not in polyglot
 Plug 'ViViDboarder/force-vim', { 'for': ['apex', 'visualforce'] }
