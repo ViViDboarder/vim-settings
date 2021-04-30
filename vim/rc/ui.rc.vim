@@ -72,10 +72,14 @@ function! UpdateColors()
     let dark_mode = substitute(system(cmd), '\n', '', 'g')
     " Set colorscheme and background based on mode
     if dark_mode ==# 'Dark'
-        set background=dark
+        if &background !=# 'dark'
+            set background=dark
+        endif
         call s:maybe_set_color(s:env_color_dark)
     else
-        set background=light
+        if &background !=# 'light'
+            set background=light
+        endif
         call s:maybe_set_color(s:env_color_light)
     endif
 endfunction
