@@ -69,40 +69,7 @@ let g:dash_map = { 'apex' : 'apex', 'visualforce' : 'vf' }
 
 " Lint and completion
 if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version >= 800)
-    " Install ALE
-    Plug 'dense-analysis/ale'
-    let g:airline#extensions#ale#enabled = 1
-    " Speed up first load time
-    let g:ale_lint_on_enter = 0
-
-    " NOTE: Some of these are installed when bootstrapping environment, outside of vim setup
-    let g:ale_linters = {
-                \ 'go': ['gopls', 'golint', 'golangci-lint'],
-                \ 'python': ['pyls', 'mypy'],
-                \ 'rust': ['rls', 'cargo'],
-                \ 'sh': ['language_server', 'shell', 'shellcheck'],
-                \ 'text': ['proselint', 'alex'],
-                \}
-    let g:ale_linter_aliases = {
-                \ 'markdown': ['text'],
-                \}
-    " More than a few languages use the same fixers
-    let s:ale_pretty_trim_fixer = ['prettier', 'trim_whitespace', 'remove_trailing_lines']
-    let g:ale_fixers = {
-                \ '*': ['trim_whitespace', 'remove_trailing_lines'],
-                \ 'go': ['gofmt', 'goimports'],
-                \ 'json': s:ale_pretty_trim_fixer,
-                \ 'rust': ['rustfmt'],
-                \ 'python': [ 'black', 'autopep8', 'reorder-python-imports', 'remove_trailing_lines', 'trim_whitespace'],
-                \ 'markdown': s:ale_pretty_trim_fixer,
-                \ 'yaml': ['prettier', 'remove_trailing_lines'],
-                \ 'css':  s:ale_pretty_trim_fixer,
-                \ 'javascript': s:ale_pretty_trim_fixer,
-                \}
-    let g:ale_python_flake8_options = '--max-line-length 80'
-
-    " Create shortcut for ALEFix
-    nnoremap <F4> :ALEFix<CR>
+    call s:smart_source_rc('plugins/ale')
 
     " Enable autocomplete from ale and asyncomplete
     if !g:gui.has_autocomplete_features
@@ -144,6 +111,8 @@ end
 " Custom go
 let g:go_def_mapping_enabled = 0
 let g:go_version_warning = 0
+let g:go_fmt_autosave = 0
+let g:go_imports_autosave = 0
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 " Custom rust
 let g:rustfmt_autosave = 1
