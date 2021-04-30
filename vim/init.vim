@@ -5,7 +5,12 @@ if !1 | finish | endif
 
 " Don't use fish as the default shell. This makes things weird
 if &shell =~# 'fish$'
-    set shell=sh
+    set shell=bash
+endif
+
+" Don't use sh if we have bash
+if &shell =~# '/sh$' && executable('bash')
+  set shell=bash
 endif
 
 function! s:smart_source_rc(name)
