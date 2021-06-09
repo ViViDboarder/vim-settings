@@ -6,7 +6,7 @@ export PYTHONPATH=""
 
 # Determines if a command exists or not
 function command_exist() {
-  command -v "$1" > /dev/null 2>&1;
+    command -v "$1" > /dev/null 2>&1;
 }
 
 # Runs a command or spits out the output
