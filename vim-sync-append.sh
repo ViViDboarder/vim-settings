@@ -5,36 +5,25 @@
 # http://github.com/ViViDboarder/Vim-Settings
 ############################
 
-if [ -d ~/.vim  ] || [ -f ~/.vimrc ] || [ -d ~/.nvim  ] || [ -f ~/.nvimrc ] || [ -d ~/.config/nvim  ]; then
-    echo "Vim files already exist. Please backup or remove .(n)vim and .(n)vimrc and .config/nvim"
-    exit 1
-fi
+set -ex
 
 # Get current directory for future use in links
-VIM_SYNC_DIR=$(dirname $0)
-cd $VIM_SYNC_DIR
+VIM_SYNC_DIR=$(dirname "$0")
+cd "$VIM_SYNC_DIR"
 VIM_SYNC_DIR=$(pwd)
 
 
 # Vim
-ln -s $VIM_SYNC_DIR/vim/init.vim ~/.vimrc
-ln -s $VIM_SYNC_DIR/vim ~/.vim
+[ -d "$HOME/.vim" ] || ln -s "$VIM_SYNC_DIR/vim" "$HOME/.vim"
+[ -f "$HOME/.vimrc" ] || ln -s "$VIM_SYNC_DIR/vim/init.vim" "$HOME/.vimrc"
 
-# Neovim legacy
-ln -s $VIM_SYNC_DIR/vim/init.vim ~/.nvimrc
-ln -s $VIM_SYNC_DIR/vim ~/.nvim
-
-# Neovim new
-mkdir -p ${XDG_CONFIG_HOME:=$HOME/.config}
-ln -s $VIM_SYNC_DIR/vim $XDG_CONFIG_HOME/nvim
+# Neovim
+mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
+[ -f "$XDG_CONFIG_HOME/nvim" ] || ln -s "$VIM_SYNC_DIR/vim" "$XDG_CONFIG_HOME/nvim"
 
 # Install all bundles
 echo "Install all bundles"
 if hash nvim 2>/dev/null; then
-    if hash pip 2>/dev/null; then
-        echo 'Installing neovim python module in $HOME'
-        pip install --user neovim
-    fi
     echo "If using Neovim, install the python modules in your environment"
     nvim +PlugInstall +qall
 fi
