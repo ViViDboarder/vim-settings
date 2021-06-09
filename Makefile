@@ -45,3 +45,28 @@ install-hooks: $(PRE_COMMIT_ENV_BIN)/pre-commit
 .PHONY: check
 check: $(PRE_COMMIT_ENV_BIN)/pre-commit
 	$(PRE_COMMIT_ENV_BIN)/pre-commit run --all-files
+
+# Build Docker images
+.PHONY: docker-build
+docker-build:
+	docker build \
+		--tag vividboarder/my-neovim .
+
+# Build Docker images
+.PHONY: docker-build-all
+docker-build-all:
+	docker buildx build \
+		--platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
+		--tag vividboarder/my-neovim .
+
+# Build Docker images
+.PHONY: docker-build-push
+docker-build-push:
+	docker buildx build \
+		--push \
+		--platform linux/arm/v7,linux/arm64/v8,linux/amd64 \
+		--tag vividboarder/my-neovim .
+
+.PHONY: docker-clean
+docker-clean:
+	docker volume rm nvim-$(USER)-home
