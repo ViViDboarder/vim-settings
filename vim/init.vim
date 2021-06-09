@@ -9,7 +9,7 @@ if &shell =~# 'fish$'
 endif
 
 " Don't use sh if we have bash
-if &shell =~# '/sh$' && executable('bash')
+if &shell =~# '/sh$' || &shell =~# '^sh$' && executable('bash')
   set shell=bash
 endif
 
