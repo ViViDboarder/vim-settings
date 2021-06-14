@@ -33,6 +33,11 @@ let g:ale_fixers = {
 let g:ale_python_flake8_options = '--max-line-length 88'
 let g:ale_go_golangci_lint_options = ''
 let g:ale_go_golangci_lint_package = 1
-
+let g:ale_rust_cargo_use_clippy = 1
+let g:ale_rust_rls_config = {
+            \   'rust': {
+            \     'clippy_preference': 'on'
+            \   }
+            \ }
 " Create shortcut for ALEFix
 nnoremap <F4> :ALEFix<CR>
