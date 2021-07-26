@@ -31,8 +31,8 @@ function install_language_servers() {
     # https://github.com/fwcd/kotlin-language-server/blob/master/BUILDING.md
 
     # Python
-    maybe_run pip install --user python-language-server
-    maybe_run pip3 install --user python-language-server
+    maybe_run pip install --user --upgrade python-language-server
+    maybe_run pip3 install --user --upgrade python-language-server
 
     # Rust
     maybe_run rustup component add rls rustfmt rust-analysis rust-src
@@ -45,25 +45,25 @@ function install_linters() {
     echo "### Installing linters..."
 
     # Python
-    maybe_run pip install --user flake8
-    maybe_run pip install --user mypy || echo "WARNING: mypy is py3 only"
-    maybe_run pip3 install --user flake8 mypy
+    maybe_run pip install --user --upgrade flake8
+    maybe_run pip install --user --upgrade mypy || echo "WARNING: mypy is py3 only"
+    maybe_run pip3 install --user --upgrade flake8 mypy
 
     # CSS
     maybe_run npm install -g csslint
 
     # Vim
-    maybe_run pip install --user vim-vint
-    maybe_run pip3 install --user vim-vint
+    maybe_run pip install --user --upgrade vim-vint
+    maybe_run pip3 install --user --upgrade vim-vint
 
     # YAML
-    maybe_run pip install --user yamllint
-    maybe_run pip3 install --user yamllint
+    maybe_run pip install --user --upgrade yamllint
+    maybe_run pip3 install --user --upgrade yamllint
 
     # Text / Markdown
     maybe_run npm install -g alex
-    maybe_run pip install --user proselint
-    maybe_run pip3 install --user proselint
+    maybe_run pip install --user --upgrade proselint
+    maybe_run pip3 install --user --upgrade proselint
 
     # Makefile
     maybe_run go get -u github.com/mrtazz/checkmake
@@ -78,9 +78,9 @@ function install_fixers() {
     maybe_run npm install -g prettier
 
     # Python
-    maybe_run pip install --user autopep8 reorder-python-imports
-    maybe_run pip install --user black || echo "WARNING: black is py3 only"
-    maybe_run pip3 install --user black autopep8 reorder-python-imports
+    maybe_run pip install --user --upgrade autopep8 reorder-python-imports
+    maybe_run pip install --user --upgrade black pyls-black || echo "WARNING: black is py3 only"
+    maybe_run pip3 install --user --upgrade black pyls-black autopep8 reorder-python-imports
 
     # Rust
     maybe_run rustup component add rustfmt
