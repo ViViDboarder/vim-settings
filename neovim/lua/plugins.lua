@@ -254,6 +254,18 @@ return require('packer').startup(function()
         config = config_dark_notify,
         requires = { "hoob3rt/lualine.nvim" },
     }
+    use {
+        'mhinz/vim-startify',
+        config = function()
+            vim.g.startify_list_order = {
+                { '   My Bookmarks'}, 'bookmarks',
+                { '   Most recently used files in the current directory' }, 'dir',
+                { '   Most recently used files' }, 'files',
+                { '   My Sessions' }, 'sessions'
+            }
+            require("utils").maybe_require("plugins.startify_local")
+        end,
+    }
 
     -- LSP
     use {

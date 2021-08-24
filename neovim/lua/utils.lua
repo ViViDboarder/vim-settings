@@ -48,4 +48,36 @@ function M.env_default(name, def)
     return val == nil and def or val
 end
 
+-- Checks to see if a package can be required
+function M.can_require(name)
+  if package.loaded[name] then
+    return false
+  else
+    for _, searcher in ipairs(package.searchers or package.loaders) do
+      local loader = searcher(name)
+      if type(loader) == 'function' then
+          package.preload[name] = loader
+          return true
+        end
+      end
+
+      return false
+    end
+end
+
+-- Require a package if possible
+function M.maybe_require(name)
+  if M.can_require(name) then
+    return require(name)
+  end
+
+  return nil
+end
+
+-- Require a package and a "_local" suffixed one
+function M.require_with_local(name)
+  require(name)
+  M.maybe_require(name .. "_local")
+end
+
 return M
