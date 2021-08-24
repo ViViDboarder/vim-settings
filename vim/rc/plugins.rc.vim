@@ -129,3 +129,11 @@ Plug 'pdurbin/vim-tsv'
 " Themes
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/wombat256.vim'
+
+" Saving and loading specific versions of plugins
+call s:source_rc('plug-snapshot.rc.vim')
+function! s:save_snapshot()
+    let l:f_path = fnameescape(expand('~/.vim/rc/plug-snapshot.rc.vim'))
+    execute 'PlugSnapshot!' . l:f_path
+endfunction
+command! SavePlugSnapshot call s:save_snapshot()
