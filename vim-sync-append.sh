@@ -19,7 +19,9 @@ VIM_SYNC_DIR=$(pwd)
 
 # Neovim
 mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
-[ -f "$XDG_CONFIG_HOME/nvim" ] || ln -s "$VIM_SYNC_DIR/vim" "$XDG_CONFIG_HOME/nvim"
+# TODO: check nvim version and link either the vim or neovim dirs
+# nvim --version | awk '/NVIM v/{ print $2; }'
+[ -f "$XDG_CONFIG_HOME/nvim" ] || ln -s "$VIM_SYNC_DIR/neovim" "$XDG_CONFIG_HOME/nvim"
 
 # Install all bundles
 echo "Install all bundles"
@@ -29,9 +31,6 @@ if hash nvim 2>/dev/null; then
 fi
 vim +PlugInstall +qall
 
-vim --version | grep -q '\+lua' || { echo "Warning: Default vim does not include lua"; }
-vim --version | grep -q '\+ruby' || { echo "Warning: Default vim does not include ruby."; }
-vim --version | grep -q '\+python' || { echo "Warning: Default vim does not include python"; }
 
 echo "All done!"
 exit 0
