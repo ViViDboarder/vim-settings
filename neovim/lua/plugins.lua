@@ -244,6 +244,7 @@ return require('packer').startup(function()
     --]]
     use {
         "hoob3rt/lualine.nvim",
+        -- configured by dark-notify
         -- config = function() config_lualine("auto") end,
     }
     use {
