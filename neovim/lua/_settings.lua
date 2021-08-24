@@ -18,5 +18,8 @@ o.scrolloff = 3
 -- o.term = "xterm-256color"
 -- o.backspace = "2"
 
+-- o.mousehide = true
+o.mouse = "a"
+
 local has = vim.fn.has
 g.is_mac = (has("mac") or has("macunix") or has("gui_macvim") or vim.fn.system("uname"):find("^darwin") ~= nil)
