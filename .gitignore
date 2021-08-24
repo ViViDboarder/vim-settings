@@ -14,3 +14,5 @@ vim/spell/
 vim/tmp/
 vim/tmp/viminfo.*
 vim/view/
+neovim/tmp
+neovim/plugin
