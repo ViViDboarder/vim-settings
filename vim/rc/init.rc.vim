@@ -18,7 +18,3 @@ endif
 augroup syntax_overrides
     au BufRead,BufNewFile *.md set syntax=markdown
 augroup end
-
-" Default to running vim like it's an IDE. To disable on a more restricted
-" machine, override this to 0 using an init.local.rc.vim
-let g:vim_as_an_ide = 1

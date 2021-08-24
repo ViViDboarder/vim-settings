@@ -12,44 +12,31 @@ function! s:source_rc(path)
 endfunction
 " }} Functions
 
-" Saving and loading specific versions of plugins
-call s:smart_source_rc('plug-snapshot')
-function! s:save_snapshot()
-    let l:f_path = fnameescape(expand('~/.vim/rc/plug-snapshot.rc.vim'))
-    execute 'PlugSnapshot!' . l:f_path
-endfunction
-command! SavePlugSnapshot call s:save_snapshot()
-
-
 " General
 Plug 'godlygeek/tabular' " Tabular spacing
 Plug 'gregsexton/MatchTag'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi' " emacs bindinds in insert
+Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-scripts/file-line'
-if !g:gui.has_buffer_features
-    call s:smart_source_rc('plugins/airline')
-    call s:smart_source_rc('plugins/startify')
-endif
+call s:smart_source_rc('plugins/airline')
+call s:smart_source_rc('plugins/startify')
+call s:smart_source_rc('plugins/goyo-limelight')
 Plug 'milkypostman/vim-togglelist'
 nnoremap <silent> <F6> :call ToggleQuickfixList()<CR>
 nnoremap <silent> <F7> :call ToggleLocationList()<CR>
 " Plug 'edkolev/tmuxline.vim' " Removed because this can fail on some machines
 " let g:tmuxline_powerline_separators = 0
-call s:smart_source_rc('plugins/goyo-limelight') " Distraction free editing
 
 " Searching
-if !exists('g:gui_oni')
-    if !executable('fzf')
-        call s:smart_source_rc('plugins/ctrlp')
-    endif
-    call s:smart_source_rc('plugins/fzf')
-    call s:smart_source_rc('plugins/vim-grepper')
+if !executable('fzf')
+    call s:smart_source_rc('plugins/ctrlp')
 endif
+call s:smart_source_rc('plugins/fzf')
+call s:smart_source_rc('plugins/vim-grepper')
 
 " Git / Version control
 call s:smart_source_rc('plugins/fugitive')
@@ -67,43 +54,51 @@ let g:dash_map = { 'apex' : 'apex', 'visualforce' : 'vf' }
 
 " IDE stuff
 
+" let l:is_vim8 = v:version >= 8
+" let l:is_nvim = has('nvim')
+" let l:is_nvim_5 = has('nvim-0.5')
+
 " Lint and completion
-if (g:vim_as_an_ide && !g:gui.has_linter_features) && (has('nvim') || v:version >= 800)
+if has('nvim') || v:version >= 800
+    " let g:ale_completion_enabled = 1
     call s:smart_source_rc('plugins/ale')
+    set omnifunc=ale#completion#OmniFunc
 
-    " Enable autocomplete from ale and asyncomplete
-    if !g:gui.has_autocomplete_features
-        set omnifunc=ale#completion#OmniFunc
-        " Set ale completion as omni-func
-        " Enable asyncomplete
-        Plug 'prabirshrestha/asyncomplete.vim'
-        " Add ALE to asyncomplete
-        augroup acomp_setup
-            au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
-                        \ 'priority': 10,
-                        \ }))
-        augroup end
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~? '\s'
+    endfunction
 
-        let g:asyncomplete_auto_popup = 0
-        " Make asyncomplete manually triggered
-        function! s:check_back_space() abort
-            let col = col('.') - 1
-            return !col || getline('.')[col - 1]  =~? '\s'
-        endfunction
+    " " Enable asyncomplete
+    " Plug 'prabirshrestha/asyncomplete.vim'
+    " " Add ALE to asyncomplete
+    " augroup acomp_setup
+    "     au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
+    "                 \ 'priority': 10,
+    "                 \ }))
+    "     au CompleteDone * if pumvisible() == 0 | pclose | endif
+    " augroup end
+    "
+    " let g:asyncomplete_auto_popup = 0
+    " " Make asyncomplete manually triggered
+    " inoremap <silent><expr> <C-Space>
+    "             \ pumvisible() ? "\<C-n>" :
+    "             \ <SID>check_back_space() ? "\<TAB>" :
+    "             \ asyncomplete#force_refresh()
+    "
 
-        inoremap <silent><expr> <C-Space>
-                    \ pumvisible() ? "\<C-n>" :
-                    \ <SID>check_back_space() ? "\<TAB>" :
-                    \ asyncomplete#force_refresh()
-    end
+    set completeopt+=preview
+    imap <silent> <C-Space> <Plug>(ale_complete)
+    " inoremap <silent><expr> <C-Space>
+    "             \ pumvisible() ? "\<C-n>" :
+    "             \ <SID>check_back_space() ? "\<TAB>" :
+    "             \ <Plug>(ale_complete)
 end
 
 " Programming Tag navigation
-if g:vim_as_an_ide && (v:version > 703) && !g:gui.has_ctags_features
-    call s:smart_source_rc('plugins/tagbar')
-    Plug 'ludovicchabant/vim-gutentags' " Auto generate tags files
-    command! TagsUpdate :GutentagsUpdate
-end
+call s:smart_source_rc('plugins/tagbar')
+Plug 'ludovicchabant/vim-gutentags'
+command! TagsUpdate :GutentagsUpdate
 
 " Filetype configuration
 

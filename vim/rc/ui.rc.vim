@@ -86,7 +86,6 @@ endfunction
 command! UpdateColors call UpdateColors()
 nnoremap <leader>cc :UpdateColors<CR>
 
-" Disabled because this is slow...
 augroup AutoColors
     autocmd FocusGained * call UpdateColors()
 augroup END

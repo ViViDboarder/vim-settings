@@ -52,13 +52,6 @@ function! IsGuiApp()
                 \ || has('gui_vimr') || exists('g:gui_oni')
 endfunction
 
-" Some GUI applications provide built in support for certain features
-let g:gui = {}
-let g:gui.has_buffer_features = exists('g:gui_oni')
-let g:gui.has_autocomplete_features = exists('g:gui_oni')
-let g:gui.has_linter_features = exists('g:gui_oni')
-let g:gui.has_ctags_features = exists('g:gui_oni')
-
 " Auto install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
