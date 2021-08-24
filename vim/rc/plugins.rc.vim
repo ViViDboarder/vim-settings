@@ -108,19 +108,14 @@ end
 " Filetype configuration
 
 " Languages with custom configuration
-" Custom go
-let g:go_def_mapping_enabled = 0
-let g:go_version_warning = 0
-let g:go_fmt_autosave = 0
-let g:go_imports_autosave = 0
+" Custom Go
 Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 " Custom rust
 let g:rustfmt_autosave = 1
 Plug 'rust-lang/rust.vim'
 " Lots of custom python
 call s:smart_source_rc('plugins/python')
-
-" Disable polyglog for languages with more robust plugins
+" Disable polyglot for languages with more robust plugins
 let g:polyglot_disabled = ['go', 'rust']
 Plug 'sheerun/vim-polyglot'
 " Custom rule for ansible playbook detection
