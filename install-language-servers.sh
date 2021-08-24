@@ -84,8 +84,8 @@ function install_fixers() {
 
     # Python
     maybe_run pip install --user --upgrade autopep8 reorder-python-imports
-    maybe_run pip install --user --upgrade black pyls-black || echo "WARNING: black is py3 only"
-    maybe_run pip3 install --user --upgrade black pyls-black autopep8 reorder-python-imports
+    maybe_run pip install --user --upgrade black pyls-black python-lsp-black pyls-isort pyls-mypy || echo "WARNING: black is py3 only"
+    maybe_run pip3 install --user --upgrade black pyls-black python-lsp-black pyls-isort pyls-mypy autopep8 reorder-python-imports
 
     # Rust
     maybe_run rustup component add rustfmt
