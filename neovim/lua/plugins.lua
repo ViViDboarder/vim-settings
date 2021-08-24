@@ -125,10 +125,9 @@ function config_lualine(theme_name)
             lualine_b = { "branch", "diff" },
             lualine_c = { "filename" },
             lualine_x = { "encoding", "fileformat", "filetype" },
-            lualine_y = { "progress" },
+            lualine_y = { "progress", "location" },
             lualine_z = {
                 { "diagnostics", sources = { "nvim_lsp" } },
-                "location"
             },
         },
     }
