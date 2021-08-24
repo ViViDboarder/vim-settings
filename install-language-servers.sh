@@ -33,9 +33,14 @@ function install_language_servers() {
     # Python
     maybe_run pip install --user --upgrade python-language-server
     maybe_run pip3 install --user --upgrade python-language-server
+    maybe_run pip install --user python-lsp-server[all]
+    maybe_run pip3 install --user python-lsp-server[all]
 
     # Rust
     maybe_run rustup component add rls rustfmt rust-analysis rust-src
+
+    # Go
+    maybe_run env GO111MODULE=on go get golang.org/x/tools/gopls@latest
 
     echo ""
 }
