@@ -291,10 +291,12 @@ return require('packer').startup(function()
         "nvim-treesitter/nvim-treesitter-textobjects",
         requires = "nvim-treesitter/nvim-treesitter",
     }
+    --[[
     use {
         "nvim-treesitter/completion-treesitter",
         requires = "nvim-treesitter/nvim-treesitter",
     }
+    --]]
 
     -- Completion
     use {

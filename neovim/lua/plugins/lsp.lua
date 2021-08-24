@@ -73,7 +73,8 @@ function M.config_lsp()
             on_attach=default_attach,
             settings={
                 pylsp={
-                    configurationSources = {"flake8"},
+                    -- configurationSources = {"flake8"},
+                    configurationSources = {"black"},
                     formatCommand = {"black"},
                 },
             },
