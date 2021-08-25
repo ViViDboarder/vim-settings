@@ -52,13 +52,14 @@ local function default_attach(client, bufnr)
         ]])
     end
 
-    -- Some override telescope bindings
-    -- TODO: Detect telescope or nvim-lspfuzzy and set keymap accordingly
-    buf_set_keymap("n", "<leader>t", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
-    -- buf_set_keymap("n", "<leader>ft", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
-
-    -- buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
-    -- buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+    -- Some override some fuzzy finder bindings to use lsp sources
+    if packer_plugins["nvim-lspfuzzy"] then
+        buf_set_keymap("n", "<leader>t", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
+        -- buf_set_keymap("n", "<leader>ft", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
+    elseif packer_plugins["telescope.nvim"] then
+        buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+        buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+    end
 end
 
 local function config_lsp()
