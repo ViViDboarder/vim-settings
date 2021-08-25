@@ -191,6 +191,7 @@ return require('packer').startup(function()
         },
         config = function() require("plugins.telescope") end,
     }
+    --[[
     use {
         'junegunn/fzf',
         run = ":call fzf#install()",
@@ -227,6 +228,7 @@ return require('packer').startup(function()
             }
         end,
     }
+    --]]
 
     -- Filetypes
     use "ViViDboarder/vim-forcedotcom"
