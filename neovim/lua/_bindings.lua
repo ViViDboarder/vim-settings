@@ -8,6 +8,7 @@ map("n", "<C-N><C-N>", ":set invnumber<CR>", opt_silent)
 map("n", "<leader>ln", ":set invnumber<CR>", opt_silent)
 map("n", "<leader>/", ":set hlsearch! hlsearch?<CR>", opt_silent)
 map("n", "<leader>cs", ":nohlsearch<CR>", opt_silent)
+map("n", "<leader>ws", ":set list!<CR>", opt_silent)
 
 -- Save and quit typos
 map("c", "WQ<CR>", "wq<CR>", opt_silent)
@@ -39,3 +40,17 @@ map("n", "U", ":redo<CR>", opt_default)
 map("i", "jk", "<esc>", opt_default)
 map("i", "``", "<esc>", opt_default)
 map("v", "``", "<esc>", opt_default)
+
+-- C-Space completion
+_G.complete_space = function()
+    if vim.fn.pumvisible() == 1 then
+        return utils.t"<C-n>"
+    elseif packer_plugins["completion-nvim"] and packer_plugins["completion-nvim"].loaded then
+        return utils.t"<Plug>(completion_trigger)"
+    elseif packer_plugins["nvim-compe"] and packer_plugins["nvim-compe"].loaded then
+        return vim.fn["compe#complete"]()
+    else
+        return utils.t"<C-x><C-o>"
+    end
+end
+map("i", "<C-Space>", "v:lua.complete_space()", {expr = true})

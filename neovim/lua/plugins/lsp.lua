@@ -1,5 +1,3 @@
-local M = {}
-
 local function default_attach(client, bufnr)
     require('completion').on_attach()
 
@@ -55,11 +53,15 @@ local function default_attach(client, bufnr)
     end
 
     -- Some override telescope bindings
-    buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
-    buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+    -- TODO: Detect telescope or nvim-lspfuzzy and set keymap accordingly
+    buf_set_keymap("n", "<leader>t", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
+    -- buf_set_keymap("n", "<leader>ft", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
+
+    -- buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+    -- buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
 end
 
-function M.config_lsp()
+local function config_lsp()
     local language_servers = {
         "bashls",
         "gopls",
@@ -82,4 +84,4 @@ function M.config_lsp()
     end
 end
 
-return M
+config_lsp()
