@@ -46,9 +46,9 @@ function M.mixed_indent()
 end
 
 function M.trailing_whitespace()
-    local count = vim.fn.search([[\s\+$]], 'nw')
-    if count ~= 0 then
-        return "tw:" .. count
+    local line = vim.fn.search([[\s\+$]], 'nw')
+    if line ~= 0 then
+        return "tw:" .. line
     end
 
     return nil
@@ -56,29 +56,32 @@ end
 
 -- Configure lualine witha  provided theme
 function M.config_lualine(theme_name)
+    -- Theme name transformations
     if theme_name == nil then
         theme_name = "auto"
     elseif theme_name == "wombat256mod" then
         theme_name = "wombat"
+    elseif theme_name == "wombuddy" then
+        theme_name = "wombat"
     end
-
 
     require("lualine").setup {
         options = {
             theme = theme_name,
             icons_enabled = false,
             component_separators = {"|", "|"},
-            section_separators = {" ", " "},
+            section_separators = {"", ""},
         },
         sections = {
             lualine_a = { M.single_letter_mode },
-            lualine_b = { "branch", "diff" },
+            lualine_b = { "FugitiveHead", "diff" },
             lualine_c = { "filename" },
             lualine_x = { M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
                 { "diagnostics", sources = { "nvim_lsp" } },
-                M.mixed_indent, M.trailing_whitespace,
+                { M.mixed_indent, color = { bg = "#de4f1f" } },
+                { M.trailing_whitespace, color = { bg = "#de4f1f" } },
             },
         },
     }

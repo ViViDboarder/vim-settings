@@ -10,44 +10,6 @@ end
 
 -- Requires :PackerCompile for "config" to be loaded
 
--- TODO: Get rid of if airline goes
-local function config_airline()
-    -- Use short-form mode text
-    vim.g.airline_mode_map = {
-        ['__'] = '-',
-        ['n']  = 'N',
-        ['i']  = 'I',
-        ['R']  = 'R',
-        ['c']  = 'C',
-        ['v']  = 'V',
-        ['V']  = 'V',
-        [''] = 'V',
-        ['s']  = 'S',
-        ['S']  = 'S',
-        [''] = 'S',
-        ['t']  = 'T',
-    }
-
-    -- abbreviate trailing whitespace and mixed indent
-    vim.g["airline#extensions#whitespace#trailing_format"] = "tw[%s]"
-    vim.g["airline#extensions#whitespace#mixed_indent_format"] = "i[%s]"
-    -- Vertical separators for all
-    vim.g.airline_left_sep=''
-    vim.g.airline_left_alt_sep=''
-    vim.g.airline_right_sep=''
-    vim.g.airline_right_alt_sep=''
-    vim.g["airline#extensions#tabline#enabled"] = 1
-    vim.g["airline#extensions#tabline#left_sep"] = " "
-    vim.g["airline#extensions#tabline#left_alt_sep"] = "|"
-    -- Slimmer section z
-    vim.g.airline_section_z = "%2l/%L:%2v"
-    -- Skip most common encoding
-    vim.g["airline#parts#ffenc#skip_expected_string"] = "utf-8[unix]"
-    -- If UTF-8 symbols don't work, use ASCII
-    -- vim.g.airline_symbols_ascii = 1
-    vim.g["airline#extensions#nvimlsp#enabled"] = 1
-end
-
 -- Configures dark-notify to use colors from my environment
 local function config_dark_notify()
     local default_color = "solarized"
@@ -95,7 +57,7 @@ return require('packer').startup(function()
     }
     use {
         "tpope/vim-fugitive",
-        cmd = { "Git", "Gstatus", "Gblame", "Gpush", "Gpull" },
+        -- cmd = { "Git", "Gstatus", "Gblame", "Gpush", "Gpull" },
     }
     use {
         "milkypostman/vim-togglelist",
@@ -106,8 +68,17 @@ return require('packer').startup(function()
     }
 
     -- UI
+    use "~/workspace/ez-colors.nvim/wombat"
+    use {
+        "~/workspace/wombuddy",
+        requires = "tjdevries/colorbuddy.vim",
+    }
     use "vim-scripts/wombat256.vim"
     use "ishan9299/nvim-solarized-lua"
+    use {
+        "norcalli/nvim-colorizer.lua",
+        config = function() require("colorizer").setup() end,
+    }
     --[[
     use {
         "shaunsingh/solarized.nvim",
@@ -125,7 +96,7 @@ return require('packer').startup(function()
     --[[
     use {
         "vim-airline/vim-airline",
-        config = config_airline,
+        config = function() require("plugins.airline") end,
         requires = { "vim-airline/vim-airline-themes", opt = true },
     }
     --]]
@@ -155,6 +126,15 @@ return require('packer').startup(function()
         "glepnir/lspsaga.nvim",
         requires = { "neovim/nvim-lspconfig" },
     }
+    --[[
+    use {
+        "SmiteshP/nvim-gps",
+        requires = "nvim-treesitter/nvim-treesitter"
+    }
+    --]]
+
+    -- Writing
+    -- abolish/pencil
 
     -- Treesitter
     use {
@@ -253,6 +233,11 @@ return require('packer').startup(function()
         end,
     }
     --]]
+
+    use {
+        "dense-analysis/ale",
+        config = function() require("utils").require_with_local("plugins.ale") end,
+    }
 
     -- Debuging nvim config
     use {
