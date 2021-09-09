@@ -30,8 +30,8 @@ local function default_attach(client, bufnr)
         vim.cmd([[
             augroup lsp_format
                 autocmd!
-                " autocmd BufWritePre *.rs,*.go lua vim.lsp.buf.formatting_sync(nil, 1000)
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
+                autocmd BufWritePre *.rs,*.go lua vim.lsp.buf.formatting_sync(nil, 1000)
+                " autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
             augroup END
         ]])
     elseif client.resolved_capabilities.document_range_formatting then
