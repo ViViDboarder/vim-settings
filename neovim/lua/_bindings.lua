@@ -54,3 +54,8 @@ _G.complete_space = function()
     end
 end
 map("i", "<C-Space>", "v:lua.complete_space()", {expr = true})
+
+-- Easily toggle spelling
+vim.cmd "command Spell setlocal spell! spelllang=en_us"
+-- Pop spelling completion for word under cursor
+map("n", "<leader>s", "viw<esc>a<c-x>s", {})
