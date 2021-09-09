@@ -79,6 +79,7 @@ return require('packer').startup(function()
         "norcalli/nvim-colorizer.lua",
         config = function() require("colorizer").setup() end,
     }
+    use "folke/tokyonight.nvim"
     --[[
     use {
         "shaunsingh/solarized.nvim",
