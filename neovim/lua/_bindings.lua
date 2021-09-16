@@ -1,7 +1,10 @@
+-- luacheck: globals packer_plugins
+local utils = require("utils")
+
 local map = vim.api.nvim_set_keymap
 
-local opt_silent = {silent=true}
-local opt_default = {silent=true, noremap=true}
+local opt_silent = {silent = true}
+local opt_default = {silent = true, noremap = true}
 map("n", "<C-L><C-L>", ":set wrap!<CR>", opt_silent)
 map("n", "<leader>lw", ":set wrap!<CR>", opt_silent)
 map("n", "<C-N><C-N>", ":set invnumber<CR>", opt_silent)
@@ -42,15 +45,15 @@ map("i", "``", "<esc>", opt_default)
 map("v", "``", "<esc>", opt_default)
 
 -- C-Space completion
-_G.complete_space = function()
+function _G.complete_space()
     if vim.fn.pumvisible() == 1 then
-        return utils.t"<C-n>"
+        return utils.t("<C-n>")
     elseif packer_plugins["completion-nvim"] and packer_plugins["completion-nvim"].loaded then
-        return utils.t"<Plug>(completion_trigger)"
+        return utils.t("<Plug>(completion_trigger)")
     elseif packer_plugins["nvim-compe"] and packer_plugins["nvim-compe"].loaded then
         return vim.fn["compe#complete"]()
     else
-        return utils.t"<C-x><C-o>"
+        return utils.t("<C-x><C-o>")
     end
 end
 map("i", "<C-Space>", "v:lua.complete_space()", {expr = true})

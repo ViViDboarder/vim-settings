@@ -1,7 +1,8 @@
-utils = require("utils")
+-- luacheck: globals packer_plugins
+local utils = require("utils")
 
 -- TODO: Determine if I want to keep this or remove it in favor of dark-notify
-_G.update_colors = function()
+function _G.update_colors()
     local function maybe_set(scope, name, val)
         if vim[scope][name] ~= val then
             vim[scope][name] = val
@@ -39,7 +40,8 @@ _G.update_colors = function()
     -- Update status line theme
     if change and vim.fn.exists(":AirlineRefresh") == 1 then
         vim.cmd(":AirlineRefresh")
-    elseif change and _G["packer_plugins"] ~= nil and packer_plugins["lualine"] and packer_plugins["lualine"].loaded then
+    elseif (change and _G["packer_plugins"]
+            and packer_plugins["lualine"] and packer_plugins["lualine"].loaded) then
         local lualine_theme = vim.g.colors_name
         if lualine_theme == "solarized" then
             lualine_theme = lualine_theme .. "_" .. mode
@@ -47,10 +49,10 @@ _G.update_colors = function()
         require("plugins.lualine").config_lualine(lualine_theme)
     end
 
-    return changed and "Changed color to " .. env_color .. " with mode " .. mode or "No change"
+    return change and "Changed color to " .. env_color .. " with mode " .. mode or "No change"
 end
 -- utils.autocmd("auto_colors", "FocusGained * call v:lua.update_colors()")
 
 -- Initial set of colors
 -- TODO: if update_colors() is removed, use the env color fetching and set the colorscheme here
-update_colors()
+_G.update_colors()

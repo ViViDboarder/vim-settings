@@ -1,3 +1,4 @@
+-- luacheck: globals packer_plugins
 local function default_attach(client, bufnr)
     require('completion').on_attach()
 
@@ -7,6 +8,7 @@ local function default_attach(client, bufnr)
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings
+    -- TODO: Maybe prefix all of these for easier discovery
     local opts = { noremap=true, silent=true }
     buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)

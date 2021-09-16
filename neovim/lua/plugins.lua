@@ -1,6 +1,4 @@
 -- Do all Packer stuff
-utils = require("utils")
-
 local install_path = vim.fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -31,6 +29,7 @@ local function config_dark_notify()
 end
 
 return require('packer').startup(function()
+    -- luacheck: push globals use
     use "wbthomason/packer.nvim"
 
     -- Quality of life
@@ -109,9 +108,9 @@ return require('packer').startup(function()
     use {
         "cormacrelf/dark-notify",
         -- Download latest release on install
-        run = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/",
+        run = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/",  -- luacheck: no max line length
         config = config_dark_notify,
-        requires = { "hoob3rt/lualine.nvim" },
+        requires = "hoob3rt/lualine.nvim",
     }
     use {
         'mhinz/vim-startify',
@@ -125,7 +124,7 @@ return require('packer').startup(function()
     }
     use {
         "glepnir/lspsaga.nvim",
-        requires = { "neovim/nvim-lspconfig" },
+        requires = "neovim/nvim-lspconfig",
     }
     --[[
     use {
@@ -167,9 +166,7 @@ return require('packer').startup(function()
     -- Fuzzy Finder
     use {
         "nvim-telescope/telescope.nvim",
-        requires = {
-            "nvim-lua/plenary.nvim",
-        },
+        requires = "nvim-lua/plenary.nvim",
         config = function() require("plugins.telescope") end,
     }
     --[[
@@ -187,7 +184,7 @@ return require('packer').startup(function()
             -- Override key commands
             -- vim.g.fzf_action = { ['ctrl-t'] = 'tab split', ['ctrl-s'] = 'split', ['ctrl-v'] = 'vsplit', }
             -- Override git log to show authors
-            vim.g.fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h %an: %s%d %C(black)%C(bold)%cr"'
+            vim.g.fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h %an: %s%d %C(black)%C(bold)%cr"'  -- luacheck: no max line length
 
             vim.g.fzf_preview_window = {"right:50%", "ctrl-/"}
 
@@ -246,4 +243,5 @@ return require('packer').startup(function()
         cmd = { "StartupTime" },
     }
 
+    -- luacheck: pop
 end)

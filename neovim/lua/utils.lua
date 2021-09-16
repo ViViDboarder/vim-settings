@@ -44,7 +44,7 @@ end
 
 -- Get env value or use default, if not present
 function M.env_default(name, def)
-    val = vim.env[name]
+    local val = vim.env[name]
     return val == nil and def or val
 end
 
@@ -80,8 +80,8 @@ function M.require_with_local(name)
   -- In that case, the local file would probably start with a `require` for the
   -- non-local version. This would allow more control but at the cost of a bit
   -- of boiler plate
-  rmod = require(name)
-  lmod = M.maybe_require(name .. "_local")
+  local rmod = require(name)
+  local lmod = M.maybe_require(name .. "_local")
   if lmod ~= nil then
     return lmod
   end

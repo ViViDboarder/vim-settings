@@ -1,4 +1,4 @@
-local o, wo, bo = vim.o, vim.wo, vim.bo
+local o = vim.o
 
 -- Helpers
 require "_settings"

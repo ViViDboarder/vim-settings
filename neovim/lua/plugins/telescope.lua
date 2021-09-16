@@ -21,7 +21,7 @@ local function config_telescope()
             layout_strategy = "flex",
         }
     }
-    opts = {silent=true, noremap=true}
+    local opts = {silent=true, noremap=true}
     vim.api.nvim_set_keymap("n", "<C-t>", "<cmd>Telescope find_files<CR>", opts)
     vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", opts)
     vim.api.nvim_set_keymap("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", opts)

@@ -1,6 +1,4 @@
-local wo = vim.wo
 local o = vim.o
-local bo = vim.bo
 local g = vim.g
 
 -- Set leader to space

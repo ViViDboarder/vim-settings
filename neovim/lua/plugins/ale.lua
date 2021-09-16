@@ -1,16 +1,16 @@
 vim.g["airline#extensions#ale#enabled"] = 1
 vim.g.ale_lint_on_enter = 0
 vim.g.ale_linters = {
-    -- go = { 'gopls', 'golint', 'golangci-lint' },
-    go = { "golangci-lint" },
-    -- rust = { 'rls', 'cargo' },
-    rust = { "cargo" },
-    -- sh = { 'language_server', 'shell', 'shellcheck' },
-    sh = { "shell", "shellcheck" },
-    text = { "proselint", "alex" },
+    -- go = {'gopls', 'golint', 'golangci-lint'},
+    go = {"golangci-lint"},
+    -- rust = {'rls', 'cargo'},
+    rust = {"cargo"},
+    -- sh = {'language_server', 'shell', 'shellcheck'},
+    sh = {"shell", "shellcheck"},
+    text = {"proselint", "alex"},
 }
 vim.g.ale_linter_aliases = {
-    markdown = { "text" },
+    markdown = {"text"},
 }
 local pretty_trim_fixer = {
     "prettier",
@@ -18,10 +18,10 @@ local pretty_trim_fixer = {
     "remove_trailing_lines"
 }
 vim.g.ale_fixers = {
-    ["*"] = { "trim_whitespace", "remove_trailing_lines" },
-    -- go = { "gofmt", "goimports" },
+    ["*"] = {"trim_whitespace", "remove_trailing_lines"},
+    -- go = {"gofmt", "goimports"},
     json = pretty_trim_fixer,
-    -- rust = { "rustfmt" },
+    -- rust = {"rustfmt"},
     --[[
     python = {
         "black",
@@ -32,7 +32,7 @@ vim.g.ale_fixers = {
     },
     --]]
     markdown = pretty_trim_fixer,
-    yaml = { "prettier", "remove_trailing_lines" },
+    yaml = {"prettier", "remove_trailing_lines"},
     css =  pretty_trim_fixer,
     javascript = pretty_trim_fixer,
 }
