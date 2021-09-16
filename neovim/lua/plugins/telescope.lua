@@ -30,6 +30,9 @@ local function config_telescope()
     vim.api.nvim_set_keymap("n", "<leader>t", "<cmd>Telescope current_buffer_tags<CR>", opts)
     vim.api.nvim_set_keymap("n", "<leader>ft", "<cmd>Telescope tags<CR>", opts)
     vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", opts)
+
+    vim.cmd "command Rg Telescope live_grep"
+    vim.cmd "command Grep Telescope live_grep"
 end
 
 config_telescope()
