@@ -1,7 +1,4 @@
--- luacheck: globals packer_plugins
-local utils = require("utils")
-
--- TODO: Determine if I want to keep this or remove it in favor of dark-notify
+-- Update colors based on environment variables
 function _G.update_colors()
     local function maybe_set(scope, name, val)
         if vim[scope][name] ~= val then
@@ -12,12 +9,13 @@ function _G.update_colors()
     end
 
     -- Set colorscheme based on env
+    local utils = require("utils")
     local default_color = "solarized"
     local env_color = utils.env_default("VIM_COLOR", default_color)
     env_color = utils.env_default("NVIM_COLOR", env_color)
 
     -- Read dark mode
-    local mode = vim.env.IS_DARKMODE
+    local mode = utils.env_default("IS_DARKMODE", "dark")
     if vim.g.is_mac == 1 then
         local cmd = "defaults read -g AppleInterfaceStyle 2>/dev/null || echo Light"
         mode = vim.fn.system(cmd):gsub("\n", ""):lower()
@@ -38,21 +36,26 @@ function _G.update_colors()
     end
 
     -- Update status line theme
-    if change and vim.fn.exists(":AirlineRefresh") == 1 then
-        vim.cmd(":AirlineRefresh")
-    elseif (change and _G["packer_plugins"]
-            and packer_plugins["lualine"] and packer_plugins["lualine"].loaded) then
-        local lualine_theme = vim.g.colors_name
-        if lualine_theme == "solarized" then
-            lualine_theme = lualine_theme .. "_" .. mode
+    if change then
+        if vim.fn.exists(":AirlineRefresh") == 1 then
+            vim.cmd(":AirlineRefresh")
+        elseif utils.is_plugin_loaded("lualine.nvim") then
+            local lualine_theme = vim.g.colors_name
+            if lualine_theme == "solarized" then
+                lualine_theme = lualine_theme .. "_" .. mode
+            end
+            require("plugins.lualine").config_lualine(lualine_theme)
         end
-        require("plugins.lualine").config_lualine(lualine_theme)
     end
 
     return change and "Changed color to " .. env_color .. " with mode " .. mode or "No change"
 end
--- utils.autocmd("auto_colors", "FocusGained * call v:lua.update_colors()")
 
--- Initial set of colors
--- TODO: if update_colors() is removed, use the env color fetching and set the colorscheme here
+-- Don't need the autocommand when dark-notify is installed
+local utils = require("utils")
+if not utils.is_plugin_loaded("dark-notify") then
+    utils.autocmd("auto_colors", "FocusGained * call v:lua.update_colors()")
+end
+
+-- Initial setting of colors
 _G.update_colors()

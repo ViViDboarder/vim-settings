@@ -1,4 +1,4 @@
--- Do all Packer stuff
+-- Install packer
 local install_path = vim.fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -6,24 +6,12 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.cmd "packadd packer.nvim"
 end
 
--- Requires :PackerCompile for "config" to be loaded
-
 -- Configures dark-notify to use colors from my environment
 local function config_dark_notify()
-    local default_color = "solarized"
-    local env_color = utils.env_default("VIM_COLOR", default_color)
-    require("dark_notify").run{
-        schemes = {
-            dark = utils.env_default("VIM_COLOR_DARK", env_color),
-            light = utils.env_default("VIM_COLOR_LIGHT", env_color),
-        },
-        onchange = function(mode)
-            -- Update lualine with new colors
-            local lualine_theme = vim.g.colors_name
-            if lualine_theme == "solarized" then
-                lualine_theme = lualine_theme .. "_" .. mode
-            end
-            require("plugins.lualine").config_lualine(lualine_theme)
+    require("dark_notify").run {
+        onchange = function(_)
+            -- Defined in _colors
+            _G.update_colors()
         end,
     }
 end
@@ -68,17 +56,21 @@ return require('packer').startup(function()
 
     -- UI
     use "~/workspace/ez-colors.nvim/wombat"
-    use {
-        "~/workspace/wombuddy",
-        requires = "tjdevries/colorbuddy.vim",
-    }
+    use "hoob3rt/lualine.nvim"
     use "vim-scripts/wombat256.vim"
     use "ishan9299/nvim-solarized-lua"
     use {
         "norcalli/nvim-colorizer.lua",
         config = function() require("colorizer").setup() end,
     }
-    use "folke/tokyonight.nvim"
+    use {
+        "folke/tokyonight.nvim",
+        run = "fish -c 'echo \"set --path --prepend fish_themes_path \"(pwd)\"/extras\" > ~/.config/fish/conf.d/tokyonight.fish' || true",  -- luacheck: no max line length
+    }
+    use {
+        "~/workspace/wombuddy",
+        requires = "tjdevries/colorbuddy.vim",
+    }
     --[[
     use {
         "shaunsingh/solarized.nvim",
@@ -100,11 +92,6 @@ return require('packer').startup(function()
         requires = { "vim-airline/vim-airline-themes", opt = true },
     }
     --]]
-    use {
-        "hoob3rt/lualine.nvim",
-        -- configured by dark-notify
-        -- config = function() require("plugins.lualine").config_lualine("solarized") end,
-    }
     use {
         "cormacrelf/dark-notify",
         -- Download latest release on install
@@ -184,7 +171,8 @@ return require('packer').startup(function()
             -- Override key commands
             -- vim.g.fzf_action = { ['ctrl-t'] = 'tab split', ['ctrl-s'] = 'split', ['ctrl-v'] = 'vsplit', }
             -- Override git log to show authors
-            vim.g.fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h %an: %s%d %C(black)%C(bold)%cr"'  -- luacheck: no max line length
+            vim.g.fzf_commits_log_options = --graph --color=always \z
+                --format="%C(auto)%h %an: %s%d %C(black)%C(bold)%cr"
 
             vim.g.fzf_preview_window = {"right:50%", "ctrl-/"}
 
@@ -240,7 +228,7 @@ return require('packer').startup(function()
     -- Debuging nvim config
     use {
         "tweekmonster/startuptime.vim",
-        cmd = { "StartupTime" },
+        cmd = {"StartupTime"},
     }
 
     -- luacheck: pop

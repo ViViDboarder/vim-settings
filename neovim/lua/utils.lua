@@ -1,4 +1,5 @@
 -- Utils taken from https://github.com/zzzeyez/dots/blob/master/nvim/lua/utils.lua
+-- luacheck: globals packer_plugins
 local M = {}
 
 -- Key mapping
@@ -87,6 +88,11 @@ function M.require_with_local(name)
   end
 
   return rmod
+end
+
+-- Returns whether or not packer plugin is loaded
+function M.is_plugin_loaded(name)
+  return _G["packer_plugins"] and packer_plugins[name] and packer_plugins[name].loaded
 end
 
 return M

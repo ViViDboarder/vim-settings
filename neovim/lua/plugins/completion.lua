@@ -1,4 +1,5 @@
 -- TODO: Determine if keeping this
+--[[
 local function config_compe()
     require("compe").setup{
         enabled = true,
@@ -14,6 +15,7 @@ local function config_compe()
         },
     }
 end
+--]]
 
 -- TODO: Some issue with tags completion maybe compe is better?
 local function config_complete()
