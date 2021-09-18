@@ -61,3 +61,6 @@ map("i", "<C-Space>", "v:lua.complete_space()", {expr = true})
 vim.cmd "command Spell setlocal spell! spelllang=en_us"
 -- Pop spelling completion for word under cursor
 map("n", "<leader>s", "viw<esc>a<c-x>s", {})
+
+-- Build on F5
+map("n", "<F5>", ":make<CR>", {})
