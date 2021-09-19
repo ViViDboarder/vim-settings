@@ -56,7 +56,10 @@ return require('packer').startup(function()
 
     -- UI
     use "~/workspace/ez-colors.nvim/wombat"
-    use "hoob3rt/lualine.nvim"
+    use {
+        "hoob3rt/lualine.nvim",
+        config = function() require("plugins.lualine").config_lualine(vim.g.colors_name) end,
+    }
     use "vim-scripts/wombat256.vim"
     use "ishan9299/nvim-solarized-lua"
     use {
