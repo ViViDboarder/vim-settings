@@ -55,14 +55,13 @@ return require('packer').startup(function()
     }
 
     -- UI
-    use "~/workspace/ez-colors.nvim/wombat"
     use {
-        "~/workspace/wombat-lush",
+        "ViViDboarder/wombat.nvim",
         requires = "rktjmp/lush.nvim",
     }
     use {
-        "hoob3rt/lualine.nvim",
-        config = function() require("plugins.lualine").config_lualine(vim.g.colors_name) end,
+        "ViViDboarder/wombuddy.nvim",
+        requires = "tjdevries/colorbuddy.vim",
     }
     use "vim-scripts/wombat256.vim"
     use "ishan9299/nvim-solarized-lua"
@@ -74,24 +73,6 @@ return require('packer').startup(function()
         "folke/tokyonight.nvim",
         run = "fish -c 'echo \"set --path --prepend fish_themes_path \"(pwd)\"/extras\" > ~/.config/fish/conf.d/tokyonight.fish' || true",  -- luacheck: no max line length
     }
-    use {
-        "~/workspace/wombuddy",
-        requires = "tjdevries/colorbuddy.vim",
-    }
-    --[[
-    use {
-        "shaunsingh/solarized.nvim",
-        config = function() vim.g.colors_name = "solarized" end,
-        -- config = function() require("solarized").set() end,
-    }
-    --]]
-    --[[
-    use {
-        "altercation/vim-colors-solarized",
-        -- config = function() update_colors() end,
-        -- config = function() vim.g.colors_name = "solarized" end,
-    }
-    --]]
     --[[
     use {
         "vim-airline/vim-airline",
@@ -99,6 +80,10 @@ return require('packer').startup(function()
         requires = { "vim-airline/vim-airline-themes", opt = true },
     }
     --]]
+    use {
+        "hoob3rt/lualine.nvim",
+        config = function() require("plugins.lualine").config_lualine(vim.g.colors_name) end,
+    }
     use {
         "cormacrelf/dark-notify",
         -- Download latest release on install
