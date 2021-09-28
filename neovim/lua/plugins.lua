@@ -57,6 +57,10 @@ return require('packer').startup(function()
     -- UI
     use "~/workspace/ez-colors.nvim/wombat"
     use {
+        "~/workspace/wombat-lush",
+        requires = "rktjmp/lush.nvim",
+    }
+    use {
         "hoob3rt/lualine.nvim",
         config = function() require("plugins.lualine").config_lualine(vim.g.colors_name) end,
     }
@@ -125,6 +129,12 @@ return require('packer').startup(function()
 
     -- Writing
     -- abolish/pencil
+    use {
+        "preservim/vim-pencil",
+        cmd = {"Pencil"},
+    }
+    use "preservim/vim-textobj-sentence"
+
 
     -- Treesitter
     use {
