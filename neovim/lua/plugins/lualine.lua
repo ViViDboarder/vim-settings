@@ -59,7 +59,7 @@ function M.config_lualine(theme_name)
     -- Theme name transformations
     if theme_name == nil then
         theme_name = "auto"
-    elseif theme_name == "wombat256mod" then
+    elseif theme_name:find("wombat") then
         theme_name = "wombat"
     elseif theme_name == "wombuddy" then
         theme_name = "wombat"
