@@ -1,7 +1,7 @@
--- Utils taken from https://github.com/zzzeyez/dots/blob/master/nvim/lua/utils.lua
 -- luacheck: globals packer_plugins
 local M = {}
 
+-- Utils taken from https://github.com/zzzeyez/dots/blob/master/nvim/lua/utils.lua
 -- Key mapping
 function M.map(mode, key, result, opts)
   vim.fn.nvim_set_keymap(
@@ -27,6 +27,8 @@ end
 function M.get_color(synID, what, mode)
   return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(synID)), what, mode)
 end
+
+-- end zzzeyez utils
 
 -- Create an autocmd
 function M.autocmd(group, cmds, clear)
