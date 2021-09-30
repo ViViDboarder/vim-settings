@@ -44,7 +44,7 @@ return require('packer').startup(function()
     }
     use {
         "tpope/vim-fugitive",
-        -- cmd = { "Git", "Gstatus", "Gblame", "Gpush", "Gpull" },
+        -- cmd = {"Git"},
     }
     use {
         "milkypostman/vim-togglelist",
