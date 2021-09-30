@@ -1,6 +1,10 @@
 -- luacheck: globals packer_plugins
+local utils = require("utils")
+
 local function default_attach(client, bufnr)
-    require('completion').on_attach()
+    if utils.is_plugin_loaded("completion-nvim") then
+        require('completion').on_attach()
+    end
 
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end

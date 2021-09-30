@@ -1,5 +1,6 @@
 local o = vim.o
 local g = vim.g
+local utils = require("utils")
 
 -- Set leader to space
 g.mapleader = " "
@@ -18,6 +19,12 @@ o.scrolloff = 3
 
 -- o.mousehide = true
 o.mouse = "a"
+
+-- Autocomplete options
+o.completeopt = "menuone,noinsert,noselect,preview"
+utils.augroup("close_preview", function()
+    vim.cmd("autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif")
+end)
 
 local has = vim.fn.has
 g.is_mac = (has("mac") or has("macunix") or has("gui_macvim") or vim.fn.system("uname"):find("^darwin") ~= nil)
