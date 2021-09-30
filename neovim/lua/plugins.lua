@@ -53,6 +53,10 @@ return require('packer').startup(function()
             vim.api.nvim_set_keymap("n", "<F7>", ":call ToggleLocationList()<CR>", {silent=true, noremap=true})
         end,
     }
+    use {
+        "mhinz/vim-grepper",
+        config = function() require("plugins.grepper") end,
+    }
 
     -- UI
     use {
