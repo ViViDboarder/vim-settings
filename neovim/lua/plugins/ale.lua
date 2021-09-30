@@ -1,8 +1,9 @@
 vim.g["airline#extensions#ale#enabled"] = 1
 vim.g.ale_lint_on_enter = 0
+vim.g.ale_go_golangci_lint_package = 1
 vim.g.ale_linters = {
-    -- go = {'gopls', 'golint', 'golangci-lint'},
-    go = {"golangci-lint"},
+    go = {'gopls', 'golint', 'golangci-lint'},
+    -- go = {"golangci-lint"},
     -- rust = {'rls', 'cargo'},
     rust = {"cargo"},
     -- sh = {'language_server', 'shell', 'shellcheck'},
