@@ -68,7 +68,8 @@ local function config_lsp()
     local language_servers = {
         "bashls",
         "gopls",
-        "pylsp",
+        -- "pylsp",
+        "pyright",
         "rust_analyzer",
     }
     local lsp_config = require("lspconfig")
