@@ -143,9 +143,20 @@ return require('packer').startup(function()
     --]]
 
     -- Completion
+    --[[
     use {
         "nvim-lua/completion-nvim",
-        config = function() require("utils").require_with_local("plugins.completion") end,
+        config = function() require("plugins.completion").config_complete() end,
+    }
+    --]]
+    use {
+        "hrsh7th/nvim-cmp",
+        config = function() require("plugins.completion").config_cmp() end,
+        requires = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "f3fora/cmp-spell",
+        }
     }
 
     -- Fuzzy Finder

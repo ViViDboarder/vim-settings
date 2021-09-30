@@ -51,6 +51,8 @@ function _G.complete_space()
         return utils.t("<Plug>(completion_trigger)")
     elseif utils.is_plugin_loaded("nvim-compe") then
         return vim.fn["compe#complete"]()
+    elseif utils.is_plugin_loaded("nvim-cmp") then
+        return utils.t("<Plug>(cmp_complete)")
     else
         return utils.t("<C-x><C-o>")
     end

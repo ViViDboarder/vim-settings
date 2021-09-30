@@ -1,24 +1,31 @@
--- TODO: Determine if keeping this
---[[
-local function config_compe()
-    require("compe").setup{
-        enabled = true,
-        autocomplete = true,
-        source = {
-            path = true,
-            buffer = true,
-            calc = true,
-            tags = true,
-            spell = true,
-            nvim_lsp = true,
-            nvim_lua = true,
+local M = {}
+
+function M.config_cmp()
+    vim.o.completeopt = "menuone,noinsert,noselect"
+    local cmp = require("cmp")
+    cmp.setup {
+        completion = {
+            completeopt = "menuone,noinsert,noselect",
+            autocomplete = false,
+        },
+        sources = {
+            {name = "nvim_lsp"},
+            {name = "buffer"},
+            {name = "spell"},
         },
     }
+
+    -- Add a plug mapping to use in C-Space binding
+    vim.api.nvim_set_keymap(
+        "i",
+        "<Plug>(cmp_complete)",
+        "<cmd>lua require('cmp').complete()<CR>",
+        {silent = true, noremap = true}
+    )
 end
---]]
 
 -- TODO: Some issue with tags completion maybe compe is better?
-local function config_complete()
+function M.config_complete()
     vim.o.completeopt = "menuone,noinsert,noselect"
     -- shortmess+=c
     vim.g.completion_enable_auto_popup = 0
@@ -31,4 +38,4 @@ local function config_complete()
     ]])
 end
 
-config_complete()
+return M
