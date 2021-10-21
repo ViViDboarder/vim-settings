@@ -85,7 +85,7 @@ return require('packer').startup(function()
     }
     --]]
     use {
-        "hoob3rt/lualine.nvim",
+        "shadmansaleh/lualine.nvim",
         config = function() require("plugins.lualine").config_lualine(vim.g.colors_name) end,
     }
     use {

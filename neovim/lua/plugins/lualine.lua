@@ -8,27 +8,7 @@ function M.custom_ffenc()
         return enc .. "[" .. format .. "]"
     end
 
-    return nil
-end
-
--- Use only single letters for mode names
-function M.single_letter_mode()
-    local mode_map = {
-        ['__'] = '-',
-        ['n']  = 'N',
-        ['i']  = 'I',
-        ['R']  = 'R',
-        ['c']  = 'C',
-        ['v']  = 'V',
-        ['V']  = 'V',
-        [''] = 'V',
-        ['s']  = 'S',
-        ['S']  = 'S',
-        [''] = 'S',
-        ['t']  = 'T',
-    }
-
-    return mode_map[vim.fn.mode()]
+    return ""
 end
 
 function M.mixed_indent()
@@ -42,7 +22,7 @@ function M.mixed_indent()
         return "i:" .. require("math").max(tab_indent, space_indent)
     end
 
-    return nil
+    return ""
 end
 
 function M.trailing_whitespace()
@@ -51,7 +31,7 @@ function M.trailing_whitespace()
         return "tw:" .. line
     end
 
-    return nil
+    return ""
 end
 
 -- Configure lualine witha  provided theme
@@ -69,19 +49,19 @@ function M.config_lualine(theme_name)
         options = {
             theme = theme_name,
             icons_enabled = false,
-            component_separators = {"|", "|"},
-            section_separators = {"", ""},
+            component_separators = {left = "|", right = "|"},
+            section_separators = {left = "", right = ""},
         },
         sections = {
-            lualine_a = { M.single_letter_mode },
-            lualine_b = { "FugitiveHead", "diff" },
-            lualine_c = { "filename" },
-            lualine_x = { M.custom_ffenc, "filetype" },
-            lualine_y = { "progress", "location" },
+            lualine_a = {{"mode", fmt = function(str) return str:sub(1, 1) end}},
+            lualine_b = {"FugitiveHead", "diff"},
+            lualine_c = {"filename"},
+            lualine_x = {M.custom_ffenc, "filetype"},
+            lualine_y = {"progress", "location"},
             lualine_z = {
-                { "diagnostics", sources = { "nvim_lsp" } },
-                { M.mixed_indent, color = { bg = "#de4f1f" } },
-                { M.trailing_whitespace, color = { bg = "#de4f1f" } },
+                {"diagnostics", sources = {"nvim_lsp"}},
+                {M.mixed_indent, color = {bg = "#de4f1f"}},
+                {M.trailing_whitespace, color = {bg = "#de4f1f"}},
             },
         },
     }
