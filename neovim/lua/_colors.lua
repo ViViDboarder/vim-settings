@@ -40,11 +40,7 @@ function _G.update_colors()
         if vim.fn.exists(":AirlineRefresh") == 1 then
             vim.cmd(":AirlineRefresh")
         elseif utils.is_plugin_loaded("lualine.nvim") then
-            local lualine_theme = vim.g.colors_name
-            if lualine_theme == "solarized" then
-                lualine_theme = lualine_theme .. "_" .. mode
-            end
-            require("plugins.lualine").config_lualine(lualine_theme)
+            require("plugins.lualine").config_lualine()
         end
     end
 

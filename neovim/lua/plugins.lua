@@ -85,15 +85,15 @@ return require('packer').startup(function()
     }
     --]]
     use {
-        "shadmansaleh/lualine.nvim",
-        config = function() require("plugins.lualine").config_lualine(vim.g.colors_name) end,
+        "nvim-lualine/lualine.nvim",
+        config = function() require("plugins.lualine").config_lualine() end,
     }
     use {
         "cormacrelf/dark-notify",
         -- Download latest release on install
         run = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/",  -- luacheck: no max line length
         config = config_dark_notify,
-        requires = "hoob3rt/lualine.nvim",
+        requires = "nvim-lualine/lualine.nvim",
     }
     use {
         'mhinz/vim-startify',
