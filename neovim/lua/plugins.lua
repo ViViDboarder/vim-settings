@@ -122,7 +122,10 @@ return require('packer').startup(function()
         "preservim/vim-pencil",
         cmd = {"Pencil"},
     }
-    use "preservim/vim-textobj-sentence"
+    use {
+        "preservim/vim-textobj-sentence",
+        requires = "kana/vim-textobj-user",
+    }
 
 
     -- Treesitter
