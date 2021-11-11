@@ -74,6 +74,9 @@ function install_linters() {
     # Makefile
     maybe_run go get -u github.com/mrtazz/checkmake
 
+    # Lua
+    maybe_run luarocks install luacheck
+
     echo ""
 }
 

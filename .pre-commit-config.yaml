@@ -13,3 +13,14 @@ repos:
           (?x)^(
             vim/colors/.*\.vim
           )$
+  - repo: local
+    hooks:
+      - id: luacheck
+        name: Luacheck
+        entry: luacheck
+        args:
+          - --globals
+          - vim
+          - --
+        language: system
+        types: [file, lua]
