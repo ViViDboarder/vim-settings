@@ -163,6 +163,8 @@ return require('packer').startup(function()
             "hrsh7th/cmp-nvim-lsp",
             "hrsh7th/cmp-buffer",
             "f3fora/cmp-spell",
+            "L3MON4D3/LuaSnip",
+            "saadparwaiz1/cmp_luasnip",
         }
     }
 

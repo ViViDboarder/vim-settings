@@ -81,8 +81,7 @@ local function config_lsp()
     -- Maybe update capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     if utils.is_plugin_loaded("cmp-nvim-lsp") then
-        capabilities = require("cmp_nvim_lsp").update_capabilities(
-            capabilities, {snippetSupport = false})
+        capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
     end
 
     for _, ls in ipairs(language_servers) do

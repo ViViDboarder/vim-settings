@@ -8,8 +8,12 @@ function M.config_cmp()
             completeopt = "menuone,noinsert,noselect",
             autocomplete = false,
         },
+        expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+        end,
         sources = {
             {name = "nvim_lsp"},
+            {name = "luasnip"},
             {name = "buffer"},
             {name = "spell"},
         },
