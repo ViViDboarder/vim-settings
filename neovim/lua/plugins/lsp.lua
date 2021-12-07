@@ -74,7 +74,8 @@ local function config_lsp()
         "gopls",
         -- "pylsp",
         "pyright",
-        "rust_analyzer",
+        -- "rust_analyzer",
+        "rls",
     }
     local lsp_config = require("lspconfig")
 
@@ -93,6 +94,11 @@ local function config_lsp()
                     -- configurationSources = {"flake8"},
                     configurationSources = {"black"},
                     formatCommand = {"black"},
+                },
+                rust={
+                    build_on_save = false,
+                    all_features = true,
+                    unstable_features = true,
                 },
             },
         }
