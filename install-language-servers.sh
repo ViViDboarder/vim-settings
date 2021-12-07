@@ -38,10 +38,10 @@ function install_language_servers() {
     maybe_run npm install -g pyrite
 
     # Rust
-    maybe_run rustup component add rls rustfmt rust-analysis rust-src
+    maybe_run rustup component add rls rustfmt rust-analysis rust-src clippy rustfmt
 
     # Go
-    maybe_run env GO111MODULE=on go get golang.org/x/tools/gopls@latest
+    maybe_run env GO111MODULE=on go install golang.org/x/tools/gopls@latest
 
     echo ""
 }
