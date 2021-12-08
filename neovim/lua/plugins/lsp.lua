@@ -69,7 +69,7 @@ local function default_attach(client, bufnr)
     end
 
     -- Use LspSaga features, if possible
-    if packer_plugins["lspsaga.nvim"] then
+    if utils.is_plugin_loaded("lspsaga.nvim") then
         buf_set_keymap('n', 'K', "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
         buf_set_keymap('n', '<leader>rn', "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
         buf_set_keymap('n', '<leader>e', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
