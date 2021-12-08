@@ -37,7 +37,7 @@ local function default_attach(client, bufnr)
         vim.cmd([[
             augroup lsp_format
                 autocmd!
-                autocmd BufWritePre *.rs,*.go lua vim.lsp.buf.formatting_sync(nil, 1000)
+                autocmd BufWritePre *.rs,*.go,*.py lua vim.lsp.buf.formatting_sync(nil, 1000)
                 " autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
             augroup END
         ]])
@@ -97,6 +97,9 @@ function M.config_lsp()
     if utils.is_plugin_loaded("cmp-nvim-lsp") then
         capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
     end
+    if utils.is_plugin_loaded("null-ls.nvim") then
+        table.insert(language_servers, "null-ls")
+    end
 
     for _, ls in ipairs(language_servers) do
         lsp_config[ls].setup{
@@ -131,6 +134,38 @@ function M.config_lsp_saga()
             sign = false,
         },
     }
+end
+
+function M.config_null_ls()
+    local null_ls = require("null-ls")
+    null_ls.config{
+        sources = {
+            -- Generic
+            -- null_ls.builtins.formatting.preittier,
+            -- null_ls.builtins.formatting.trim_whitespace,
+            -- null_ls.builtins.formatting.trim_newlines,
+            -- Fish
+            -- null_ls.builtins.formatting.fish_indent,
+            -- Python
+            -- null_ls.builtins.formatting.reorder_python_imports,
+            -- null_ls.builtins.formatting.black,
+            -- Go
+            null_ls.builtins.diagnostics.golangci_lint,
+            -- Text
+            -- null_ls.builtins.code_actions.proselint,
+            -- Ansible
+            -- null_ls.builtins.diagnostics.ansiblelint,
+            -- Shell
+            null_ls.builtins.diagnostics.shellcheck,
+            -- Rust
+            -- null_ls.builtins.formatting.rustfmt,
+        },
+    }
+    --[[
+    require("lspconfig")["null-ls"].setup{
+        on_attach=default_attach,
+    }
+    --]]
 end
 
 return M

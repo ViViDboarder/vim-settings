@@ -16,6 +16,9 @@ local function config_dark_notify()
     }
 end
 
+-- Disable polyglot for langauges I've added special support for
+vim.g.polyglot_disabled = { "go", "rust" }
+
 return require('packer').startup(function()
     -- luacheck: push globals use
     use "wbthomason/packer.nvim"
@@ -102,10 +105,18 @@ return require('packer').startup(function()
 
     -- LSP
     use {
+        "jose-elias-alvarez/null-ls.nvim",
+        config = function() require("plugins.lsp").config_null_ls() end,
+        requires = {
+            "nvim-lua/plenary.nvim",
+        }
+    }
+    use {
         "neovim/nvim-lspconfig",
         config = function() require("plugins.lsp").config_lsp() end,
         requires = {
             "hrsh7th/cmp-nvim-lsp",
+            "jose-elias-alvarez/null-ls.nvim",
         },
     }
     use {
@@ -130,7 +141,6 @@ return require('packer').startup(function()
         "preservim/vim-textobj-sentence",
         requires = "kana/vim-textobj-user",
     }
-
 
     -- Treesitter
     use {
@@ -225,7 +235,6 @@ return require('packer').startup(function()
     use {
         'sheerun/vim-polyglot',
         config = function()
-            vim.g.polyglot_disabled = { "go", "rust" }
             vim.cmd([[
                 augroup ansible_playbook
                     au BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml set filetype=yaml.ansible
@@ -233,14 +242,6 @@ return require('packer').startup(function()
             ]])
         end,
     }
-    --[[
-    use {
-        "fatih/vim-go",
-        config = function()
-            vim.g.go_code_completion_enabled = 0
-        end,
-    }
-    --]]
 
     use {
         "dense-analysis/ale",

@@ -16,6 +16,14 @@ function M.config_cmp()
             {name = "buffer"},
             {name = "spell"},
         },
+        --[[
+        mapping = {
+            ['<C-Space>'] = cmp.mapping({
+                    i = cmp.mapping.complete(),
+                    c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+                }),
+        },
+        --]]
     }
 
     -- Add a plug mapping to use in C-Space binding
