@@ -82,14 +82,6 @@ local function default_attach(client, bufnr)
 end
 
 function M.config_lsp()
-    local language_servers = {
-        "bashls",
-        "gopls",
-        -- "pylsp",
-        "pyright",
-        -- "rust_analyzer",
-        "rls",
-    }
     local lsp_config = require("lspconfig")
 
     -- Maybe update capabilities
@@ -97,28 +89,26 @@ function M.config_lsp()
     if utils.is_plugin_loaded("cmp-nvim-lsp") then
         capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
     end
+
     if utils.is_plugin_loaded("null-ls.nvim") then
-        table.insert(language_servers, "null-ls")
+        M.config_null_ls()
+        lsp_config["null-ls"].setup{ capabilities=capabilities, on_attach=default_attach }
     end
 
-    for _, ls in ipairs(language_servers) do
-        lsp_config[ls].setup{
-            capabilities = capabilities,
-            on_attach=default_attach,
-            settings={
-                pylsp={
-                    -- configurationSources = {"flake8"},
-                    configurationSources = {"black"},
-                    formatCommand = {"black"},
-                },
-                rust={
-                    build_on_save = false,
-                    all_features = true,
-                    unstable_features = true,
-                },
+    lsp_config.bashls.setup{ capabilities=capabilities, on_attach=default_attach }
+    lsp_config.gopls.setup{ capabilities=capabilities, on_attach=default_attach }
+    lsp_config.pyright.setup{ capabilities=capabilities, on_attach=default_attach }
+    lsp_config.rls.setup{
+        capabilities=capabilities,
+        on_attach=default_attach,
+        settings={
+            rust={
+                build_on_save = false,
+                all_features = true,
+                unstable_features = true,
             },
-        }
-    end
+        },
+    }
 end
 
 function M.config_lsp_saga()
