@@ -103,11 +103,15 @@ return require('packer').startup(function()
     -- LSP
     use {
         "neovim/nvim-lspconfig",
-        config = function() require("utils").require_with_local("plugins.lsp") end,
+        config = function() require("plugins.lsp").config_lsp() end,
+        requires = {
+            "hrsh7th/cmp-nvim-lsp",
+        },
     }
     use {
         "glepnir/lspsaga.nvim",
         requires = "neovim/nvim-lspconfig",
+        config = function() require("plugins.lsp").config_lsp_saga() end,
     }
     --[[
     use {

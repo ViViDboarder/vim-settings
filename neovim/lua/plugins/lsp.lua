@@ -1,4 +1,5 @@
 -- luacheck: globals packer_plugins
+local M = {}
 local utils = require("utils")
 
 local function default_attach(client, bufnr)
@@ -66,9 +67,21 @@ local function default_attach(client, bufnr)
         buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
         buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
     end
+
+    -- Use LspSaga features, if possible
+    if packer_plugins["lspsaga.nvim"] then
+        buf_set_keymap('n', 'K', "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
+        buf_set_keymap('n', '<leader>rn', "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+        buf_set_keymap('n', '<leader>e', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
+        buf_set_keymap('n', '[d', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
+        buf_set_keymap('n', ']d', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
+        buf_set_keymap('n', '<C-k>', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
+        -- Code actions
+        buf_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+    end
 end
 
-local function config_lsp()
+function M.config_lsp()
     local language_servers = {
         "bashls",
         "gopls",
@@ -105,4 +118,19 @@ local function config_lsp()
     end
 end
 
-config_lsp()
+function M.config_lsp_saga()
+    local saga = require("lspsaga")
+    saga.init_lsp_saga{
+        error_sign = "🔥",
+        warn_sign ="⚠️",
+        hint_sign = "🤔",
+        dianostic_header_icon = " 💬   ",
+        code_action_icon = "💡",
+        code_action_prompt = {
+            enable = false,
+            sign = false,
+        },
+    }
+end
+
+return M

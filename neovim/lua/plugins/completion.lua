@@ -1,7 +1,6 @@
 local M = {}
 
 function M.config_cmp()
-    vim.o.completeopt = "menuone,noinsert,noselect"
     local cmp = require("cmp")
     cmp.setup {
         completion = {
