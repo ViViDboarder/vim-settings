@@ -81,13 +81,6 @@ return require('packer').startup(function()
         "folke/tokyonight.nvim",
         run = "fish -c 'echo \"set --path --prepend fish_themes_path \"(pwd)\"/extras\" > ~/.config/fish/conf.d/tokyonight.fish' || true",  -- luacheck: no max line length
     }
-    --[[
-    use {
-        "vim-airline/vim-airline",
-        config = function() require("plugins.airline") end,
-        requires = { "vim-airline/vim-airline-themes", opt = true },
-    }
-    --]]
     use {
         "nvim-lualine/lualine.nvim",
         config = function() require("plugins.lualine").config_lualine() end,
@@ -247,7 +240,7 @@ return require('packer').startup(function()
 
     use {
         "dense-analysis/ale",
-        config = function() require("utils").require_with_local("plugins.ale") end,
+        config = function() require("plugins.ale") end,
     }
 
     -- Debuging nvim config
