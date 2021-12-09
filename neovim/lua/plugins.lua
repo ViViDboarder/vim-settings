@@ -116,6 +116,7 @@ return require('packer').startup(function()
             "jose-elias-alvarez/null-ls.nvim",
         },
     }
+    -- NOTE: Disabled because it's got issues with Neovim 0.6.0
     use {
         "glepnir/lspsaga.nvim",
         opt = true,
