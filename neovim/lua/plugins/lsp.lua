@@ -81,8 +81,40 @@ local function default_attach(client, bufnr)
     end
 end
 
+local function config_lsp_ui()
+    -- Add floating window boarders
+    vim.cmd [[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]]
+    vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+    local border = {
+        {"┌", "FloatBorder"},
+        {"─", "FloatBorder"},
+        {"┐", "FloatBorder"},
+        {"│", "FloatBorder"},
+        {"┘", "FloatBorder"},
+        {"─", "FloatBorder"},
+        {"└", "FloatBorder"},
+        {"│", "FloatBorder"},
+    }
+    local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or border
+        return orig_util_open_floating_preview(contents, syntax, opts, ...)
+    end
+
+    -- Diagnostics signs
+    local signs = { Error = "🔥", Warn = "⚠️", Hint = "🤔", Info = "📝" }
+    for type, icon in pairs(signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+    end
+
+    vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+end
+
 function M.config_lsp()
     local lsp_config = require("lspconfig")
+    config_lsp_ui()
 
     -- Maybe update capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
