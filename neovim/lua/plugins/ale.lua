@@ -5,6 +5,7 @@ vim.g.ale_disable_lsp = 1
 vim.g.ale_linters = {
     go = {},
     rust = {},
+    python = {},
     -- sh = {'language_server', 'shell', 'shellcheck'},
     sh = {},
     text = {"proselint", "alex"},

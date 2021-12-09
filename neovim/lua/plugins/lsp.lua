@@ -37,7 +37,7 @@ local function default_attach(client, bufnr)
         vim.cmd([[
             augroup lsp_format
                 autocmd!
-                autocmd BufWritePre *.rs,*.go,*.py lua vim.lsp.buf.formatting_sync(nil, 1000)
+                autocmd BufWritePre *.rs,*.go,*.sh lua vim.lsp.buf.formatting_sync(nil, 1000)
                 " autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
             augroup END
         ]])
@@ -137,8 +137,9 @@ function M.config_null_ls()
             -- Fish
             -- null_ls.builtins.formatting.fish_indent,
             -- Python
-            -- null_ls.builtins.formatting.reorder_python_imports,
-            -- null_ls.builtins.formatting.black,
+            null_ls.builtins.formatting.reorder_python_imports,
+            null_ls.builtins.formatting.black,
+            null_ls.builtins.diagnostics.mypy,
             -- Go
             null_ls.builtins.diagnostics.golangci_lint,
             -- Text
