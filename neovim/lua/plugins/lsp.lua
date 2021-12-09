@@ -2,6 +2,37 @@
 local M = {}
 local utils = require("utils")
 
+local function config_lsp_ui()
+    -- Add floating window boarders
+    vim.cmd [[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]]
+    vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+    local border = {
+        {"┌", "FloatBorder"},
+        {"─", "FloatBorder"},
+        {"┐", "FloatBorder"},
+        {"│", "FloatBorder"},
+        {"┘", "FloatBorder"},
+        {"─", "FloatBorder"},
+        {"└", "FloatBorder"},
+        {"│", "FloatBorder"},
+    }
+    local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or border
+        return orig_util_open_floating_preview(contents, syntax, opts, ...)
+    end
+
+    -- Diagnostics signs
+    local signs = { Error = "🔥", Warn = "⚠️", Hint = "🤔", Info = "📝" }
+    for type, icon in pairs(signs) do
+        local hl = "DiagnosticSign" .. type
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+    end
+
+    -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+end
+
 local function default_attach(client, bufnr)
     if utils.is_plugin_loaded("completion-nvim") then
         require('completion').on_attach()
@@ -81,37 +112,6 @@ local function default_attach(client, bufnr)
         -- Code actions
         buf_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
     end
-end
-
-local function config_lsp_ui()
-    -- Add floating window boarders
-    vim.cmd [[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]]
-    vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
-    local border = {
-        {"┌", "FloatBorder"},
-        {"─", "FloatBorder"},
-        {"┐", "FloatBorder"},
-        {"│", "FloatBorder"},
-        {"┘", "FloatBorder"},
-        {"─", "FloatBorder"},
-        {"└", "FloatBorder"},
-        {"│", "FloatBorder"},
-    }
-    local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-        opts = opts or {}
-        opts.border = opts.border or border
-        return orig_util_open_floating_preview(contents, syntax, opts, ...)
-    end
-
-    -- Diagnostics signs
-    local signs = { Error = "🔥", Warn = "⚠️", Hint = "🤔", Info = "📝" }
-    for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-    end
-
-    -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 end
 
 function M.config_lsp()
