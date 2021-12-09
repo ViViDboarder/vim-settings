@@ -33,9 +33,9 @@ function install_language_servers() {
     # Python
     maybe_run pip install --user --upgrade python-language-server
     maybe_run pip3 install --user --upgrade python-language-server
-    maybe_run pip install --user python-lsp-server[all] || echo "WARNING: python-lsp-server is py3 only"
-    maybe_run pip3 install --user python-lsp-server[all]
-    maybe_run npm install -g pyrite
+    maybe_run pip install --user "python-lsp-server[all]" || echo "WARNING: python-lsp-server is py3 only"
+    maybe_run pip3 install --user "python-lsp-server[all]"
+    maybe_run npm install -g pyright
 
     # Rust
     maybe_run rustup component add rls rustfmt rust-analysis rust-src clippy rustfmt
