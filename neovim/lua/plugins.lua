@@ -21,7 +21,8 @@ vim.g.polyglot_disabled = { "go", "rust" }
 
 return require('packer').startup(function()
     -- luacheck: push globals use
-    use "wbthomason/packer.nvim"
+    use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
+    use {"wbthomason/packer.nvim", opt = true}
 
     -- Quality of life
     use "tpope/vim-endwise"
