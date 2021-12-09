@@ -1,4 +1,5 @@
 local M = {}
+local utils = require("utils")
 
 -- Only return interesting ffenc (not utf-8[unix])
 function M.custom_ffenc()
@@ -45,6 +46,20 @@ function M.config_lualine(theme_name)
         theme_name = "wombat"
     end
 
+    local gps = {}
+    if utils.is_plugin_loaded("nvim-gps") then
+        gps = require("nvim-gps")
+        gps.setup{
+            icons = {
+                ["class-name"] = "(c) ",
+                ["function-name"] = "(ƒ) ",
+                ["method-name"] = "(m) ",
+                ["container-name"] = "",
+                ["tag-name"] = "(t) ",
+            }
+        }
+    end
+
     require("lualine").setup {
         options = {
             theme = theme_name,
@@ -55,7 +70,7 @@ function M.config_lualine(theme_name)
         sections = {
             lualine_a = {{"mode", fmt = function(str) return str:sub(1, 1) end}},
             lualine_b = {"FugitiveHead", "diff"},
-            lualine_c = {"filename"},
+            lualine_c = {"filename", { gps.get_location, cond = gps.is_available }},
             lualine_x = {M.custom_ffenc, "filetype"},
             lualine_y = {"progress", "location"},
             lualine_z = {

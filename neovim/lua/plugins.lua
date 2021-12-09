@@ -84,6 +84,9 @@ return require('packer').startup(function()
     use {
         "nvim-lualine/lualine.nvim",
         config = function() require("plugins.lualine").config_lualine() end,
+        requires = {
+            "SmiteshP/nvim-gps",
+        }
     }
     use {
         "cormacrelf/dark-notify",
@@ -119,12 +122,10 @@ return require('packer').startup(function()
         requires = "neovim/nvim-lspconfig",
         config = function() require("plugins.lsp").config_lsp_saga() end,
     }
-    --[[
     use {
         "SmiteshP/nvim-gps",
-        requires = "nvim-treesitter/nvim-treesitter"
+        requires = "nvim-treesitter/nvim-treesitter",
     }
-    --]]
 
     -- Writing
     -- abolish/pencil
