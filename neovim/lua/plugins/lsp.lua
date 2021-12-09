@@ -7,6 +7,8 @@ local function default_attach(client, bufnr)
         require('completion').on_attach()
     end
 
+    config_lsp_ui()
+
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -109,12 +111,11 @@ local function config_lsp_ui()
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
 
-    vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+    -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 end
 
 function M.config_lsp()
     local lsp_config = require("lspconfig")
-    config_lsp_ui()
 
     -- Maybe update capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
