@@ -122,11 +122,7 @@ function M.config_lsp()
         capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
     end
 
-    if utils.is_plugin_loaded("null-ls.nvim") then
-        M.config_null_ls()
-        lsp_config["null-ls"].setup{ capabilities=capabilities, on_attach=default_attach }
-    end
-
+    -- Configure each server
     lsp_config.bashls.setup{ capabilities=capabilities, on_attach=default_attach }
     lsp_config.gopls.setup{ capabilities=capabilities, on_attach=default_attach }
     lsp_config.pyright.setup{ capabilities=capabilities, on_attach=default_attach }
@@ -141,6 +137,10 @@ function M.config_lsp()
             },
         },
     }
+    if utils.is_plugin_loaded("null-ls.nvim") then
+        M.config_null_ls()
+        lsp_config["null-ls"].setup{ capabilities=capabilities, on_attach=default_attach }
+    end
 end
 
 function M.config_lsp_saga()
