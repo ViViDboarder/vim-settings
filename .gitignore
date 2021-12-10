@@ -4,7 +4,7 @@
 tags
 neovim/backup/
 neovim/plugged/
-neovim/plugin
+neovim/plugin/packer_compiled.lua
 neovim/spell/
 neovim/tmp/
 vim/.netrwhist
