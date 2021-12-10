@@ -74,7 +74,7 @@ function M.config_lualine(theme_name)
             lualine_x = {M.custom_ffenc, "filetype"},
             lualine_y = {"progress", "location"},
             lualine_z = {
-                {"diagnostics", sources = {"nvim_lsp"}},
+                {"diagnostics", sources = {"nvim_diagnostic"}},
                 {M.mixed_indent, color = {bg = "#de4f1f"}},
                 {M.trailing_whitespace, color = {bg = "#de4f1f"}},
             },
