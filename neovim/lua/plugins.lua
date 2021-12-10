@@ -1,10 +1,10 @@
 -- Install packer
-local install_path = vim.fn.stdpath("data").."/site/pack/packer/start/packer.nvim"
-
+local install_path = vim.fn.stdpath("data").."/site/pack/packer/opt/packer.nvim"
+local packer_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", install_path})
-  vim.cmd "packadd packer.nvim"
+  packer_bootstrap = vim.fn.system({"git", "clone", "https://github.com/wbthomason/packer.nvim", install_path})
 end
+vim.cmd "packadd packer.nvim"
 
 -- Configures dark-notify to use colors from my environment
 local function config_dark_notify()
@@ -16,23 +16,63 @@ local function config_dark_notify()
     }
 end
 
--- Disable polyglot for langauges I've added special support for
-vim.g.polyglot_disabled = { "go", "rust" }
+return require('packer').startup(function(use)
+    -- Load things faster!
+    -- use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
 
-return require('packer').startup(function()
-    -- luacheck: push globals use
-    use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
-    use {"wbthomason/packer.nvim", opt = true}
+    -- Let Packer manage and lazyload itself
+    use {
+        "wbthomason/packer.nvim",
+        cmd = {
+            "PackerClean",
+            "PackerCompile",
+            "PackerInstall",
+            "PackerLoad",
+            "PackerProfile",
+            "PackerStatus",
+            "PackerSync",
+            "PackerUpdate",
+        },
+        config = [[require("plugins")]],
+    }
 
-    -- Quality of life
+    -- Colorschemes
+    use {
+        "vim-scripts/wombat256.vim",
+        { "ViViDboarder/wombat.nvim", requires = "rktjmp/lush.nvim" },
+        { "ViViDboarder/wombuddy.nvim", requires = "tjdevries/colorbuddy.vim" },
+        "ishan9299/nvim-solarized-lua",
+        {
+            "folke/tokyonight.nvim",
+            run = "fish -c 'echo \"set --path --prepend fish_themes_path \"(pwd)\"/extras\" > ~/.config/fish/conf.d/tokyonight.fish' || true",  -- luacheck: no max line length
+        },
+    }
+
+    -- Auto and ends to some ifs and dos
     use "tpope/vim-endwise"
+
+    -- Unix commands from vim? Yup!
     use "tpope/vim-eunuch"
+
+    -- Adds repeats for custom motions
     use "tpope/vim-repeat"
+
+    -- Readline shortcuts
     use "tpope/vim-rsi"
+
+    -- Surround motions
     use "tpope/vim-surround"
+
+    -- Better netrw
     use "tpope/vim-vinegar"
+
+    -- Easier jumping to lines
     use "vim-scripts/file-line"
+
+    -- Auto ctags generation
     use "ludovicchabant/vim-gutentags"
+
+    -- Better commenting
     use {
         "tomtom/tcomment_vim",
         config = function()
@@ -40,16 +80,21 @@ return require('packer').startup(function()
             vim.api.nvim_set_keymap("v", "//", ":TCommentBlock<CR>", {silent=true, noremap=true})
         end,
     }
+
+    -- Allow wrapping and joining of arguments across multiple lines
     use {
         "FooSoft/vim-argwrap",
         config = function()
             vim.api.nvim_set_keymap("n","<Leader>a", ":ArgWrap<CR>", {silent=true, noremap=true})
         end,
     }
+
+    -- Adds git operations to vim
     use {
         "tpope/vim-fugitive",
-        -- cmd = {"Git"},
     }
+
+    -- Quick toggling of Location and Quickfix lists
     use {
         "milkypostman/vim-togglelist",
         config = function()
@@ -57,37 +102,34 @@ return require('packer').startup(function()
             vim.api.nvim_set_keymap("n", "<F7>", ":call ToggleLocationList()<CR>", {silent=true, noremap=true})
         end,
     }
+
+    -- Find text everywhere!
     use {
         "mhinz/vim-grepper",
         config = function() require("plugins.grepper") end,
     }
 
-    -- UI
-    use {
-        "ViViDboarder/wombat.nvim",
-        requires = "rktjmp/lush.nvim",
-    }
-    use {
-        "ViViDboarder/wombuddy.nvim",
-        requires = "tjdevries/colorbuddy.vim",
-    }
-    use "vim-scripts/wombat256.vim"
-    use "ishan9299/nvim-solarized-lua"
+    -- Highlight inline colors
     use {
         "norcalli/nvim-colorizer.lua",
         config = function() require("colorizer").setup() end,
     }
-    use {
-        "folke/tokyonight.nvim",
-        run = "fish -c 'echo \"set --path --prepend fish_themes_path \"(pwd)\"/extras\" > ~/.config/fish/conf.d/tokyonight.fish' || true",  -- luacheck: no max line length
-    }
+
+    -- Custom status line
+    use { "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" }
     use {
         "nvim-lualine/lualine.nvim",
         config = function() require("plugins.lualine").config_lualine() end,
         requires = {
-            "SmiteshP/nvim-gps",
+            -- Show my current location in my status bar
+            -- { "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" },
+        },
+        after = {
+            "nvim-gps"
         }
     }
+
+    -- On Mac, update colors when dark mode changes
     use {
         "cormacrelf/dark-notify",
         -- Download latest release on install
@@ -95,37 +137,35 @@ return require('packer').startup(function()
         config = config_dark_notify,
         requires = "nvim-lualine/lualine.nvim",
     }
+
+    -- Custom start screen
     use {
         'mhinz/vim-startify',
         config = function() require("utils").require_with_local("plugins.startify") end,
     }
 
     -- LSP
-    use {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function() require("plugins.lsp").config_null_ls() end,
-        requires = {
-            "nvim-lua/plenary.nvim",
-        }
-    }
+
+    -- Configure language servers
     use {
         "neovim/nvim-lspconfig",
-        config = function() require("plugins.lsp").config_lsp() end,
         requires = {
-            "hrsh7th/cmp-nvim-lsp",
             "jose-elias-alvarez/null-ls.nvim",
         },
     }
-    -- NOTE: Disabled because it's got issues with Neovim 0.6.0
+
+    -- Generic linter/formatters in diagnostics API
+    use {
+        "jose-elias-alvarez/null-ls.nvim",
+        requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    }
+
+    -- Fancy LSP UIs
     use {
         "glepnir/lspsaga.nvim",
-        opt = true,
         requires = "neovim/nvim-lspconfig",
-        config = function() require("plugins.lsp").config_lsp_saga() end,
-    }
-    use {
-        "SmiteshP/nvim-gps",
-        requires = "nvim-treesitter/nvim-treesitter",
+        -- NOTE: Disabled because it's got issues with Neovim 0.6.0
+        disable = true,
     }
 
     -- Writing
@@ -176,13 +216,17 @@ return require('packer').startup(function()
             "f3fora/cmp-spell",
             "L3MON4D3/LuaSnip",
             "saadparwaiz1/cmp_luasnip",
-        }
+        },
+        event = "InsertEnter *",
     }
 
     -- Fuzzy Finder
     use {
         "nvim-telescope/telescope.nvim",
-        requires = "nvim-lua/plenary.nvim",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-lua/popup.nvim",
+        },
         config = function() require("plugins.telescope") end,
     }
     --[[
@@ -251,5 +295,8 @@ return require('packer').startup(function()
         cmd = {"StartupTime"},
     }
 
-    -- luacheck: pop
+    -- Auto sync after bootstrapping on a fresh box
+    if packer_bootstrap then
+        require("packer").sync()
+    end
 end)

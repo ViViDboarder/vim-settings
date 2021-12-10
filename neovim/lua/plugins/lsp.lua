@@ -2,7 +2,7 @@
 local M = {}
 local utils = require("utils")
 
-local function config_lsp_ui()
+function M.config_lsp_ui()
     -- Add floating window boarders
     vim.cmd [[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]]
     vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
@@ -30,15 +30,12 @@ local function config_lsp_ui()
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
 
-    -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 end
 
 local function default_attach(client, bufnr)
     if utils.is_plugin_loaded("completion-nvim") then
         require('completion').on_attach()
     end
-
-    config_lsp_ui()
 
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -63,6 +60,9 @@ local function default_attach(client, bufnr)
     buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
     buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
     buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+    -- Open diagnostic on hold
+    vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
     -- Set some keybinds conditional on server capabilities
     if client.resolved_capabilities.document_formatting then
@@ -185,11 +185,6 @@ function M.config_null_ls()
             -- null_ls.builtins.formatting.rustfmt,
         },
     }
-    --[[
-    require("lspconfig")["null-ls"].setup{
-        on_attach=default_attach,
-    }
-    --]]
 end
 
 return M
