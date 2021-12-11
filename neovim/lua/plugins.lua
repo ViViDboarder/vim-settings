@@ -18,7 +18,7 @@ end
 
 return require('packer').startup(function(use)
     -- Load things faster!
-    -- use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
+    use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
 
     -- Let Packer manage and lazyload itself
     use {
