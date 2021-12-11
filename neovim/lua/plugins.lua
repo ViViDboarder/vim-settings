@@ -72,6 +72,12 @@ return require('packer').startup(function(use)
     -- Auto ctags generation
     use "ludovicchabant/vim-gutentags"
 
+    -- Make it easier to discover some of my keymaps
+    use {
+        "folke/which-key.nvim",
+        config = function() require("plugins.whichkey").configure() end
+    }
+
     -- Better commenting
     use {
         "tomtom/tcomment_vim",
