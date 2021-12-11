@@ -215,11 +215,11 @@ return require('packer').startup(function(use)
         "hrsh7th/nvim-cmp",
         config = function() require("plugins.completion").config_cmp() end,
         requires = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "f3fora/cmp-spell",
+            { "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
+            { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
+            { "f3fora/cmp-spell", after = "nvim-cmp" },
+            { "saadparwaiz1/cmp_luasnip", after = "nvim-cmp" },
             "L3MON4D3/LuaSnip",
-            "saadparwaiz1/cmp_luasnip",
         },
         event = "InsertEnter *",
     }
