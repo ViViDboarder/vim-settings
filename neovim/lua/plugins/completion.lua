@@ -16,14 +16,22 @@ function M.config_cmp()
             {name = "buffer"},
             {name = "spell"},
         },
-        --[[
         mapping = {
-            ['<C-Space>'] = cmp.mapping({
-                    i = cmp.mapping.complete(),
-                    c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+            ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+            ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+            ['<C-Space>'] = cmp.mapping(function()
+                if cmp.visible() then
+                    cmp.select_next_item()
+                else
+                    cmp.complete()
+                end
+            end, { 'i', 'c' }),
+            ['<C-e>'] = cmp.mapping({
+                    i = cmp.mapping.abort(),
+                    c = cmp.mapping.close(),
                 }),
+            ['<CR>'] = cmp.mapping.confirm({ select = true }),
         },
-        --]]
     }
 
     -- Add a plug mapping to use in C-Space binding
