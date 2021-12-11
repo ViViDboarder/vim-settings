@@ -153,12 +153,10 @@ return require('packer').startup(function(use)
     -- LSP
 
     -- Configure language servers
-    use {
-        "neovim/nvim-lspconfig",
-        requires = {
-            "jose-elias-alvarez/null-ls.nvim",
-        },
-    }
+    use "neovim/nvim-lspconfig"
+
+    -- Better display of diagnostics
+    use "folke/trouble.nvim"
 
     -- Generic linter/formatters in diagnostics API
     use {

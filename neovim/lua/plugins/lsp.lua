@@ -24,12 +24,25 @@ function M.config_lsp_ui()
     end
 
     -- Diagnostics signs
-    local signs = { Error = "🔥", Warn = "⚠️", Hint = "🤔", Info = "📝" }
+    local signs = { Error = "🔥", Warn = "⚠️", Hint = "🤔", Info = "➞" }
     for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
 
+    if utils.is_plugin_loaded("trouble") then
+        require("trouble").setup {
+            fold_open = "▼",
+            fold_closed = "▶",
+            signs = {
+                error = signs.Error,
+                warning = signs.Warning,
+                hint = signs.Hint,
+                information = signs.Info,
+                other = "",
+            },
+        }
+    end
 end
 
 local function default_attach(client, bufnr)
