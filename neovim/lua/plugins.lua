@@ -182,6 +182,12 @@ return require('packer').startup(function(use)
         "preservim/vim-textobj-sentence",
         requires = "kana/vim-textobj-user",
     }
+    use {
+        "junegunn/goyo.vim",
+        cmd = { "Goyo", "Zen" },
+        config = [[require("plugins.goyo-limelight")]],
+        requires = { "junegunn/limelight.vim", cmd = "Limelight" },
+    }
 
     -- Treesitter
     use {
