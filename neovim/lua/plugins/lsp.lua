@@ -174,7 +174,7 @@ end
 
 function M.config_null_ls()
     local null_ls = require("null-ls")
-    null_ls.config{
+    null_ls.setup{
         sources = {
             -- Generic
             -- null_ls.builtins.formatting.preittier,
