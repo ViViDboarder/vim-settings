@@ -53,6 +53,7 @@ RUN npm install -g \
     alex \
     bash-language-server \
     csslint \
+    pyright
 
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /go/bin v1.35.2
 # RUN GOPATH=/go go get -u github.com/golangci/golangci-lint/cmd/golangci-lint@latest
