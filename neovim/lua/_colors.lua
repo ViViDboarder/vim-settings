@@ -2,12 +2,15 @@
 function _G.update_colors()
     local function maybe_set(scope, name, val, force)
         force = force or false
-        if vim[scope][name] ~= val then
-            vim[scope][name] = val
-            return true
-        end
-        if force then
-            vim[scope][name] = val
+        local changed = vim[scope][name] ~= val
+        if changed or force then
+            if scope == "g" and name == "colors_name" then
+                -- Colorscheme is different. Use this instead of setting colors_name directly
+                vim.cmd("colorscheme "..val)
+            else
+                vim[scope][name] = val
+            end
+            return changed
         end
         return false
     end
@@ -31,12 +34,12 @@ function _G.update_colors()
         env_color = utils.env_default("VIM_COLOR_DARK", env_color)
         env_color = utils.env_default("NVIM_COLOR_DARK", env_color)
         change = maybe_set("o", "background", "dark")
-        change = maybe_set("g", "colors_name", env_color, true) or change
+        change = maybe_set("g", "colors_name", env_color, false) or change
     elseif mode == "light" then
         env_color = utils.env_default("VIM_COLOR_LIGHT", env_color)
         env_color = utils.env_default("NVIM_COLOR_LIGHT", env_color)
         change = maybe_set("o", "background", "light")
-        change = maybe_set("g", "colors_name", env_color, true) or change
+        change = maybe_set("g", "colors_name", env_color, false) or change
     end
 
     -- Update status line theme
