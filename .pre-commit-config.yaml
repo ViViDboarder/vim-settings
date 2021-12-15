@@ -1,12 +1,12 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v4.0.1
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
   - repo: https://github.com/Kuniwak/vint
-    rev: 9a239b20be279324ced3b34ed71f84a63edfd4fb
+    rev: v0.4a3
     hooks:
       - id: vint
         exclude: >
@@ -24,3 +24,8 @@ repos:
           - --
         language: system
         types: [file, lua]
+  - repo: https://github.com/IamTheFij/StyLua
+    rev: pre-commit-hook
+    hooks:
+      - id: stylua
+        args: ["--indent-type", "Spaces"]
