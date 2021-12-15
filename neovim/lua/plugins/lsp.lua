@@ -75,7 +75,7 @@ local function default_attach(client, bufnr)
     buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
     -- Open diagnostic on hold
-    if vim.diagnostic ~= nil then
+    if vim["diagnostic"] ~= nil then
         vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
     end
 
