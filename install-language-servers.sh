@@ -94,6 +94,9 @@ function install_fixers() {
     # Rust
     maybe_run rustup component add rustfmt
 
+    # Lua
+    maybe_run cargo install stylua
+
     echo ""
 }
 

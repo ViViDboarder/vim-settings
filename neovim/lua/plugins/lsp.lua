@@ -194,6 +194,8 @@ function M.config_null_ls()
             null_ls.builtins.diagnostics.shellcheck,
             -- Rust
             -- null_ls.builtins.formatting.rustfmt,
+            -- Lua
+            null_ls.builtins.formatting.stylua,
         },
     }
 end
