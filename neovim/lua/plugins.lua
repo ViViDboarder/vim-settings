@@ -158,6 +158,7 @@ return require("packer").startup(function(use)
     -- On Mac, update colors when dark mode changes
     use({
         "cormacrelf/dark-notify",
+        disable = not vim.g.is_mac,
         -- Download latest release on install
         run = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/", -- luacheck: no max line length
         config = config_dark_notify,
