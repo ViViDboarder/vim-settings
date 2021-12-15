@@ -223,12 +223,6 @@ return require('packer').startup(function(use)
     --]]
 
     -- Completion
-    --[[
-    use {
-        "nvim-lua/completion-nvim",
-        config = function() require("plugins.completion").config_complete() end,
-    }
-    --]]
     use {
         "hrsh7th/nvim-cmp",
         config = function() require("plugins.completion").config_cmp() end,
