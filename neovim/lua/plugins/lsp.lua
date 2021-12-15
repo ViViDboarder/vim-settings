@@ -4,17 +4,17 @@ local utils = require("utils")
 
 function M.config_lsp_ui()
     -- Add floating window boarders
-    vim.cmd [[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]]
-    vim.cmd [[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+    vim.cmd([[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]])
+    vim.cmd([[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]])
     local border = {
-        {"┌", "FloatBorder"},
-        {"─", "FloatBorder"},
-        {"┐", "FloatBorder"},
-        {"│", "FloatBorder"},
-        {"┘", "FloatBorder"},
-        {"─", "FloatBorder"},
-        {"└", "FloatBorder"},
-        {"│", "FloatBorder"},
+        { "┌", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "┐", "FloatBorder" },
+        { "│", "FloatBorder" },
+        { "┘", "FloatBorder" },
+        { "─", "FloatBorder" },
+        { "└", "FloatBorder" },
+        { "│", "FloatBorder" },
     }
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
@@ -31,7 +31,7 @@ function M.config_lsp_ui()
     end
 
     if utils.is_plugin_loaded("trouble") then
-        require("trouble").setup {
+        require("trouble").setup({
             fold_open = "▼",
             fold_closed = "▶",
             signs = {
@@ -41,38 +41,42 @@ function M.config_lsp_ui()
                 information = signs.Info,
                 other = "",
             },
-        }
+        })
     end
 end
 
 local function default_attach(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+    local function buf_set_keymap(...)
+        vim.api.nvim_buf_set_keymap(bufnr, ...)
+    end
+    local function buf_set_option(...)
+        vim.api.nvim_buf_set_option(bufnr, ...)
+    end
 
-    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+    buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
     -- Mappings
     -- TODO: Maybe prefix all of these for easier discovery
-    local opts = { noremap=true, silent=true }
-    buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-    buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-    buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-    buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-    buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-    buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    buf_set_keymap('n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-    buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-    buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-    buf_set_keymap('n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    local opts = { noremap = true, silent = true }
+    buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+    buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
+    buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
+    buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+    buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+    buf_set_keymap("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+    buf_set_keymap("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+    buf_set_keymap("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
+    buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+    buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+    buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+    buf_set_keymap("n", "<leader>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
+    buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+    buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+    buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
     -- Open diagnostic on hold
     if vim["diagnostic"] ~= nil then
-        vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+        vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
     end
 
     -- Set some keybinds conditional on server capabilities
@@ -114,14 +118,14 @@ local function default_attach(client, bufnr)
 
     -- Use LspSaga features, if possible
     if utils.is_plugin_loaded("lspsaga.nvim") then
-        buf_set_keymap('n', 'K', "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-        buf_set_keymap('n', '<leader>rn', "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-        buf_set_keymap('n', '<leader>e', "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
-        buf_set_keymap('n', '[d', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
-        buf_set_keymap('n', ']d', "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
-        buf_set_keymap('n', '<C-k>', "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
+        buf_set_keymap("n", "K", "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
+        buf_set_keymap("n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+        buf_set_keymap("n", "<leader>e", "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
+        buf_set_keymap("n", "[d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
+        buf_set_keymap("n", "]d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
+        buf_set_keymap("n", "<C-k>", "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
         -- Code actions
-        buf_set_keymap('n', '<leader>ca', "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+        buf_set_keymap("n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
     end
 end
 
@@ -135,31 +139,31 @@ function M.config_lsp()
     end
 
     -- Configure each server
-    lsp_config.bashls.setup{ capabilities=capabilities, on_attach=default_attach }
-    lsp_config.gopls.setup{ capabilities=capabilities, on_attach=default_attach }
-    lsp_config.pyright.setup{ capabilities=capabilities, on_attach=default_attach }
-    lsp_config.rls.setup{
-        capabilities=capabilities,
-        on_attach=default_attach,
-        settings={
-            rust={
+    lsp_config.bashls.setup({ capabilities = capabilities, on_attach = default_attach })
+    lsp_config.gopls.setup({ capabilities = capabilities, on_attach = default_attach })
+    lsp_config.pyright.setup({ capabilities = capabilities, on_attach = default_attach })
+    lsp_config.rls.setup({
+        capabilities = capabilities,
+        on_attach = default_attach,
+        settings = {
+            rust = {
                 build_on_save = false,
                 all_features = true,
                 unstable_features = true,
             },
         },
-    }
+    })
     if utils.is_plugin_loaded("null-ls.nvim") then
         M.config_null_ls()
-        lsp_config["null-ls"].setup{ capabilities=capabilities, on_attach=default_attach }
+        lsp_config["null-ls"].setup({ capabilities = capabilities, on_attach = default_attach })
     end
 end
 
 function M.config_lsp_saga()
     local saga = require("lspsaga")
-    saga.init_lsp_saga{
+    saga.init_lsp_saga({
         error_sign = "🔥",
-        warn_sign ="⚠️",
+        warn_sign = "⚠️",
         hint_sign = "🤔",
         dianostic_header_icon = " 💬   ",
         code_action_icon = "💡",
@@ -167,12 +171,12 @@ function M.config_lsp_saga()
             enable = false,
             sign = false,
         },
-    }
+    })
 end
 
 function M.config_null_ls()
     local null_ls = require("null-ls")
-    null_ls.setup{
+    null_ls.setup({
         sources = {
             -- Generic
             -- null_ls.builtins.formatting.preittier,
@@ -197,7 +201,7 @@ function M.config_null_ls()
             -- Lua
             null_ls.builtins.formatting.stylua,
         },
-    }
+    })
 end
 
 return M

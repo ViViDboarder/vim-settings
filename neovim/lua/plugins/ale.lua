@@ -8,18 +8,18 @@ vim.g.ale_linters = {
     python = {},
     -- sh = {'language_server', 'shell', 'shellcheck'},
     sh = {},
-    text = {"proselint", "alex"},
+    text = { "proselint", "alex" },
 }
 vim.g.ale_linter_aliases = {
-    markdown = {"text"},
+    markdown = { "text" },
 }
 local pretty_trim_fixer = {
     "prettier",
     "trim_whitespace",
-    "remove_trailing_lines"
+    "remove_trailing_lines",
 }
 vim.g.ale_fixers = {
-    ["*"] = {"trim_whitespace", "remove_trailing_lines"},
+    ["*"] = { "trim_whitespace", "remove_trailing_lines" },
     -- go = {"gofmt", "goimports"},
     json = pretty_trim_fixer,
     -- rust = {"rustfmt"},
@@ -33,7 +33,7 @@ vim.g.ale_fixers = {
     },
     --]]
     markdown = pretty_trim_fixer,
-    yaml = {"prettier", "remove_trailing_lines"},
-    css =  pretty_trim_fixer,
+    yaml = { "prettier", "remove_trailing_lines" },
+    css = pretty_trim_fixer,
     javascript = pretty_trim_fixer,
 }

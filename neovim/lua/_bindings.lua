@@ -2,8 +2,8 @@ local utils = require("utils")
 
 local map = vim.api.nvim_set_keymap
 
-local opt_silent = {silent = true}
-local opt_default = {silent = true, noremap = true}
+local opt_silent = { silent = true }
+local opt_default = { silent = true, noremap = true }
 map("n", "<C-L><C-L>", ":set wrap!<CR>", opt_silent)
 map("n", "<leader>lw", ":set wrap!<CR>", opt_silent)
 map("n", "<C-N><C-N>", ":set invnumber<CR>", opt_silent)
@@ -57,10 +57,10 @@ function _G.complete_space()
         return utils.t("<C-x><C-o>")
     end
 end
-map("i", "<C-Space>", "v:lua.complete_space()", {expr = true})
+map("i", "<C-Space>", "v:lua.complete_space()", { expr = true })
 
 -- Easily toggle spelling
-vim.cmd "command Spell setlocal spell! spelllang=en_us"
+vim.cmd("command Spell setlocal spell! spelllang=en_us")
 -- Pop spelling completion for word under cursor
 map("n", "<leader>s", "viw<esc>a<c-x>s", {})
 

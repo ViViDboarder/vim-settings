@@ -13,12 +13,12 @@ function M.custom_ffenc()
 end
 
 function M.mixed_indent()
-    local mixed = vim.fn.search([[\v^(\t+ | +\t)]], 'nw')
+    local mixed = vim.fn.search([[\v^(\t+ | +\t)]], "nw")
     if mixed > 0 then
         return "i:" .. mixed
     end
-    local space_indent = vim.fn.search([[\v^ +]], 'nw')
-    local tab_indent = vim.fn.search([[\v^\t+]], 'nw')
+    local space_indent = vim.fn.search([[\v^ +]], "nw")
+    local tab_indent = vim.fn.search([[\v^\t+]], "nw")
     if tab_indent > 0 and space_indent > 0 then
         return "i:" .. require("math").max(tab_indent, space_indent)
     end
@@ -27,7 +27,7 @@ function M.mixed_indent()
 end
 
 function M.trailing_whitespace()
-    local line = vim.fn.search([[\s\+$]], 'nw')
+    local line = vim.fn.search([[\s\+$]], "nw")
     if line ~= 0 then
         return "tw:" .. line
     end
@@ -49,31 +49,38 @@ function M.config_lualine(theme_name)
     local gps = {}
     if utils.is_plugin_loaded("nvim-gps") then
         gps = require("nvim-gps")
-        gps.setup{
+        gps.setup({
             icons = {
                 ["class-name"] = "(c) ",
                 ["function-name"] = "(ƒ) ",
                 ["method-name"] = "(m) ",
                 ["container-name"] = "",
                 ["tag-name"] = "(t) ",
-            }
-        }
+            },
+        })
     end
 
     local diagnostic_plugin = "nvim_diagnostic"
-    if vim.fn.has('nvim-0.6.0') ~= 1 then
+    if vim.fn.has("nvim-0.6.0") ~= 1 then
         diagnostic_plugin = "nvim_lsp"
     end
 
-    require("lualine").setup {
+    require("lualine").setup({
         options = {
             theme = theme_name,
             icons_enabled = false,
-            component_separators = {left = "|", right = "|"},
-            section_separators = {left = "", right = ""},
+            component_separators = { left = "|", right = "|" },
+            section_separators = { left = "", right = "" },
         },
         sections = {
-            lualine_a = {{ "mode", fmt = function(str) return str:sub(1, 1) end }},
+            lualine_a = {
+                {
+                    "mode",
+                    fmt = function(str)
+                        return str:sub(1, 1)
+                    end,
+                },
+            },
             lualine_b = { "FugitiveHead", "diff" },
             lualine_c = { "filename", { gps.get_location, cond = gps.is_available } },
             lualine_x = { M.custom_ffenc, "filetype" },
@@ -84,7 +91,7 @@ function M.config_lualine(theme_name)
                 { M.trailing_whitespace, color = { bg = "#de4f1f" } },
             },
         },
-    }
+    })
 end
 
 return M

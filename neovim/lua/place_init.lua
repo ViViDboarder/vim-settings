@@ -1,2 +1,2 @@
-require "_settings"
-require "_bindings"
+require("_settings")
+require("_bindings")

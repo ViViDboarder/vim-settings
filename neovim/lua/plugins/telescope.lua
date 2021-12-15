@@ -1,6 +1,6 @@
 local function config_telescope()
     local actions = require("telescope.actions")
-    require("telescope").setup{
+    require("telescope").setup({
         defaults = {
             vimgrep_arguments = {
                 "rg",
@@ -16,12 +16,12 @@ local function config_telescope()
                     ["<esc>"] = actions.close,
                     -- Disable scroll-up to allow clearing prompt
                     ["<C-u>"] = false,
-                }
+                },
             },
             layout_strategy = "flex",
-        }
-    }
-    local opts = {silent=true, noremap=true}
+        },
+    })
+    local opts = { silent = true, noremap = true }
     vim.api.nvim_set_keymap("n", "<C-t>", "<cmd>Telescope find_files<CR>", opts)
     vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", opts)
     vim.api.nvim_set_keymap("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", opts)
