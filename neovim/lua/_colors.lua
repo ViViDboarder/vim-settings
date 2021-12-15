@@ -6,7 +6,7 @@ function _G.update_colors()
         if changed or force then
             if scope == "g" and name == "colors_name" then
                 -- Colorscheme is different. Use this instead of setting colors_name directly
-                vim.cmd("colorscheme "..val)
+                vim.cmd("colorscheme " .. val)
             else
                 vim[scope][name] = val
             end
