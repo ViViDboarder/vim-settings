@@ -16,6 +16,16 @@ local function config_dark_notify()
     }
 end
 
+-- Pin version dependent packages
+pinned_commits = {}
+if vim.fn.has('nvim-0.6.0') ~= 1 then
+    if vim.fn.has "nvim-0.5.1" == 1 then
+        pinned_commits["telescope"] = "80cdb00b221f69348afc4fb4b701f51eb8dd3120"
+    elseif vim.fn.has "nvim-0.5.0" == 1 then
+        pinned_commits["telescope"] = "587a10d1494d8ffa1229246228f0655db2f0a48a"
+    end
+end
+
 return require('packer').startup(function(use)
     -- Load things faster!
     use {'lewis6991/impatient.nvim', config = [[require('impatient')]]}
@@ -237,6 +247,7 @@ return require('packer').startup(function(use)
             "nvim-lua/plenary.nvim",
             "nvim-lua/popup.nvim",
         },
+        commit = pinned_commits["telescope"],
         config = function() require("plugins.telescope") end,
     }
     --[[

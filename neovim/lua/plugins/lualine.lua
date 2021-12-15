@@ -60,6 +60,11 @@ function M.config_lualine(theme_name)
         }
     end
 
+    local diagnostic_plugin = "nvim_diagnostic"
+    if vim.fn.has('nvim-0.6.0') ~= 1 then
+        diagnostic_plugin = "nvim_lsp"
+    end
+
     require("lualine").setup {
         options = {
             theme = theme_name,
@@ -68,15 +73,15 @@ function M.config_lualine(theme_name)
             section_separators = {left = "", right = ""},
         },
         sections = {
-            lualine_a = {{"mode", fmt = function(str) return str:sub(1, 1) end}},
-            lualine_b = {"FugitiveHead", "diff"},
-            lualine_c = {"filename", { gps.get_location, cond = gps.is_available }},
-            lualine_x = {M.custom_ffenc, "filetype"},
-            lualine_y = {"progress", "location"},
+            lualine_a = {{ "mode", fmt = function(str) return str:sub(1, 1) end }},
+            lualine_b = { "FugitiveHead", "diff" },
+            lualine_c = { "filename", { gps.get_location, cond = gps.is_available } },
+            lualine_x = { M.custom_ffenc, "filetype" },
+            lualine_y = { "progress", "location" },
             lualine_z = {
-                {"diagnostics", sources = {"nvim_diagnostic"}},
-                {M.mixed_indent, color = {bg = "#de4f1f"}},
-                {M.trailing_whitespace, color = {bg = "#de4f1f"}},
+                { "diagnostics", sources = { diagnostic_plugin } },
+                { M.mixed_indent, color = { bg = "#de4f1f" } },
+                { M.trailing_whitespace, color = { bg = "#de4f1f" } },
             },
         },
     }
