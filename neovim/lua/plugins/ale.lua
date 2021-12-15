@@ -6,6 +6,7 @@ vim.g.ale_linters = {
     go = {},
     rust = {},
     python = {},
+    lua = {},
     -- sh = {'language_server', 'shell', 'shellcheck'},
     sh = {},
     text = { "proselint", "alex" },
