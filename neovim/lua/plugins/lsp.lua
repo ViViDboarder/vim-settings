@@ -30,8 +30,8 @@ function M.config_lsp_ui()
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
 
-    if utils.is_plugin_loaded("trouble") then
-        require("trouble").setup({
+    utils.try_require("trouble", function(trouble)
+        trouble.setup({
             fold_open = "▼",
             fold_closed = "▶",
             signs = {
@@ -42,7 +42,7 @@ function M.config_lsp_ui()
                 other = "",
             },
         })
-    end
+    end)
 end
 
 local function default_attach(client, bufnr)
@@ -108,10 +108,7 @@ local function default_attach(client, bufnr)
     end
 
     -- Some override some fuzzy finder bindings to use lsp sources
-    if packer_plugins["nvim-lspfuzzy"] then
-        buf_set_keymap("n", "<leader>t", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
-        -- buf_set_keymap("n", "<leader>ft", "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
-    elseif packer_plugins["telescope.nvim"] then
+    if utils.try_require("telescope.nvim") ~= nil then
         buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
         buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
     end
@@ -153,56 +150,56 @@ function M.config_lsp()
             },
         },
     })
-    if utils.is_plugin_loaded("null-ls.nvim") then
-        M.config_null_ls()
+    utils.try_require("null-ls", function()
         lsp_config["null-ls"].setup({ capabilities = capabilities, on_attach = default_attach })
-    end
+    end)
 end
 
 function M.config_lsp_saga()
-    local saga = require("lspsaga")
-    saga.init_lsp_saga({
-        error_sign = "🔥",
-        warn_sign = "⚠️",
-        hint_sign = "🤔",
-        dianostic_header_icon = " 💬   ",
-        code_action_icon = "💡",
-        code_action_prompt = {
-            enable = false,
-            sign = false,
-        },
-    })
+    utils.try_require("lspsaga", function(saga)
+        saga.init_lsp_saga({
+                error_sign = "🔥",
+                warn_sign = "⚠️",
+                hint_sign = "🤔",
+                dianostic_header_icon = " 💬   ",
+                code_action_icon = "💡",
+                code_action_prompt = {
+                    enable = false,
+                    sign = false,
+                },
+            })
+    end)
 end
 
 function M.config_null_ls()
-    local null_ls = require("null-ls")
-    null_ls.setup({
-        sources = {
-            -- Generic
-            -- null_ls.builtins.formatting.preittier,
-            -- null_ls.builtins.formatting.trim_whitespace,
-            -- null_ls.builtins.formatting.trim_newlines,
-            -- Fish
-            -- null_ls.builtins.formatting.fish_indent,
-            -- Python
-            null_ls.builtins.formatting.reorder_python_imports,
-            null_ls.builtins.formatting.black,
-            null_ls.builtins.diagnostics.mypy,
-            -- Go
-            null_ls.builtins.diagnostics.golangci_lint,
-            -- Text
-            -- null_ls.builtins.code_actions.proselint,
-            -- Ansible
-            -- null_ls.builtins.diagnostics.ansiblelint,
-            -- Shell
-            null_ls.builtins.diagnostics.shellcheck,
-            -- Rust
-            -- null_ls.builtins.formatting.rustfmt,
-            -- Lua
-            null_ls.builtins.diagnostics.luacheck,
-            null_ls.builtins.formatting.stylua,
-        },
-    })
-end
-
+    utils.try_require("null-ls", function(null_ls)
+        null_ls.setup({
+                sources = {
+                    -- Generic
+                    -- null_ls.builtins.formatting.preittier,
+                    -- null_ls.builtins.formatting.trim_whitespace,
+                    -- null_ls.builtins.formatting.trim_newlines,
+                    -- Fish
+                    -- null_ls.builtins.formatting.fish_indent,
+                    -- Python
+                    null_ls.builtins.formatting.reorder_python_imports,
+                    null_ls.builtins.formatting.black,
+                    null_ls.builtins.diagnostics.mypy,
+                    -- Go
+                    null_ls.builtins.diagnostics.golangci_lint,
+                    -- Text
+                    -- null_ls.builtins.code_actions.proselint,
+                    -- Ansible
+                    -- null_ls.builtins.diagnostics.ansiblelint,
+                    -- Shell
+                    null_ls.builtins.diagnostics.shellcheck,
+                    -- Rust
+                    -- null_ls.builtins.formatting.rustfmt,
+                    -- Lua
+                    null_ls.builtins.diagnostics.luacheck,
+                    null_ls.builtins.formatting.stylua,
+                },
+            })
+        end)
+    end
 return M

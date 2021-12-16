@@ -98,4 +98,23 @@ function M.is_plugin_loaded(name)
     return _G["packer_plugins"] and packer_plugins[name] and packer_plugins[name].loaded
 end
 
+-- Try to require something and perform some action if it was found
+function M.try_require(name, on_found, on_notfound)
+    local status, module = pcall(require, name)
+    if status then
+        if on_found ~= nil then
+            on_found(module)
+        end
+
+        return module
+    else
+        if on_notfound ~= nil then
+            on_notfound(name)
+        end
+
+        return nil
+    end
+
+end
+
 return M
