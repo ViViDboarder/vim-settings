@@ -114,7 +114,6 @@ function M.try_require(name, on_found, on_notfound)
 
         return nil
     end
-
 end
 
 return M

@@ -160,50 +160,50 @@ end
 function M.config_lsp_saga()
     utils.try_require("lspsaga", function(saga)
         saga.init_lsp_saga({
-                error_sign = "🔥",
-                warn_sign = "⚠️",
-                hint_sign = "🤔",
-                dianostic_header_icon = " 💬   ",
-                code_action_icon = "💡",
-                code_action_prompt = {
-                    enable = false,
-                    sign = false,
-                },
-            })
+            error_sign = "🔥",
+            warn_sign = "⚠️",
+            hint_sign = "🤔",
+            dianostic_header_icon = " 💬   ",
+            code_action_icon = "💡",
+            code_action_prompt = {
+                enable = false,
+                sign = false,
+            },
+        })
     end)
 end
 
 function M.config_null_ls()
     utils.try_require("null-ls", function(null_ls)
         null_ls.setup({
-                on_attach = default_attach,
-                capabilities = merged_capabilities(),
-                sources = {
-                    -- Generic
-                    -- null_ls.builtins.formatting.preittier,
-                    -- null_ls.builtins.formatting.trim_whitespace,
-                    -- null_ls.builtins.formatting.trim_newlines,
-                    -- Fish
-                    -- null_ls.builtins.formatting.fish_indent,
-                    -- Python
-                    null_ls.builtins.formatting.reorder_python_imports,
-                    null_ls.builtins.formatting.black,
-                    null_ls.builtins.diagnostics.mypy,
-                    -- Go
-                    null_ls.builtins.diagnostics.golangci_lint,
-                    -- Text
-                    -- null_ls.builtins.code_actions.proselint,
-                    -- Ansible
-                    -- null_ls.builtins.diagnostics.ansiblelint,
-                    -- Shell
-                    null_ls.builtins.diagnostics.shellcheck,
-                    -- Rust
-                    -- null_ls.builtins.formatting.rustfmt,
-                    -- Lua
-                    null_ls.builtins.diagnostics.luacheck,
-                    null_ls.builtins.formatting.stylua,
-                },
-            })
-        end)
-    end
+            on_attach = default_attach,
+            capabilities = merged_capabilities(),
+            sources = {
+                -- Generic
+                -- null_ls.builtins.formatting.preittier,
+                -- null_ls.builtins.formatting.trim_whitespace,
+                -- null_ls.builtins.formatting.trim_newlines,
+                -- Fish
+                -- null_ls.builtins.formatting.fish_indent,
+                -- Python
+                null_ls.builtins.formatting.reorder_python_imports,
+                null_ls.builtins.formatting.black,
+                null_ls.builtins.diagnostics.mypy,
+                -- Go
+                null_ls.builtins.diagnostics.golangci_lint,
+                -- Text
+                -- null_ls.builtins.code_actions.proselint,
+                -- Ansible
+                -- null_ls.builtins.diagnostics.ansiblelint,
+                -- Shell
+                null_ls.builtins.diagnostics.shellcheck,
+                -- Rust
+                -- null_ls.builtins.formatting.rustfmt,
+                -- Lua
+                null_ls.builtins.diagnostics.luacheck,
+                null_ls.builtins.formatting.stylua,
+            },
+        })
+    end)
+end
 return M
