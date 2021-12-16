@@ -28,7 +28,7 @@ if vim.fn.has("nvim-0.6.0") ~= 1 then
     end
 end
 
-return require("packer").startup(function(use)
+return require("packer").startup({function(use)
     -- Load things faster!
     use({ "lewis6991/impatient.nvim", config = [[require('impatient')]] })
 
@@ -335,4 +335,11 @@ return require("packer").startup(function(use)
     if packer_bootstrap then
         require("packer").sync()
     end
-end)
+end,
+config = {
+    display = {
+        open_fn = function()
+            return require("packer.util").float({ border = "single" })
+        end,
+    },
+}})
