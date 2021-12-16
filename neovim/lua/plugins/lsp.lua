@@ -126,14 +126,18 @@ local function default_attach(client, bufnr)
     end
 end
 
-function M.config_lsp()
-    local lsp_config = require("lspconfig")
-
+local function merged_capabilities()
     -- Maybe update capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    if utils.is_plugin_loaded("cmp-nvim-lsp") then
-        capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
-    end
+    utils.try_require("cmp-nvim-lsp", function(cmp_nvim_lsp)
+        capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+    end)
+    return capabilities
+end
+
+function M.config_lsp()
+    local lsp_config = require("lspconfig")
+    local capabilities = merged_capabilities()
 
     -- Configure each server
     lsp_config.bashls.setup({ capabilities = capabilities, on_attach = default_attach })
@@ -150,9 +154,6 @@ function M.config_lsp()
             },
         },
     })
-    utils.try_require("null-ls", function()
-        lsp_config["null-ls"].setup({ capabilities = capabilities, on_attach = default_attach })
-    end)
 end
 
 function M.config_lsp_saga()
@@ -174,6 +175,8 @@ end
 function M.config_null_ls()
     utils.try_require("null-ls", function(null_ls)
         null_ls.setup({
+                on_attach = default_attach,
+                capabilities = merged_capabilities(),
                 sources = {
                     -- Generic
                     -- null_ls.builtins.formatting.preittier,
