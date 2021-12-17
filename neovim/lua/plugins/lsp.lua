@@ -137,24 +137,25 @@ local function merged_capabilities()
 end
 
 function M.config_lsp()
-    local lsp_config = require("lspconfig")
-    local capabilities = merged_capabilities()
+    utils.try_require("lspconfig", function(lsp_config)
+        local capabilities = merged_capabilities()
 
-    -- Configure each server
-    lsp_config.bashls.setup({ capabilities = capabilities, on_attach = default_attach })
-    lsp_config.gopls.setup({ capabilities = capabilities, on_attach = default_attach })
-    lsp_config.pyright.setup({ capabilities = capabilities, on_attach = default_attach })
-    lsp_config.rls.setup({
-        capabilities = capabilities,
-        on_attach = default_attach,
-        settings = {
-            rust = {
-                build_on_save = false,
-                all_features = true,
-                unstable_features = true,
+        -- Configure each server
+        lsp_config.bashls.setup({ capabilities = capabilities, on_attach = default_attach })
+        lsp_config.gopls.setup({ capabilities = capabilities, on_attach = default_attach })
+        lsp_config.pyright.setup({ capabilities = capabilities, on_attach = default_attach })
+        lsp_config.rls.setup({
+            capabilities = capabilities,
+            on_attach = default_attach,
+            settings = {
+                rust = {
+                    build_on_save = false,
+                    all_features = true,
+                    unstable_features = true,
+                },
             },
-        },
-    })
+        })
+    end)
 end
 
 function M.config_lsp_saga()
