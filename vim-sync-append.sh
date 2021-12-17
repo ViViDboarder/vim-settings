@@ -26,7 +26,7 @@ echo "Install all bundles"
 if hash nvim 2>/dev/null; then
     echo "If using Neovim, install the python modules in your environment"
     nvim --headless -c PlugInstall -c qall
-    nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerBootstrap"
+    nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerBootstrap" -c "PackerSync"
     nvim --headless -c "TSUpdateSync" -c "quitall"
 fi
 if hash vim 2>/dev/null; then
