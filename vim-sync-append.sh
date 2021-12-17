@@ -19,9 +19,7 @@ VIM_SYNC_DIR=$(pwd)
 
 # Neovim
 mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
-# TODO: check nvim version and link either the vim or neovim dirs
-# nvim --version | awk '/NVIM v/{ print $2; }'
-[ -f "$XDG_CONFIG_HOME/nvim" ] || ln -s "$VIM_SYNC_DIR/neovim" "$XDG_CONFIG_HOME/nvim"
+[ -e "$XDG_CONFIG_HOME/nvim" ] || ln -s "$VIM_SYNC_DIR/neovim" "$XDG_CONFIG_HOME/nvim"
 
 # Install all bundles
 echo "Install all bundles"
