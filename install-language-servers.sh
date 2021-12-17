@@ -72,7 +72,7 @@ function install_linters() {
     maybe_run pip3 install --user --upgrade proselint
 
     # Makefile
-    maybe_run go get -u github.com/mrtazz/checkmake
+    # maybe_run go install github.com/mrtazz/checkmake@latest
 
     # Lua
     maybe_run luarocks --local install luacheck
