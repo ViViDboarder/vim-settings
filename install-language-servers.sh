@@ -1,8 +1,14 @@
 #! /bin/bash
-set -e
 
 # Clear explicit PYTHONPATH since this gets confused between py2 and py3
 export PYTHONPATH=""
+
+# Ignore failed installs
+if [ -z "$IGNORE_MISSING" ]; then
+    set -e
+else
+    set +e
+fi
 
 # Determines if a command exists or not
 function command_exist() {
