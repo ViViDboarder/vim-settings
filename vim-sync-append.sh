@@ -25,7 +25,9 @@ mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
 echo "Install all bundles"
 if hash nvim 2>/dev/null; then
     echo "If using Neovim, install the python modules in your environment"
-    nvim +PlugInstall +qall
+    nvim --headless -c PlugInstall -c qall
+    nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerBootstrap"
+    nvim --headless -c "TSUpdateSync" -c "quitall"
 fi
 if hash vim 2>/dev/null; then
     vim +PlugInstall +qall
