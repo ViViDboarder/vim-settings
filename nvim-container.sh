@@ -14,9 +14,10 @@ fi
 docker run --interactive --rm --tty \
     --name "$container_name" \
     --env "VIM_COLOR=$VIM_COLOR" \
-    --volume "${container_name}-home:/home/vividboarder" \
+    --volume "${container_name}-home:/home/vividboarder/.data" \
     --volume "$(pwd):/home/vividboarder/data" \
     --workdir /home/vividboarder/data \
-    --entrypoint /vim-settings/docker-entry.sh \
-    vividboarder/my-neovim nvim "$@"
-    # --user "$(id -u):$(id -g)" \
+    --entrypoint /docker-entry.sh \
+    --user "$(id -u):$(id -g)" \
+    nvim "$@"
+    # vividboarder/my-neovim nvim "$@"

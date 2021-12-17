@@ -29,7 +29,9 @@ if hash nvim 2>/dev/null; then
     echo "If using Neovim, install the python modules in your environment"
     nvim +PlugInstall +qall
 fi
-vim +PlugInstall +qall
+if hash vim 2>/dev/null; then
+    vim +PlugInstall +qall
+fi
 
 
 echo "All done!"

@@ -2,6 +2,11 @@
 .DS_Store
 .pre_commit_env/
 tags
+neovim/backup/
+neovim/plugged/
+neovim/plugin/packer_compiled.lua
+neovim/spell/
+neovim/tmp/
 vim/.netrwhist
 vim/UltiSnips
 vim/autoload/plug.vim
@@ -14,5 +19,3 @@ vim/spell/
 vim/tmp/
 vim/tmp/viminfo.*
 vim/view/
-Dockerfile
-Makefile
