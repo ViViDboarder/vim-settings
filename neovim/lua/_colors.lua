@@ -6,7 +6,11 @@ function _G.update_colors()
         if changed or force then
             if scope == "g" and name == "colors_name" then
                 -- Colorscheme is different. Use this instead of setting colors_name directly
-                vim.cmd("colorscheme " .. val)
+                -- Try to set the colorscheme. If not loaded, skip the error
+                local status, _ = pcall(vim.cmd, "colorscheme " .. val)
+                if not status then
+                    vim.notify("Failed to set colorscheme to " .. val .. ". Maybe it's not yet loaded")
+                end
             else
                 vim[scope][name] = val
             end
