@@ -13,8 +13,10 @@ RUN apk add \
     py3-pip \
     python3 \
     rustup \
-    shellcheck \
     ;
+
+# Try to install shellcheck
+RUN test "$(uname -m)" = "x86_64" && apk add shellcheck || true
 
 # Install dependencies for python-language-server
 RUN apk add gcc g++ python3-dev
