@@ -207,4 +207,17 @@ function M.config_null_ls()
         })
     end)
 end
+
+function M.config_lsp_intaller()
+    utils.try_require("nvim-lsp-installer", function(lsp_installer)
+        lsp_installer.on_server_ready(function(server)
+            server:setup({
+                on_attach = default_attach,
+            })
+        end)
+    end, function()
+        print("nvim-lsp-installer not installed")
+    end)
+end
+
 return M

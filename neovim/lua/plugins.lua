@@ -189,6 +189,12 @@ return require("packer").startup({
         -- Configure language servers
         use("neovim/nvim-lspconfig")
 
+        -- Install language servers
+        use({
+            "williamboman/nvim-lsp-installer",
+            requires = "neovim/nvim-lspconfig",
+        })
+
         -- Better display of diagnostics
         use("folke/trouble.nvim")
 
