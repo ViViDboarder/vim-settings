@@ -24,7 +24,12 @@ function M.config_lsp_ui()
     end
 
     -- Diagnostics signs
-    local signs = { Error = "🔥", Warn = "⚠️", Hint = "🤔", Info = "➞" }
+    local signs = {
+        Error = "🔥",
+        Warn = "⚠️",
+        Hint = "🤔",
+        Info = "➞",
+    }
     for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
@@ -34,13 +39,8 @@ function M.config_lsp_ui()
         trouble.setup({
             fold_open = "▼",
             fold_closed = "▶",
-            signs = {
-                error = signs.Error,
-                warning = signs.Warning,
-                hint = signs.Hint,
-                information = signs.Info,
-                other = "",
-            },
+            icons = false,
+            use_diagnostic_signs = true,
         })
     end)
 end
