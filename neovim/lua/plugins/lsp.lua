@@ -215,8 +215,6 @@ function M.config_lsp_intaller()
                 on_attach = default_attach,
             })
         end)
-    end, function()
-        print("nvim-lsp-installer not installed")
     end)
 end
 
