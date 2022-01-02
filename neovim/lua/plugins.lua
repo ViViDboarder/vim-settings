@@ -348,6 +348,17 @@ return require("packer").startup({
             cmd = { "StartupTime" },
         })
 
+        -- Fancy todo highlighting
+        use({
+            "folke/todo-comments.nvim",
+            requires = {
+                "nvim-lua/plenary.nvim",
+            },
+            config = function()
+                require("plugins.todo")
+            end,
+        })
+
         -- Auto sync after bootstrapping on a fresh box
         if packer_bootstrap then
             require("packer").sync()
