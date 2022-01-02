@@ -2,6 +2,7 @@ local M = {}
 
 function M.config_cmp()
     local cmp = require("cmp")
+    local luasnip = require("luasnip")
     cmp.setup({
         completion = {
             completeopt = "menuone,noinsert,noselect",
@@ -19,6 +20,13 @@ function M.config_cmp()
         mapping = {
             ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
             ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+            ["<Tab>"] = cmp.mapping(function(fallback)
+                if luasnip.expand_or_jumpable() then
+                    luasnip.expand_or_jump()
+                else
+                    fallback()
+                end
+            end),
             ["<C-Space>"] = cmp.mapping(function()
                 if cmp.visible() then
                     cmp.select_next_item()
