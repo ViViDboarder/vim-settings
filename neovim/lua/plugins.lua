@@ -197,7 +197,10 @@ return require("packer").startup({
             requires = "neovim/nvim-lspconfig",
         })
 
-        -- Better display of diagnostics
+        -- Lua dev for vim
+        use("folke/lua-dev.nvim")
+
+        -- Better display of lsp diagnostics
         use("folke/trouble.nvim")
 
         -- Generic linter/formatters in diagnostics API

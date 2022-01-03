@@ -220,12 +220,45 @@ function M.config_null_ls()
     end)
 end
 
+local function get_luadev_config()
+    local luadev = utils.try_require("lua-dev")
+    if luadev ~= nil then
+        return luadev.setup({
+            -- add any options here, or leave empty to use the default settings
+            lspconfig = {
+                on_attach = default_attach,
+                settings = {
+                    Lua = {
+                        completion = {
+                            callSnippet = "Disable",
+                            keywordSnippet = "Disable",
+                        },
+                    },
+                },
+            },
+        })
+    end
+
+    return nil
+end
+
 function M.config_lsp_intaller()
     utils.try_require("nvim-lsp-installer", function(lsp_installer)
+        -- Default options
+        local opts = {
+            on_attach = default_attach,
+        }
+
         lsp_installer.on_server_ready(function(server)
-            server:setup({
-                on_attach = default_attach,
-            })
+            -- Config luadev opts
+            if server.name == "sumneko_lua" then
+                local luadev = get_luadev_config()
+                if luadev ~= nil then
+                    opts.settings = luadev.settings
+                    print(vim.inspect(opts.settings.Lua))
+                end
+            end
+            server:setup(opts)
         end)
     end)
 end
