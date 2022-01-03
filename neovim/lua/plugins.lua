@@ -16,15 +16,17 @@ local function config_dark_notify()
     })
 end
 
--- Pin version dependent packages
+-- Pin version dependent packages due to unstable APIs
 local pinned_commits = {}
 if vim.fn.has("nvim-0.6.0") ~= 1 then
     if vim.fn.has("nvim-0.5.1") == 1 then
         -- Last commit compatible with 0.5.1
         pinned_commits["telescope"] = "80cdb00b221f69348afc4fb4b701f51eb8dd3120"
+        pinned_commits["null-ls"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e"
     elseif vim.fn.has("nvim-0.5.0") == 1 then
-        -- Last commit compatible with 0.5.1
+        -- Last commit compatible with 0.5.0
         pinned_commits["telescope"] = "587a10d1494d8ffa1229246228f0655db2f0a48a"
+        pinned_commits["null-ls"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81"
     end
 end
 
@@ -201,6 +203,7 @@ return require("packer").startup({
         -- Generic linter/formatters in diagnostics API
         use({
             "jose-elias-alvarez/null-ls.nvim",
+            commit = pinned_commits["null-ls"],
             requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         })
 
