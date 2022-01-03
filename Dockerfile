@@ -63,12 +63,6 @@ RUN nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quital
 
 # Create persistent data dir
 RUN mkdir -p /home/vividboarder/.data
-# VOLUME /home/vividboarder/.data
-
-# Make home dir read/write for everyone
-# RUN chown -R ":users" /home/vividboarder
-# RUN chmod -R a+rw /home/vividboarder
-# RUN chmod -R a-s /home/vividboarder
 
 # Generate workdir
 RUN mkdir /home/vividboarder/data

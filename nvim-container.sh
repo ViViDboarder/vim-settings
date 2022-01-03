@@ -22,5 +22,4 @@ docker run --interactive --rm --tty \
     --entrypoint /docker-entry.sh \
     --user "vividboarder:$(id -g)" \
     --group-add users \
-    nvim "$@"
-    # vividboarder/my-neovim nvim "$@"
+    vividboarder/my-neovim nvim "$@"
