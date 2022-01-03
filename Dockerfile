@@ -8,11 +8,13 @@ RUN apk add \
     git \
     go \
     make \
-    neovim \
     npm \
     py3-pip \
     python3 \
     ;
+
+# Install neovim from edge repo for latest
+RUN apk add neovim --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Try to install shellcheck
 RUN test "$(uname -m)" = "x86_64" && apk add shellcheck || true
