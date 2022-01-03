@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -24,8 +24,8 @@ repos:
           - --
         language: system
         types: [file, lua]
-  - repo: https://github.com/IamTheFij/StyLua
-    rev: pre-commit-hook
+  - repo: https://github.com/johnnymorganz/stylua
+    rev: v0.11.3
     hooks:
       - id: stylua
         args: ["--indent-type", "Spaces"]
