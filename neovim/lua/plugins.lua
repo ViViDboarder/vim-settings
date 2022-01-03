@@ -234,7 +234,7 @@ return require("packer").startup({
             "nvim-treesitter/nvim-treesitter",
             run = ":TSUpdate",
             config = function()
-                require("utils").require_with_local("plugins.treesitter")
+                require("plugins.treesitter").setup()
             end,
         })
         use({

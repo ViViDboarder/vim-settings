@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -ex
+
 if ! docker image ls -q nvim > /dev/null ;then
     echo "no nvim image found"
     exit 1
@@ -18,6 +20,7 @@ docker run --interactive --rm --tty \
     --volume "$(pwd):/home/vividboarder/data" \
     --workdir /home/vividboarder/data \
     --entrypoint /docker-entry.sh \
-    --user "$(id -u):$(id -g)" \
+    --user "vividboarder:$(id -g)" \
+    --group-add users \
     nvim "$@"
     # vividboarder/my-neovim nvim "$@"

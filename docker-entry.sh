@@ -17,9 +17,15 @@ VOLUME_DATA=/home/vividboarder/.data
 [ -d "$VOLUME_DATA/nvim/backup" ] || mkdir -p "$VOLUME_DATA/nvim/backup"
 [ -d "$XDG_CONFIG_HOME/nvim/backup" ] || ln -s "$VOLUME_DATA/nvim/backup" "$XDG_CONFIG_HOME/nvim/backup"
 
-TS_PARSERS="share/nvim/site/pack/packer/start/nvim-treesitter/parser"
-[ -d "$VOLUME_DATA/ts-parsers" ] || mkdir -p "$VOLUME_DATA/ts-parsers"
-rm -fr "$HOME/.local/$TS_PARSERS" || ln -s "$VOLUME_DATA/ts-parsers" "$HOME/.local/$TS_PARSERS"
+# TS_PARSERS="$HOME/.local/share/nvim/site/pack/packer/start/nvim-treesitter/parser"
+# [ -d "$VOLUME_DATA/ts-parsers" ] || mkdir -p "$VOLUME_DATA/ts-parsers"
+# rm -fr "$TS_PARSERS"
+# ln -s "$VOLUME_DATA/ts-parsers" "$TS_PARSERS"
+#
+# TS_PARSERS="$HOME/.local/share/nvim/site/parser"
+# [ -d "$VOLUME_DATA/ts-parsers" ] || mkdir -p "$VOLUME_DATA/ts-parsers"
+# rm -fr "$TS_PARSERS"
+# ln -s "$VOLUME_DATA/ts-parsers" "$TS_PARSERS"
 
 if [ "$1" == "bash" ]; then
     exec "$@"

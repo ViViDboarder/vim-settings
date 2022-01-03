@@ -26,17 +26,13 @@ RUN apk add gcc g++ python3-dev
 RUN pip3 install pynvim
 
 # Create user
-RUN adduser -D -h /home/vividboarder -s /bin/bash vividboarder
+RUN adduser -D -h /home/vividboarder -s /bin/bash --ingroup users vividboarder
 USER vividboarder
 
 WORKDIR /home/vividboarder
 ENV HOME /home/vividboarder
 ENV XDG_CONFIG_HOME $HOME/.config
 RUN mkdir -p $XDG_CONFIG_HOME
-
-# Create persistent data dir
-RUN mkdir -p /home/vividboarder/.data
-VOLUME /home/vividboarder/.data
 
 # Configure go path
 ENV GOPATH $HOME/go
@@ -50,18 +46,27 @@ ENV PATH $PATH:$NPM_PACKAGES/bin
 ENV PATH $HOME/.local/bin:$PATH
 
 # Install Language servers
-COPY --chown=vividboarder:vividboarder ./install-language-servers.sh ./
+COPY --chown=vividboarder:users ./install-language-servers.sh ./
 RUN ./install-language-servers.sh
 # Install golangci-lint
 RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $GOPATH/bin v1.43.0
 
 # Add config
-COPY --chown=vividboarder:vividboarder ./neovim $HOME/.config/nvim
+COPY --chown=vividboarder:users ./neovim $HOME/.config/nvim
 
 # Sync packer plugins
 RUN nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerBootstrap"
-# This may not actually do anyting. Haven't figured out how to get compiled ts files into the image
-RUN nvim --headless -c "TSUpdateSync" -c "quitall"
+# Bootstrap treesitter parsers
+RUN nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quitall
+
+# Create persistent data dir
+RUN mkdir -p /home/vividboarder/.data
+# VOLUME /home/vividboarder/.data
+
+# Make home dir read/write for everyone
+# RUN chown -R ":users" /home/vividboarder
+# RUN chmod -R a+rw /home/vividboarder
+# RUN chmod -R a-s /home/vividboarder
 
 # Generate workdir
 RUN mkdir /home/vividboarder/data
