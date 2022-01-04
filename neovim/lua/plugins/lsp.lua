@@ -255,7 +255,6 @@ function M.config_lsp_intaller()
                 local luadev = get_luadev_config()
                 if luadev ~= nil then
                     opts.settings = luadev.settings
-                    print(vim.inspect(opts.settings.Lua))
                 end
             end
             server:setup(opts)
