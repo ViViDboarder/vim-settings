@@ -108,7 +108,7 @@ return require("packer").startup({
         use({
             "FooSoft/vim-argwrap",
             config = function()
-                vim.api.nvim_set_keymap("n", "<Leader>a", ":ArgWrap<CR>", { silent = true, noremap = true })
+                vim.api.nvim_set_keymap("n", "<Leader>a", "<cmd>ArgWrap<CR>", { silent = true, noremap = true })
             end,
         })
 
