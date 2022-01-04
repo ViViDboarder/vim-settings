@@ -12,7 +12,6 @@ local map = vim.api.nvim_set_keymap
 local opt_silent = { silent = true }
 map("n", "gs", "<plug>(GrepperOperator)", opt_silent)
 map("x", "gs", "<plug>(GrepperOperator)", opt_silent)
-map("n", "<leader>*", ":Grepper -cword -noprompt<cr>", opt_silent)
 
 -- Override Todo command to use Grepper
 vim.cmd("command! Todo :Grepper -noprompt -query TODO")
