@@ -115,6 +115,14 @@ return require("packer").startup({
         -- Adds git operations to vim
         use({
             "tpope/vim-fugitive",
+            config = function()
+                local opts = { silent = true, noremap = true }
+                vim.api.nvim_set_keymap("n", "gb", "<cmd>Gblame<CR>", opts)
+                vim.api.nvim_set_keymap("n", "gc", "<cmd>Gcommit<CR>", opts)
+                vim.api.nvim_set_keymap("n", "gd", "<cmd>Gdiff<CR>", opts)
+                vim.api.nvim_set_keymap("n", "gs", "<cmd>Git<CR>", opts)
+                vim.api.nvim_set_keymap("n", "gw", "<cmd>Gwrite<CR>", opts)
+            end,
         })
 
         -- Quick toggling of Location and Quickfix lists
