@@ -1,11 +1,6 @@
 #! /bin/bash
 
-set -ex
-
-if ! docker image ls -q nvim > /dev/null ;then
-    echo "no nvim image found"
-    exit 1
-fi
+set -e
 
 container_name=nvim-$USER
 
@@ -15,11 +10,11 @@ fi
 
 docker run --interactive --rm --tty \
     --name "$container_name" \
-    --env "VIM_COLOR=$VIM_COLOR" \
+    --env "NVIM_COLOR=$NVIM_COLOR" \
     --volume "${container_name}-home:/home/vividboarder/.data" \
     --volume "$(pwd):/home/vividboarder/data" \
     --workdir /home/vividboarder/data \
     --entrypoint /docker-entry.sh \
     --user "vividboarder:$(id -g)" \
     --group-add users \
-    vividboarder/my-neovim nvim "$@"
+    vividboarder/my-neovim "$@"

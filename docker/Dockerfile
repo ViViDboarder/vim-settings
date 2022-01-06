@@ -7,6 +7,7 @@ RUN apk add \
     curl \
     git \
     go \
+    luarocks \
     make \
     npm \
     py3-pip \
@@ -68,5 +69,5 @@ RUN mkdir -p /home/vividboarder/.data
 RUN mkdir /home/vividboarder/data
 WORKDIR /home/vividboarder/data
 
-COPY docker-entry.sh /docker-entry.sh
+COPY ./docker/docker-entry.sh /docker-entry.sh
 ENTRYPOINT /docker-entry.sh

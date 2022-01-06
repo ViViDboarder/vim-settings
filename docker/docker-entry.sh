@@ -1,6 +1,6 @@
 #! /bin/bash
 
-set -ex
+set -e
 
 VOLUME_DATA=/home/vividboarder/.data
 [ -d "$VOLUME_DATA/nvim/backup" ] || mkdir -p "$VOLUME_DATA/nvim/backup"

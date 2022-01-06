@@ -50,12 +50,14 @@ check: $(PRE_COMMIT_ENV_BIN)/pre-commit
 .PHONY: docker-build
 docker-build:
 	docker build \
+		-f ./docker/Dockerfile \
 		--tag vividboarder/my-neovim .
 
 # Build Docker images
 .PHONY: docker-build-all
 docker-build-all:
 	docker buildx build \
+		-f ./docker/Dockerfile \
 		--platform linux/arm,linux/arm64,linux/amd64 \
 		--tag vividboarder/my-neovim .
 
@@ -63,6 +65,7 @@ docker-build-all:
 .PHONY: docker-build-push
 docker-build-push:
 	docker buildx build \
+		-f ./docker/Dockerfile \
 		--push \
 		--platform linux/arm,linux/arm64,linux/amd64 \
 		--tag vividboarder/my-neovim .
