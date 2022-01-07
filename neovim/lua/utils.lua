@@ -95,7 +95,7 @@ end
 
 -- Returns whether or not packer plugin is loaded
 function M.is_plugin_loaded(name)
-    return _G["packer_plugins"] and packer_plugins[name] and packer_plugins[name].loaded
+    return _G["packer_plugins"] and _G["packer_plugins"][name] and _G["packer_plugins"][name].loaded
 end
 
 -- Try to require something and perform some action if it was found
