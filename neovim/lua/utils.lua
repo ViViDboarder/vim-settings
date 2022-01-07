@@ -116,4 +116,88 @@ function M.try_require(name, on_found, on_notfound)
     end
 end
 
+-- Compare sequenced integers used to compare versions. Eg {0, 6, 0}
+function M.cmp_versions(a, b)
+    for i, part_a in pairs(a) do
+        local part_b = b[i]
+        if part_b == nil or part_a > part_b then
+            return 1
+        elseif part_a < part_b then
+            return -1
+        end
+    end
+
+    return 0
+end
+
+-- Checks if a list contains a value
+function M.list_contains(list, value)
+    for _, v in pairs(list) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+-- Materializes an iterator into a list
+function M.materialize_list(list, iterator)
+    if iterator == nil then
+        iterator = list
+        list = {}
+    end
+    for item in iterator do
+        table.insert(list, item)
+    end
+
+    return list
+end
+
+-- Maps a set of version rules to a value eg. [">0.5.0"] = "has 0.5.0"
+-- If more than one rule matches, the one with the greatest version number is used
+function M.map_version_rule(rules)
+    local v = vim.version()
+    local current_version = { v.major, v.minor, v.patch }
+
+    -- Parse a constraint and version of a string
+    local parse_rule = function(rule_string)
+        local cmp, major, minor, patch = string.gmatch(rule_string, "([=<>]+)(%d+).(%d+).(%d+)")()
+        return cmp, tonumber(major), tonumber(minor), tonumber(patch)
+    end
+
+    -- Checks if a constraint matches the current nvim instance
+    local matches = function(cmp, major, minor, patch)
+        local c = M.cmp_versions(current_version, { major, minor, patch })
+        if c == 1 then
+            if M.list_contains({ ">", ">=" }, cmp) then
+                return true
+            end
+        elseif c == 0 then
+            if M.list_contains({ "==", ">=", "<=" }, cmp) then
+                return true
+            end
+        elseif c == -1 then
+            if M.list_contains({ "<", "<=" }, cmp) then
+                return true
+            end
+        end
+        return false
+    end
+
+    local latest_version, latest_value = nil, nil
+    for rule, value in pairs(rules) do
+        local cmp, major, minor, patch = parse_rule(rule)
+        if matches(cmp, major, minor, patch) then
+            -- If the rule matches and the version that it matches is greater than the previous matches, save it
+            if latest_version == nil or M.cmp_versions({ major, minor, patch }, latest_version) == 1 then
+                latest_version = { major, minor, patch }
+                latest_value = value
+            end
+        end
+    end
+
+    -- Return highest versioned matched value
+    return latest_value
+end
+
 return M

@@ -1,4 +1,5 @@
 -- Install packer
+local utils = require("utils")
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
 local packer_bootstrap = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -14,20 +15,6 @@ local function config_dark_notify()
             _G.update_colors()
         end,
     })
-end
-
--- Pin version dependent packages due to unstable APIs
-local pinned_commits = {}
-if vim.fn.has("nvim-0.6.0") ~= 1 then
-    if vim.fn.has("nvim-0.5.1") == 1 then
-        -- Last commit compatible with 0.5.1
-        pinned_commits["telescope"] = "80cdb00b221f69348afc4fb4b701f51eb8dd3120"
-        pinned_commits["null-ls"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e"
-    elseif vim.fn.has("nvim-0.5.0") == 1 then
-        -- Last commit compatible with 0.5.0
-        pinned_commits["telescope"] = "587a10d1494d8ffa1229246228f0655db2f0a48a"
-        pinned_commits["null-ls"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81"
-    end
 end
 
 return require("packer").startup({
@@ -214,7 +201,11 @@ return require("packer").startup({
         -- Generic linter/formatters in diagnostics API
         use({
             "jose-elias-alvarez/null-ls.nvim",
-            commit = pinned_commits["null-ls"],
+            commit = utils.map_version_rule({
+                [">=0.6.0"] = nil,
+                [">=0.5.1"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e",
+                [">=0.5.0"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81",
+            }),
             requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
         })
 
@@ -289,7 +280,11 @@ return require("packer").startup({
                 "nvim-lua/plenary.nvim",
                 "nvim-lua/popup.nvim",
             },
-            commit = pinned_commits["telescope"],
+            commit = utils.map_version_rule({
+                [">=0.6.0"] = nil,
+                [">=0.5.1"] = "80cdb00b221f69348afc4fb4b701f51eb8dd3120",
+                [">=0.5.0"] = "587a10d1494d8ffa1229246228f0655db2f0a48a",
+            }),
             config = function()
                 require("plugins.telescope")
             end,
