@@ -55,6 +55,14 @@ local function default_attach(client, bufnr)
 
     buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
+    if resolved_capabilities.goto_definition then
+        buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+    end
+    
+    if resolved_capabilities.document_formatting then
+        buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+    end
+
     -- Mappings
     -- TODO: Maybe prefix all of these for easier discovery
     local opts = { noremap = true, silent = true }
