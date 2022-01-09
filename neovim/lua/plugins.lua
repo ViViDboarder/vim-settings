@@ -280,10 +280,10 @@ return require("packer").startup({
                 "nvim-lua/plenary.nvim",
                 "nvim-lua/popup.nvim",
             },
-            commit = utils.map_version_rule({
+            tag = utils.map_version_rule({
                 [">=0.6.0"] = nil,
-                [">=0.5.1"] = "80cdb00b221f69348afc4fb4b701f51eb8dd3120",
-                [">=0.5.0"] = "587a10d1494d8ffa1229246228f0655db2f0a48a",
+                ["<0.6.0"] = "nvim-0.5.1",
+                ["==0.5.0"] = "nvim-0.5.0",
             }),
             config = function()
                 require("plugins.telescope")
