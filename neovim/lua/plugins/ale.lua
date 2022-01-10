@@ -10,6 +10,9 @@ vim.g.ale_linters = {
     -- sh = {'language_server', 'shell', 'shellcheck'},
     sh = {},
     text = {},
+    markdown = {},
+    fish = {},
+    ansible = {},
 }
 vim.g.ale_linter_aliases = {
     markdown = { "text" },

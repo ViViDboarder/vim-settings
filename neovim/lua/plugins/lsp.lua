@@ -214,11 +214,11 @@ function M.config_null_ls()
 
         local sources = {
             -- Generic
-            -- null_ls.builtins.formatting.preittier,
-            -- null_ls.builtins.formatting.trim_whitespace,
-            -- null_ls.builtins.formatting.trim_newlines,
+            null_ls.builtins.formatting.preittier,
+            null_ls.builtins.formatting.trim_whitespace,
+            null_ls.builtins.formatting.trim_newlines,
             -- Fish
-            -- null_ls.builtins.formatting.fish_indent,
+            null_ls.builtins.formatting.fish_indent,
             -- Python
             null_ls.builtins.formatting.reorder_python_imports,
             null_ls.builtins.formatting.black,
@@ -231,7 +231,7 @@ function M.config_null_ls()
             null_ls.builtins.code_actions.proselint,
             alex_lint,
             -- Ansible
-            -- null_ls.builtins.diagnostics.ansiblelint,
+            null_ls.builtins.diagnostics.ansiblelint,
             -- Shell
             null_ls.builtins.diagnostics.shellcheck,
             -- Rust
