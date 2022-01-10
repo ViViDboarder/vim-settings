@@ -239,6 +239,8 @@ function M.config_null_ls()
             -- Lua
             null_ls.builtins.diagnostics.luacheck,
             null_ls.builtins.formatting.stylua,
+            -- Docker
+            null_ls.builtins.diagnostics.hadolint,
         }
 
         -- HACK: Handle old versions of null_ls for vim < 0.6 that don't support `setup`

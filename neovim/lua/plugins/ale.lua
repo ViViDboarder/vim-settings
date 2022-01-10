@@ -13,6 +13,7 @@ vim.g.ale_linters = {
     markdown = {},
     fish = {},
     ansible = {},
+    dockerfile = {},
 }
 vim.g.ale_linter_aliases = {
     markdown = { "text" },
