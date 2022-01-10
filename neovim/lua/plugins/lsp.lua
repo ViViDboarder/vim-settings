@@ -53,14 +53,13 @@ local function default_attach(client, bufnr)
         vim.api.nvim_buf_set_option(bufnr, ...)
     end
 
+    -- Set built in features to use lsp functions
     buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-
-    if resolved_capabilities.goto_definition then
-        buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+    if client.resolved_capabilities.goto_definition then
+        buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
     end
-    
-    if resolved_capabilities.document_formatting then
-        buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+    if client.resolved_capabilities.document_formatting then
+        buf_set_option("formatexpr", "v:lua.vim.lsp.formatexpr()")
     end
 
     -- Mappings
