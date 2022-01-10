@@ -101,12 +101,18 @@ function install_fixers() {
     maybe_run rustup component add rustfmt
 
     # Lua
-    maybe_run cargo install stylua
+    if ! release-gitter --git-url "https://github.com/JohnnyMorganz/StyLua" \
+        --map-system Windows=win64 --map-system Linux=linux --map-system Darwin=macos \
+        -x -c "chmod +x ~/bin/stylua" "stylua-{version}-{system}.zip" ~/bin ; then
+        maybe_run cargo install stylua
+    fi
 
     echo ""
 }
 
 function main() {
+    maybe_run pip3 install --user --upgrade release-gitter
+
     install_language_servers
     install_linters
     install_fixers
