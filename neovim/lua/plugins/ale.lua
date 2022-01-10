@@ -9,7 +9,7 @@ vim.g.ale_linters = {
     lua = {},
     -- sh = {'language_server', 'shell', 'shellcheck'},
     sh = {},
-    text = { "proselint", "alex" },
+    text = {},
 }
 vim.g.ale_linter_aliases = {
     markdown = { "text" },

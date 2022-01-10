@@ -189,6 +189,29 @@ end
 
 function M.config_null_ls()
     utils.try_require("null-ls", function(null_ls)
+        local helpers = require("null-ls.helpers")
+        local alex_lint = {
+            name = "alex",
+            method = null_ls.methods.DIAGNOSTICS,
+            filetypes = { "markdown" },
+            generator = null_ls.generator({
+                command = "alex",
+                args = { "--stdin", "--quiet" },
+                to_stdin = true,
+                from_stderr = true,
+                format = "line",
+                check_exit_code = function(code)
+                    return code <= 1
+                end,
+                on_output = helpers.diagnostics.from_patterns({
+                    {
+                        pattern = [[ *(%d+):(%d+)-(%d+):(%d+) *(%w+) *(.+) +[%w]+ +([-%l]+)]],
+                        groups = { "row", "col", "end_row", "end_col", "severity", "message", "code" },
+                    },
+                }),
+            }),
+        }
+
         local sources = {
             -- Generic
             -- null_ls.builtins.formatting.preittier,
@@ -203,7 +226,10 @@ function M.config_null_ls()
             -- Go
             null_ls.builtins.diagnostics.golangci_lint,
             -- Text
-            -- null_ls.builtins.code_actions.proselint,
+            null_ls.builtins.diagnostics.proselint,
+            -- null_ls.builtins.diagnostics.write_good,
+            null_ls.builtins.code_actions.proselint,
+            alex_lint,
             -- Ansible
             -- null_ls.builtins.diagnostics.ansiblelint,
             -- Shell
