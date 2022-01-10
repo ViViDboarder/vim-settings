@@ -214,7 +214,7 @@ function M.config_null_ls()
 
         local sources = {
             -- Generic
-            null_ls.builtins.formatting.preittier,
+            null_ls.builtins.formatting.prettier,
             null_ls.builtins.formatting.trim_whitespace,
             null_ls.builtins.formatting.trim_newlines,
             -- Fish
