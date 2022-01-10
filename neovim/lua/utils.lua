@@ -200,4 +200,17 @@ function M.map_version_rule(rules)
     return latest_value
 end
 
+function M.keymap_group(mode, prefix, opts, bufnr)
+    local map_fn = vim.api.nvim_set_keymap
+    if bufnr ~= nil then
+        map_fn = function(...)
+            return vim.api.nvim_buf_set_keymap(bufnr, ...)
+        end
+    end
+
+    return function(keys, rhs, new_opts)
+        map_fn(mode, prefix .. keys, rhs, new_opts or opts)
+    end
+end
+
 return M

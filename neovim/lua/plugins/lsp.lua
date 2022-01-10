@@ -65,6 +65,12 @@ local function default_attach(client, bufnr)
     -- Mappings
     -- TODO: Maybe prefix all of these for easier discovery
     local opts = { noremap = true, silent = true }
+
+    local lsp_keymap = utils.keymap_group("n", "<leader>l", opts, bufnr)
+    lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
+    lsp_keymap("r", "<cmd>lua vim.lsp.buf.rename()<CR>")
+    lsp_keymap("e", "<cmd>lua vim.lsp.diagnostics.show_line_diagnostics()<CR>")
+
     buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
     buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
     buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
