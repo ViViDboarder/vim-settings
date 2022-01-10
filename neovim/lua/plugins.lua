@@ -368,6 +368,22 @@ return require("packer").startup({
             end,
         })
 
+        -- Fancy notifications
+        use({
+            "rcarriga/nvim-notify",
+            config = function()
+                require("notify").setup({
+                    icons = {
+                        ERROR = "🔥",
+                        WARN = "⚠️",
+                        DEBUG = "🤔",
+                        INFO = "*",
+                    },
+                })
+                vim.notify = require("notify")
+            end,
+        })
+
         -- Auto sync after bootstrapping on a fresh box
         if packer_bootstrap then
             require("packer").sync()
