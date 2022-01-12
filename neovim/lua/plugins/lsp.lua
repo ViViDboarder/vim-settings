@@ -45,71 +45,81 @@ function M.config_lsp_ui()
     end)
 end
 
-local function default_attach(client, bufnr)
-    local function buf_set_keymap(...)
-        vim.api.nvim_buf_set_keymap(bufnr, ...)
-    end
-    local function buf_set_option(...)
-        vim.api.nvim_buf_set_option(bufnr, ...)
-    end
+local function get_default_attach(override_capabilities)
+    return function(client, bufnr)
+        -- Allow overriding capabilities to avoid duplicate lsps with capabilities
+        if override_capabilities ~= nil then
+            client.resolved_capabilities = vim.tbl_extend(
+                "force",
+                client.resolved_capabilities,
+                override_capabilities or {}
+            )
+        end
 
-    -- Set built in features to use lsp functions
-    buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-    if client.resolved_capabilities.goto_definition then
-        buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
-    end
-    if client.resolved_capabilities.document_formatting then
-        buf_set_option("formatexpr", "v:lua.vim.lsp.formatexpr()")
-    end
+        local function buf_set_keymap(...)
+            vim.api.nvim_buf_set_keymap(bufnr, ...)
+        end
+        local function buf_set_option(...)
+            vim.api.nvim_buf_set_option(bufnr, ...)
+        end
 
-    -- Mappings
-    -- TODO: Maybe prefix all of these for easier discovery
-    local opts = { noremap = true, silent = true }
+        -- Set built in features to use lsp functions
+        buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+        if client.resolved_capabilities.goto_definition then
+            buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
+        end
+        if client.resolved_capabilities.document_formatting then
+            buf_set_option("formatexpr", "v:lua.vim.lsp.formatexpr()")
+        end
 
-    local lsp_keymap = utils.keymap_group("n", "<leader>l", opts, bufnr)
-    lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
-    lsp_keymap("r", "<cmd>lua vim.lsp.buf.rename()<CR>")
-    lsp_keymap("e", "<cmd>lua vim.lsp.diagnostics.show_line_diagnostics()<CR>")
+        -- Mappings
+        -- TODO: Maybe prefix all of these for easier discovery
+        local opts = { noremap = true, silent = true }
 
-    buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-    buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
-    buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
-    buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-    buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-    buf_set_keymap("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-    buf_set_keymap("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-    buf_set_keymap("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-    buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-    buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-    buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-    buf_set_keymap("n", "<leader>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
-    buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-    buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
-    buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
+        local lsp_keymap = utils.keymap_group("n", "<leader>l", opts, bufnr)
+        lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
+        lsp_keymap("r", "<cmd>lua vim.lsp.buf.rename()<CR>")
+        lsp_keymap("e", "<cmd>lua vim.lsp.diagnostics.show_line_diagnostics()<CR>")
 
-    -- Open diagnostic on hold
-    if vim["diagnostic"] ~= nil then
-        vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
-    end
+        buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+        buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
+        buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
+        buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+        buf_set_keymap("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+        buf_set_keymap("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+        buf_set_keymap("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+        buf_set_keymap("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
+        buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+        buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+        buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+        buf_set_keymap("n", "<leader>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
+        buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+        buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+        buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
-    -- Set some keybinds conditional on server capabilities
-    if client.resolved_capabilities.document_formatting then
-        buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-        vim.cmd([[
+        -- Open diagnostic on hold
+        if vim["diagnostic"] ~= nil then
+            vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
+        end
+
+        -- Set some keybinds conditional on server capabilities
+        if client.resolved_capabilities.document_formatting then
+            buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+            vim.cmd([[
             augroup lsp_format
                 autocmd!
                 autocmd BufWritePre *.rs,*.go,*.sh lua vim.lsp.buf.formatting_sync(nil, 1000)
                 " autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
             augroup END
         ]])
-    end
-    if client.resolved_capabilities.document_range_formatting then
-        buf_set_keymap("n", "<leader>lfr", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-    end
+        end
+        if client.resolved_capabilities.document_range_formatting then
+            buf_set_keymap("n", "<leader>lfr", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+        end
 
-    -- Set autocommands conditional on server_capabilities
-    if client.resolved_capabilities.document_highlight then
-        vim.cmd([[
+        -- Set autocommands conditional on server_capabilities
+        if client.resolved_capabilities.document_highlight then
+            vim.cmd([[
         :hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
         :hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
         :hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
@@ -119,24 +129,25 @@ local function default_attach(client, bufnr)
             autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
         augroup END
         ]])
-    end
+        end
 
-    -- Some override some fuzzy finder bindings to use lsp sources
-    if utils.try_require("telescope.nvim") ~= nil then
-        buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
-        buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
-    end
+        -- Some override some fuzzy finder bindings to use lsp sources
+        if utils.try_require("telescope.nvim") ~= nil then
+            buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+            buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+        end
 
-    -- Use LspSaga features, if possible
-    if utils.is_plugin_loaded("lspsaga.nvim") then
-        buf_set_keymap("n", "K", "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-        buf_set_keymap("n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-        buf_set_keymap("n", "<leader>e", "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
-        buf_set_keymap("n", "[d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
-        buf_set_keymap("n", "]d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
-        buf_set_keymap("n", "<C-k>", "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
-        -- Code actions
-        buf_set_keymap("n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+        -- Use LspSaga features, if possible
+        if utils.is_plugin_loaded("lspsaga.nvim") then
+            buf_set_keymap("n", "K", "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
+            buf_set_keymap("n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
+            buf_set_keymap("n", "<leader>e", "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
+            buf_set_keymap("n", "[d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
+            buf_set_keymap("n", "]d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
+            buf_set_keymap("n", "<C-k>", "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
+            -- Code actions
+            buf_set_keymap("n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
+        end
     end
 end
 
@@ -153,13 +164,19 @@ function M.config_lsp()
     utils.try_require("lspconfig", function(lsp_config)
         local capabilities = merged_capabilities()
 
+        -- Config null-ls
+        require("plugins.null-ls").configure({ capabilities = capabilities, on_attach = get_default_attach() })
+
+        -- Attach options to disable formatting
+        local no_format = { document_formatting = false, document_range_formatting = false }
+
         -- Configure each server
-        lsp_config.bashls.setup({ capabilities = capabilities, on_attach = default_attach })
-        lsp_config.gopls.setup({ capabilities = capabilities, on_attach = default_attach })
-        lsp_config.pyright.setup({ capabilities = capabilities, on_attach = default_attach })
+        lsp_config.bashls.setup({ capabilities = capabilities, on_attach = get_default_attach() })
+        lsp_config.gopls.setup({ capabilities = capabilities, on_attach = get_default_attach(no_format) })
+        lsp_config.pyright.setup({ capabilities = capabilities, on_attach = get_default_attach(no_format) })
         lsp_config.rls.setup({
             capabilities = capabilities,
-            on_attach = default_attach,
+            on_attach = get_default_attach(no_format),
             settings = {
                 rust = {
                     build_on_save = false,
@@ -187,87 +204,13 @@ function M.config_lsp_saga()
     end)
 end
 
-function M.config_null_ls()
-    utils.try_require("null-ls", function(null_ls)
-        local helpers = require("null-ls.helpers")
-        local alex_lint = {
-            name = "alex",
-            method = null_ls.methods.DIAGNOSTICS,
-            filetypes = { "markdown" },
-            generator = null_ls.generator({
-                command = "alex",
-                args = { "--stdin", "--quiet" },
-                to_stdin = true,
-                from_stderr = true,
-                format = "line",
-                check_exit_code = function(code)
-                    return code <= 1
-                end,
-                on_output = helpers.diagnostics.from_patterns({
-                    {
-                        pattern = [[ *(%d+):(%d+)-(%d+):(%d+) *(%w+) *(.+) +[%w]+ +([-%l]+)]],
-                        groups = { "row", "col", "end_row", "end_col", "severity", "message", "code" },
-                    },
-                }),
-            }),
-        }
-
-        local sources = {
-            -- Generic
-            null_ls.builtins.formatting.prettier,
-            null_ls.builtins.formatting.trim_whitespace,
-            null_ls.builtins.formatting.trim_newlines,
-            -- Fish
-            null_ls.builtins.formatting.fish_indent,
-            -- Python
-            null_ls.builtins.formatting.reorder_python_imports,
-            null_ls.builtins.formatting.black,
-            null_ls.builtins.diagnostics.mypy,
-            -- Go
-            null_ls.builtins.diagnostics.golangci_lint,
-            -- Text
-            null_ls.builtins.diagnostics.proselint,
-            -- null_ls.builtins.diagnostics.write_good,
-            null_ls.builtins.code_actions.proselint,
-            alex_lint,
-            -- Ansible
-            null_ls.builtins.diagnostics.ansiblelint,
-            -- Shell
-            null_ls.builtins.diagnostics.shellcheck,
-            -- Rust
-            -- null_ls.builtins.formatting.rustfmt,
-            -- Lua
-            null_ls.builtins.diagnostics.luacheck,
-            null_ls.builtins.formatting.stylua,
-            -- Docker
-            null_ls.builtins.diagnostics.hadolint,
-        }
-
-        -- HACK: Handle old versions of null_ls for vim < 0.6 that don't support `setup`
-        if null_ls["setup"] ~= nil then
-            null_ls.setup({
-                on_attach = default_attach,
-                capabilities = merged_capabilities(),
-                sources = sources,
-            })
-        else
-            null_ls.config({
-                sources = sources,
-            })
-            require("lspconfig")["null-ls"].setup({
-                on_attach = default_attach,
-            })
-        end
-    end)
-end
-
 local function get_luadev_config()
     local luadev = utils.try_require("lua-dev")
     if luadev ~= nil then
         return luadev.setup({
             -- add any options here, or leave empty to use the default settings
             lspconfig = {
-                on_attach = default_attach,
+                on_attach = get_default_attach(),
                 settings = {
                     Lua = {
                         completion = {
@@ -287,7 +230,7 @@ function M.config_lsp_intaller()
     utils.try_require("nvim-lsp-installer", function(lsp_installer)
         -- Default options
         local opts = {
-            on_attach = default_attach,
+            on_attach = get_default_attach(),
         }
 
         lsp_installer.on_server_ready(function(server)
