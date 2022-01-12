@@ -186,19 +186,13 @@ function M.config_lsp()
     utils.try_require("lspconfig", function(lsp_config)
         local capabilities = merged_capabilities()
 
-        -- Config null-ls
-        require("plugins.null-ls").configure({ capabilities = capabilities, on_attach = get_default_attach() })
-
-        -- Attach options to disable formatting
-        local no_format = { document_formatting = false, document_range_formatting = false }
-
         -- Configure each server
         lsp_config.bashls.setup({ capabilities = capabilities, on_attach = get_default_attach() })
-        lsp_config.gopls.setup({ capabilities = capabilities, on_attach = get_default_attach(no_format) })
-        lsp_config.pyright.setup({ capabilities = capabilities, on_attach = get_default_attach(no_format) })
+        lsp_config.gopls.setup({ capabilities = capabilities, on_attach = get_default_attach() })
+        lsp_config.pyright.setup({ capabilities = capabilities, on_attach = get_default_attach() })
         lsp_config.rls.setup({
             capabilities = capabilities,
-            on_attach = get_default_attach(no_format),
+            on_attach = get_default_attach(),
             settings = {
                 rust = {
                     build_on_save = false,
@@ -207,6 +201,9 @@ function M.config_lsp()
                 },
             },
         })
+
+        -- Config null-ls after lsps so we can disable for languages that have language servers
+        require("plugins.null-ls").configure({ capabilities = capabilities, on_attach = get_default_attach() })
     end)
 end
 
