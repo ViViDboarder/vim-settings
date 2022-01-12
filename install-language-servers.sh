@@ -73,7 +73,7 @@ function install_linters() {
     maybe_run pip3 install --user --upgrade yamllint
 
     # Text / Markdown
-    maybe_run npm install -g alex
+    maybe_run npm install -g alex write-good
     maybe_run pip install --user --upgrade proselint
     maybe_run pip3 install --user --upgrade proselint
 
