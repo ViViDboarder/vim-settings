@@ -73,14 +73,25 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Mappings
-        -- TODO: Maybe prefix all of these for easier discovery
         local opts = { noremap = true, silent = true }
+        local lsp_keymap = utils.swapped_map(utils.keymap_group("n", "<leader>l", opts, bufnr), function(lsp_keymap)
+            lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
+            lsp_keymap("rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
+            lsp_keymap("e", "<cmd>lua vim.lsp.diagnostics.show_line_diagnostics()<CR>")
+            lsp_keymap("D", "<cmd>lua vim.lsp.buf.declaration()<CR>")
+            lsp_keymap("d", "<cmd>lua vim.lsp.buf.definition()<CR>")
+            lsp_keymap("t", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
+            lsp_keymap("i", "<cmd>lua vim.lsp.buf.implementation()<CR>")
+            lsp_keymap("s", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+            lsp_keymap("wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+            lsp_keymap("wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+            lsp_keymap("wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
+            lsp_keymap("r", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+            lsp_keymap("p", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+            lsp_keymap("n", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+        end)
 
-        local lsp_keymap = utils.keymap_group("n", "<leader>l", opts, bufnr)
-        lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
-        lsp_keymap("r", "<cmd>lua vim.lsp.buf.rename()<CR>")
-        lsp_keymap("e", "<cmd>lua vim.lsp.diagnostics.show_line_diagnostics()<CR>")
-
+        -- Older keymaps
         buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
         buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
         buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
@@ -132,9 +143,21 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Some override some fuzzy finder bindings to use lsp sources
-        if utils.try_require("telescope.nvim") ~= nil then
+        if utils.try_require("telescope") ~= nil then
+            -- Replace some Telescope bindings with LSP versions
             buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
             buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+            buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+
+            -- Replace some LSP bindings with Telescope ones
+            lsp_keymap("d", "<cmd>Telescope lsp_definitions<CR>")
+            lsp_keymap("t", "<cmd>Telescope lsp_type_definition()<CR>")
+            lsp_keymap("i", "<cmd>Telescope lsp_implementations<CR>")
+            lsp_keymap("r", "<cmd>Telescope lsp_references<CR>")
+            lsp_keymap("A", "<cmd>Telescope lsp_code_actions<CR>")
+
+            buf_set_keymap("n", "<leader>ca", "<cmd>Telescope lsp_code_actions<CR>", opts)
+            buf_set_keymap("v", "<leader>lA", "<cmd>Telescope lsp_range_code_actions<CR>", opts)
         end
 
         -- Use LspSaga features, if possible

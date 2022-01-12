@@ -200,6 +200,13 @@ function M.map_version_rule(rules)
     return latest_value
 end
 
+-- Basically the oposite of map
+function M.swapped_map(v, func)
+    func(v)
+    return func
+end
+
+-- Returns a function used to create keymaps with consistent prefixes
 function M.keymap_group(mode, prefix, opts, bufnr)
     local map_fn = vim.api.nvim_set_keymap
     if bufnr ~= nil then
