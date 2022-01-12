@@ -1,22 +1,36 @@
 local M = {}
 local utils = require("utils")
 
+local function disable_formatter_filetypes_for_existing_servers(sources, preserve)
+    -- Aggregate filetypes with language servers
+    local server_filetypes = {}
+    utils.try_require("lspconfig", function(lsp_config)
+        vim.tbl_map(function(server)
+            vim.list_extend(server_filetypes, lsp_config[server].filetypes)
+        end, lsp_config.available_servers())
+    end)
+
+    -- Remove filetypes for formatters I want to preserve
+    server_filetypes = vim.tbl_filter(function(ft)
+        return not vim.tbl_contains(preserve or {}, ft)
+    end, server_filetypes)
+
+    -- Map disabled filetypes onto list of sources
+    local NULL_LS_FORMATTING = require("null-ls.methods").FORMATTING
+    local formatters = vim.tbl_filter(function(builtin)
+        return builtin.METHOD == NULL_LS_FORMATTING
+    end, sources)
+
+    -- Apply with statement to all filtered formatters to disable filetypes
+    vim.tbl_map(function(builtin)
+        return builtin.with({ disabled_filetypes = server_filetypes })
+    end, formatters)
+
+    return sources
+end
+
 function M.configure(options)
     utils.try_require("null-ls", function(null_ls)
-        -- Aggregate filetypes with language servers
-        local server_filetypes = {}
-        utils.try_require("lspconfig", function(lsp_config)
-            vim.tbl_map(function(server)
-                vim.list_extend(server_filetypes, lsp_config[server].filetypes)
-            end, lsp_config.available_servers())
-        end)
-
-        -- Remove filetypes for Language servers I want to override
-        local override_filetypes = { "python" }
-        server_filetypes = vim.tbl_filter(function(ft)
-            return not vim.tbl_contains(override_filetypes, ft)
-        end, server_filetypes)
-
         local sources = {
             -- Generic
             null_ls.builtins.formatting.prettier,
@@ -46,10 +60,7 @@ function M.configure(options)
             null_ls.builtins.diagnostics.hadolint,
         }
 
-        -- Map disabled filetypes onto list of sources
-        vim.tbl_map(function(builtin)
-            return builtin.with({ disabled_filetypes = server_filetypes })
-        end, sources)
+        disable_formatter_filetypes_for_existing_servers(sources, { "python" })
 
         -- Add custom or modified sources
         vim.list_extend(sources, {
