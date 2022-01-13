@@ -31,6 +31,10 @@ local function config_telescope()
         "<cmd>lua require('telescope.builtin').spell_suggest(require('telescope.themes').get_cursor())<CR>",
         opts
     )
+
+    if require("utils").is_plugin_loaded("nvim-notify") then
+        require("telescope").load_extension("notify")
+    end
 end
 
 config_telescope()
