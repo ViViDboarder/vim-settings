@@ -4,14 +4,23 @@ local M = {}
 local ensure_installed = {
     "bash",
     "css",
+    "dockerfile",
     "fish",
     "go",
     "gomod",
+    "html",
+    "java",
     "javascript",
     "json",
+    "kotlin",
     "lua",
+    "make",
     "python",
     "rust",
+    "scala",
+    "toml",
+    "typescript",
+    "vim",
     "yaml",
 }
 
