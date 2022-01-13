@@ -1,3 +1,11 @@
+local function load_extensions()
+    local utils = require("utils")
+    require("telescope").load_extension("file_browser")
+    if utils.is_plugin_loaded("nvim-notify") then
+        require("telescope").load_extension("notify")
+    end
+end
+
 local function config_telescope()
     local actions = require("telescope.actions")
     require("telescope").setup({
@@ -32,9 +40,7 @@ local function config_telescope()
         opts
     )
 
-    if require("utils").is_plugin_loaded("nvim-notify") then
-        require("telescope").load_extension("notify")
-    end
+    load_extensions()
 end
 
 config_telescope()

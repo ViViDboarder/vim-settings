@@ -279,6 +279,7 @@ return require("packer").startup({
             requires = {
                 "nvim-lua/plenary.nvim",
                 "nvim-lua/popup.nvim",
+                "nvim-telescope/telescope-file-browser.nvim",
             },
             tag = utils.map_version_rule({
                 [">=0.6.0"] = nil,
