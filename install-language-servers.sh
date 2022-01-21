@@ -89,6 +89,11 @@ function install_linters() {
     # Lua
     maybe_run luarocks --local install luacheck
 
+    # Docker
+    maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
+        -c "mv ~/bin/hadolint-* ~/bin/hadolint && chmod +x ~/bin/hadolint" \
+        "hadolint-{system}-x86_64" ~/bin
+
     echo ""
 }
 
