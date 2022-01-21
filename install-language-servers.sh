@@ -91,7 +91,7 @@ function install_linters() {
 
     # Docker
     maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
-        -c "mv ~/bin/hadolint-* ~/bin/hadolint && chmod +x ~/bin/hadolint" \
+        -c '"mv ~/bin/hadolint-* ~/bin/hadolint && chmod +x ~/bin/hadolint"' \
         "hadolint-{system}-x86_64" ~/bin
 
     echo ""
