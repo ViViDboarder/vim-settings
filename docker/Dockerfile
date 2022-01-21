@@ -51,8 +51,6 @@ ENV PATH $HOME/.local/bin:$PATH
 # Install Language servers
 COPY --chown=vividboarder:users ./install-language-servers.sh ./
 RUN ./install-language-servers.sh
-# Install golangci-lint
-RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $GOPATH/bin v1.43.0
 
 # Add config
 COPY --chown=vividboarder:users ./neovim $HOME/.config/nvim
