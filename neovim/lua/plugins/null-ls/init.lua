@@ -15,16 +15,19 @@ local function disable_formatter_filetypes_for_existing_servers(sources, preserv
         return not vim.tbl_contains(preserve or {}, ft)
     end, server_filetypes)
 
-    -- Map disabled filetypes onto list of sources
-    local NULL_LS_FORMATTING = require("null-ls.methods").FORMATTING
-    local formatters = vim.tbl_filter(function(builtin)
-        return builtin.METHOD == NULL_LS_FORMATTING
-    end, sources)
+    local NULL_LS_FORMATTING = require("null-ls").methods.FORMATTING
 
     -- Apply with statement to all filtered formatters to disable filetypes
-    vim.tbl_map(function(builtin)
-        return builtin.with({ disabled_filetypes = server_filetypes })
-    end, formatters)
+    sources = vim.tbl_map(function(builtin)
+        if
+            builtin.method == NULL_LS_FORMATTING
+            or (type(builtin.method) == "table" and utils.list_contains(builtin.method, NULL_LS_FORMATTING))
+        then
+            return builtin.with({ disabled_filetypes = server_filetypes })
+        end
+
+        return builtin
+    end, sources)
 
     return sources
 end
@@ -60,7 +63,7 @@ function M.configure(options)
             null_ls.builtins.diagnostics.hadolint,
         }
 
-        disable_formatter_filetypes_for_existing_servers(sources, { "python" })
+        sources = disable_formatter_filetypes_for_existing_servers(sources, { "python" })
 
         -- Add custom or modified sources
         vim.list_extend(sources, {
