@@ -144,13 +144,17 @@ local function get_default_attach(override_capabilities)
         -- Some override some fuzzy finder bindings to use lsp sources
         if utils.try_require("telescope") ~= nil then
             -- Replace some Telescope bindings with LSP versions
-            buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
-            buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
-            buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+            if client.resolved_capabilities.goto_definition then
+                buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+                buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+                buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+            end
 
             -- Replace some LSP bindings with Telescope ones
-            lsp_keymap("d", "<cmd>Telescope lsp_definitions<CR>")
-            lsp_keymap("t", "<cmd>Telescope lsp_type_definition()<CR>")
+            if client.resolved_capabilities.goto_definition then
+                lsp_keymap("d", "<cmd>Telescope lsp_definitions<CR>")
+                lsp_keymap("t", "<cmd>Telescope lsp_type_definition()<CR>")
+            end
             lsp_keymap("i", "<cmd>Telescope lsp_implementations<CR>")
             lsp_keymap("r", "<cmd>Telescope lsp_references<CR>")
             lsp_keymap("A", "<cmd>Telescope lsp_code_actions<CR>")
