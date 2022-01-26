@@ -8,11 +8,14 @@ o.backup = true
 -- Set leader to space
 g.mapleader = " "
 
+-- Get terminal colors and unicode working, hopefully
 vim.cmd([[
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 ]])
 o.termguicolors = true
+-- o.term = "xterm-256color"
+
 o.number = true
 o.expandtab = true
 o.tabstop = 4
@@ -21,7 +24,6 @@ o.shiftwidth = 4
 o.virtualedit = "onemore"
 o.scrolljump = 5
 o.scrolloff = 3
--- o.term = "xterm-256color"
 -- o.backspace = "2"
 
 -- o.mousehide = true
