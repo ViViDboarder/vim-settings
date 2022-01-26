@@ -2,6 +2,9 @@ local o = vim.o
 local g = vim.g
 local utils = require("utils")
 
+-- Set backup on
+o.backup = true
+
 -- Set leader to space
 g.mapleader = " "
 
