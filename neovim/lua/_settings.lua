@@ -4,6 +4,12 @@ local utils = require("utils")
 
 -- Set backup on
 o.backup = true
+o.backupdir = table.concat({
+    vim.env.XDG_DATA_HOME .. "/nvim/backup//",
+    vim.env.XDG_CONFIG_HOME .. "/nvim/backup//",
+    "~/.config/nvim/backup//",
+    ".",
+}, ",")
 
 -- Set leader to space
 g.mapleader = " "
