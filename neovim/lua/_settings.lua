@@ -5,8 +5,8 @@ local utils = require("utils")
 -- Set backup on
 o.backup = true
 o.backupdir = table.concat({
-    vim.env.XDG_DATA_HOME .. "/nvim/backup//",
-    vim.env.XDG_CONFIG_HOME .. "/nvim/backup//",
+    (vim.env.XDG_DATA_HOME or "") .. "/nvim/backup//",
+    (vim.env.XDG_CONFIG_HOME or "") .. "/nvim/backup//",
     "~/.config/nvim/backup//",
     ".",
 }, ",")
