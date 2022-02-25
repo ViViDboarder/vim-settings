@@ -317,13 +317,6 @@ use({
     end,
 })
 
-use({
-    "dense-analysis/ale",
-    config = function()
-        require("plugins.ale")
-    end,
-})
-
 -- Debuging nvim config
 use({
     "tweekmonster/startuptime.vim",
