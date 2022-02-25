@@ -250,12 +250,6 @@ return require("packer").startup({
             "nvim-treesitter/nvim-treesitter-textobjects",
             requires = "nvim-treesitter/nvim-treesitter",
         })
-        --[[
-    use {
-        "nvim-treesitter/completion-treesitter",
-        requires = "nvim-treesitter/nvim-treesitter",
-    }
-    --]]
 
         -- Completion
         use({
@@ -290,45 +284,6 @@ return require("packer").startup({
                 require("plugins.telescope")
             end,
         })
-        --[[
-    use {
-        'junegunn/fzf',
-        run = ":call fzf#install()",
-    }
-    use {
-        'junegunn/fzf.vim',
-        requires = "junegunn/fzf",
-        config = function()
-            vim.g.fzf_command_prefix = 'FZF'
-            -- Jump to existing window if possible
-            vim.g.fzf_buffers_jump = 1
-            -- Override key commands
-            -- vim.g.fzf_action = { ['ctrl-t'] = 'tab split', ['ctrl-s'] = 'split', ['ctrl-v'] = 'vsplit', }
-            -- Override git log to show authors
-            vim.g.fzf_commits_log_options = --graph --color=always \z
-                --format="%C(auto)%h %an: %s%d %C(black)%C(bold)%cr"
-
-            vim.g.fzf_preview_window = {"right:50%", "ctrl-/"}
-
-            vim.api.nvim_set_keymap("n", "<C-t>", "<cmd>FZF<CR>", {silent=true, noremap=true})
-            vim.api.nvim_set_keymap("n", "<Leader>b", "<cmd>FZFBuffers<CR>", {silent=true, noremap=true})
-            vim.api.nvim_set_keymap("n", "<F2>", "<cmd>FZFBuffers<CR>", {silent=true, noremap=true})
-            vim.api.nvim_set_keymap("n", "<Leader>fg", "<cmd>FZFRg<CR>", {silent=true, noremap=true})
-            vim.api.nvim_set_keymap("n", "<Leader>r", "<cmd>FZFTags<CR>", {silent=true, noremap=true})
-            vim.api.nvim_set_keymap("n", "<Leader>t", "<cmd>FZFBTags<CR>", {silent=true, noremap=true})
-            vim.api.nvim_set_keymap("n", "<Leader>g", "<cmd>FZFBCommits<CR>", {silent=true, noremap=true})
-        end,
-    }
-    use {
-        "ojroques/nvim-lspfuzzy",
-        requires = { "junegunn/fzf", "junegunn/fzf" },
-        config = function()
-            require("lspfuzzy").setup{
-                fzf_trim = false,
-            }
-        end,
-    }
-    --]]
 
         -- Filetypes
         use("ViViDboarder/vim-forcedotcom")
