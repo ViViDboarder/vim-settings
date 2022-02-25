@@ -309,11 +309,11 @@ use({
     "sheerun/vim-polyglot",
     config = function()
         vim.cmd([[
-                    augroup polyglot_fts
-                    au BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml set filetype=yaml.ansible
-                    au BufRead,BufNewFile go.mod,go.sum set filetype=gomod
-                augroup end
-                ]])
+        augroup polyglot_fts
+            au BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml set filetype=yaml.ansible
+            au BufRead,BufNewFile go.mod,go.sum set filetype=gomod
+        augroup end
+        ]])
     end,
 })
 
