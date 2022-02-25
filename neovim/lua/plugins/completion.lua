@@ -5,7 +5,7 @@ function M.config_cmp()
     local luasnip = require("luasnip")
     cmp.setup({
         completion = {
-            completeopt = "menuone,noinsert,noselect",
+            completeopt = "menuone,noinsert",
             autocomplete = false,
         },
         snippet = {
