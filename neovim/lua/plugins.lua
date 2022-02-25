@@ -303,10 +303,11 @@ return require("packer").startup({
             "sheerun/vim-polyglot",
             config = function()
                 vim.cmd([[
-                augroup ansible_playbook
+                augroup polyglot_fts
                     au BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml set filetype=yaml.ansible
+                    au BufRead,BufNewFile go.mod,go.sum set filetype=gomod
                 augroup end
-            ]])
+                ]])
             end,
         })
 
