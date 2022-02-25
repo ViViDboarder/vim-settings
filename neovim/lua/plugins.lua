@@ -267,6 +267,16 @@ return require("packer").startup({
             event = "InsertEnter *",
         })
 
+        -- Add snippets
+        use({
+            "rafamadriz/friendly-snippets",
+            requires = "L3MON4D3/LuaSnip",
+            after = "LuaSnip",
+            config = function()
+                require("luasnip.loaders.from_vscode").load()
+            end,
+        })
+
         -- Fuzzy Finder
         use({
             "nvim-telescope/telescope.nvim",
