@@ -3,9 +3,6 @@ local M = {}
 local utils = require("utils")
 
 function M.config_lsp_ui()
-    -- Add floating window boarders
-    vim.cmd([[autocmd ColorScheme * highlight NormalFloat guibg=#1f2335]])
-    vim.cmd([[autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]])
     local border = {
         { "┌", "FloatBorder" },
         { "─", "FloatBorder" },
@@ -132,15 +129,15 @@ local function get_default_attach(override_capabilities)
         -- Set autocommands conditional on server_capabilities
         if client.resolved_capabilities.document_highlight then
             vim.cmd([[
-        :hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-        :hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-        :hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-        augroup lsp_document_highlight
-        autocmd!
-            autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-            autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        augroup END
-        ]])
+                :highlight link LspReferenceRead MatchParen
+                :highlight link LspReferenceText MatchParen
+                :highlight link LspReferenceWrite MatchParen
+                augroup lsp_document_highlight
+                    autocmd!
+                    autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+                    autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+                augroup END
+            ]])
         end
 
         -- Some override some fuzzy finder bindings to use lsp sources
