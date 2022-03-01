@@ -215,14 +215,6 @@ use({
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 })
 
--- Fancy LSP UIs
-use({
-    "glepnir/lspsaga.nvim",
-    requires = "neovim/nvim-lspconfig",
-    -- NOTE: Disabled because it's got issues with Neovim 0.6.0
-    disable = true,
-})
-
 -- Writing
 -- abolish/pencil
 use({

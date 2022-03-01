@@ -162,18 +162,6 @@ local function get_default_attach(override_capabilities)
             buf_set_keymap("n", "<leader>ca", "<cmd>Telescope lsp_code_actions<CR>", opts)
             buf_set_keymap("v", "<leader>lA", "<cmd>Telescope lsp_range_code_actions<CR>", opts)
         end
-
-        -- Use LspSaga features, if possible
-        if utils.is_plugin_loaded("lspsaga.nvim") then
-            buf_set_keymap("n", "K", "<Cmd>lua require('lspsaga.hover').render_hover_doc()<CR>", opts)
-            buf_set_keymap("n", "<leader>rn", "<cmd>lua require('lspsaga.rename').rename()<CR>", opts)
-            buf_set_keymap("n", "<leader>e", "<cmd>lua require('lspsaga.diagnostic').show_line_diagnostics()<CR>", opts)
-            buf_set_keymap("n", "[d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_prev()<CR>", opts)
-            buf_set_keymap("n", "]d", "<cmd>lua require('lspsaga.diagnostic').lsp_jump_diagnostic_next()<CR>", opts)
-            buf_set_keymap("n", "<C-k>", "<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>", opts)
-            -- Code actions
-            buf_set_keymap("n", "<leader>ca", "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", opts)
-        end
     end
 end
 
