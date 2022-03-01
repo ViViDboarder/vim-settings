@@ -20,15 +20,17 @@ install-language-servers:
 .PHONY: uninstall
 uninstall:
 	rm ~/.vimrc
-	rm ~/.nvimrc
 	rm -fr ~/.vim
-	rm -fr ~/.nvim
 	rm -fr ~/.config/nvim
 
 .PHONY: clean
 clean:
-	rm -fr ./vim/plugged
-	rm -fr ./vim/autoload/plug.vim
+	# Clean vim-plug
+	rm -fr ./vim/plugged ./vim/autoload/plug.vim
+	# Clean LspInstall
+	rm -fr ~/.local/share/nvim/lsp_servers
+	# Clean Packer
+	rm -fr ~/.local/share/nvim/site/pack/packer
 
 # Installs pre-commit hooks
 $(PRE_COMMIT_ENV):
