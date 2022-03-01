@@ -117,7 +117,7 @@ local function get_default_attach(override_capabilities)
             vim.cmd([[
             augroup lsp_format
                 autocmd!
-                autocmd BufWritePre *.rs,*.go,*.sh lua vim.lsp.buf.formatting_sync(nil, 1000)
+                autocmd BufWritePre *.rs,*.go,*.sh,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)
                 " autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
             augroup END
         ]])
