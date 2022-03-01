@@ -74,7 +74,7 @@ local function get_default_attach(override_capabilities)
         local lsp_keymap = utils.keymap_group("n", "<leader>l", opts, bufnr)
         lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
         lsp_keymap("rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-        lsp_keymap("e", "<cmd>lua vim.lsp.diagnostics.show_line_diagnostics()<CR>")
+        lsp_keymap("e", "<cmd>lua vim.diagnostic.open_float()<CR>")
         lsp_keymap("D", "<cmd>lua vim.lsp.buf.declaration()<CR>")
         lsp_keymap("d", "<cmd>lua vim.lsp.buf.definition()<CR>")
         lsp_keymap("t", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
@@ -101,14 +101,14 @@ local function get_default_attach(override_capabilities)
         buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
         buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
         buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-        buf_set_keymap("n", "<leader>e", "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", opts)
+        buf_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
         buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
         buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
         buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
 
         -- Open diagnostic on hold
         if vim["diagnostic"] ~= nil then
-            vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
+            vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]])
         end
 
         -- Set some keybinds conditional on server capabilities
