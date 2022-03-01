@@ -1,9 +1,6 @@
 {
   "LuaSnip": {
-    "commit": "5addafc"
-  },
-  "ale": {
-    "commit": "5b1044e"
+    "commit": "7c634dd"
   },
   "cmp-buffer": {
     "commit": "d66c4c2"
@@ -18,7 +15,7 @@
     "commit": "d6f837f"
   },
   "colorbuddy.vim": {
-    "commit": "e0f5faf"
+    "commit": "cdb5b06"
   },
   "dark-notify": {
     "commit": "891adc0"
@@ -27,7 +24,7 @@
     "commit": "67c3590"
   },
   "friendly-snippets": {
-    "commit": "2e57554"
+    "commit": "1dad064"
   },
   "goyo.vim": {
     "commit": "a9c7283"
@@ -60,10 +57,10 @@
     "commit": "6afd8f7"
   },
   "nvim-lsp-installer": {
-    "commit": "08b764c"
+    "commit": "29154c2"
   },
   "nvim-lspconfig": {
-    "commit": "e124258"
+    "commit": "103bbcc"
   },
   "nvim-notify": {
     "commit": "57093e9"
@@ -72,13 +69,13 @@
     "commit": "995ae7e"
   },
   "nvim-treesitter": {
-    "commit": "18c558f"
+    "commit": "dcfd6c0"
   },
   "nvim-treesitter-refactor": {
     "commit": "0dc8069"
   },
   "nvim-treesitter-textobjects": {
-    "commit": "e23fc8a"
+    "commit": "4a3363d"
   },
   "packer.nvim": {
     "commit": "c576ab3"
