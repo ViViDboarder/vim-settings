@@ -35,6 +35,9 @@
   "limelight.vim": {
     "commit": "eebac6c"
   },
+  "lsp_signature.nvim": {
+    "commit": "f7c308e"
+  },
   "lua-dev.nvim": {
     "commit": "a0ee777"
   },
@@ -48,19 +51,19 @@
     "commit": "739a98c"
   },
   "nvim-cmp": {
-    "commit": "13d6446"
+    "commit": "45e93cd"
   },
   "nvim-colorizer.lua": {
     "commit": "36c610a"
   },
   "nvim-gps": {
-    "commit": "6afd8f7"
+    "commit": "653febd"
   },
   "nvim-lsp-installer": {
     "commit": "29154c2"
   },
   "nvim-lspconfig": {
-    "commit": "103bbcc"
+    "commit": "cdc2ec5"
   },
   "nvim-notify": {
     "commit": "57093e9"
@@ -69,7 +72,7 @@
     "commit": "995ae7e"
   },
   "nvim-treesitter": {
-    "commit": "dcfd6c0"
+    "commit": "82389e5"
   },
   "nvim-treesitter-refactor": {
     "commit": "0dc8069"
@@ -78,7 +81,7 @@
     "commit": "4a3363d"
   },
   "packer.nvim": {
-    "commit": "c576ab3"
+    "commit": "92d9ec8"
   },
   "plenary.nvim": {
     "commit": "2a278c8"
@@ -126,7 +129,7 @@
     "commit": "a30ba7e"
   },
   "vim-fugitive": {
-    "commit": "c29ef11"
+    "commit": "afd6c13"
   },
   "vim-grepper": {
     "commit": "2b93535"
@@ -168,7 +171,7 @@
     "commit": "28d2bd1"
   },
   "wombat.nvim": {
-    "commit": "8caafe4"
+    "commit": "96989b1"
   },
   "wombat256.vim": {
     "commit": "8734ba4"
