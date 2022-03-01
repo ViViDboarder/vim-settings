@@ -50,7 +50,12 @@ function M.configure(options)
             -- Text
             null_ls.builtins.code_actions.proselint,
             null_ls.builtins.diagnostics.proselint,
-            null_ls.builtins.diagnostics.write_good,
+            null_ls.builtins.diagnostics.write_good.with({
+                extra_args = { "--no-adverb" },
+                diagnostics_postprocess = function(diagnostic)
+                    diagnostic.severity = vim.diagnostic.severity.WARN
+                end,
+            }),
             -- null_ls.builtins.diagnostics.alex
             -- Ansible
             -- null_ls.builtins.diagnostics.ansiblelint.with({filetypes={"yaml.ansible"}}),
