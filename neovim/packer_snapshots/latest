@@ -1,1 +1,182 @@
-{"dark-notify": {"commit": "891adc0"}, "wombuddy.nvim": {"commit": "29deb8f"}, "packer.nvim": {"commit": "c576ab3"}, "nvim-notify": {"commit": "57093e9"}, "colorbuddy.vim": {"commit": "e0f5faf"}, "vim-surround": {"commit": "baf89ad"}, "nvim-lspconfig": {"commit": "e124258"}, "null-ls.nvim": {"commit": "739a98c"}, "file-line": {"commit": "67c3590"}, "lualine.nvim": {"commit": "016a207"}, "vim-startify": {"commit": "81e36c3"}, "which-key.nvim": {"commit": "28d2bd1"}, "telescope-file-browser.nvim": {"commit": "d06fe1d"}, "vim-argwrap": {"commit": "0faba07"}, "nvim-treesitter-textobjects": {"commit": "e23fc8a"}, "cmp-nvim-lsp": {"commit": "ebdfc20"}, "cmp_luasnip": {"commit": "d6f837f"}, "friendly-snippets": {"commit": "2e57554"}, "nvim-colorizer.lua": {"commit": "36c610a"}, "plenary.nvim": {"commit": "2a278c8"}, "vim-fugitive": {"commit": "c29ef11"}, "ale": {"commit": "5b1044e"}, "rust.vim": {"commit": "4aa69b8"}, "telescope.nvim": {"commit": "567ec85"}, "vim-textobj-user": {"commit": "41a675d"}, "trouble.nvim": {"commit": "20469be"}, "nvim-gps": {"commit": "6afd8f7"}, "wombat.nvim": {"commit": "8caafe4"}, "cmp-spell": {"commit": "5602f1a"}, "startuptime.vim": {"commit": "dfa57f5"}, "vim-gutentags": {"commit": "50705e8"}, "todo-comments.nvim": {"commit": "98b1ebf"}, "vim-android": {"commit": "e9d03b1"}, "vim-togglelist": {"commit": "48f0d30"}, "lush.nvim": {"commit": "2189230"}, "nvim-treesitter-refactor": {"commit": "0dc8069"}, "LuaSnip": {"commit": "5addafc"}, "vim-endwise": {"commit": "4289889"}, "limelight.vim": {"commit": "eebac6c"}, "vim-grepper": {"commit": "2b93535"}, "goyo.vim": {"commit": "a9c7283"}, "vim-repeat": {"commit": "24afe92"}, "lua-dev.nvim": {"commit": "a0ee777"}, "tokyonight.nvim": {"commit": "8223c97"}, "vim-vinegar": {"commit": "bb1bcdd"}, "nvim-treesitter": {"commit": "18c558f"}, "vim-pencil": {"commit": "5b4110d"}, "wombat256.vim": {"commit": "8734ba4"}, "impatient.nvim": {"commit": "7abfc92"}, "vim-forcedotcom": {"commit": "a30ba7e"}, "vim-eunuch": {"commit": "e2c9e01"}, "popup.nvim": {"commit": "b7404d3"}, "nvim-solarized-lua": {"commit": "995ae7e"}, "nvim-lsp-installer": {"commit": "08b764c"}, "vim-textobj-sentence": {"commit": "c5dd562"}, "tcomment_vim": {"commit": "3729ae4"}, "vim-rsi": {"commit": "e181883"}, "nvim-cmp": {"commit": "13d6446"}, "vim-polyglot": {"commit": "83422e0"}, "cmp-buffer": {"commit": "d66c4c2"}}
+{
+  "LuaSnip": {
+    "commit": "5addafc"
+  },
+  "ale": {
+    "commit": "5b1044e"
+  },
+  "cmp-buffer": {
+    "commit": "d66c4c2"
+  },
+  "cmp-nvim-lsp": {
+    "commit": "ebdfc20"
+  },
+  "cmp-spell": {
+    "commit": "5602f1a"
+  },
+  "cmp_luasnip": {
+    "commit": "d6f837f"
+  },
+  "colorbuddy.vim": {
+    "commit": "e0f5faf"
+  },
+  "dark-notify": {
+    "commit": "891adc0"
+  },
+  "file-line": {
+    "commit": "67c3590"
+  },
+  "friendly-snippets": {
+    "commit": "2e57554"
+  },
+  "goyo.vim": {
+    "commit": "a9c7283"
+  },
+  "impatient.nvim": {
+    "commit": "7abfc92"
+  },
+  "limelight.vim": {
+    "commit": "eebac6c"
+  },
+  "lua-dev.nvim": {
+    "commit": "a0ee777"
+  },
+  "lualine.nvim": {
+    "commit": "016a207"
+  },
+  "lush.nvim": {
+    "commit": "2189230"
+  },
+  "null-ls.nvim": {
+    "commit": "739a98c"
+  },
+  "nvim-cmp": {
+    "commit": "13d6446"
+  },
+  "nvim-colorizer.lua": {
+    "commit": "36c610a"
+  },
+  "nvim-gps": {
+    "commit": "6afd8f7"
+  },
+  "nvim-lsp-installer": {
+    "commit": "08b764c"
+  },
+  "nvim-lspconfig": {
+    "commit": "e124258"
+  },
+  "nvim-notify": {
+    "commit": "57093e9"
+  },
+  "nvim-solarized-lua": {
+    "commit": "995ae7e"
+  },
+  "nvim-treesitter": {
+    "commit": "18c558f"
+  },
+  "nvim-treesitter-refactor": {
+    "commit": "0dc8069"
+  },
+  "nvim-treesitter-textobjects": {
+    "commit": "e23fc8a"
+  },
+  "packer.nvim": {
+    "commit": "c576ab3"
+  },
+  "plenary.nvim": {
+    "commit": "2a278c8"
+  },
+  "popup.nvim": {
+    "commit": "b7404d3"
+  },
+  "rust.vim": {
+    "commit": "4aa69b8"
+  },
+  "startuptime.vim": {
+    "commit": "dfa57f5"
+  },
+  "tcomment_vim": {
+    "commit": "3729ae4"
+  },
+  "telescope-file-browser.nvim": {
+    "commit": "d06fe1d"
+  },
+  "telescope.nvim": {
+    "commit": "567ec85"
+  },
+  "todo-comments.nvim": {
+    "commit": "98b1ebf"
+  },
+  "tokyonight.nvim": {
+    "commit": "8223c97"
+  },
+  "trouble.nvim": {
+    "commit": "20469be"
+  },
+  "vim-android": {
+    "commit": "e9d03b1"
+  },
+  "vim-argwrap": {
+    "commit": "0faba07"
+  },
+  "vim-endwise": {
+    "commit": "4289889"
+  },
+  "vim-eunuch": {
+    "commit": "e2c9e01"
+  },
+  "vim-forcedotcom": {
+    "commit": "a30ba7e"
+  },
+  "vim-fugitive": {
+    "commit": "c29ef11"
+  },
+  "vim-grepper": {
+    "commit": "2b93535"
+  },
+  "vim-gutentags": {
+    "commit": "50705e8"
+  },
+  "vim-pencil": {
+    "commit": "5b4110d"
+  },
+  "vim-polyglot": {
+    "commit": "83422e0"
+  },
+  "vim-repeat": {
+    "commit": "24afe92"
+  },
+  "vim-rsi": {
+    "commit": "e181883"
+  },
+  "vim-startify": {
+    "commit": "81e36c3"
+  },
+  "vim-surround": {
+    "commit": "baf89ad"
+  },
+  "vim-textobj-sentence": {
+    "commit": "c5dd562"
+  },
+  "vim-textobj-user": {
+    "commit": "41a675d"
+  },
+  "vim-togglelist": {
+    "commit": "48f0d30"
+  },
+  "vim-vinegar": {
+    "commit": "bb1bcdd"
+  },
+  "which-key.nvim": {
+    "commit": "28d2bd1"
+  },
+  "wombat.nvim": {
+    "commit": "8caafe4"
+  },
+  "wombat256.vim": {
+    "commit": "8734ba4"
+  },
+  "wombuddy.nvim": {
+    "commit": "29deb8f"
+  }
+}
