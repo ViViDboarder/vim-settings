@@ -275,6 +275,19 @@ use({
     end,
 })
 
+use({
+    "ray-x/lsp_signature.nvim",
+    config = function()
+        require("lsp_signature").setup({
+            extra_trigger_chars = { "(", "," },
+            auto_close_after = nil,
+            -- Toggle these to use hint only
+            floating_window = true,
+            hint_enable = false,
+        })
+    end,
+})
+
 -- Fuzzy Finder
 use({
     "nvim-telescope/telescope.nvim",
