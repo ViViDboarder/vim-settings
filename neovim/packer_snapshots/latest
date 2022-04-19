@@ -1,6 +1,6 @@
 {
   "LuaSnip": {
-    "commit": "49fdb0d"
+    "commit": "6b67cb1"
   },
   "cmp-buffer": {
     "commit": "d66c4c2"
@@ -24,7 +24,7 @@
     "commit": "67c3590"
   },
   "friendly-snippets": {
-    "commit": "e302658"
+    "commit": "804c3f5"
   },
   "goyo.vim": {
     "commit": "a9c7283"
@@ -36,55 +36,55 @@
     "commit": "eebac6c"
   },
   "lsp_signature.nvim": {
-    "commit": "e4f7dad"
+    "commit": "a351509"
   },
   "lua-dev.nvim": {
     "commit": "a0ee777"
   },
   "lualine.nvim": {
-    "commit": "c8e5a69"
+    "commit": "18a07f7"
   },
   "lush.nvim": {
-    "commit": "fa7694f"
+    "commit": "87e9039"
   },
   "null-ls.nvim": {
-    "commit": "739a98c"
+    "commit": "a887bd6"
   },
   "nvim-cmp": {
-    "commit": "7dbe34e"
+    "commit": "2aa7eee"
   },
   "nvim-colorizer.lua": {
     "commit": "36c610a"
   },
   "nvim-gps": {
-    "commit": "9f2adbc"
+    "commit": "49f68ec"
   },
   "nvim-lsp-installer": {
-    "commit": "4653462"
+    "commit": "e68ac4a"
   },
   "nvim-lspconfig": {
-    "commit": "3d1baa8"
+    "commit": "ad9903c"
   },
   "nvim-notify": {
-    "commit": "da10302"
+    "commit": "2c8f744"
   },
   "nvim-solarized-lua": {
     "commit": "995ae7e"
   },
   "nvim-treesitter": {
-    "commit": "ce6c1d3"
+    "commit": "a8bce85"
   },
   "nvim-treesitter-refactor": {
     "commit": "0dc8069"
   },
   "nvim-treesitter-textobjects": {
-    "commit": "c4b41e4"
+    "commit": "29c5e9e"
   },
   "packer.nvim": {
-    "commit": "92d9ec8"
+    "commit": "4dedd3b"
   },
   "plenary.nvim": {
-    "commit": "f9c65cd"
+    "commit": "9069d14"
   },
   "popup.nvim": {
     "commit": "b7404d3"
@@ -102,7 +102,7 @@
     "commit": "c6f5104"
   },
   "telescope.nvim": {
-    "commit": "6e7ee38"
+    "commit": "6e7ed1b"
   },
   "todo-comments.nvim": {
     "commit": "98b1ebf"
@@ -123,13 +123,13 @@
     "commit": "720b3ee"
   },
   "vim-eunuch": {
-    "commit": "c70b0ed"
+    "commit": "7d81275"
   },
   "vim-forcedotcom": {
     "commit": "a30ba7e"
   },
   "vim-fugitive": {
-    "commit": "d725ef5"
+    "commit": "4b0f2b6"
   },
   "vim-grepper": {
     "commit": "2b93535"
@@ -141,7 +141,7 @@
     "commit": "5b4110d"
   },
   "vim-polyglot": {
-    "commit": "83422e0"
+    "commit": "db7bb8ba"
   },
   "vim-repeat": {
     "commit": "24afe92"
@@ -153,7 +153,7 @@
     "commit": "81e36c3"
   },
   "vim-surround": {
-    "commit": "9857a87"
+    "commit": "81fc0ec"
   },
   "vim-textobj-sentence": {
     "commit": "c5dd562"
