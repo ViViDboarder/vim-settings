@@ -208,7 +208,7 @@ use("folke/trouble.nvim")
 use({
     "jose-elias-alvarez/null-ls.nvim",
     commit = utils.map_version_rule({
-        [">=0.6.0"] = nil,
+        [">=0.6.0"] = utils.nil_val,
         [">=0.5.1"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e",
         [">=0.5.0"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81",
     }),
@@ -297,7 +297,7 @@ use({
         "nvim-telescope/telescope-file-browser.nvim",
     },
     tag = utils.map_version_rule({
-        [">=0.6.0"] = nil,
+        [">=0.6.0"] = utils.nil_val,
         ["<0.6.0"] = "nvim-0.5.1",
         ["==0.5.0"] = "nvim-0.5.0",
     }),

@@ -153,6 +153,8 @@ function M.materialize_list(list, iterator)
     return list
 end
 
+M.nil_val = {}
+
 -- Maps a set of version rules to a value eg. [">0.5.0"] = "has 0.5.0"
 -- If more than one rule matches, the one with the greatest version number is used
 function M.map_version_rule(rules)
@@ -197,6 +199,10 @@ function M.map_version_rule(rules)
     end
 
     -- Return highest versioned matched value
+    if latest_value == M.nil_val then
+        return nil
+    end
+
     return latest_value
 end
 
