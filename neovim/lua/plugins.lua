@@ -37,7 +37,9 @@ use({ "lewis6991/impatient.nvim", config = [[require('impatient')]] })
 
 -- Let Packer manage and lazyload itself
 use({
-    "wbthomason/packer.nvim",
+    -- "wbthomason/packer.nvim",
+    "ViViDboarder/packer.nvim",
+    branch = "configure-snapshot",
     cmd = {
         "PackerClean",
         "PackerCompile",
