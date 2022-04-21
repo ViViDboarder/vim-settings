@@ -19,9 +19,11 @@ function M.config_cmp()
             { name = "buffer" },
             { name = "spell" },
         },
-        mapping = {
-            ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-            ["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+        mapping = cmp.mapping.preset.insert({
+            -- Scroll docs with readline back - forward
+            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-f>"] = cmp.mapping.scroll_docs(4),
+            -- Expand snippets with Tab
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if luasnip.expand_or_jumpable() then
                     luasnip.expand_or_jump()
@@ -29,19 +31,17 @@ function M.config_cmp()
                     fallback()
                 end
             end),
+            -- Start and cycle completions with C-Space
             ["<C-Space>"] = cmp.mapping(function()
                 if cmp.visible() then
                     cmp.select_next_item()
                 else
                     cmp.complete()
                 end
-            end, { "i", "c" }),
-            ["<C-e>"] = cmp.mapping({
-                i = cmp.mapping.abort(),
-                c = cmp.mapping.close(),
-            }),
+            end),
+            -- Confirm completion with Enter
             ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        },
+        }),
     })
 
     -- Add a plug mapping to use in C-Space binding
