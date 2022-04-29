@@ -299,7 +299,8 @@ use({
         "nvim-telescope/telescope-file-browser.nvim",
     },
     tag = utils.map_version_rule({
-        [">=0.6.0"] = utils.nil_val,
+        [">=0.7.0"] = utils.nil_val,
+        [">=0.6.0"] = "nvim-0.6",
         ["<0.6.0"] = "nvim-0.5.1",
         ["==0.5.0"] = "nvim-0.5.0",
     }),
