@@ -122,11 +122,11 @@ use({
     "tpope/vim-fugitive",
     config = function()
         local opts = { silent = true, noremap = true }
-        vim.api.nvim_set_keymap("n", "gb", "<cmd>Gblame<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gc", "<cmd>Gcommit<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gd", "<cmd>Gdiff<CR>", opts)
+        vim.api.nvim_set_keymap("n", "gb", "<cmd>Git blame<CR>", opts)
+        vim.api.nvim_set_keymap("n", "gc", "<cmd>Git commit<CR>", opts)
+        vim.api.nvim_set_keymap("n", "gd", "<cmd>Git diff<CR>", opts)
         vim.api.nvim_set_keymap("n", "gs", "<cmd>Git<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gw", "<cmd>Gwrite<CR>", opts)
+        vim.api.nvim_set_keymap("n", "gw", "<cmd>Git write<CR>", opts)
     end,
 })
 

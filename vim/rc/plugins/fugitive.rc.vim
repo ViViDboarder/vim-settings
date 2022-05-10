@@ -1,7 +1,7 @@
-Plug 'tpope/vim-fugitive' ", { 'on': ['Gblame', 'Gdiff', 'Gcommit', 'Gstatus', 'Gwrite'] }
+Plug 'tpope/vim-fugitive' ", { 'on': ['Git'] }
 " Mappings
-nnoremap <leader>gb :Gblame<CR>
-nnoremap <leader>gc :Gcommit<CR>
-nnoremap <leader>gd :Gdiff<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gw :Gwrite<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gc :Git commit<CR>
+nnoremap <leader>gd :Git diff<CR>
+nnoremap <leader>gs :Git status<CR>
+nnoremap <leader>gw :Git write<CR>
