@@ -57,7 +57,18 @@ use({
 -- Colorschemes
 use({
     "vim-scripts/wombat256.vim",
-    { "ViViDboarder/wombat.nvim", requires = "rktjmp/lush.nvim" },
+    {
+        "ViViDboarder/wombat.nvim",
+        requires = {
+            {
+                "rktjmp/lush.nvim",
+                tag = utils.map_version_rule({
+                    [">=0.7.0"] = utils.nil_val,
+                    [">=0.5.0"] = "v1.0.1",
+                }),
+            },
+        },
+    },
     { "ViViDboarder/wombuddy.nvim", requires = "tjdevries/colorbuddy.vim" },
     "ishan9299/nvim-solarized-lua",
     {
@@ -236,6 +247,10 @@ use({
 use({
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
+    commit = utils.map_version_rule({
+        [">=0.7.0"] = utils.nil_value,
+        [">=0.5.0"] = "a189323454d1215c682c7ad7db3e6739d26339c4",
+    }),
     config = function()
         require("plugins.treesitter").setup()
     end,
@@ -255,11 +270,22 @@ use({
     config = function()
         require("plugins.completion").config_cmp()
     end,
+    commit = utils.map_version_rule({
+        [">=0.7.0"] = utils.nil_val,
+        [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
+    }),
     requires = {
         { "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
         { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
         { "f3fora/cmp-spell", after = "nvim-cmp" },
-        { "saadparwaiz1/cmp_luasnip", after = "nvim-cmp" },
+        {
+            "saadparwaiz1/cmp_luasnip",
+            after = "nvim-cmp",
+            commit = utils.map_version_rule({
+                [">0.7.0"] = utils.nil_val,
+                [">=0.5.0"] = "b10829736542e7cc9291e60bab134df1273165c9",
+            }),
+        },
         "L3MON4D3/LuaSnip",
     },
     event = "InsertEnter *",
