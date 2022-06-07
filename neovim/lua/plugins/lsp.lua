@@ -111,6 +111,11 @@ local function get_default_attach(override_capabilities)
             vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]])
         end
 
+        -- Use IncRename if available
+        if utils.try_require("inc_rename") ~= nil then
+            lsp_keymap("rn", "<cmd>IncRename()<CR>")
+        end
+
         -- Set some keybinds conditional on server capabilities
         if client.resolved_capabilities.document_formatting then
             buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)

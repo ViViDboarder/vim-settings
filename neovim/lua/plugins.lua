@@ -215,6 +215,15 @@ use("folke/lua-dev.nvim")
 -- Better display of lsp diagnostics
 use("folke/trouble.nvim")
 
+-- Incremental lsp rename view
+use({
+    "smjonas/inc-rename.nvim",
+    config = function()
+        require("inc_rename").setup()
+    end,
+    disable = vim.fn.has("nvim-0.7.0") ~= 1,
+})
+
 -- Generic linter/formatters in diagnostics API
 use({
     "jose-elias-alvarez/null-ls.nvim",
