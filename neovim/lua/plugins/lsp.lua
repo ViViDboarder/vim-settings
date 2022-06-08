@@ -27,6 +27,14 @@ function M.config_lsp_ui()
         Hint = "🤔",
         Info = "➞",
     }
+    if vim.env["TERM"] == "xterm-kitty" then
+        signs = {
+            Error = "!!",
+            Warn = "!",
+            Hint = "?",
+            Info = "i",
+        }
+    end
     for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
