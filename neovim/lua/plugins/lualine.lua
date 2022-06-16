@@ -82,7 +82,7 @@ function M.config_lualine(theme_name)
                 },
             },
             lualine_b = { "FugitiveHead", "diff" },
-            lualine_c = { "filename", { gps.get_location, cond = gps.is_available } },
+            lualine_c = { { "filename", path = 1 }, { gps.get_location, cond = gps.is_available } },
             lualine_x = { M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
