@@ -397,10 +397,10 @@ use({
     config = function()
         require("notify").setup({
             icons = {
-                ERROR = "🔥",
-                WARN = "⚠️",
-                DEBUG = "🤔",
-                INFO = "*",
+                ERROR = utils.diagnostic_signs.Error,
+                WARN = utils.diagnostic_signs.Warn,
+                DEBUG = utils.diagnostic_signs.Hint,
+                INFO = utils.diagnostic_signs.Info,
             },
         })
         vim.notify = require("notify")

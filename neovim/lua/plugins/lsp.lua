@@ -21,22 +21,7 @@ function M.config_lsp_ui()
     end
 
     -- Diagnostics signs
-    local signs = {
-        Error = "🔥",
-        Warn = "⚠️",
-        Hint = "🤔",
-        Info = "➞",
-    }
-
-    -- Don't use emoji for Kitty
-    if vim.env["TERM"] == "xterm-kitty" then
-        signs = {
-            Error = "!!",
-            Warn = "!",
-            Hint = "?",
-            Info = "i",
-        }
-    end
+    local signs = utils.diagnostic_signs
 
     for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
@@ -217,9 +202,9 @@ end
 function M.config_lsp_saga()
     utils.try_require("lspsaga", function(saga)
         saga.init_lsp_saga({
-            error_sign = "🔥",
-            warn_sign = "⚠️",
-            hint_sign = "🤔",
+            error_sign = utils.diagnostic_signs.Error,
+            warn_sign = utils.diagnostic_signs.Warn,
+            hint_sign = utils.diagnostic_signs.Hint,
             dianostic_header_icon = " 💬   ",
             code_action_icon = "💡",
             code_action_prompt = {

@@ -226,4 +226,24 @@ function M.keymap_group(mode, prefix, opts, bufnr)
     end
 end
 
+-- Diagnostics signs
+M.diagnostic_signs = {
+    Error = "🔥",
+    Warn = "⚠️",
+    Hint = "🤔",
+    Info = "➞",
+    Pencil = "✏️",
+}
+
+-- Don't use emoji for Kitty
+if vim.env["TERM"] == "xterm-kitty" then
+    M.diagnostic_signs = {
+        Error = "🔥",
+        Warn = "⚠",
+        Hint = "🤔",
+        Info = "i",
+        Pencil = "✎",
+    }
+end
+
 return M
