@@ -27,6 +27,8 @@ function M.config_lsp_ui()
         Hint = "🤔",
         Info = "➞",
     }
+
+    -- Don't use emoji for Kitty
     if vim.env["TERM"] == "xterm-kitty" then
         signs = {
             Error = "!!",
@@ -35,6 +37,7 @@ function M.config_lsp_ui()
             Info = "i",
         }
     end
+
     for type, icon in pairs(signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
