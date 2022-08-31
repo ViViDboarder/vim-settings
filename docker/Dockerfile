@@ -1,6 +1,6 @@
-FROM alpine:3.15
+FROM alpine:3.16
 
-RUN apk add \
+RUN apk add --no-cache \
     bash \
     cargo \
     ctags \
@@ -15,18 +15,15 @@ RUN apk add \
     ;
 
 # Install neovim from edge repo for latest
-RUN apk add neovim --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
+RUN apk add --no-cache neovim py3-pynvim --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
-# Try to install shellcheck
-RUN test "$(uname -m)" = "x86_64" && apk add shellcheck || true
+# Install shellcheck from edge repo because aarch64 build does not exist on main
+RUN apk add --no-cache shellcheck --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community || true
 # Try to install rustup
-RUN apk add rustup || true
+RUN apk add --no-cache rustup || true
 
 # Install dependencies for python-language-server
-RUN apk add gcc g++ python3-dev
-
-# Install neovim python client
-RUN pip3 install pynvim
+RUN apk add --no-cache gcc g++ python3-dev
 
 # Create user
 RUN adduser -D -h /home/vividboarder -s /bin/bash --ingroup users vividboarder
@@ -68,4 +65,4 @@ RUN mkdir /home/vividboarder/data
 WORKDIR /home/vividboarder/data
 
 COPY ./docker/docker-entry.sh /docker-entry.sh
-ENTRYPOINT /docker-entry.sh
+ENTRYPOINT ["/docker-entry.sh"]
