@@ -83,7 +83,7 @@ function install_linters() {
     # Go
     maybe_run release-gitter --git-url "https://github.com/golangci/golangci-lint" \
         --map-system Windows=windows --map-system Linux=linux --map-system Darwin=darwin \
-        --map-arch x86_64=amd64 --map-arch armv7l=armv7 \
+        --map-arch x86_64=amd64 --map-arch armv7l=armv7 --map-arch aarch64=arm64 \
         --extract-files golangci-lint "golangci-lint-{version}-{system}-{arch}.tar.gz" ~/bin
 
     # Lua
@@ -114,7 +114,8 @@ function install_fixers() {
     # Lua
     if ! release-gitter --git-url "https://github.com/JohnnyMorganz/StyLua" \
         --map-system Windows=win64 --map-system Linux=linux --map-system Darwin=macos \
-        -x -c "chmod +x ~/bin/stylua" "stylua-{system}.zip" ~/bin ; then
+        --map-arch x86_64="" --map-arch aarch64=-aarch64 \
+        -x -c "chmod +x ~/bin/stylua" "stylua-{system}{arch}.zip" ~/bin ; then
         maybe_run cargo install stylua
     fi
 
