@@ -221,7 +221,7 @@ use({
     config = function()
         require("inc_rename").setup()
     end,
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
+    disable = vim.fn.has("nvim-0.8.0") ~= 1,
 })
 
 -- Generic linter/formatters in diagnostics API
