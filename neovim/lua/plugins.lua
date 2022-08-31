@@ -33,7 +33,14 @@ packer.init({
 })
 
 -- Load things faster!
-use({ "lewis6991/impatient.nvim", config = [[require('impatient')]] })
+use({
+    "lewis6991/impatient.nvim",
+    config = [[require('impatient')]],
+    commit = utils.map_version_rule({
+        [">0.6.0"] = utils.nil_val,
+        [">=0.5.0"] = "969f2c5",
+    }),
+})
 
 -- Let Packer manage and lazyload itself
 use({
@@ -165,6 +172,7 @@ use({
 })
 
 -- Custom status line
+-- nvim-gps is deprecated in favor of https://github.com/SmiteshP/nvim-navic using LSP rather than TS
 use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
 use({
     "nvim-lualine/lualine.nvim",
@@ -201,7 +209,14 @@ use({
 -- LSP
 
 -- Configure language servers
-use("neovim/nvim-lspconfig")
+use({
+    "neovim/nvim-lspconfig",
+    tag = utils.map_version_rule({
+        [">=0.7.0"] = "v0.1.3",
+        [">=0.6.1"] = "v0.1.2",
+        [">=0.6.0"] = "v0.1.0",
+    }),
+})
 
 -- Install language servers
 use({
@@ -332,7 +347,8 @@ use({
         "nvim-telescope/telescope-file-browser.nvim",
     },
     tag = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
+        -- Follow stable release tag
+        [">=0.7.0"] = "0.1.0",
         [">=0.6.0"] = "nvim-0.6",
         ["<0.6.0"] = "nvim-0.5.1",
         ["==0.5.0"] = "nvim-0.5.0",
