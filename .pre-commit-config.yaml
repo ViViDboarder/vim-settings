@@ -25,9 +25,9 @@ repos:
         language: system
         types: [file, lua]
   - repo: https://github.com/johnnymorganz/stylua
-    rev: v0.11.3
+    rev: v0.14.3
     hooks:
-      - id: stylua
+      - id: stylua-system
   - repo: local
     hooks:
       - id: sort-json
