@@ -6,7 +6,9 @@ local function disable_formatter_filetypes_for_existing_servers(sources, preserv
     local server_filetypes = {}
     utils.try_require("lspconfig", function(lsp_config)
         vim.tbl_map(function(server)
-            vim.list_extend(server_filetypes, lsp_config[server].filetypes)
+            if lsp_config[server].filetypes ~= nil then
+                vim.list_extend(server_filetypes, lsp_config[server].filetypes)
+            end
         end, lsp_config.available_servers())
     end)
 

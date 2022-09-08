@@ -220,12 +220,18 @@ use({
 
 -- Install language servers
 use({
-    "williamboman/nvim-lsp-installer",
-    requires = "neovim/nvim-lspconfig",
+    "williamboman/mason.nvim",
+    requires = {
+        "neovim/nvim-lspconfig",
+        "williamboman/mason-lspconfig.nvim",
+    },
 })
 
 -- Lua dev for vim
-use("folke/lua-dev.nvim")
+use({
+    "folke/lua-dev.nvim",
+    requires = "neovim/lsp-config",
+})
 
 -- Better display of lsp diagnostics
 use("folke/trouble.nvim")

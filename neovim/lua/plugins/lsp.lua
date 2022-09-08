@@ -52,6 +52,7 @@ local function get_default_attach(override_capabilities)
         local function buf_set_keymap(...)
             vim.api.nvim_buf_set_keymap(bufnr, ...)
         end
+
         local function buf_set_option(...)
             vim.api.nvim_buf_set_option(bufnr, ...)
         end
@@ -174,47 +175,6 @@ local function merged_capabilities()
     return capabilities
 end
 
-function M.config_lsp()
-    utils.try_require("lspconfig", function(lsp_config)
-        local capabilities = merged_capabilities()
-
-        -- Configure each server
-        lsp_config.bashls.setup({ capabilities = capabilities, on_attach = get_default_attach() })
-        lsp_config.gopls.setup({ capabilities = capabilities, on_attach = get_default_attach() })
-        lsp_config.pyright.setup({ capabilities = capabilities, on_attach = get_default_attach() })
-        lsp_config.rls.setup({
-            capabilities = capabilities,
-            on_attach = get_default_attach(),
-            settings = {
-                rust = {
-                    build_on_save = false,
-                    all_features = true,
-                    unstable_features = true,
-                },
-            },
-        })
-
-        -- Config null-ls after lsps so we can disable for languages that have language servers
-        require("plugins.null-ls").configure({ capabilities = capabilities, on_attach = get_default_attach() })
-    end)
-end
-
-function M.config_lsp_saga()
-    utils.try_require("lspsaga", function(saga)
-        saga.init_lsp_saga({
-            error_sign = utils.diagnostic_signs.Error,
-            warn_sign = utils.diagnostic_signs.Warn,
-            hint_sign = utils.diagnostic_signs.Hint,
-            dianostic_header_icon = " 💬   ",
-            code_action_icon = "💡",
-            code_action_prompt = {
-                enable = false,
-                sign = false,
-            },
-        })
-    end)
-end
-
 local function get_luadev_config()
     local luadev = utils.try_require("lua-dev")
     if luadev ~= nil then
@@ -234,26 +194,78 @@ local function get_luadev_config()
         })
     end
 
-    return nil
+    return { settings = nil }
+end
+
+function M.config_lsp()
+    utils.try_require("lspconfig", function(lsp_config)
+        local capabilities = merged_capabilities()
+        local default_attach = get_default_attach()
+        local default_setup = { capabilities = capabilities, on_attach = default_attach }
+
+        -- Configure each server
+        lsp_config.bashls.setup(default_setup)
+        lsp_config.gopls.setup(default_setup)
+        lsp_config.pyright.setup(default_setup)
+        -- lsp_config.tsserver.setup(default_setup)
+        lsp_config.rls.setup({
+            capabilities = capabilities,
+            on_attach = default_attach,
+            settings = {
+                rust = {
+                    build_on_save = false,
+                    all_features = true,
+                    unstable_features = true,
+                },
+            },
+        })
+        lsp_config.sumneko_lua.setup({
+            capabilities = capabilities,
+            on_attach = default_attach,
+            settings = get_luadev_config().settings,
+        })
+
+        -- Auto setup mason installed servers
+        utils.try_require("mason-lspconfig", function(mason_lspconfig)
+            -- Get list of servers that are installed but not set up
+            local already_setup = lsp_config.available_servers()
+            local needs_setup = vim.tbl_filter(function(server)
+                return not vim.tbl_contains(already_setup, server)
+            end, mason_lspconfig.get_installed_servers())
+
+            -- Setup each server with default config
+            vim.tbl_map(function(server)
+                lsp_config[server].setup(default_setup)
+            end, needs_setup)
+        end)
+
+        -- Config null-ls after lsps so we can disable for languages that have language servers
+        require("plugins.null-ls").configure(default_setup)
+    end)
+end
+
+function M.config_lsp_saga()
+    utils.try_require("lspsaga", function(saga)
+        saga.init_lsp_saga({
+            error_sign = utils.diagnostic_signs.Error,
+            warn_sign = utils.diagnostic_signs.Warn,
+            hint_sign = utils.diagnostic_signs.Hint,
+            dianostic_header_icon = " 💬   ",
+            code_action_icon = "💡",
+            code_action_prompt = {
+                enable = false,
+                sign = false,
+            },
+        })
+    end)
 end
 
 function M.config_lsp_intaller()
-    utils.try_require("nvim-lsp-installer", function(lsp_installer)
-        -- Default options
-        local opts = {
-            on_attach = get_default_attach(),
-        }
-
-        lsp_installer.on_server_ready(function(server)
-            -- Config luadev opts
-            if server.name == "sumneko_lua" then
-                local luadev = get_luadev_config()
-                if luadev ~= nil then
-                    opts.settings = luadev.settings
-                end
-            end
-            server:setup(opts)
-        end)
+    utils.try_require("mason", function(mason)
+        mason.setup()
+    end)
+    utils.try_require("mason-lspconfig", function(mason_lspconfig)
+        mason_lspconfig.setup()
     end)
 end
 
