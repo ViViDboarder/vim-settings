@@ -39,7 +39,7 @@ endfunction
 
 " IsMac determines if this instance is running on macOS
 function! IsMac()
-  return !s:is_windows && !s:is_cygwin
+  return !s:is_windows && !s:is_cygwin && !has('iVim')
       \ && (has('mac') || has('macunix') || has('gui_macvim') ||
       \   (!executable('xdg-open') &&
       \     system('uname') =~? '^darwin'))
@@ -54,8 +54,14 @@ endfunction
 
 " Auto install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    if has('iVim')
+        terminal curl -kOL --remote-name --time-cond $SSL_CERT_FILE -o $SSL_CERT_FILE https://curl.haxx.se/ca/cacert.pem
+        terminal curl -fLo ~/.vim/autoload/plug.vim --create-dirs
                 \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    else 
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    endif 
     augroup pluginstall
         autocmd VimEnter * PlugInstall
     augroup end
@@ -64,6 +70,8 @@ endif
 call s:smart_source_rc('init')
 call s:smart_source_rc('input')
 call plug#begin()
-call s:smart_source_rc('plugins')
+if !has('iVim') 
+    call s:smart_source_rc('plugins')
+endif
 call plug#end()
 call s:smart_source_rc('ui')
