@@ -36,9 +36,10 @@ packer.init({
 use({
     "lewis6991/impatient.nvim",
     config = [[require('impatient')]],
-    commit = utils.map_version_rule({
-        [">0.6.0"] = utils.nil_val,
-        [">=0.5.0"] = "969f2c5",
+    tag = utils.map_version_rule({
+        [">=0.7.0"] = utils.nil_val,
+        [">0.6.0"] = "v0.2",
+        [">=0.5.0"] = "v0.1",
     }),
 })
 
