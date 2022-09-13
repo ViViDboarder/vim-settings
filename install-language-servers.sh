@@ -113,9 +113,9 @@ function install_fixers() {
 
     # Lua
     if ! release-gitter --git-url "https://github.com/JohnnyMorganz/StyLua" \
-        --map-system Windows=win64 --map-system Linux=linux --map-system Darwin=macos \
-        --map-arch x86_64="" --map-arch aarch64=-aarch64 \
-        -x -c "chmod +x ~/bin/stylua" "stylua-{system}{arch}.zip" ~/bin ; then
+        --map-arch amd64=aarch64 \
+        --map-system Windows=windows --map-system Linux=linux --map-system Darwin=macos \
+        -x -c "chmod +x ~/bin/stylua" "stylua-{system}-{arch}.zip" ~/bin ; then
         maybe_run cargo install stylua
     fi
 
