@@ -4,7 +4,7 @@ These are my Vim and Neovim settings that I like to keep synced between my compu
 
 I use Neovim day to day, but there are times it is not available, so Vim and older Neovim installs are supported as well.
 
-Vim and Neovim less than 0.5 support is really in maintanence mode now and not heavily maintained.
+Vim and Neovim less than 0.5 support is really in maintanence mode now and not heavily maintained. I may actually trim down the configuration to be more minimal and act as an alternative to my more IDE like Neovim environment.
 
 The bootstrap script included will set the proper symblinks and run package managers to install any plugins.
 
@@ -15,6 +15,10 @@ The bootstrap script included will set the proper symblinks and run package mana
     make install
 
 You can also remove any installed plugins or uninstall this configuration using either `make clean` or `make uninstall` respectively.
+
+## Version support
+
+Nearly every version of Vim or Neovim found on major distros is supported right now. To simplify things, I am considering adopting the following rule: Supporting only the lowest version of each found in the latest Ubuntu LTS and Debian Stable releases. I'll also make tags for commits where I drop support for a version.
 
 ## Project Layout
 
