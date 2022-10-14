@@ -230,7 +230,7 @@ use({
 -- Lua dev for vim
 use({
     "folke/lua-dev.nvim",
-    requires = "neovim/lsp-config",
+    requires = "neovim/nvim-lspconfig",
 })
 
 -- Better display of lsp diagnostics
