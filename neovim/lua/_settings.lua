@@ -43,3 +43,4 @@ end)
 
 local has = vim.fn.has
 g.is_mac = (has("mac") or has("macunix") or has("gui_macvim") or vim.fn.system("uname"):find("^darwin") ~= nil)
+g.is_gui = vim.fn.exists("g:neovide")
