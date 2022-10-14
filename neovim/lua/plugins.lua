@@ -226,6 +226,8 @@ use({
         "neovim/nvim-lspconfig",
         "williamboman/mason-lspconfig.nvim",
     },
+    -- Only supports >=0.7.0
+    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 -- Lua dev for vim
@@ -243,6 +245,7 @@ use({
     config = function()
         require("inc_rename").setup()
     end,
+    -- Only supports >=0.8.0
     disable = vim.fn.has("nvim-0.8.0") ~= 1,
 })
 
@@ -250,7 +253,8 @@ use({
 use({
     "jose-elias-alvarez/null-ls.nvim",
     commit = utils.map_version_rule({
-        [">=0.6.0"] = utils.nil_val,
+        [">=0.7.0"] = utils.nil_val,
+        [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
         [">=0.5.1"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e",
         [">=0.5.0"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81",
     }),
