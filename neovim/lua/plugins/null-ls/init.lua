@@ -58,9 +58,6 @@ function M.configure(options)
                     diagnostic.severity = vim.diagnostic.severity.WARN
                 end,
             }),
-            -- null_ls.builtins.diagnostics.alex
-            -- Ansible
-            -- null_ls.builtins.diagnostics.ansiblelint.with({filetypes={"yaml.ansible"}}),
             -- Shell
             null_ls.builtins.diagnostics.shellcheck,
             -- Lua
@@ -70,13 +67,22 @@ function M.configure(options)
             null_ls.builtins.diagnostics.hadolint,
         }
 
-        sources = disable_formatter_filetypes_for_existing_servers(sources, { "python" })
+        if vim.fn.has("nvim-0.6.0") then
+            vim.list_extend(sources, {
+                -- Text
+                null_ls.builtins.diagnostics.alex,
+                -- Ansible
+                null_ls.builtins.diagnostics.ansiblelint.with({ filetypes = { "yaml.ansible" } }),
+            })
+        else
+            -- Sources I use added or modified after 0.5.0 compatability was broken
+            vim.list_extend(sources, {
+                require("plugins.null-ls.linters").alex,
+                require("plugins.null-ls.linters").ansiblelint,
+            })
+        end
 
-        -- Add custom or modified sources
-        vim.list_extend(sources, {
-            require("plugins.null-ls.linters").alex,
-            require("plugins.null-ls.linters").ansiblelint,
-        })
+        sources = disable_formatter_filetypes_for_existing_servers(sources, { "python" })
 
         -- Setup or configure null_ls
         if null_ls["setup"] ~= nil then
