@@ -401,15 +401,7 @@ use({
 use({
     "rcarriga/nvim-notify",
     config = function()
-        require("notify").setup({
-            icons = {
-                ERROR = utils.diagnostic_signs.Error,
-                WARN = utils.diagnostic_signs.Warn,
-                DEBUG = utils.diagnostic_signs.Hint,
-                INFO = utils.diagnostic_signs.Info,
-            },
-        })
-        vim.notify = require("notify")
+        require("plugins.notify")
     end,
 })
 
