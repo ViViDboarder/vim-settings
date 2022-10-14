@@ -42,11 +42,8 @@ local function get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Allow overriding capabilities to avoid duplicate lsps with capabilities
         if override_capabilities ~= nil then
-            client.resolved_capabilities = vim.tbl_extend(
-                "force",
-                client.resolved_capabilities,
-                override_capabilities or {}
-            )
+            client.resolved_capabilities =
+                vim.tbl_extend("force", client.resolved_capabilities, override_capabilities or {})
         end
 
         local function buf_set_keymap(...)
@@ -175,10 +172,11 @@ local function merged_capabilities()
     return capabilities
 end
 
+--[[
 local function get_luadev_config()
-    local luadev = utils.try_require("lua-dev")
-    if luadev ~= nil then
-        return luadev.setup({
+    local neodev = utils.try_require("neodev")
+    if neodev ~= nil then
+        return neodev.setup({
             -- add any options here, or leave empty to use the default settings
             lspconfig = {
                 on_attach = get_default_attach(),
@@ -196,6 +194,7 @@ local function get_luadev_config()
 
     return { settings = nil }
 end
+--]]
 
 function M.config_lsp()
     utils.try_require("lspconfig", function(lsp_config)
@@ -219,11 +218,18 @@ function M.config_lsp()
                 },
             },
         })
+
+        -- Configure neovim dev for when sumneko_lua is installed
+        utils.try_require("neodev", function(neodev)
+            neodev.setup({})
+        end)
+        --[[
         lsp_config.sumneko_lua.setup({
             capabilities = capabilities,
             on_attach = default_attach,
-            settings = get_luadev_config().settings,
+            -- settings = get_luadev_config().settings,
         })
+        --]]
 
         -- Auto setup mason installed servers
         utils.try_require("mason-lspconfig", function(mason_lspconfig)

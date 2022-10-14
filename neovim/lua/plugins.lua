@@ -232,7 +232,7 @@ use({
 
 -- Lua dev for vim
 use({
-    "folke/lua-dev.nvim",
+    "folke/neodev.nvim",
     requires = "neovim/nvim-lspconfig",
 })
 
