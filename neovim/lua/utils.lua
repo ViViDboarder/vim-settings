@@ -159,7 +159,7 @@ M.nil_val = {}
 -- If more than one rule matches, the one with the greatest version number is used
 function M.map_version_rule(rules)
     local v = vim.version()
-    local current_version = { v.major, v.minor, v.patch }
+    local current_version = { v and v.major, v and v.minor, v and v.patch }
 
     -- Parse a constraint and version of a string
     local parse_rule = function(rule_string)

@@ -1,7 +1,7 @@
 -- Install packer
 local utils = require("utils")
 local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/opt/packer.nvim"
-local packer_bootstrap = false
+local packer_bootstrap = ""
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
     packer_bootstrap = vim.fn.system({ "git", "clone", "https://github.com/wbthomason/packer.nvim", install_path })
 end
@@ -411,6 +411,6 @@ use({
 })
 
 -- Auto sync after bootstrapping on a fresh box
-if packer_bootstrap then
+if packer_bootstrap ~= "" then
     packer.sync()
 end
