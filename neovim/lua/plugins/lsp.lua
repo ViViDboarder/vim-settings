@@ -172,30 +172,6 @@ local function merged_capabilities()
     return capabilities
 end
 
---[[
-local function get_luadev_config()
-    local neodev = utils.try_require("neodev")
-    if neodev ~= nil then
-        return neodev.setup({
-            -- add any options here, or leave empty to use the default settings
-            lspconfig = {
-                on_attach = get_default_attach(),
-                settings = {
-                    Lua = {
-                        completion = {
-                            callSnippet = "Disable",
-                            keywordSnippet = "Disable",
-                        },
-                    },
-                },
-            },
-        })
-    end
-
-    return { settings = nil }
-end
---]]
-
 function M.config_lsp()
     utils.try_require("lspconfig", function(lsp_config)
         local capabilities = merged_capabilities()
@@ -206,7 +182,6 @@ function M.config_lsp()
         lsp_config.bashls.setup(default_setup)
         lsp_config.gopls.setup(default_setup)
         lsp_config.pyright.setup(default_setup)
-        -- lsp_config.tsserver.setup(default_setup)
         lsp_config.rls.setup({
             capabilities = capabilities,
             on_attach = default_attach,
@@ -223,13 +198,6 @@ function M.config_lsp()
         utils.try_require("neodev", function(neodev)
             neodev.setup({})
         end)
-        --[[
-        lsp_config.sumneko_lua.setup({
-            capabilities = capabilities,
-            on_attach = default_attach,
-            -- settings = get_luadev_config().settings,
-        })
-        --]]
 
         -- Auto setup mason installed servers
         utils.try_require("mason-lspconfig", function(mason_lspconfig)
@@ -247,22 +215,6 @@ function M.config_lsp()
 
         -- Config null-ls after lsps so we can disable for languages that have language servers
         require("plugins.null-ls").configure(default_setup)
-    end)
-end
-
-function M.config_lsp_saga()
-    utils.try_require("lspsaga", function(saga)
-        saga.init_lsp_saga({
-            error_sign = utils.diagnostic_signs.Error,
-            warn_sign = utils.diagnostic_signs.Warn,
-            hint_sign = utils.diagnostic_signs.Hint,
-            dianostic_header_icon = " 💬   ",
-            code_action_icon = "💡",
-            code_action_prompt = {
-                enable = false,
-                sign = false,
-            },
-        })
     end)
 end
 
