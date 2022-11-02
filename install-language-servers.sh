@@ -91,8 +91,20 @@ function install_linters() {
 
     # Docker
     maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
-        -c '"mv ~/bin/hadolint-* ~/bin/hadolint && chmod +x ~/bin/hadolint"' \
-        "hadolint-{system}-x86_64" ~/bin
+        --exec "'mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint'" \
+        "hadolint-{system}-{arch}" ~/bin
+
+    # Terraform
+    maybe_run release-gitter --git-url "https://github.com/aquasecurity/tfsec" \
+        --map-arch arm64=aarch64 --map-arch x86_64=amd64 \
+        --map-system Linux=linux --map-system Darwin=darwin \
+        --exec "'mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec'" \
+        "tfsec-{system}-{arch}" ~/bin
+    maybe_run release-gitter --git-url "https://github.com/terraform-linters/tflint" \
+        --map-arch x86_64=amd64 \
+        --map-system Linux=linux --map-system Darwin=darwin \
+        --extract-all --exec "'chmod +x ~/bin/tflint'" \
+        "tflint_{system}_{arch}.zip" ~/bin
 
     echo ""
 }
@@ -113,9 +125,10 @@ function install_fixers() {
 
     # Lua
     if ! release-gitter --git-url "https://github.com/JohnnyMorganz/StyLua" \
-        --map-arch amd64=aarch64 \
+        --map-arch arm64=aarch64 \
         --map-system Windows=windows --map-system Linux=linux --map-system Darwin=macos \
-        -x -c "chmod +x ~/bin/stylua" "stylua-{system}-{arch}.zip" ~/bin ; then
+        --extract-all --exec "chmod +x ~/bin/stylua" \
+        "stylua-{system}-{arch}.zip" ~/bin ; then
         maybe_run cargo install stylua
     fi
 
