@@ -67,6 +67,7 @@ function M.configure(options)
             null_ls.builtins.diagnostics.hadolint,
         }
 
+        -- HACK: Support for <0.6
         if vim.fn.has("nvim-0.6.0") then
             vim.list_extend(sources, {
                 -- Text

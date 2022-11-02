@@ -38,12 +38,41 @@ function M.config_lsp_ui()
     end)
 end
 
+local function get_server_capabilities(client)
+    -- HACK: Support for <0.8
+    if client.server_capabilities ~= nil then
+        return client.server_capabilities
+    end
+
+    local capabilities = client.resolved_capabilities
+    if capabilities.documentSymbolProvider == nil then
+        capabilities.documentSymbolProvider = capabilities.goto_definition
+    end
+    if capabilities.documentFormattingProvider == nil then
+        capabilities.documentFormattingProvider = capabilities.document_formatting
+    end
+    if capabilities.documentRangeFormattingProvider == nil then
+        capabilities.documentRangeFormattingProvider = capabilities.document_range_formatting
+    end
+    if capabilities.documentHighlightProvider == nil then
+        capabilities.documentHighlightProvider = capabilities.document_highlight
+    end
+    if capabilities.workspaceSymbolProvider == nil then
+        -- Not sure what the legacy version of this is
+        capabilities.workspaceSymbolProvider = capabilities.goto_definition
+    end
+
+    return capabilities
+end
+
 local function get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Allow overriding capabilities to avoid duplicate lsps with capabilities
+
+        -- Using custom method to extract for <0.8 support
+        local server_capabilities = get_server_capabilities(client)
         if override_capabilities ~= nil then
-            client.resolved_capabilities =
-                vim.tbl_extend("force", client.resolved_capabilities, override_capabilities or {})
+            server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
         end
 
         local function buf_set_keymap(...)
@@ -54,13 +83,16 @@ local function get_default_attach(override_capabilities)
             vim.api.nvim_buf_set_option(bufnr, ...)
         end
 
-        -- Set built in features to use lsp functions
-        buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
-        if client.resolved_capabilities.goto_definition then
-            buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
-        end
-        if client.resolved_capabilities.document_formatting then
-            buf_set_option("formatexpr", "v:lua.vim.lsp.formatexpr()")
+        -- Set built in features to use lsp functions (automatic in nvim-0.8)
+        -- HACK: Support for <0.8
+        if not vim.fn.has("nvim-0.8") then
+            buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+            if server_capabilities.documentSymbolProvider then
+                buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
+            end
+            if server_capabilities.documentFormattingProvider then
+                buf_set_option("formatexpr", "v:lua.vim.lsp.formatexpr()")
+            end
         end
 
         -- Mappings
@@ -107,26 +139,39 @@ local function get_default_attach(override_capabilities)
 
         -- Use IncRename if available
         if utils.try_require("inc_rename") ~= nil then
-            lsp_keymap("rn", "<cmd>IncRename()<CR>")
+            vim.keymap.set("n", "<leader>rn", function()
+                return ":IncRename " .. vim.fn.expand("<cword>")
+            end, { expr = true, buffer = true, desc = "Rename current symbol" })
         end
 
         -- Set some keybinds conditional on server capabilities
-        if client.resolved_capabilities.document_formatting then
+        -- HACK: Support for <0.8
+        if vim.fn.has("nvim-0.8") then
+            buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
+            buf_set_keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
+            if server_capabilities.documentFormattingProvider then
+                vim.cmd([[
+                augroup lsp_format
+                    autocmd!
+                    autocmd BufWritePre *.rs,*.go,*.sh,*.lua lua vim.lsp.buf.format({async=false, timeout_ms=1000})
+                augroup END
+            ]])
+            end
+        else
             buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-            vim.cmd([[
-            augroup lsp_format
-                autocmd!
-                autocmd BufWritePre *.rs,*.go,*.sh,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)
-                " autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1000)
-            augroup END
-        ]])
-        end
-        if client.resolved_capabilities.document_range_formatting then
             buf_set_keymap("n", "<leader>lfr", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+            if server_capabilities.documentFormattingProvider then
+                vim.cmd([[
+                augroup lsp_format
+                    autocmd!
+                    autocmd BufWritePre *.rs,*.go,*.sh,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)
+                augroup END
+            ]])
+            end
         end
 
         -- Set autocommands conditional on server_capabilities
-        if client.resolved_capabilities.document_highlight then
+        if server_capabilities.documentHighlightProvider then
             vim.cmd([[
                 :highlight link LspReferenceRead MatchParen
                 :highlight link LspReferenceText MatchParen
@@ -142,15 +187,18 @@ local function get_default_attach(override_capabilities)
         -- Some override some fuzzy finder bindings to use lsp sources
         if utils.try_require("telescope") ~= nil then
             -- Replace some Telescope bindings with LSP versions
-            if client.resolved_capabilities.goto_definition then
+            if server_capabilities.documentSymbolProvider then
                 buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
-                buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+            end
+            if server_capabilities.workspaceSymbolProvider then
                 buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
             end
 
             -- Replace some LSP bindings with Telescope ones
-            if client.resolved_capabilities.goto_definition then
+            if server_capabilities.definitionProvider then
                 lsp_keymap("d", "<cmd>Telescope lsp_definitions<CR>")
+            end
+            if server_capabilities.typeDefinitionProvider then
                 lsp_keymap("t", "<cmd>Telescope lsp_type_definition()<CR>")
             end
             lsp_keymap("i", "<cmd>Telescope lsp_implementations<CR>")
@@ -165,10 +213,11 @@ end
 
 local function merged_capabilities()
     -- Maybe update capabilities
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    local capabilities = nil
     utils.try_require("cmp-nvim-lsp", function(cmp_nvim_lsp)
-        capabilities = cmp_nvim_lsp.update_capabilities(capabilities)
+        capabilities = cmp_nvim_lsp.default_capabilities()
     end)
+
     return capabilities
 end
 

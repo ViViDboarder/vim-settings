@@ -61,6 +61,7 @@ function M.config_lualine(theme_name)
     end
 
     local diagnostic_plugin = "nvim_diagnostic"
+    -- HACK: Support for <0.6
     if vim.fn.has("nvim-0.6.0") ~= 1 then
         diagnostic_plugin = "nvim_lsp"
     end

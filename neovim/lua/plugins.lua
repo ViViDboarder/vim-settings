@@ -213,6 +213,7 @@ use({
 use({
     "neovim/nvim-lspconfig",
     tag = utils.map_version_rule({
+        -- [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "v0.1.3",
         [">=0.6.1"] = "v0.1.2",
         [">=0.6.0"] = "v0.1.0",
@@ -283,7 +284,8 @@ use({
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
     commit = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_value,
+        [">=0.8.0"] = utils.nil_val,
+        [">=0.7.0"] = "4cccb6f494eb255b32a290d37c35ca12584c74d0",
         [">=0.5.0"] = "a189323454d1215c682c7ad7db3e6739d26339c4",
     }),
     config = function()
