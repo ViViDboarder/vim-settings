@@ -90,13 +90,18 @@ function install_linters() {
     maybe_run luarocks --local install luacheck
 
     # Docker
+    hadolint_arm64=arm64
+    if [ "$(uname -s)" == "Darwin" ]; then
+        hadolint_arm64=x86_64
+    fi
     maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
+        --map-arch arm64=$hadolint_arm64 \
         --exec "'mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint'" \
         "hadolint-{system}-{arch}" ~/bin
 
     # Terraform
     maybe_run release-gitter --git-url "https://github.com/aquasecurity/tfsec" \
-        --map-arch arm64=aarch64 --map-arch x86_64=amd64 \
+        --map-arch x86_64=amd64 \
         --map-system Linux=linux --map-system Darwin=darwin \
         --exec "'mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec'" \
         "tfsec-{system}-{arch}" ~/bin
@@ -116,8 +121,8 @@ function install_fixers() {
     maybe_run npm install -g prettier
 
     # Python
-    maybe_run pip install --user --upgrade autopep8 reorder-python-imports
-    maybe_run pip install --user --upgrade black pyls-black python-lsp-black pyls-isort pyls-mypy || echo "WARNING: black is py3 only"
+    maybe_run pip install --user --upgrade "'autopep8<1.7.0'" reorder-python-imports
+    maybe_run pip install --user --upgrade autopep8 reorder-python-imports black pyls-black python-lsp-black pyls-isort pyls-mypy || echo "WARNING: black is py3 only"
     maybe_run pip3 install --user --upgrade black pyls-black python-lsp-black pyls-isort pyls-mypy autopep8 reorder-python-imports
 
     # Rust
