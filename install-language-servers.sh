@@ -84,7 +84,9 @@ function install_linters() {
     maybe_run release-gitter --git-url "https://github.com/golangci/golangci-lint" \
         --map-system Windows=windows --map-system Linux=linux --map-system Darwin=darwin \
         --map-arch x86_64=amd64 --map-arch armv7l=armv7 --map-arch aarch64=arm64 \
-        --extract-files golangci-lint "golangci-lint-{version}-{system}-{arch}.tar.gz" ~/bin
+        --extract-files golangci-lint \
+        --exec "'chmod +x ~/bin/golangci-lint'" \
+        "golangci-lint-{version}-{system}-{arch}.tar.gz" ~/bin
 
     # Lua
     maybe_run luarocks --local install luacheck
