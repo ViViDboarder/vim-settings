@@ -68,7 +68,7 @@ function M.configure(options)
         }
 
         -- HACK: Support for <0.6
-        if vim.fn.has("nvim-0.6.0") then
+        if vim.fn.has("nvim-0.6.0") == 1 then
             vim.list_extend(sources, {
                 -- Text
                 null_ls.builtins.diagnostics.alex,

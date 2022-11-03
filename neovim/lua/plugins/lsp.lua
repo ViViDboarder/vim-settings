@@ -21,9 +21,7 @@ function M.config_lsp_ui()
     end
 
     -- Diagnostics signs
-    local signs = utils.diagnostic_signs
-
-    for type, icon in pairs(signs) do
+    for type, icon in pairs(utils.diagnostic_signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
@@ -85,7 +83,7 @@ local function get_default_attach(override_capabilities)
 
         -- Set built in features to use lsp functions (automatic in nvim-0.8)
         -- HACK: Support for <0.8
-        if not vim.fn.has("nvim-0.8") then
+        if vim.fn.has("nvim-0.8") ~= 1 then
             buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
             if server_capabilities.documentSymbolProvider then
                 buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
@@ -146,7 +144,7 @@ local function get_default_attach(override_capabilities)
 
         -- Set some keybinds conditional on server capabilities
         -- HACK: Support for <0.8
-        if vim.fn.has("nvim-0.8") then
+        if vim.fn.has("nvim-0.8") == 1 then
             buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
             buf_set_keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
             if server_capabilities.documentFormattingProvider then
