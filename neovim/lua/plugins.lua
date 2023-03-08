@@ -23,7 +23,11 @@ local use = packer.use
 
 packer.init({
     -- Always load default
-    snapshot = "latest",
+    snapshot = utils.map_version_rule({
+        [">=0.8.0"] = "latest-0.8",
+        [">=0.7.0"] = "latest-0.7",
+        [">=0.5.0"] = "latest",
+    }),
     snapshot_path = packer_util.join_paths(vim.fn.stdpath("config"), "packer_snapshots"),
     display = {
         open_fn = function()
