@@ -80,11 +80,12 @@ end
 
 -- Require a package and a "_local" suffixed one
 function M.require_with_local(name)
-    -- TODO: Decide if local should completely override the versioned module
+    -- Local should completely override the versioned module
     -- In that case, the local file would probably start with a `require` for the
     -- non-local version. This would allow more control but at the cost of a bit
     -- of boiler plate
     local rmod = require(name)
+
     local lmod = M.maybe_require(name .. "_local")
     if lmod ~= nil then
         return lmod

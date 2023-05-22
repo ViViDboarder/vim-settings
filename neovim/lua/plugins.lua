@@ -293,7 +293,7 @@ use({
         [">=0.5.0"] = "a189323454d1215c682c7ad7db3e6739d26339c4",
     }),
     config = function()
-        require("plugins.treesitter").setup()
+        utils.require_with_local("plugins.treesitter").setup()
     end,
 })
 use({
