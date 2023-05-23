@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.18
 
 RUN apk add --no-cache \
     bash \
@@ -9,21 +9,17 @@ RUN apk add --no-cache \
     go \
     luarocks \
     make \
+    neovim \
     npm \
     py3-pip \
+    py3-pynvim \
     python3 \
     ;
-
-# Install neovim from edge repo for latest
-RUN apk add --no-cache neovim py3-pynvim --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Install shellcheck from edge repo because aarch64 build does not exist on main
 RUN apk add --no-cache shellcheck --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community || true
 # Try to install rustup
 RUN apk add --no-cache rustup || true
-
-# Install dependencies for python-language-server
-RUN apk add --no-cache gcc g++ python3-dev
 
 # Create user
 RUN adduser -D -h /home/vividboarder -s /bin/bash --ingroup users vividboarder
