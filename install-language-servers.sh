@@ -149,6 +149,7 @@ function install_linters() {
             hadolint_arm64=x86_64
         fi
         maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
+            --map-arch aarch64=$hadolint_arm64 \
             --map-arch arm64=$hadolint_arm64 \
             --exec "'mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint'" \
             "hadolint-{system}-{arch}" ~/bin
@@ -158,11 +159,13 @@ function install_linters() {
     if want_lang terraform ;then
         maybe_run release-gitter --git-url "https://github.com/aquasecurity/tfsec" \
             --map-arch x86_64=amd64 \
+            --map-arch aarch64=arm64 \
             --map-system Linux=linux --map-system Darwin=darwin \
             --exec "'mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec'" \
             "tfsec-{system}-{arch}" ~/bin
         maybe_run release-gitter --git-url "https://github.com/terraform-linters/tflint" \
             --map-arch x86_64=amd64 \
+            --map-arch aarch64=arm64 \
             --map-system Linux=linux --map-system Darwin=darwin \
             --extract-all --exec "'chmod +x ~/bin/tflint'" \
             "tflint_{system}_{arch}.zip" ~/bin
