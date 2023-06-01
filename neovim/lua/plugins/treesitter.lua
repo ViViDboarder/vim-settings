@@ -1,7 +1,7 @@
 -- Configures nvim-treesitter
 local M = {}
 
-local ensure_installed = {
+M.ensure_installed = {
     "bash",
     "css",
     "dockerfile",
@@ -25,7 +25,7 @@ local ensure_installed = {
 }
 
 function M.bootstrap()
-    require("nvim-treesitter.install").ensure_installed_sync(ensure_installed)
+    require("nvim-treesitter.install").ensure_installed_sync(M.ensure_installed)
 end
 
 function M.setup()
@@ -38,7 +38,7 @@ function M.setup()
             enable = true,
             disable = {},
         },
-        ensure_installed = ensure_installed,
+        ensure_installed = M.ensure_installed,
     })
 end
 
