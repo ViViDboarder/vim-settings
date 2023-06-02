@@ -24,6 +24,7 @@ local use = packer.use
 packer.init({
     -- Always load default
     snapshot = utils.map_version_rule({
+        [">=0.9.0"] = "latest-0.9",
         [">=0.8.0"] = "latest-0.8",
         [">=0.7.0"] = "latest-0.7",
         [">=0.5.0"] = "latest",
@@ -37,15 +38,20 @@ packer.init({
 })
 
 -- Load things faster!
-use({
-    "lewis6991/impatient.nvim",
-    config = [[require('impatient')]],
-    tag = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
-        [">0.6.0"] = "v0.2",
-        [">=0.5.0"] = "v0.1",
-    }),
-})
+if vim.fn.has("nvim-0.9.0") == 1 then
+    -- Not needed on nvim 0.9+
+    vim.loader.enable()
+else
+    use({
+        "lewis6991/impatient.nvim",
+        config = [[require('impatient')]],
+        tag = utils.map_version_rule({
+            [">=0.7.0"] = utils.nil_val,
+            [">0.6.0"] = "v0.2",
+            [">=0.5.0"] = "v0.1",
+        }),
+    })
+end
 
 -- Let Packer manage and lazyload itself
 use({
@@ -177,20 +183,24 @@ use({
 })
 
 -- Custom status line
--- nvim-gps is deprecated in favor of https://github.com/SmiteshP/nvim-navic using LSP rather than TS
-use({ "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" })
+use({
+    "SmiteshP/nvim-gps",
+    requires = "nvim-treesitter/nvim-treesitter",
+    disable = vim.fn.has("nvim-0.7.0") == 1,
+})
+-- Replaces gps for 0.7+
+use({
+    "SmiteshP/nvim-navic",
+    requires = "neovim/nvim-lspconfig",
+    disable = vim.fn.has("nvim-0.7.0") ~= 1,
+})
+
 use({
     "nvim-lualine/lualine.nvim",
     config = function()
         require("plugins.lualine").config_lualine()
     end,
-    requires = {
-        -- Show my current location in my status bar
-        -- { "SmiteshP/nvim-gps", requires = "nvim-treesitter/nvim-treesitter" },
-    },
-    after = {
-        "nvim-gps",
-    },
+    after = vim.fn.has("nvim-0.7.0") == 1 and "nvim-navic" or "nvim-gps",
 })
 
 -- On Mac, update colors when dark mode changes
@@ -218,7 +228,7 @@ use({
     "neovim/nvim-lspconfig",
     tag = utils.map_version_rule({
         -- [">=0.8.0"] = utils.nil_val,
-        [">=0.7.0"] = "v0.1.3",
+        [">=0.7.0"] = "v0.1.6",
         [">=0.6.1"] = "v0.1.2",
         [">=0.6.0"] = "v0.1.0",
     }),
@@ -257,8 +267,14 @@ use({
 -- Generic linter/formatters in diagnostics API
 use({
     "jose-elias-alvarez/null-ls.nvim",
+    branch = utils.map_version_rule({
+        [">=0.8.0"] = utils.nil_val,
+        [">=0.7.0"] = "0.7-compat",
+        ["<0.7.0"] = utils.nil_val, -- use pinned commits
+    }),
     commit = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
+        [">=0.8.0"] = utils.nil_val,
+        [">=0.7.0"] = utils.nil_val, -- Use pinned branch
         [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
         [">=0.5.1"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e",
         [">=0.5.0"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81",

@@ -143,7 +143,6 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Set some keybinds conditional on server capabilities
-        -- HACK: Support for <0.8
         if vim.fn.has("nvim-0.8") == 1 then
             buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
             buf_set_keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
@@ -156,6 +155,7 @@ local function get_default_attach(override_capabilities)
             ]])
             end
         else
+            -- HACK: Support for <0.8
             buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
             buf_set_keymap("n", "<leader>lfr", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
             if server_capabilities.documentFormattingProvider then
@@ -206,6 +206,13 @@ local function get_default_attach(override_capabilities)
             buf_set_keymap("n", "<leader>ca", "<cmd>Telescope lsp_code_actions<CR>", opts)
             buf_set_keymap("v", "<leader>lA", "<cmd>Telescope lsp_range_code_actions<CR>", opts)
         end
+
+        -- Attach navic for statusline location
+        if server_capabilities.documentSymbolProvider then
+            utils.try_require("nvim-navic", function(navic)
+                navic.attach(client, bufnr)
+            end)
+        end
     end
 end
 
@@ -249,7 +256,13 @@ function M.config_lsp()
         -- Auto setup mason installed servers
         utils.try_require("mason-lspconfig", function(mason_lspconfig)
             -- Get list of servers that are installed but not set up
-            local already_setup = lsp_config.available_servers()
+            local already_setup
+            if lsp_config["util"] and lsp_config.util["available_servers"] then
+                already_setup = lsp_config.util.available_servers()
+            else
+                -- HACK: For lspconfig versions lower than 0.1.4
+                already_setup = lsp_config.available_servers()
+            end
             local needs_setup = vim.tbl_filter(function(server)
                 return not vim.tbl_contains(already_setup, server)
             end, mason_lspconfig.get_installed_servers())

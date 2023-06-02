@@ -5,11 +5,18 @@ local function disable_formatter_filetypes_for_existing_servers(sources, preserv
     -- Aggregate filetypes with language servers
     local server_filetypes = {}
     utils.try_require("lspconfig", function(lsp_config)
+        local available_servers
+        if lsp_config["util"] and lsp_config.util["available_servers"] then
+            available_servers = lsp_config.util.available_servers()
+        else
+            -- HACK: For lspconfig versions lower than 0.1.4
+            available_servers = lsp_config.available_servers()
+        end
         vim.tbl_map(function(server)
             if lsp_config[server].filetypes ~= nil then
                 vim.list_extend(server_filetypes, lsp_config[server].filetypes)
             end
-        end, lsp_config.available_servers())
+        end, available_servers)
     end)
 
     -- Remove filetypes for formatters I want to preserve

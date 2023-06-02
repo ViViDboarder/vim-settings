@@ -46,9 +46,9 @@ function M.config_lualine(theme_name)
         theme_name = "wombat"
     end
 
-    local gps = {}
-    if utils.is_plugin_loaded("nvim-gps") then
-        gps = require("nvim-gps")
+    -- gps / navic
+    local code_loc = {}
+    utils.try_require("nvim-gps", function(gps)
         gps.setup({
             icons = {
                 ["class-name"] = "(c) ",
@@ -58,7 +58,12 @@ function M.config_lualine(theme_name)
                 ["tag-name"] = "(t) ",
             },
         })
-    end
+        code_loc = { gps.get_location, cond = gps.is_available }
+    end)
+    utils.try_require("nvim-navic", function(navic)
+        navic.setup()
+        code_loc = { navic.get_location, cond = navic.is_available }
+    end)
 
     local diagnostic_plugin = "nvim_diagnostic"
     -- HACK: Support for <0.6
@@ -83,7 +88,7 @@ function M.config_lualine(theme_name)
                 },
             },
             lualine_b = { "FugitiveHead", "diff" },
-            lualine_c = { { "filename", path = 1 }, { gps.get_location, cond = gps.is_available } },
+            lualine_c = { { "filename", path = 1 }, code_loc },
             lualine_x = { M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
