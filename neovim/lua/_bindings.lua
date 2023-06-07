@@ -1,5 +1,6 @@
 local utils = require("utils")
 
+-- TODO: Use which-key for mappings
 local map = vim.api.nvim_set_keymap
 
 local opt_silent = { silent = true }
@@ -32,8 +33,8 @@ map("v", "pp", "p", opt_default)
 map("v", "po", '"_dP', opt_default)
 
 -- Buffer nav
-map("n", "gb", ":bnext<CR>", {})
-map("n", "gB", ":bprevious<CR>", {})
+map("n", "gb", ":bnext<CR>", { desc = "Next buffer" })
+map("n", "gB", ":bprevious<CR>", { desc = "Previous buffer" })
 
 -- Easy redo
 map("n", "U", ":redo<CR>", opt_default)

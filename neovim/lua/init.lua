@@ -6,8 +6,14 @@ require("_bindings")
 require("_colors")
 
 -- Create commands
-vim.cmd("command! TagsUpdate !ctags -R .")
-vim.cmd("command! Todo grep TODO")
+-- TODO: remove check when dropping v0.6.0
+if vim.fn.has("nvim-0.7.0") == 1 then
+    vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
+    vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
+else
+    vim.cmd("command! TagsUpdate !ctags -R .")
+    vim.cmd("command! Todo grep TODO")
+end
 
 -- Use better grep programs
 if vim.fn.executable("rg") == 1 then
@@ -20,6 +26,7 @@ elseif vim.fn.executable("ack") == 1 then
 end
 
 -- Disable polyglot for langauges I've added special support for
+-- TODO: Can this be moved somewhere better?
 vim.g.polyglot_disabled = { "go", "rust" }
 
 -- Plugins

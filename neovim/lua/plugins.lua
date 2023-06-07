@@ -131,6 +131,7 @@ use({
 use({
     "tomtom/tcomment_vim",
     config = function()
+        -- TODO: use which-key?
         vim.api.nvim_set_keymap("n", "//", ":TComment<CR>", { silent = true, noremap = true })
         vim.api.nvim_set_keymap("v", "//", ":TCommentBlock<CR>", { silent = true, noremap = true })
     end,
@@ -140,7 +141,12 @@ use({
 use({
     "FooSoft/vim-argwrap",
     config = function()
-        vim.api.nvim_set_keymap("n", "<Leader>a", "<cmd>ArgWrap<CR>", { silent = true, noremap = true })
+        -- TODO: use which-key?
+        vim.api.nvim_set_keymap("n", "<Leader>a", "<cmd>ArgWrap<CR>", {
+            silent = true,
+            noremap = true,
+            desc = "Wrap or unwrap arguments",
+        })
     end,
 })
 
@@ -149,6 +155,7 @@ use({
     "tpope/vim-fugitive",
     config = function()
         local opts = { silent = true, noremap = true }
+        -- TODO: use which-key?
         vim.api.nvim_set_keymap("n", "gb", "<cmd>Git blame<CR>", opts)
         vim.api.nvim_set_keymap("n", "gc", "<cmd>Git commit<CR>", opts)
         vim.api.nvim_set_keymap("n", "gd", "<cmd>Git diff<CR>", opts)
@@ -161,6 +168,7 @@ use({
 use({
     "milkypostman/vim-togglelist",
     config = function()
+        -- TODO: use which-key?
         vim.api.nvim_set_keymap("n", "<F6>", ":call ToggleQuickfixList()<CR>", { silent = true, noremap = true })
         vim.api.nvim_set_keymap("n", "<F7>", ":call ToggleLocationList()<CR>", { silent = true, noremap = true })
     end,
