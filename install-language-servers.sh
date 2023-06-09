@@ -139,7 +139,9 @@ function install_linters() {
 
     # Lua
     if want_lang lua || want_lang neovim ;then
-        maybe_run luarocks --local install luacheck luafilesystem
+        maybe_run luarocks --local install luafilesystem
+        # Version pinned to version in pre-commit
+        maybe_run luarocks --local install luacheck 1.1.0
     fi
 
     # Docker
@@ -197,12 +199,15 @@ function install_fixers() {
 
     # Lua
     if want_lang lua || want_lang neovim ;then
+      # Version pinned to version in pre-commit
+      local stylua_version=0.17.1
         if ! release-gitter --git-url "https://github.com/JohnnyMorganz/StyLua" \
+            --version "v$stylua_version" \
             --map-arch arm64=aarch64 \
             --map-system Windows=windows --map-system Linux=linux --map-system Darwin=macos \
             --extract-all --exec "chmod +x ~/bin/stylua" \
             "stylua-{system}-{arch}.zip" ~/bin ; then
-            maybe_run cargo install stylua
+            maybe_run cargo install --version "$stylua_version" stylua
         fi
     fi
 

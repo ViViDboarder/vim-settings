@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -14,9 +14,17 @@ repos:
             vim/colors/.*\.vim
           )$
   - repo: https://github.com/johnnymorganz/stylua
-    rev: v0.15.2
+    rev: v0.17.1
     hooks:
       - id: stylua-github
+  - repo: https://github.com/lunarmodules/luacheck
+    rev: v1.1.0
+    hooks:
+      - id: luacheck
+        args:
+          - --globals
+          - vim
+          - --
   - repo: local
     hooks:
       - id: sort-json
@@ -25,12 +33,3 @@ repos:
         entry: ./scripts/sort-json.sh
         files: "(\\.json$|^neovim/packer_snapshots/)"
         types: [text]
-      - id: luacheck
-        name: Luacheck
-        entry: luacheck
-        args:
-          - --globals
-          - vim
-          - --
-        language: system
-        types: [lua]
