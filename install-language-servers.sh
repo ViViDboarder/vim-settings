@@ -139,7 +139,7 @@ function install_linters() {
 
     # Lua
     if want_lang lua || want_lang neovim ;then
-        maybe_run luarocks --local install luacheck
+        maybe_run luarocks --local install luacheck luafilesystem
     fi
 
     # Docker
