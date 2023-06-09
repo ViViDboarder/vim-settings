@@ -73,10 +73,6 @@ local function get_default_attach(override_capabilities)
             server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
         end
 
-        local function buf_set_keymap(...)
-            vim.api.nvim_buf_set_keymap(bufnr, ...)
-        end
-
         local function buf_set_option(...)
             vim.api.nvim_buf_set_option(bufnr, ...)
         end
@@ -94,27 +90,37 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Mappings
-        local opts = { noremap = true, silent = true }
-        local lsp_keymap = utils.keymap_group("n", "<leader>l", opts, bufnr)
-        lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>")
-        lsp_keymap("rn", "<cmd>lua vim.lsp.buf.rename()<CR>")
-        lsp_keymap("e", "<cmd>lua vim.diagnostic.open_float()<CR>")
-        lsp_keymap("D", "<cmd>lua vim.lsp.buf.declaration()<CR>")
-        lsp_keymap("d", "<cmd>lua vim.lsp.buf.definition()<CR>")
-        lsp_keymap("t", "<cmd>lua vim.lsp.buf.type_definition()<CR>")
-        lsp_keymap("i", "<cmd>lua vim.lsp.buf.implementation()<CR>")
-        lsp_keymap("s", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-        lsp_keymap("wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-        lsp_keymap("wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-        lsp_keymap("wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-        lsp_keymap("r", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-        lsp_keymap("p", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-        lsp_keymap("n", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+        -- TODO: use functions instead of strings when dropping 0.6
+        local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr })
+        lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>", { desc = "Display hover" })
+        lsp_keymap("rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "Refactor rename" })
+        lsp_keymap("e", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Open float dialog" })
+        lsp_keymap("D", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declaration" })
+        lsp_keymap("d", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
+        lsp_keymap("t", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { desc = "Go to type definition" })
+        lsp_keymap("i", "<cmd>lua vim.lsp.buf.implementation()<CR>", { desc = "Show implementations" })
+        lsp_keymap("s", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "Show signature help" })
+        lsp_keymap("wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", { desc = "Workspace: Add folder" })
+        lsp_keymap("wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", { desc = "Workspace: Remove folder" })
+        lsp_keymap(
+            "wl",
+            "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
+            { desc = "Workspace: List folders" }
+        )
+        lsp_keymap("r", "<cmd>lua vim.lsp.buf.references()<CR>", { desc = "References" })
+        lsp_keymap("p", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { desc = "Diagnostics: Go to previous" })
+        lsp_keymap("n", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { desc = "Diagnostics: Go to next" })
 
         -- Set insert keymap for signature help
-        buf_set_keymap("i", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+        utils.keymap_set(
+            "i",
+            "<C-k>",
+            "<cmd>lua vim.lsp.buf.signature_help()<CR>",
+            { buffer = bufnr, desc = "Show signature help" }
+        )
 
         -- Older keymaps
+        --[[
         buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
         buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
         buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
@@ -129,14 +135,17 @@ local function get_default_attach(override_capabilities)
         buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
         buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
         buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
+        --]]
 
         -- Open diagnostic on hold
         if vim["diagnostic"] ~= nil then
+            -- TODO: When dropping 0.6, use lua aucommand api
             vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]])
         end
 
         -- Use IncRename if available
         if utils.try_require("inc_rename") ~= nil then
+            -- TODO: Should I be using this for calling lua functions from keymaps?
             vim.keymap.set("n", "<leader>rn", function()
                 return ":IncRename " .. vim.fn.expand("<cword>")
             end, { expr = true, buffer = true, desc = "Rename current symbol" })
@@ -144,25 +153,35 @@ local function get_default_attach(override_capabilities)
 
         -- Set some keybinds conditional on server capabilities
         if vim.fn.has("nvim-0.8") == 1 then
-            buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
-            buf_set_keymap("v", "<leader>lf", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
+            lsp_keymap("f", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", { desc = "Format code" })
+            lsp_keymap(
+                "f",
+                "<cmd>lua vim.lsp.buf.format({async=true})<CR>",
+                { mode = "v", desc = "Format selected code" }
+            )
             if server_capabilities.documentFormattingProvider then
-                vim.cmd([[
-                augroup lsp_format
-                    autocmd!
-                    autocmd BufWritePre *.rs,*.go,*.sh,*.lua lua vim.lsp.buf.format({async=false, timeout_ms=1000})
-                augroup END
-            ]])
+                vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+                    pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
+                    callback = function()
+                        vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
+                    end,
+                    group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
+                    desc = "Auto format code on save",
+                })
             end
         else
             -- HACK: Support for <0.8
-            buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-            buf_set_keymap("n", "<leader>lfr", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+            lsp_keymap("f", "<cmd>lua vim.lsp.buf.formatting()<CR>", { desc = "Format code" })
+            lsp_keymap(
+                "f",
+                "<cmd>lua vim.lsp.buf.range_formatting()<CR>",
+                { mode = "v", desc = "Format selected code" }
+            )
             if server_capabilities.documentFormattingProvider then
                 vim.cmd([[
                 augroup lsp_format
                     autocmd!
-                    autocmd BufWritePre *.rs,*.go,*.sh,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)
+                    autocmd BufWritePre  lua vim.lsp.buf.formatting_sync(nil, 1000)
                 augroup END
             ]])
             end
@@ -185,26 +204,25 @@ local function get_default_attach(override_capabilities)
         -- Some override some fuzzy finder bindings to use lsp sources
         if utils.try_require("telescope") ~= nil then
             -- Replace some Telescope bindings with LSP versions
+            local telescope_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr })
             if server_capabilities.documentSymbolProvider then
-                buf_set_keymap("n", "<leader>t", "<cmd>Telescope lsp_document_symbols<CR>", opts)
+                telescope_keymap("t", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Find buffer tags" })
             end
             if server_capabilities.workspaceSymbolProvider then
-                buf_set_keymap("n", "<leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", opts)
+                telescope_keymap("T", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", { desc = "Find tags" })
             end
 
             -- Replace some LSP bindings with Telescope ones
             if server_capabilities.definitionProvider then
-                lsp_keymap("d", "<cmd>Telescope lsp_definitions<CR>")
+                lsp_keymap("d", "<cmd>Telescope lsp_definitions<CR>", { desc = "Find definition" })
             end
             if server_capabilities.typeDefinitionProvider then
-                lsp_keymap("t", "<cmd>Telescope lsp_type_definition()<CR>")
+                lsp_keymap("t", "<cmd>Telescope lsp_type_definition<CR>", { desc = "Find type definition" })
             end
-            lsp_keymap("i", "<cmd>Telescope lsp_implementations<CR>")
-            lsp_keymap("r", "<cmd>Telescope lsp_references<CR>")
-            lsp_keymap("A", "<cmd>Telescope lsp_code_actions<CR>")
-
-            buf_set_keymap("n", "<leader>ca", "<cmd>Telescope lsp_code_actions<CR>", opts)
-            buf_set_keymap("v", "<leader>lA", "<cmd>Telescope lsp_range_code_actions<CR>", opts)
+            lsp_keymap("i", "<cmd>Telescope lsp_implementations<CR>", { desc = "Find implementations" })
+            lsp_keymap("r", "<cmd>Telescope lsp_references<CR>", { desc = "Find references" })
+            lsp_keymap("A", "<cmd>Telescope lsp_code_actions<CR>", { desc = "Select code actions" })
+            lsp_keymap("A", "<cmd>Telescope lsp_range_code_actions<CR>", { mode = "v", desc = "Select code actions" })
         end
 
         -- Attach navic for statusline location

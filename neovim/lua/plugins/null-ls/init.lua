@@ -30,7 +30,7 @@ local function disable_formatter_filetypes_for_existing_servers(sources, preserv
     sources = vim.tbl_map(function(builtin)
         if
             builtin.method == NULL_LS_FORMATTING
-            or (type(builtin.method) == "table" and utils.list_contains(builtin.method, NULL_LS_FORMATTING))
+            or (type(builtin.method) == "table" and vim.tbl_contains(builtin.method, NULL_LS_FORMATTING))
         then
             return builtin.with({ disabled_filetypes = server_filetypes })
         end

@@ -1,48 +1,43 @@
 local utils = require("utils")
 
--- TODO: Use which-key for mappings
-local map = vim.api.nvim_set_keymap
-
-local opt_silent = { silent = true }
-local opt_default = { silent = true, noremap = true }
-map("n", "<C-L><C-L>", ":set wrap!<CR>", opt_silent)
-map("n", "<leader>lw", ":set wrap!<CR>", opt_silent)
-map("n", "<C-N><C-N>", ":set invnumber<CR>", opt_silent)
-map("n", "<leader>ln", ":set invnumber<CR>", opt_silent)
-map("n", "<leader>/", ":set hlsearch! hlsearch?<CR>", opt_silent)
-map("n", "<leader>cs", ":nohlsearch<CR>", opt_silent)
-map("n", "<leader>ws", ":set list!<CR>", opt_silent)
+utils.keymap_set("n", "<C-L><C-L>", ":set wrap!<CR>", { desc = "Toggle line wrapping" })
+utils.keymap_set("n", "<leader>lw", ":set wrap!<CR>", { desc = "Toggle line wrapping" })
+utils.keymap_set("n", "<C-N><C-N>", ":set invnumber<CR>", { desc = "Toggle line numbers" })
+utils.keymap_set("n", "<leader>ln", ":set invnumber<CR>", { desc = "Toggle line numbers" })
+utils.keymap_set("n", "<leader>/", ":set hlsearch! hlsearch?<CR>", { desc = "Toggle search highlighting" })
+utils.keymap_set("n", "<leader>cs", ":nohlsearch<CR>", { desc = "Clear search highlighting" })
+utils.keymap_set("n", "<leader>ws", ":set list!<CR>", { desc = "Toggle whitespace characters" })
 
 -- Save and quit typos
-map("c", "WQ<CR>", "wq<CR>", opt_silent)
-map("c", "Wq<CR>", "wq<CR>", opt_silent)
-map("c", "W<CR>", "w<CR>", opt_silent)
-map("c", "Q<CR>", "q<CR>", opt_silent)
-map("c", "Q!<CR>", "q!<CR>", opt_silent)
-map("c", "Qa<CR>", "qa<CR>", opt_silent)
-map("c", "Qa!<CR>", "qa!<CR>", opt_silent)
-map("c", "QA<CR>", "qa<CR>", opt_silent)
-map("c", "QA!<CR>", "qa!<CR>", opt_silent)
-map("c", "w;", "w", opt_default)
-map("c", "W;", "w", opt_default)
-map("c", "q;", "q", opt_default)
-map("c", "Q;", "q", opt_default)
+utils.keymap_set("c", "WQ<CR>", "wq<CR>", { desc = "Write and quit" })
+utils.keymap_set("c", "Wq<CR>", "wq<CR>", { desc = "Write and quit" })
+utils.keymap_set("c", "W<CR>", "w<CR>", { desc = "Write" })
+utils.keymap_set("c", "Q<CR>", "q<CR>", { desc = "Quit" })
+utils.keymap_set("c", "Q!<CR>", "q!<CR>", { desc = "Force quit" })
+utils.keymap_set("c", "Qa<CR>", "qa<CR>", { desc = "Quit all" })
+utils.keymap_set("c", "Qa!<CR>", "qa!<CR>", { desc = "Force quit all" })
+utils.keymap_set("c", "QA<CR>", "qa<CR>", { desc = "Quit all" })
+utils.keymap_set("c", "QA!<CR>", "qa!<CR>", { desc = "Force quit all" })
+utils.keymap_set("c", "w;", "w", { desc = "Write" })
+utils.keymap_set("c", "W;", "w", { desc = "Write" })
+utils.keymap_set("c", "q;", "q", { desc = "Quit" })
+utils.keymap_set("c", "Q;", "q", { desc = "Quit" })
 
 -- Paste over
-map("v", "pp", "p", opt_default)
-map("v", "po", '"_dP', opt_default)
+utils.keymap_set("v", "pp", "p", { desc = "Paste" })
+utils.keymap_set("v", "po", '"_dP', { desc = "Paste over and keep clipboard" })
 
 -- Buffer nav
-map("n", "gb", ":bnext<CR>", { desc = "Next buffer" })
-map("n", "gB", ":bprevious<CR>", { desc = "Previous buffer" })
+utils.keymap_set("n", "gb", ":bnext<CR>", { desc = "Next buffer" })
+utils.keymap_set("n", "gB", ":bprevious<CR>", { desc = "Previous buffer" })
 
 -- Easy redo
-map("n", "U", ":redo<CR>", opt_default)
+utils.keymap_set("n", "U", ":redo<CR>", { desc = "Redo" })
 
 -- Make escape easier
-map("i", "jk", "<esc>", opt_default)
-map("i", "``", "<esc>", opt_default)
-map("v", "``", "<esc>", opt_default)
+utils.keymap_set("i", "jk", "<esc>", { desc = "Escape insert" })
+utils.keymap_set("i", "``", "<esc>", { desc = "Escape insert" })
+utils.keymap_set("v", "``", "<esc>", { desc = "Escape visual" })
 
 -- C-Space completion
 function _G.complete_space()
@@ -58,12 +53,21 @@ function _G.complete_space()
         return utils.t("<C-x><C-o>")
     end
 end
-map("i", "<C-Space>", "v:lua.complete_space()", { expr = true })
+utils.keymap_set("i", "<C-Space>", "v:lua.complete_space()", { expr = true })
 
--- Easily toggle spelling
-vim.cmd("command Spell setlocal spell! spelllang=en_us")
+-- TODO: remove check when dropping v0.6.0
+if vim.fn.has("nvim-0.7.0") == 1 then
+    vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
+    vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
+    vim.api.nvim_create_user_command("Spell", "setlocal spell! spelllang=en_us", { desc = "Toggle spelling" })
+else
+    vim.cmd("command! TagsUpdate !ctags -R .")
+    vim.cmd("command! Todo grep TODO")
+    vim.cmd("command Spell setlocal spell! spelllang=en_us")
+end
+
 -- Pop spelling completion for word under cursor
-map("n", "<leader>s", "viw<esc>a<c-x>s", {})
+utils.keymap_set("n", "<leader>s", "viw<esc>a<c-x>s", { desc = "Show spelling suggestions" })
 
 -- Build on F5
-map("n", "<F5>", ":make<CR>", {})
+utils.keymap_set("n", "<F5>", ":make<CR>", { desc = "Run make" })

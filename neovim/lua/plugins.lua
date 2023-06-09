@@ -131,9 +131,8 @@ use({
 use({
     "tomtom/tcomment_vim",
     config = function()
-        -- TODO: use which-key?
-        vim.api.nvim_set_keymap("n", "//", ":TComment<CR>", { silent = true, noremap = true })
-        vim.api.nvim_set_keymap("v", "//", ":TCommentBlock<CR>", { silent = true, noremap = true })
+        require("utils").keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
+        require("utils").keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
     end,
 })
 
@@ -141,10 +140,7 @@ use({
 use({
     "FooSoft/vim-argwrap",
     config = function()
-        -- TODO: use which-key?
-        vim.api.nvim_set_keymap("n", "<Leader>a", "<cmd>ArgWrap<CR>", {
-            silent = true,
-            noremap = true,
+        require("utils").keymap_set("n", "<Leader>a", "<cmd>ArgWrap<CR>", {
             desc = "Wrap or unwrap arguments",
         })
     end,
@@ -154,13 +150,11 @@ use({
 use({
     "tpope/vim-fugitive",
     config = function()
-        local opts = { silent = true, noremap = true }
-        -- TODO: use which-key?
-        vim.api.nvim_set_keymap("n", "gb", "<cmd>Git blame<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gc", "<cmd>Git commit<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gd", "<cmd>Git diff<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gs", "<cmd>Git<CR>", opts)
-        vim.api.nvim_set_keymap("n", "gw", "<cmd>Git write<CR>", opts)
+        require("utils").keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
+        require("utils").keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })
+        require("utils").keymap_set("n", "gd", "<cmd>Git diff<CR>", { desc = "Git diff" })
+        require("utils").keymap_set("n", "gs", "<cmd>Git<CR>", { desc = "Git status" })
+        require("utils").keymap_set("n", "gw", "<cmd>Git write<CR>", { desc = "Git write" })
     end,
 })
 
@@ -168,9 +162,8 @@ use({
 use({
     "milkypostman/vim-togglelist",
     config = function()
-        -- TODO: use which-key?
-        vim.api.nvim_set_keymap("n", "<F6>", ":call ToggleQuickfixList()<CR>", { silent = true, noremap = true })
-        vim.api.nvim_set_keymap("n", "<F7>", ":call ToggleLocationList()<CR>", { silent = true, noremap = true })
+        require("utils").keymap_set("n", "<F6>", ":call ToggleQuickfixList()<CR>", { desc = "Toggle quickfix" })
+        require("utils").keymap_set("n", "<F7>", ":call ToggleLocationList()<CR>", { desc = "Toggle location list" })
     end,
 })
 
@@ -406,6 +399,7 @@ use("hsanson/vim-android")
 use({
     "sheerun/vim-polyglot",
     config = function()
+        -- TODO: Replace with api calls when dropping 0.6
         vim.cmd([[
         augroup polyglot_fts
             au BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml set filetype=yaml.ansible

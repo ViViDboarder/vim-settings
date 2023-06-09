@@ -45,11 +45,11 @@ function M.config_cmp()
     })
 
     -- Add a plug mapping to use in C-Space binding
-    vim.api.nvim_set_keymap(
+    require("utils").keymap_set(
         "i",
         "<Plug>(cmp_complete)",
         "<cmd>lua require('cmp').complete()<CR>",
-        { silent = true, noremap = true }
+        { desc = "Autocomplete" }
     )
 end
 

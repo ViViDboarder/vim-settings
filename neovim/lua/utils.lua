@@ -1,33 +1,12 @@
 -- luacheck: globals packer_plugins
 local M = {}
 
--- Key mapping
-function M.map(mode, key, result, opts)
-    M.try_require("which-key", function(wk)
-        local mappings = {}
-        mappings[key] = result
-        wk.register(mappings, {
-            mode = mode,
-            noremap = true,
-            silent = opts.silent or false,
-            expr = opts.expr or false,
-            script = opts.script or false,
-        })
-    end, function()
-        vim.fn.nvim_set_keymap(mode, key, result, {
-            noremap = true,
-            silent = opts.silent or false,
-            expr = opts.expr or false,
-            script = opts.script or false,
-        })
-    end)
-end
-
 function M.get_color(synID, what, mode)
     return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(synID)), what, mode)
 end
 
 -- Create an autocmd
+-- TODO: Remove this and use nvim_create_autocmd and nvim_create_augroup when dropping .6
 function M.autocmd(group, cmds, clear)
     clear = clear == nil and false or clear
     if type(cmds) == "string" then
@@ -133,16 +112,6 @@ function M.cmp_versions(a, b)
     return 0
 end
 
--- Checks if a list contains a value
-function M.list_contains(list, value)
-    for _, v in pairs(list) do
-        if v == value then
-            return true
-        end
-    end
-    return false
-end
-
 -- Materializes an iterator into a list
 function M.materialize_list(list, iterator)
     if iterator == nil then
@@ -156,9 +125,10 @@ function M.materialize_list(list, iterator)
     return list
 end
 
+-- Special not actually nil, but to be treated as nil value in some cases
 M.nil_val = {}
 
--- Maps a set of version rules to a value eg. [">0.5.0"] = "has 0.5.0"
+-- Maps a set of version rules to a value eg. [">=0.5.0"] = "has 0.5.0"
 -- If more than one rule matches, the one with the greatest version number is used
 function M.map_version_rule(rules)
     local v = vim.version()
@@ -174,15 +144,15 @@ function M.map_version_rule(rules)
     local matches = function(cmp, major, minor, patch)
         local c = M.cmp_versions(current_version, { major, minor, patch })
         if c == 1 then
-            if M.list_contains({ ">", ">=" }, cmp) then
+            if vim.tbl_contains({ ">", ">=" }, cmp) then
                 return true
             end
         elseif c == 0 then
-            if M.list_contains({ "==", ">=", "<=" }, cmp) then
+            if vim.tbl_contains({ "==", ">=", "<=" }, cmp) then
                 return true
             end
         elseif c == -1 then
-            if M.list_contains({ "<", "<=" }, cmp) then
+            if vim.tbl_contains({ "<", "<=" }, cmp) then
                 return true
             end
         end
@@ -215,17 +185,65 @@ function M.swapped_map(v, func)
     return func
 end
 
--- Returns a function used to create keymaps with consistent prefixes
-function M.keymap_group(mode, prefix, opts, bufnr)
-    local map_fn = vim.api.nvim_set_keymap
-    if bufnr ~= nil then
-        map_fn = function(...)
-            return vim.api.nvim_buf_set_keymap(bufnr, ...)
+-- Pop from table
+function M.tbl_pop(t, key)
+    local v = t[key]
+    t[key] = nil
+    return v
+end
+
+-- Calls keymap_set with preferred defaults
+function M.keymap_set(mode, lhs, rhs, opts)
+    opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true })
+    -- TODO: Remove this check when dropping 0.6 support
+    if vim.fn.has("nvim-0.7") == 1 then
+        vim.keymap.set(mode, lhs, rhs, opts)
+    else
+        -- Desc is not supported in 0.6
+        opts["desc"] = nil
+        if type(mode) ~= "string" then
+            for _, m in pairs(mode) do
+                M.keymap_set(m, lhs, rhs, opts)
+            end
+            return
+        end
+        -- Buffer requires a different function
+        local buffer = M.tbl_pop(opts, "buffer")
+        if buffer == nil then
+            vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+        else
+            vim.api.nvim_buf_set_keymap(buffer, mode, lhs, rhs, opts)
         end
     end
+end
 
-    return function(keys, rhs, new_opts)
-        map_fn(mode, prefix .. keys, rhs, new_opts or opts)
+-- Returns a curried function for passing data into vim.keymap.set
+function M.curry_keymap(mode, prefix, default_opts)
+    default_opts = vim.tbl_extend("keep", default_opts or {}, { noremap = true, silent = true })
+
+    -- TODO: Remove when dropping 0.6
+    if vim.fn.has("nvim-0.7") ~= 1 then
+        -- NOTE: This is incompatible with a lua function on rhs and a bool buffer instead of number
+        return M.keymap_group(mode, prefix, default_opts)
+    end
+
+    return function(lhs, rhs, opts)
+        opts = vim.tbl_extend("keep", opts or {}, default_opts)
+        local opt_mode = M.tbl_pop(opts, "mode")
+        vim.keymap.set(opt_mode or mode, prefix .. lhs, rhs, opts)
+    end
+end
+
+-- Returns a function used to create keymaps with consistent prefixes
+function M.keymap_group(mode, prefix, default_opts)
+    -- TODO: Remove when dropping 0.6 since curry_keymap exists
+    return function(lhs, rhs, opts)
+        opts = opts or default_opts
+        if opts ~= nil and default_opts ~= nil and opts ~= default_opts then
+            opts = vim.tbl_extend("keep", opts, default_opts)
+        end
+        local opt_mode = M.tbl_pop(opts, "mode")
+        M.keymap_set(opt_mode or mode, prefix .. lhs, rhs, opts)
     end
 end
 
