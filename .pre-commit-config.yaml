@@ -13,17 +13,6 @@ repos:
           (?x)^(
             vim/colors/.*\.vim
           )$
-  - repo: local
-    hooks:
-      - id: luacheck
-        name: Luacheck
-        entry: luacheck
-        args:
-          - --globals
-          - vim
-          - --
-        language: system
-        types: [file, lua]
   - repo: https://github.com/johnnymorganz/stylua
     rev: v0.15.2
     hooks:
@@ -35,3 +24,13 @@ repos:
         language: script
         entry: ./scripts/sort-json.sh
         files: "(\\.json$|^neovim/packer_snapshots/)"
+        types: [text]
+      - id: luacheck
+        name: Luacheck
+        entry: luacheck
+        args:
+          - --globals
+          - vim
+          - --
+        language: system
+        types: [lua]
