@@ -194,17 +194,9 @@ use({
     end,
 })
 
--- Custom status line
-use({
-    "SmiteshP/nvim-gps",
-    requires = "nvim-treesitter/nvim-treesitter",
-    disable = vim.fn.has("nvim-0.7.0") == 1,
-})
--- Replaces gps for 0.7+
 use({
     "SmiteshP/nvim-navic",
     requires = "neovim/nvim-lspconfig",
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 use({
@@ -212,7 +204,7 @@ use({
     config = function()
         require("plugins.lualine").config_lualine()
     end,
-    after = vim.fn.has("nvim-0.7.0") == 1 and "nvim-navic" or "nvim-gps",
+    after = "nvim-navic",
 })
 
 -- On Mac, update colors when dark mode changes
@@ -253,8 +245,6 @@ use({
         "neovim/nvim-lspconfig",
         "williamboman/mason-lspconfig.nvim",
     },
-    -- Only supports >=0.7.0
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 -- Lua dev for vim
@@ -266,7 +256,6 @@ use({
 -- Rust analyzer
 use({
     "simrat39/rust-tools.nvim",
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 -- Better display of lsp diagnostics
@@ -296,14 +285,6 @@ use({
     branch = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "0.7-compat",
-        ["<0.7.0"] = utils.nil_val, -- use pinned commits
-    }),
-    commit = utils.map_version_rule({
-        [">=0.8.0"] = utils.nil_val,
-        [">=0.7.0"] = utils.nil_val, -- Use pinned branch
-        [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
-        [">=0.5.1"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e",
-        [">=0.5.0"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81",
     }),
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 })
@@ -332,8 +313,6 @@ use({
     commit = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "4cccb6f494eb255b32a290d37c35ca12584c74d0",
-        [">=0.6.0"] = "bc25a6a5",
-        [">=0.5.0"] = "a189323454d1215c682c7ad7db3e6739d26339c4",
     }),
     config = function()
         require("utils").require_with_local("plugins.treesitter").setup()
@@ -352,10 +331,6 @@ use({
 use({
     "nvim-treesitter/nvim-treesitter-textobjects",
     requires = "nvim-treesitter/nvim-treesitter",
-    commit = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
-        ["<0.7.0"] = "eca3bf30334f85259d41dc060d50994f8f91ef7d",
-    }),
 })
 
 -- Completion
@@ -369,28 +344,16 @@ use({
     config = function()
         require("plugins.completion").config_cmp()
     end,
-    commit = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
-        [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
-    }),
     requires = {
         {
             "hrsh7th/cmp-nvim-lsp",
             after = "nvim-cmp",
-            commit = utils.map_version_rule({
-                [">=0.7.0"] = utils.nil_val,
-                ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
-            }),
         },
         { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
         { "f3fora/cmp-spell", after = "nvim-cmp" },
         {
             "saadparwaiz1/cmp_luasnip",
             after = "nvim-cmp",
-            commit = utils.map_version_rule({
-                [">0.7.0"] = utils.nil_val,
-                [">=0.5.0"] = "b10829736542e7cc9291e60bab134df1273165c9",
-            }),
         },
         "L3MON4D3/LuaSnip",
     },
@@ -430,10 +393,7 @@ use({
     },
     tag = utils.map_version_rule({
         -- Follow stable release tag
-        [">=0.7.0"] = "0.1.0",
-        [">=0.6.0"] = "nvim-0.6",
-        ["<0.6.0"] = "nvim-0.5.1",
-        ["==0.5.0"] = "nvim-0.5.0",
+        [">=0.7.0"] = "0.1.*",
     }),
     config = function()
         require("plugins.telescope")
