@@ -149,6 +149,9 @@ use({
 -- Adds git operations to vim
 use({
     "tpope/vim-fugitive",
+    -- HACK: Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
+    -- when used in status line.
+    tag = "v3.6",
     config = function()
         require("utils").keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
         require("utils").keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })
