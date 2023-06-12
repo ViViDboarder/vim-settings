@@ -14,13 +14,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         *)
             VIM_LANGS+=("$1")
-            echo "Read arg $1"
             ;;
     esac
     shift
 done
-
-echo "Langs! ${VIM_LANGS[*]}"
 
 function want_lang() {
     if [ "${#VIM_LANGS[@]}" -eq 0 ]; then
