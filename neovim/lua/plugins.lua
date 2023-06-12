@@ -27,6 +27,7 @@ packer.init({
         [">=0.9.0"] = "latest-0.9",
         [">=0.8.0"] = "latest-0.8",
         [">=0.7.0"] = "latest-0.7",
+        [">=0.6.0"] = "latest-0.6",
         [">=0.5.0"] = "latest",
     }),
     snapshot_path = packer_util.join_paths(vim.fn.stdpath("config"), "packer_snapshots"),
@@ -88,7 +89,13 @@ use({
         },
     },
     { "ViViDboarder/wombuddy.nvim", requires = "tjdevries/colorbuddy.vim" },
-    "ishan9299/nvim-solarized-lua",
+    {
+        "ishan9299/nvim-solarized-lua",
+        commit = utils.map_version_rule({
+            [">=0.7.0"] = utils.nil_val,
+            ["<0.7.0"] = "faba49b",
+        }),
+    },
     {
         "folke/tokyonight.nvim",
         run = 'fish -c \'echo "set --path --prepend fish_themes_path "(pwd)"/extras" > ~/.config/fish/conf.d/tokyonight.fish\' || true', -- luacheck: no max line length
@@ -122,9 +129,16 @@ use("ludovicchabant/vim-gutentags")
 -- Make it easier to discover some of my keymaps
 use({
     "folke/which-key.nvim",
+    -- TODO: Pin < 0.7 version
     config = function()
         require("plugins.whichkey").configure()
     end,
+    --[[
+    commit = utils.map_version_rule({
+            [">=0.7.0"]= utils.,
+            ["<0.7.0"]= "bd4411a",
+        }),
+    --]]
 })
 
 -- Better commenting
@@ -256,7 +270,14 @@ use({
 })
 
 -- Better display of lsp diagnostics
-use("folke/trouble.nvim")
+-- TODO: Pin < 0.7 version
+use({
+    "folke/trouble.nvim",
+    tag = utils.map_version_rule({
+        [">=0.7.2"] = "stable",
+        ["<0.7.2"] = "v1.0.2",
+    }),
+})
 
 -- Incremental lsp rename view
 use({
@@ -310,22 +331,38 @@ use({
     commit = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "4cccb6f494eb255b32a290d37c35ca12584c74d0",
+        [">=0.6.0"] = "bc25a6a5",
         [">=0.5.0"] = "a189323454d1215c682c7ad7db3e6739d26339c4",
     }),
     config = function()
         require("utils").require_with_local("plugins.treesitter").setup()
     end,
 })
+--[[ TODO: Enable this as an alterantive or fallback for LSPs
 use({
     "nvim-treesitter/nvim-treesitter-refactor",
     requires = "nvim-treesitter/nvim-treesitter",
+    commit = utils.map_version_rule({
+        [">=0.7.0"] = utils.nil_val,
+        ["<0.7.0"] = "75f5895",
+    }),
 })
+--]]
 use({
     "nvim-treesitter/nvim-treesitter-textobjects",
     requires = "nvim-treesitter/nvim-treesitter",
+    commit = utils.map_version_rule({
+        [">=0.7.0"] = utils.nil_val,
+        ["<0.7.0"] = "eca3bf30334f85259d41dc060d50994f8f91ef7d",
+    }),
 })
 
 -- Completion
+use({
+    "L3MON4D3/LuaSnip",
+    tag = "v1.*",
+})
+
 use({
     "hrsh7th/nvim-cmp",
     config = function()
@@ -336,7 +373,14 @@ use({
         [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
     }),
     requires = {
-        { "hrsh7th/cmp-nvim-lsp", after = "nvim-cmp" },
+        {
+            "hrsh7th/cmp-nvim-lsp",
+            after = "nvim-cmp",
+            commit = utils.map_version_rule({
+                [">=0.7.0"] = utils.nil_val,
+                ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
+            }),
+        },
         { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
         { "f3fora/cmp-spell", after = "nvim-cmp" },
         {
@@ -427,6 +471,14 @@ use({
     config = function()
         require("plugins.todo")
     end,
+    tag = utils.map_version_rule({
+        [">=0.8.0"] = "stable",
+        ["<0.8.0"] = utils.nil_val,
+    }),
+    branch = utils.map_version_rule({
+        [">=0.8.0"] = utils.nil_val,
+        ["<0.8.0"] = "neovim-pre-0.8.0",
+    }),
 })
 
 -- Fancy notifications
