@@ -129,7 +129,7 @@ function install_linters() {
         maybe_run release-gitter --git-url "https://github.com/golangci/golangci-lint" \
             --map-system Windows=windows --map-system Linux=linux --map-system Darwin=darwin \
             --map-arch x86_64=amd64 --map-arch armv7l=armv7 --map-arch aarch64=arm64 \
-            --extract-all --exec "mv /tmp/\$(echo {}|sed s/\.tar\.gz\$//)/golangci-lint ~/bin/" \
+            --extract-all --exec "'mv /tmp/\$(echo {}|sed s/\.tar\.gz\$//)/golangci-lint ~/bin/'" \
             "golangci-lint-{version}-{system}-{arch}.tar.gz" /tmp/
     fi
 
