@@ -48,6 +48,7 @@ function M.config_lualine(theme_name)
 
     -- gps / navic
     local code_loc = {}
+
     utils.try_require("nvim-gps", function(gps)
         gps.setup({
             icons = {
@@ -60,9 +61,22 @@ function M.config_lualine(theme_name)
         })
         code_loc = { gps.get_location, cond = gps.is_available }
     end)
+
     utils.try_require("nvim-navic", function(navic)
-        navic.setup()
-        code_loc = { navic.get_location, cond = navic.is_available }
+        navic.setup({
+            icons = {
+                Class = "(c)",
+                Constant = "(Const)",
+                Constructor = "cst",
+                Function = "(f)",
+                Method = "(m)",
+                Package = "(p)",
+                Property = "(pr)",
+                Struct = "(s)",
+                Variable = "(v)",
+            },
+        })
+        code_loc = { "navic" }
     end)
 
     local diagnostic_plugin = "nvim_diagnostic"
