@@ -246,7 +246,7 @@ use({
     "neovim/nvim-lspconfig",
     tag = utils.map_version_rule({
         -- [">=0.8.0"] = utils.nil_val,
-        [">=0.7.0"] = "v0.1.6",
+        [">=0.7.0"] = utils.nil_val,
         [">=0.6.1"] = "v0.1.2",
         [">=0.6.0"] = "v0.1.0",
     }),
