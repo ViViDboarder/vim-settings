@@ -75,7 +75,7 @@ function install_language_servers() {
 
     # Rust
     if want_lang rust ;then
-        maybe_run rustup component add rls rustfmt rust-analysis rust-src clippy rustfmt
+        maybe_run rustup component add rustfmt rust-analysis rust-src clippy rust-analyzer
     fi
 
     # Go

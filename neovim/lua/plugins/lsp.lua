@@ -254,17 +254,39 @@ function M.config_lsp()
         lsp_config.bashls.setup(default_setup)
         lsp_config.gopls.setup(default_setup)
         lsp_config.pyright.setup(default_setup)
-        lsp_config.rls.setup({
-            capabilities = capabilities,
-            on_attach = default_attach,
-            settings = {
-                rust = {
-                    build_on_save = false,
-                    all_features = true,
-                    unstable_features = true,
-                },
-            },
-        })
+
+        -- Set up rust analyzer (preferred) or rls
+        -- TODO: Remove rls and all configuration for it when all machines are up to date
+        if vim.fn.executable("rust-analyzer") == 1 then
+            -- Prefer rust-tools, if present
+            utils.try_require("rust-tools", function(rust_tools)
+                rust_tools.setup({
+                    capabilities = capabilities,
+                    on_attach = function(client, bufnr)
+                        default_attach(client, bufnr)
+                        -- TODO: override some bindings from rust-tools
+                        -- Eg. rust_tools.hover_actions.hover_actions or rt.code_action_group.code_action_group
+                    end,
+                })
+            end, function()
+                lsp_config.rust_analyzer.setup({
+                    capabilities = capabilities,
+                    on_attach = default_attach,
+                    settings = {
+                        ["rust-analyzer"] = {
+                            cargo = {
+                                features = "all",
+                            },
+                        },
+                    },
+                })
+            end)
+        else
+            lsp_config.rls.setup({
+                capabilities = capabilities,
+                on_attach = default_attach,
+            })
+        end
 
         -- Configure neovim dev for when sumneko_lua is installed
         utils.try_require("neodev", function(neodev)

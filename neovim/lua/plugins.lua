@@ -269,6 +269,12 @@ use({
     requires = "neovim/nvim-lspconfig",
 })
 
+-- Rust analyzer
+use({
+    "simrat39/rust-tools.nvim",
+    disable = vim.fn.has("nvim-0.7.0") ~= 1,
+})
+
 -- Better display of lsp diagnostics
 -- TODO: Pin < 0.7 version
 use({
@@ -441,7 +447,6 @@ use({
 
 -- Filetypes
 use("ViViDboarder/vim-forcedotcom")
-use("rust-lang/rust.vim")
 use("hsanson/vim-android")
 use({
     "sheerun/vim-polyglot",
