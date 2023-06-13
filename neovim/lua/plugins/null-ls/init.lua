@@ -48,6 +48,8 @@ function M.configure(options)
             null_ls.builtins.formatting.prettier,
             null_ls.builtins.formatting.trim_whitespace,
             null_ls.builtins.formatting.trim_newlines,
+            -- Ansible
+            null_ls.builtins.diagnostics.ansiblelint.with({ filetypes = { "yaml.ansible" } }),
             -- Fish
             null_ls.builtins.formatting.fish_indent,
             -- Python
@@ -59,6 +61,7 @@ function M.configure(options)
             -- Text
             null_ls.builtins.code_actions.proselint,
             null_ls.builtins.diagnostics.proselint,
+            null_ls.builtins.diagnostics.alex,
             null_ls.builtins.diagnostics.write_good.with({
                 extra_args = { "--no-adverb" },
                 diagnostics_postprocess = function(diagnostic)
@@ -74,33 +77,11 @@ function M.configure(options)
             null_ls.builtins.diagnostics.hadolint,
         }
 
-        -- HACK: Support for <0.6
-        if vim.fn.has("nvim-0.6.0") == 1 then
-            vim.list_extend(sources, {
-                -- Text
-                null_ls.builtins.diagnostics.alex,
-                -- Ansible
-                null_ls.builtins.diagnostics.ansiblelint.with({ filetypes = { "yaml.ansible" } }),
-            })
-        else
-            -- Sources I use added or modified after 0.5.0 compatability was broken
-            vim.list_extend(sources, {
-                require("plugins.null-ls.linters").alex,
-                require("plugins.null-ls.linters").ansiblelint,
-            })
-        end
-
         sources = disable_formatter_filetypes_for_existing_servers(sources, { "python", "lua" })
 
         -- Setup or configure null_ls
-        if null_ls["setup"] ~= nil then
-            options.sources = sources
-            null_ls.setup(options)
-        else
-            -- HACK: Handle old versions of null_ls for vim < 0.6 that don't support `setup`
-            null_ls.config({ sources = sources })
-            require("lspconfig")["null-ls"].setup(options)
-        end
+        options.sources = sources
+        null_ls.setup(options)
     end)
 end
 

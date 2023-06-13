@@ -28,7 +28,6 @@ packer.init({
         [">=0.8.0"] = "latest-0.8",
         [">=0.7.0"] = "latest-0.7",
         [">=0.6.0"] = "latest-0.6",
-        [">=0.5.0"] = "latest",
     }),
     snapshot_path = packer_util.join_paths(vim.fn.stdpath("config"), "packer_snapshots"),
     display = {
@@ -296,14 +295,12 @@ use({
     branch = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "0.7-compat",
-        ["<0.7.0"] = utils.nil_val, -- use pinned commits
+        ["<0.7.0"] = utils.nil_val, -- use pinned commit
     }),
     commit = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = utils.nil_val, -- Use pinned branch
         [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
-        [">=0.5.1"] = "739a98c12bedaa2430c4a3c08d1d22ad6c16513e",
-        [">=0.5.0"] = "3e7390735501d0507bf2c2b5c2e7a16f58deeb81",
     }),
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 })
@@ -333,7 +330,6 @@ use({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "4cccb6f494eb255b32a290d37c35ca12584c74d0",
         [">=0.6.0"] = "bc25a6a5",
-        [">=0.5.0"] = "a189323454d1215c682c7ad7db3e6739d26339c4",
     }),
     config = function()
         require("utils").require_with_local("plugins.treesitter").setup()
