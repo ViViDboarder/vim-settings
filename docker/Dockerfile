@@ -16,10 +16,8 @@ RUN apk add --no-cache \
     python3 \
     ;
 
-# Install shellcheck from edge repo because aarch64 build does not exist on main
-RUN apk add --no-cache shellcheck --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community || true
-# Try to install rustup
-RUN apk add --no-cache rustup || true
+# Install shellcheck and rustup, if in repo (like arm)
+RUN apk add --no-cache shellcheck rustup || true
 
 # Create user
 RUN adduser -D -h /home/vividboarder -s /bin/bash --ingroup users vividboarder
