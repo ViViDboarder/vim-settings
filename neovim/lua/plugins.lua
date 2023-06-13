@@ -282,7 +282,9 @@ use({
 use({
     "smjonas/inc-rename.nvim",
     config = function()
-        require("inc_rename").setup()
+        require("inc_rename").setup({
+            input_buffer_type = "dressing",
+        })
     end,
     -- Only supports >=0.8.0
     disable = vim.fn.has("nvim-0.8.0") ~= 1,
@@ -484,6 +486,13 @@ use({
     "rcarriga/nvim-notify",
     config = function()
         require("plugins.notify")
+    end,
+})
+
+use({
+    "stevearc/dressing.nvim",
+    config = function()
+        require("dressing").setup({})
     end,
 })
 
