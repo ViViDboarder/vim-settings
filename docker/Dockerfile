@@ -41,6 +41,10 @@ RUN npm config set prefix $NPM_PACKAGES
 ENV PATH $PATH:$NPM_PACKAGES/bin
 ENV PATH $HOME/.local/bin:$PATH
 
+# Add personal user bin path
+RUN mkdir $HOME/bin
+ENV PATH $HOME/bin:$PATH
+
 # Install Language servers
 COPY --chown=vividboarder:users ./install-language-servers.sh ./
 RUN ./install-language-servers.sh
