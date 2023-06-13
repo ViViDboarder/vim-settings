@@ -90,7 +90,7 @@ function M.configure(options)
             })
         end
 
-        sources = disable_formatter_filetypes_for_existing_servers(sources, { "python" })
+        sources = disable_formatter_filetypes_for_existing_servers(sources, { "python", "lua" })
 
         -- Setup or configure null_ls
         if null_ls["setup"] ~= nil then
