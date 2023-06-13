@@ -1,3 +1,9 @@
+-- TODO: Don't add these if it's already set
+vim.cmd([[
+    :highlight link LspReferenceRead MatchParen
+    :highlight link LspReferenceText MatchParen
+    :highlight link LspReferenceWrite MatchParen
+]])
 -- Update colors based on environment variables
 function _G.update_colors()
     local function maybe_set(scope, name, val, force)
@@ -61,16 +67,11 @@ end
 -- Don't need the autocommand when dark-notify is installed
 local utils = require("utils")
 if not utils.is_plugin_loaded("dark-notify") then
-    -- TODO: remove check when dropping v0.6.0
-    if vim.fn.has("nvim-0.7.0") == 1 then
-        vim.api.nvim_create_autocmd({ "FocusGained" }, {
-            pattern = "*",
-            callback = _G.update_colors,
-            group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
-        })
-    else
-        utils.autocmd("auto_colors", "FocusGained * call v:lua.update_colors()")
-    end
+    vim.api.nvim_create_autocmd({ "FocusGained" }, {
+        pattern = "*",
+        callback = _G.update_colors,
+        group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
+    })
 end
 
 -- Initial setting of colors

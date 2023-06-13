@@ -92,32 +92,53 @@ local function get_default_attach(override_capabilities)
         -- Mappings
         -- TODO: use functions instead of strings when dropping 0.6
         local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr })
-        lsp_keymap("h", "<cmd>lua vim.lsp.buf.hover()<CR>", { desc = "Display hover" })
-        lsp_keymap("rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { desc = "Refactor rename" })
-        lsp_keymap("e", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Open float dialog" })
-        lsp_keymap("D", "<cmd>lua vim.lsp.buf.declaration()<CR>", { desc = "Go to declaration" })
-        lsp_keymap("d", "<cmd>lua vim.lsp.buf.definition()<CR>", { desc = "Go to definition" })
-        lsp_keymap("t", "<cmd>lua vim.lsp.buf.type_definition()<CR>", { desc = "Go to type definition" })
-        lsp_keymap("i", "<cmd>lua vim.lsp.buf.implementation()<CR>", { desc = "Show implementations" })
-        lsp_keymap("s", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "Show signature help" })
-        lsp_keymap("wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", { desc = "Workspace: Add folder" })
-        lsp_keymap("wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", { desc = "Workspace: Remove folder" })
-        lsp_keymap(
-            "wl",
-            "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-            { desc = "Workspace: List folders" }
-        )
-        lsp_keymap("r", "<cmd>lua vim.lsp.buf.references()<CR>", { desc = "References" })
-        lsp_keymap("p", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { desc = "Diagnostics: Go to previous" })
-        lsp_keymap("n", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { desc = "Diagnostics: Go to next" })
+        lsp_keymap("h", function()
+            vim.lsp.buf.hover()
+        end, { desc = "Display hover" })
+        lsp_keymap("rn", function()
+            vim.lsp.buf.rename()
+        end, { desc = "Refactor rename" })
+        lsp_keymap("e", function()
+            vim.diagnostic.open_float()
+        end, { desc = "Open float dialog" })
+        lsp_keymap("D", function()
+            vim.lsp.buf.declaration()
+        end, { desc = "Go to declaration" })
+        lsp_keymap("d", function()
+            vim.lsp.buf.definition()
+        end, { desc = "Go to definition" })
+        lsp_keymap("t", function()
+            vim.lsp.buf.type_definition()
+        end, { desc = "Go to type definition" })
+        lsp_keymap("i", function()
+            vim.lsp.buf.implementation()
+        end, { desc = "Show implementations" })
+        lsp_keymap("s", function()
+            vim.lsp.buf.signature_help()
+        end, { desc = "Show signature help" })
+        lsp_keymap("wa", function()
+            vim.lsp.buf.add_workspace_folder()
+        end, { desc = "Workspace: Add folder" })
+        lsp_keymap("wr", function()
+            vim.lsp.buf.remove_workspace_folder()
+        end, { desc = "Workspace: Remove folder" })
+        lsp_keymap("wl", function()
+            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end, { desc = "Workspace: List folders" })
+        lsp_keymap("r", function()
+            vim.lsp.buf.references()
+        end, { desc = "References" })
+        lsp_keymap("p", function()
+            vim.lsp.diagnostic.goto_prev()
+        end, { desc = "Diagnostics: Go to previous" })
+        lsp_keymap("n", function()
+            vim.lsp.diagnostic.goto_next()
+        end, { desc = "Diagnostics: Go to next" })
 
         -- Set insert keymap for signature help
-        utils.keymap_set(
-            "i",
-            "<C-k>",
-            "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-            { buffer = bufnr, desc = "Show signature help" }
-        )
+        utils.keymap_set("i", "<C-k>", function()
+            vim.lsp.buf.signature_help()
+        end, { buffer = bufnr, desc = "Show signature help" })
 
         -- Older keymaps
         --[[
@@ -153,12 +174,12 @@ local function get_default_attach(override_capabilities)
 
         -- Set some keybinds conditional on server capabilities
         if vim.fn.has("nvim-0.8") == 1 then
-            lsp_keymap("f", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", { desc = "Format code" })
-            lsp_keymap(
-                "f",
-                "<cmd>lua vim.lsp.buf.format({async=true})<CR>",
-                { mode = "v", desc = "Format selected code" }
-            )
+            lsp_keymap("f", function()
+                vim.lsp.buf.format({ async = true })
+            end, { desc = "Format code" })
+            lsp_keymap("f", function()
+                vim.lsp.buf.format({ async = true })
+            end, { mode = "v", desc = "Format selected code" })
             if server_capabilities.documentFormattingProvider then
                 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
                     pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
@@ -171,34 +192,41 @@ local function get_default_attach(override_capabilities)
             end
         else
             -- HACK: Support for <0.8
-            lsp_keymap("f", "<cmd>lua vim.lsp.buf.formatting()<CR>", { desc = "Format code" })
-            lsp_keymap(
-                "f",
-                "<cmd>lua vim.lsp.buf.range_formatting()<CR>",
-                { mode = "v", desc = "Format selected code" }
-            )
+            lsp_keymap("f", function()
+                vim.lsp.buf.formatting()
+            end, { desc = "Format code" })
+            lsp_keymap("f", function()
+                vim.lsp.buf.range_formatting()
+            end, { mode = "v", desc = "Format selected code" })
             if server_capabilities.documentFormattingProvider then
-                vim.cmd([[
-                augroup lsp_format
-                    autocmd!
-                    autocmd BufWritePre  lua vim.lsp.buf.formatting_sync(nil, 1000)
-                augroup END
-            ]])
+                vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+                    pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
+                    callback = function()
+                        vim.lsp.buf.formatting_sync(nil, 1000)
+                    end,
+                    group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
+                    desc = "Auto format code on save",
+                })
             end
         end
 
         -- Set autocommands conditional on server_capabilities
         if server_capabilities.documentHighlightProvider then
-            vim.cmd([[
-                :highlight link LspReferenceRead MatchParen
-                :highlight link LspReferenceText MatchParen
-                :highlight link LspReferenceWrite MatchParen
-                augroup lsp_document_highlight
-                    autocmd!
-                    autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-                    autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-                augroup END
-            ]])
+            local lsp_document_highlight = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+            vim.api.nvim_create_autocmd({ "CursorHold" }, {
+                buffer = bufnr,
+                callback = function()
+                    vim.lsp.buf.document_highlight()
+                end,
+                group = lsp_document_highlight,
+            })
+            vim.api.nvim_create_autocmd({ "CursorMoved" }, {
+                buffer = bufnr,
+                callback = function()
+                    vim.lsp.buf.clear_references()
+                end,
+                group = lsp_document_highlight,
+            })
         end
 
         -- Some override some fuzzy finder bindings to use lsp sources

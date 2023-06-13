@@ -1,3 +1,7 @@
+if vim.fn.has("nvim-0.7.0") ~= 1 then
+    print("ERROR: Requires nvim >= 0.7.0")
+end
+
 local o = vim.o
 
 -- Helpers
