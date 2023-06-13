@@ -129,16 +129,10 @@ use("ludovicchabant/vim-gutentags")
 -- Make it easier to discover some of my keymaps
 use({
     "folke/which-key.nvim",
-    -- TODO: Pin < 0.7 version
     config = function()
         require("plugins.whichkey").configure()
     end,
-    --[[
-    commit = utils.map_version_rule({
-            [">=0.7.0"]= utils.,
-            ["<0.7.0"]= "bd4411a",
-        }),
-    --]]
+    tag = "v1.*",
 })
 
 -- Better commenting
