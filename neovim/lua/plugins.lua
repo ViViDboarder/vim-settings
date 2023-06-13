@@ -270,12 +270,11 @@ use({
 })
 
 -- Better display of lsp diagnostics
--- TODO: Pin < 0.7 version
 use({
     "folke/trouble.nvim",
     tag = utils.map_version_rule({
-        [">=0.7.2"] = "stable",
-        ["<0.7.2"] = "v1.0.2",
+        [">=0.7.2"] = "v2.*",
+        ["<0.7.2"] = "v1.*",
     }),
 })
 
