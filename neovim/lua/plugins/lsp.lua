@@ -309,7 +309,21 @@ function M.config_lsp()
 
             -- Setup each server with default config
             vim.tbl_map(function(server)
-                lsp_config[server].setup(default_setup)
+                if server == "lua_ls" then
+                    -- Disable formatting with lua_ls because I use luacheck
+                    local config = vim.tbl_extend("force", default_setup, {
+                        settings = {
+                            Lua = {
+                                format = {
+                                    enable = false,
+                                },
+                            },
+                        },
+                    })
+                    lsp_config[server].setup(config)
+                else
+                    lsp_config[server].setup(default_setup)
+                end
             end, needs_setup)
         end)
 
