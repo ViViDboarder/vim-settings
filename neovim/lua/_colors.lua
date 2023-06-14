@@ -21,7 +21,7 @@ function _G.update_colors()
 
     -- Set colorscheme based on env
     local utils = require("utils")
-    local default_color = "solarized"
+    local default_color = "wombat_lush"
     local env_color = utils.env_default("VIM_COLOR", default_color)
     env_color = utils.env_default("NVIM_COLOR", env_color)
 
