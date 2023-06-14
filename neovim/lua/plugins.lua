@@ -399,7 +399,7 @@ use({
     requires = "L3MON4D3/LuaSnip",
     after = "LuaSnip",
     config = function()
-        require("luasnip.loaders.from_vscode").load()
+        require("luasnip.loaders.from_vscode").lazy_load()
     end,
 })
 
