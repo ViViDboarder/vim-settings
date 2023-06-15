@@ -1,5 +1,5 @@
 " Maybe load init.lua
-if has('nvim-0.5')
+if has('nvim-0.6')
 	lua require('init')
 else
 	set runtimepath+='~/.vim'
