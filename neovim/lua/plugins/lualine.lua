@@ -35,6 +35,16 @@ function M.trailing_whitespace()
     return ""
 end
 
+-- Plugin to print name of current CSV column
+M.csv_col = {
+    function()
+        return vim.fn.CSVCol(1)
+    end,
+    cond = function()
+        return vim.bo.filetype == "csv" and vim.fn.exists("*CSVCol") == 1
+    end,
+}
+
 -- Configure lualine witha  provided theme
 function M.config_lualine(theme_name)
     -- Theme name transformations
@@ -102,7 +112,7 @@ function M.config_lualine(theme_name)
                 },
             },
             lualine_b = { "FugitiveHead", "diff" },
-            lualine_c = { { "filename", path = 1 }, code_loc },
+            lualine_c = { { "filename", path = 1 }, code_loc, M.csv_col },
             lualine_x = { M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
