@@ -108,8 +108,8 @@ local function get_default_attach(override_capabilities)
             { desc = "Workspace: List folders" }
         )
         lsp_keymap("r", "<cmd>lua vim.lsp.buf.references()<CR>", { desc = "References" })
-        lsp_keymap("p", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", { desc = "Diagnostics: Go to previous" })
-        lsp_keymap("n", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", { desc = "Diagnostics: Go to next" })
+        lsp_keymap("p", "<cmd>lua vim.diagnostic.goto_prev()<CR>", { desc = "Previous diagnostic" })
+        lsp_keymap("n", "<cmd>lua vim.diagnostic.goto_next()<CR>", { desc = "Next diagnostic" })
 
         -- Set insert keymap for signature help
         utils.keymap_set(
@@ -119,11 +119,41 @@ local function get_default_attach(override_capabilities)
             { buffer = bufnr, desc = "Show signature help" }
         )
 
+        -- Some top level aliases or remaps
+        utils.keymap_set("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", { buffer = bufnr, desc = "Display hover" })
+        utils.keymap_set(
+            "n",
+            "gD",
+            "<Cmd>lua vim.lsp.buf.declaration()<CR>",
+            { buffer = bufnr, desc = "Go to declaration" }
+        )
+        utils.keymap_set(
+            "n",
+            "gd",
+            "<Cmd>lua vim.lsp.buf.definition()<CR>",
+            { buffer = bufnr, desc = "Go to definition" }
+        )
+        utils.keymap_set(
+            "n",
+            "<leader>rn",
+            "<cmd>lua vim.lsp.buf.rename()<CR>",
+            { buffer = bufnr, desc = "Refactor rename" }
+        )
+        utils.keymap_set(
+            "n",
+            "[d",
+            "<cmd>lua vim.diagnostic.goto_prev()<CR>",
+            { buffer = bufnr, desc = "Previous diagnostic" }
+        )
+        utils.keymap_set(
+            "n",
+            "]d",
+            "<cmd>lua vim.diagnostic.goto_next()<CR>",
+            { buffer = bufnr, desc = "Next diagnostic" }
+        )
+
         -- Older keymaps
         --[[
-        buf_set_keymap("n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-        buf_set_keymap("n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
-        buf_set_keymap("n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
         buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
         buf_set_keymap("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
         buf_set_keymap("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
@@ -132,8 +162,6 @@ local function get_default_attach(override_capabilities)
         buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
         buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
         buf_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-        buf_set_keymap("n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
-        buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
         buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
         --]]
 
