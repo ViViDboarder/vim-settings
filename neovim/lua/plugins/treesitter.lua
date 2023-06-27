@@ -15,6 +15,7 @@ M.ensure_installed = {
     "kotlin",
     "lua",
     "make",
+    "markdown",
     "python",
     "rust",
     "scala",
