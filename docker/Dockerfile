@@ -1,3 +1,5 @@
+# hadolint global ignore=DL3018,DL3059
+
 FROM alpine:3.18
 
 RUN apk add --no-cache \
@@ -23,6 +25,7 @@ RUN apk add --no-cache shellcheck rustup || true
 RUN adduser -D -h /home/vividboarder -s /bin/bash --ingroup users vividboarder
 USER vividboarder
 
+# Create home and XDG paths
 WORKDIR /home/vividboarder
 ENV HOME /home/vividboarder
 ENV XDG_CONFIG_HOME $HOME/.config
@@ -57,6 +60,7 @@ RUN nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quital
 
 # Create persistent data dir
 RUN mkdir -p /home/vividboarder/.data
+VOLUME /home/vividboarder/.data
 
 # Generate workdir
 RUN mkdir /home/vividboarder/data
