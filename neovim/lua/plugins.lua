@@ -349,7 +349,8 @@ use({
     "nvim-treesitter/nvim-treesitter-textobjects",
     requires = "nvim-treesitter/nvim-treesitter",
     commit = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
+        [">=0.8.0"] = utils.nil_val,
+        [">=0.7.0"] = "8673926519ea61069f9c1366d1ad1949316d250e",
         ["<0.7.0"] = "eca3bf30334f85259d41dc060d50994f8f91ef7d",
     }),
 })
@@ -487,6 +488,10 @@ use({
 
 use({
     "stevearc/dressing.nvim",
+    branch = utils.map_version_rule({
+        [">=0.8.0"] = utils.nil_val,
+        ["<0.8.0"] = "nvim-0.7",
+    }),
     config = function()
         require("dressing").setup({})
     end,
