@@ -76,6 +76,12 @@ function install_language_servers() {
     # Rust
     if want_lang rust ;then
         maybe_run rustup component add rustfmt rust-analysis rust-src clippy rust-analyzer
+        if ! command_exists rustup ;then
+            maybe_run release-gitter --git-url "https://github.com/rust-lang/rust-analyzer" \
+                --map-system Windows=pc-windows-msvc --map-system Linux=unknown-linux-gnu --map-system Darwin=apple-darwin \
+                --exec "'F={}; gzip -d /tmp/\$F && mv /tmp/\$(echo \$F|sed s/\.gz\$//) ~/bin/rust-analyzer && chmod +x ~/bin/rust-analyzer'" \
+                "rust-analyzer-{arch}-{system}.gz" /tmp/
+        fi
     fi
 
     # Go
