@@ -7,7 +7,7 @@ let g:ale_lint_on_enter = 0
 " NOTE: Some of these are installed when bootstrapping environment, outside of vim setup
 let g:ale_linters = {
             \ 'go': ['gopls', 'golint', 'golangci-lint'],
-            \ 'python': ['pyls', 'mypy'],
+            \ 'python': ['pyright', 'mypy'],
             \ 'rust': ['rls', 'cargo'],
             \ 'sh': ['language_server', 'shell', 'shellcheck'],
             \ 'text': ['proselint', 'alex'],

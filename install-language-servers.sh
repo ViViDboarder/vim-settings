@@ -190,8 +190,8 @@ function install_fixers() {
     # Python
     if want_lang python ;then
         maybe_run pip install --user --upgrade "'autopep8<1.7.0'" reorder-python-imports
-        maybe_run pip install --user --upgrade autopep8 reorder-python-imports black pyls-black python-lsp-black pyls-isort pyls-mypy || echo "WARNING: black is py3 only"
-        maybe_run pip3 install --user --upgrade black pyls-black python-lsp-black pyls-isort pyls-mypy autopep8 reorder-python-imports
+        maybe_run pip install --user --upgrade autopep8 reorder-python-imports black || echo "WARNING: black is py3 only"
+        maybe_run pip3 install --user --upgrade black autopep8 reorder-python-imports
     fi
 
     # Rust
