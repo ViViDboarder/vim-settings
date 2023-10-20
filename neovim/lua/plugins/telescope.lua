@@ -53,6 +53,14 @@ local function config_telescope()
     finder_keymap("t", "<cmd>lua require('telescope.builtin').current_buffer_tags()<CR>", { desc = "Find buffer tags" })
     finder_keymap("T", "<cmd>lua require('telescope.builtin').tags()<CR>", { desc = "Find tags" })
 
+    if utils.can_require("sg.telescope") then
+        finder_keymap(
+            "G",
+            "<cmd>lua require('sg.telescope').fuzzy_search_results()<CR>",
+            { desc = "Search Sourcegraph" }
+        )
+    end
+
     load_extensions()
 end
 

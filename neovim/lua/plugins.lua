@@ -522,6 +522,16 @@ use({
     },
 })
 
+-- Work things
+-- Sourcegraph
+use({
+    "sourcegraph/sg.nvim",
+    run = "nvim -l build/init.lua",
+    requires = {
+        "nvim-lua/plenary.nvim",
+    },
+})
+
 -- Auto sync after bootstrapping on a fresh box
 if packer_bootstrap ~= "" then
     packer.sync()
