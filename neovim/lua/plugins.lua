@@ -500,6 +500,28 @@ use({
     end,
 })
 
+-- Obsidian notes
+use({
+    "epwalsh/obsidian.nvim",
+    requires = {
+        "nvim-lua/plenary.nvim",
+    },
+    tag = "v1.14.2",
+    config = function()
+        -- vim.cmd(":Git pull")
+        require("obsidian").setup({
+            workspaces = {
+                name = "personal",
+                path = "~/Documents/Obsidian",
+            },
+        })
+    end,
+    event = {
+        "BufRead " .. vim.fn.expand("~") .. "/Documents/Obsidian/**.md",
+        "BufNewFile " .. vim.fn.expand("~") .. "/Documents/Obsidian/**.md",
+    },
+})
+
 -- Auto sync after bootstrapping on a fresh box
 if packer_bootstrap ~= "" then
     packer.sync()

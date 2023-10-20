@@ -18,6 +18,8 @@ function M.config_cmp()
             { name = "luasnip" },
             { name = "buffer" },
             { name = "spell" },
+            { name = "obsidian" },
+            { name = "obsidian_new" },
         },
         mapping = cmp.mapping.preset.insert({
             -- Scroll docs with readline back - forward
@@ -45,12 +47,16 @@ function M.config_cmp()
     })
 
     -- Add a plug mapping to use in C-Space binding
-    require("utils").keymap_set(
-        "i",
-        "<Plug>(cmp_complete)",
-        "<cmd>lua require('cmp').complete()<CR>",
-        { desc = "Autocomplete" }
-    )
+    local utils = require("utils")
+    utils.keymap_set("i", "<Plug>(cmp_complete)", "<cmd>lua require('cmp').complete()<CR>", { desc = "Autocomplete" })
+
+    -- Maybe add obsidian and obsidian new. This is done here in case obsidian.nvim is loaded before cmp
+    utils.try_require("cmp_obsidian", function(cmp_obsidian)
+        cmp.register_source("obsidian", cmp_obsidian.new())
+    end)
+    utils.try_require("cmp_obsidian_new", function(cmp_obsidian_new)
+        cmp.register_source("obsidian_new", cmp_obsidian_new.new())
+    end)
 end
 
 return M
