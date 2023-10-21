@@ -159,8 +159,8 @@ use({
     -- HACK: Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
     -- when used in status line.
     tag = utils.map_version_rule({
-            [">=0.9.2"] = utils.nil_val,
-            ["<0.9.2"] = "v3.6",
+        [">=0.9.2"] = utils.nil_val,
+        ["<0.9.2"] = "v3.6",
     }),
     config = function()
         require("utils").keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
