@@ -7,16 +7,6 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 vim.cmd("packadd packer.nvim")
 
--- Configures dark-notify to use colors from my environment
-local function config_dark_notify()
-    require("dark_notify").run({
-        onchange = function(_)
-            -- Defined in _colors
-            _G.update_colors()
-        end,
-    })
-end
-
 local packer = require("packer")
 local packer_util = require("packer.util")
 local use = packer.use
@@ -226,7 +216,9 @@ use({
     disable = not vim.g.is_mac,
     -- Download latest release on install
     run = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/", -- luacheck: no max line length
-    config = config_dark_notify,
+    config = function()
+        require("plugins.darknotify")
+    end,
     requires = "https://github.com/nvim-lualine/lualine.nvim",
 })
 
