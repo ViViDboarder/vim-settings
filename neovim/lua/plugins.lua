@@ -551,6 +551,20 @@ use({
     requires = {
         "https://github.com/nvim-lua/plenary.nvim",
     },
+    config = function()
+        require("sg").setup({
+            enable_cody = false,
+            on_attach = function() end,
+        })
+    end,
+    cmd = {
+        "SourcegraphBuild",
+        "SourcegraphDownloadBinaries",
+        "SourcegraphInfo",
+        "SourcegraphLink",
+        "SourcegraphLogin",
+        "SourcegraphSearch",
+    },
 })
 
 -- Auto sync after bootstrapping on a fresh box
