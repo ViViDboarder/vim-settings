@@ -532,8 +532,7 @@ use({
     config = function()
         require("obsidian").setup({
             workspaces = {
-                name = "personal",
-                path = "~/Documents/Obsidian",
+                { name = "personal", path = "~/Documents/Obsidian" },
             },
         })
     end,
