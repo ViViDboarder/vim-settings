@@ -501,14 +501,32 @@ use({
 })
 
 -- Obsidian notes
+-- This loads an Obsidian plugin for better vault interraction as well as auto pulls
+-- and commits to my vault git repo. On iOS devices, I use Working Copy to sync the
+-- repo and use Shortcuts to automate pulling on open and auto committing and pushing
+-- after closing Obsidian.
 use({
     "epwalsh/obsidian.nvim",
     requires = {
         "nvim-lua/plenary.nvim",
+        {
+            -- Fork of https://github.com/declancm/git-scripts.nvim is used here
+            -- because it inclueds a few small fixes.
+            "https://github.com/vividboarder/git-scripts.nvim",
+            branch = "dev",
+            config = function()
+                local gs = require("git-scripts")
+                gs.setup({
+                    default_keymaps = false,
+                    commit_on_save = true,
+                })
+                gs.async_pull()
+            end,
+            after = "obsidian.nvim",
+        },
     },
-    tag = "v1.14.2",
+    tag = "v1.*",
     config = function()
-        -- vim.cmd(":Git pull")
         require("obsidian").setup({
             workspaces = {
                 name = "personal",
