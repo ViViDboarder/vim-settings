@@ -55,7 +55,7 @@ end
 
 -- Let Packer manage and lazyload itself
 use({
-    "wbthomason/packer.nvim",
+    "https://github.com/wbthomason/packer.nvim",
     cmd = {
         "PackerClean",
         "PackerCompile",
@@ -74,9 +74,9 @@ use({
 
 -- Colorschemes
 use({
-    "vim-scripts/wombat256.vim",
+    "https://github.com/vim-scripts/wombat256.vim",
     {
-        "ViViDboarder/wombat.nvim",
+        "https://github.com/ViViDboarder/wombat.nvim",
         requires = {
             {
                 "rktjmp/lush.nvim",
@@ -87,47 +87,50 @@ use({
             },
         },
     },
-    { "ViViDboarder/wombuddy.nvim", requires = "tjdevries/colorbuddy.vim" },
     {
-        "ishan9299/nvim-solarized-lua",
+        "https://github.com/ViViDboarder/wombuddy.nvim",
+        requires = "https://github.com/tjdevries/colorbuddy.vim",
+    },
+    {
+        "https://github.com/ishan9299/nvim-solarized-lua",
         commit = utils.map_version_rule({
             [">=0.7.0"] = utils.nil_val,
             ["<0.7.0"] = "faba49b",
         }),
     },
     {
-        "folke/tokyonight.nvim",
+        "https://github.com/folke/tokyonight.nvim",
         run = 'fish -c \'echo "set --path --prepend fish_themes_path "(pwd)"/extras" > ~/.config/fish/conf.d/tokyonight.fish\' || true', -- luacheck: no max line length
     },
 })
 
 -- Auto and ends to some ifs and dos
-use("tpope/vim-endwise")
+use("https://github.com/tpope/vim-endwise")
 
 -- Unix commands from vim? Yup!
-use("tpope/vim-eunuch")
+use("https://github.com/tpope/vim-eunuch")
 
 -- Adds repeats for custom motions
-use("tpope/vim-repeat")
+use("https://github.com/tpope/vim-repeat")
 
 -- Readline shortcuts
-use("tpope/vim-rsi")
+use("https://github.com/tpope/vim-rsi")
 
 -- Surround motions
-use("tpope/vim-surround")
+use("https://github.com/tpope/vim-surround")
 
 -- Better netrw
-use("tpope/vim-vinegar")
+use("https://github.com/tpope/vim-vinegar")
 
 -- Easier jumping to lines
-use("vim-scripts/file-line")
+use("https://github.com/vim-scripts/file-line")
 
 -- Auto ctags generation
-use("ludovicchabant/vim-gutentags")
+use("https://github.com/ludovicchabant/vim-gutentags")
 
 -- Make it easier to discover some of my keymaps
 use({
-    "folke/which-key.nvim",
+    "https://github.com/folke/which-key.nvim",
     config = function()
         require("plugins.whichkey").configure()
     end,
@@ -136,7 +139,7 @@ use({
 
 -- Better commenting
 use({
-    "tomtom/tcomment_vim",
+    "https://github.com/tomtom/tcomment_vim",
     config = function()
         require("utils").keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
         require("utils").keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
@@ -145,7 +148,7 @@ use({
 
 -- Allow wrapping and joining of arguments across multiple lines
 use({
-    "FooSoft/vim-argwrap",
+    "https://github.com/FooSoft/vim-argwrap",
     config = function()
         require("utils").keymap_set("n", "<Leader>a", "<cmd>ArgWrap<CR>", {
             desc = "Wrap or unwrap arguments",
@@ -155,11 +158,11 @@ use({
 
 -- Adds git operations to vim
 use({
-    "tpope/vim-fugitive",
-    -- HACK: Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
-    -- when used in status line.
+    "https://github.com/tpope/vim-fugitive",
     tag = utils.map_version_rule({
         [">=0.9.2"] = utils.nil_val,
+        -- HACK: Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
+        -- when used in status line.
         ["<0.9.2"] = "v3.6",
     }),
     config = function()
@@ -173,7 +176,7 @@ use({
 
 -- Quick toggling of Location and Quickfix lists
 use({
-    "milkypostman/vim-togglelist",
+    "https://github.com/milkypostman/vim-togglelist",
     config = function()
         require("utils").keymap_set("n", "<F6>", ":call ToggleQuickfixList()<CR>", { desc = "Toggle quickfix" })
         require("utils").keymap_set("n", "<F7>", ":call ToggleLocationList()<CR>", { desc = "Toggle location list" })
@@ -182,7 +185,7 @@ use({
 
 -- Find text everywhere!
 use({
-    "mhinz/vim-grepper",
+    "https://github.com/mhinz/vim-grepper",
     config = function()
         require("plugins.grepper")
     end,
@@ -190,7 +193,7 @@ use({
 
 -- Highlight inline colors
 use({
-    "norcalli/nvim-colorizer.lua",
+    "https://github.com/norcalli/nvim-colorizer.lua",
     config = function()
         require("colorizer").setup()
     end,
@@ -198,19 +201,19 @@ use({
 
 -- Custom status line
 use({
-    "SmiteshP/nvim-gps",
-    requires = "nvim-treesitter/nvim-treesitter",
+    "https://github.com/SmiteshP/nvim-gps",
+    requires = "https://github.com/nvim-treesitter/nvim-treesitter",
     disable = vim.fn.has("nvim-0.7.0") == 1,
 })
 -- Replaces gps for 0.7+
 use({
-    "SmiteshP/nvim-navic",
-    requires = "neovim/nvim-lspconfig",
+    "https://github.com/SmiteshP/nvim-navic",
+    requires = "https://github.com/neovim/nvim-lspconfig",
     disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 use({
-    "nvim-lualine/lualine.nvim",
+    "https://github.com/nvim-lualine/lualine.nvim",
     config = function()
         require("plugins.lualine").config_lualine()
     end,
@@ -219,17 +222,17 @@ use({
 
 -- On Mac, update colors when dark mode changes
 use({
-    "cormacrelf/dark-notify",
+    "https://github.com/cormacrelf/dark-notify",
     disable = not vim.g.is_mac,
     -- Download latest release on install
     run = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/", -- luacheck: no max line length
     config = config_dark_notify,
-    requires = "nvim-lualine/lualine.nvim",
+    requires = "https://github.com/nvim-lualine/lualine.nvim",
 })
 
 -- Custom start screen
 use({
-    "mhinz/vim-startify",
+    "https://github.com/mhinz/vim-startify",
     config = function()
         require("utils").require_with_local("plugins.startify")
     end,
@@ -239,7 +242,7 @@ use({
 
 -- Configure language servers
 use({
-    "neovim/nvim-lspconfig",
+    "https://github.com/neovim/nvim-lspconfig",
     tag = utils.map_version_rule({
         -- [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = utils.nil_val,
@@ -250,10 +253,10 @@ use({
 
 -- Install language servers
 use({
-    "williamboman/mason.nvim",
+    "https://github.com/williamboman/mason.nvim",
     requires = {
-        "neovim/nvim-lspconfig",
-        "williamboman/mason-lspconfig.nvim",
+        "https://github.com/neovim/nvim-lspconfig",
+        "https://github.com/williamboman/mason-lspconfig.nvim",
     },
     -- Only supports >=0.7.0
     disable = vim.fn.has("nvim-0.7.0") ~= 1,
@@ -261,19 +264,19 @@ use({
 
 -- Lua dev for vim
 use({
-    "folke/neodev.nvim",
-    requires = "neovim/nvim-lspconfig",
+    "https://github.com/folke/neodev.nvim",
+    requires = "https://github.com/neovim/nvim-lspconfig",
 })
 
 -- Rust analyzer
 use({
-    "simrat39/rust-tools.nvim",
+    "https://github.com/simrat39/rust-tools.nvim",
     disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 -- Better display of lsp diagnostics
 use({
-    "folke/trouble.nvim",
+    "https://github.com/folke/trouble.nvim",
     tag = utils.map_version_rule({
         [">=0.7.2"] = "v2.*",
         ["<0.7.2"] = "v1.*",
@@ -282,7 +285,7 @@ use({
 
 -- Incremental lsp rename view
 use({
-    "smjonas/inc-rename.nvim",
+    "https://github.com/smjonas/inc-rename.nvim",
     config = function()
         require("inc_rename").setup({
             input_buffer_type = "dressing",
@@ -294,7 +297,7 @@ use({
 
 -- Generic linter/formatters in diagnostics API
 use({
-    "jose-elias-alvarez/null-ls.nvim",
+    "https://github.com/jose-elias-alvarez/null-ls.nvim",
     branch = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "0.7-compat",
@@ -305,29 +308,29 @@ use({
         [">=0.7.0"] = utils.nil_val, -- Use pinned branch
         [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
     }),
-    requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    requires = { "https://github.com/nvim-lua/plenary.nvim", "https://github.com/neovim/nvim-lspconfig" },
 })
 
 -- Writing
 -- abolish/pencil
 use({
-    "preservim/vim-pencil",
+    "https://github.com/preservim/vim-pencil",
     cmd = { "Pencil" },
 })
 use({
-    "preservim/vim-textobj-sentence",
-    requires = "kana/vim-textobj-user",
+    "https://github.com/preservim/vim-textobj-sentence",
+    requires = "https://github.com/kana/vim-textobj-user",
 })
 use({
-    "junegunn/goyo.vim",
+    "https://github.com/junegunn/goyo.vim",
     cmd = { "Goyo", "Zen" },
     config = [[require("plugins.goyo-limelight")]],
-    requires = { "junegunn/limelight.vim", cmd = "Limelight" },
+    requires = { "https://github.com/junegunn/limelight.vim", cmd = "Limelight" },
 })
 
 -- Treesitter
 use({
-    "nvim-treesitter/nvim-treesitter",
+    "https://github.com/nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
     commit = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
@@ -340,8 +343,8 @@ use({
 })
 --[[ TODO: Enable this as an alterantive or fallback for LSPs
 use({
-    "nvim-treesitter/nvim-treesitter-refactor",
-    requires = "nvim-treesitter/nvim-treesitter",
+    "https://github.com/nvim-treesitter/nvim-treesitter-refactor",
+    requires = "https://github.com/nvim-treesitter/nvim-treesitter",
     commit = utils.map_version_rule({
         [">=0.7.0"] = utils.nil_val,
         ["<0.7.0"] = "75f5895",
@@ -349,8 +352,8 @@ use({
 })
 --]]
 use({
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    requires = "nvim-treesitter/nvim-treesitter",
+    "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+    requires = "https://github.com/nvim-treesitter/nvim-treesitter",
     commit = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         [">=0.7.0"] = "8673926519ea61069f9c1366d1ad1949316d250e",
@@ -360,12 +363,12 @@ use({
 
 -- Completion
 use({
-    "L3MON4D3/LuaSnip",
+    "https://github.com/L3MON4D3/LuaSnip",
     tag = "v1.*",
 })
 
 use({
-    "hrsh7th/nvim-cmp",
+    "https://github.com/hrsh7th/nvim-cmp",
     config = function()
         require("plugins.completion").config_cmp()
     end,
@@ -375,32 +378,32 @@ use({
     }),
     requires = {
         {
-            "hrsh7th/cmp-nvim-lsp",
+            "https://github.com/hrsh7th/cmp-nvim-lsp",
             after = "nvim-cmp",
             commit = utils.map_version_rule({
                 [">=0.7.0"] = utils.nil_val,
                 ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
             }),
         },
-        { "hrsh7th/cmp-buffer", after = "nvim-cmp" },
-        { "f3fora/cmp-spell", after = "nvim-cmp" },
+        { "https://github.com/hrsh7th/cmp-buffer", after = "nvim-cmp" },
+        { "https://github.com/f3fora/cmp-spell", after = "nvim-cmp" },
         {
-            "saadparwaiz1/cmp_luasnip",
+            "https://github.com/saadparwaiz1/cmp_luasnip",
             after = "nvim-cmp",
             commit = utils.map_version_rule({
                 [">0.7.0"] = utils.nil_val,
                 [">=0.5.0"] = "b10829736542e7cc9291e60bab134df1273165c9",
             }),
         },
-        "L3MON4D3/LuaSnip",
+        "https://github.com/L3MON4D3/LuaSnip",
     },
     event = "InsertEnter *",
 })
 
 -- Add snippets
 use({
-    "rafamadriz/friendly-snippets",
-    requires = "L3MON4D3/LuaSnip",
+    "https://github.com/rafamadriz/friendly-snippets",
+    requires = "https://github.com/L3MON4D3/LuaSnip",
     after = "LuaSnip",
     config = function()
         require("luasnip.loaders.from_vscode").lazy_load()
@@ -408,7 +411,7 @@ use({
 })
 
 use({
-    "ray-x/lsp_signature.nvim",
+    "https://github.com/ray-x/lsp_signature.nvim",
     config = function()
         require("lsp_signature").setup({
             extra_trigger_chars = { "(", "," },
@@ -422,11 +425,11 @@ use({
 
 -- Fuzzy Finder
 use({
-    "nvim-telescope/telescope.nvim",
+    "https://github.com/nvim-telescope/telescope.nvim",
     requires = {
-        "nvim-lua/plenary.nvim",
-        "nvim-lua/popup.nvim",
-        "nvim-telescope/telescope-file-browser.nvim",
+        "https://github.com/nvim-lua/plenary.nvim",
+        "https://github.com/nvim-lua/popup.nvim",
+        "https://github.com/nvim-telescope/telescope-file-browser.nvim",
     },
     tag = utils.map_version_rule({
         -- Follow stable release tag
@@ -441,10 +444,10 @@ use({
 })
 
 -- Filetypes
-use("ViViDboarder/vim-forcedotcom")
-use("hsanson/vim-android")
+use("https://github.com/ViViDboarder/vim-forcedotcom")
+use("https://github.com/hsanson/vim-android")
 use({
-    "sheerun/vim-polyglot",
+    "https://github.com/sheerun/vim-polyglot",
     config = function()
         -- TODO: Replace with api calls when dropping 0.6
         vim.cmd([[
@@ -458,15 +461,15 @@ use({
 
 -- Debuging nvim config
 use({
-    "tweekmonster/startuptime.vim",
+    "https://github.com/tweekmonster/startuptime.vim",
     cmd = { "StartupTime" },
 })
 
 -- Fancy todo highlighting
 use({
-    "folke/todo-comments.nvim",
+    "https://github.com/folke/todo-comments.nvim",
     requires = {
-        "nvim-lua/plenary.nvim",
+        "https://github.com/nvim-lua/plenary.nvim",
     },
     config = function()
         require("plugins.todo")
@@ -483,14 +486,14 @@ use({
 
 -- Fancy notifications
 use({
-    "rcarriga/nvim-notify",
+    "https://github.com/rcarriga/nvim-notify",
     config = function()
         require("plugins.notify")
     end,
 })
 
 use({
-    "stevearc/dressing.nvim",
+    "https://github.com/stevearc/dressing.nvim",
     branch = utils.map_version_rule({
         [">=0.8.0"] = utils.nil_val,
         ["<0.8.0"] = "nvim-0.7",
@@ -506,9 +509,9 @@ use({
 -- repo and use Shortcuts to automate pulling on open and auto committing and pushing
 -- after closing Obsidian.
 use({
-    "epwalsh/obsidian.nvim",
+    "https://github.com/epwalsh/obsidian.nvim",
     requires = {
-        "nvim-lua/plenary.nvim",
+        "https://github.com/nvim-lua/plenary.nvim",
         {
             -- Fork of https://github.com/declancm/git-scripts.nvim is used here
             -- because it inclueds a few small fixes.
@@ -543,10 +546,10 @@ use({
 -- Work things
 -- Sourcegraph
 use({
-    "sourcegraph/sg.nvim",
+    "https://github.com/sourcegraph/sg.nvim",
     run = "nvim -l build/init.lua",
     requires = {
-        "nvim-lua/plenary.nvim",
+        "https://github.com/nvim-lua/plenary.nvim",
     },
 })
 
