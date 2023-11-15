@@ -279,9 +279,20 @@ function M.config_lsp()
         local default_setup = { capabilities = capabilities, on_attach = default_attach }
 
         -- Configure each server
-        lsp_config.bashls.setup(default_setup)
         lsp_config.gopls.setup(default_setup)
         lsp_config.pyright.setup(default_setup)
+        lsp_config.bashls.setup({
+            capabilities = capabilities,
+            on_attach = default_attach,
+            settings = {
+                bashIde = {
+                    -- Disable shellcheck linting because we have it enabled in null-ls
+                    -- Some machines I use aren't configured with npm so bashls cannot
+                    -- be relied on as the sole source of shellcheck linting.
+                    shellcheckPath = "",
+                },
+            },
+        })
 
         -- Set up rust analyzer (preferred) or rls
         -- TODO: Remove rls and all configuration for it when all machines are up to date
