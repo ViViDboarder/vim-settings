@@ -525,6 +525,7 @@ use({
     },
     tag = "v1.*",
     config = function()
+        vim.g.vim_markdown_frontmatter = 1
         require("obsidian").setup({
             workspaces = {
                 { name = "personal", path = "~/Documents/Obsidian" },
