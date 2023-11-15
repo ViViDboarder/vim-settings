@@ -425,7 +425,8 @@ use({
     },
     tag = utils.map_version_rule({
         -- Follow stable release tag
-        [">=0.7.0"] = "0.1.0",
+        [">=0.9.0"] = "0.1.*",
+        [">=0.7.0"] = "0.1.*",
         [">=0.6.0"] = "nvim-0.6",
         ["<0.6.0"] = "nvim-0.5.1",
         ["==0.5.0"] = "nvim-0.5.0",
@@ -468,7 +469,7 @@ use({
     end,
     -- Tag and branch rule because old versions are supported on a branch while latest stable is a moving tag
     tag = utils.map_version_rule({
-        [">=0.8.0"] = "stable",
+        [">=0.8.0"] = "v1.*",
         ["<0.8.0"] = utils.nil_val,
     }),
     branch = utils.map_version_rule({
