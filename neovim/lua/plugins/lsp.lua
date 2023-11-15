@@ -339,7 +339,7 @@ function M.config_lsp()
             if lsp_config["util"] and lsp_config.util["available_servers"] then
                 already_setup = lsp_config.util.available_servers()
             else
-                -- HACK: For lspconfig versions lower than 0.1.4
+                -- HACK: For lspconfig versions lower than 0.1.4, which is required for nvim <0.7.0
                 already_setup = lsp_config.available_servers()
             end
             local needs_setup = vim.tbl_filter(function(server)
