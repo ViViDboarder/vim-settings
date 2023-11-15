@@ -466,6 +466,7 @@ use({
     config = function()
         require("plugins.todo")
     end,
+    -- Tag and branch rule because old versions are supported on a branch while latest stable is a moving tag
     tag = utils.map_version_rule({
         [">=0.8.0"] = "stable",
         ["<0.8.0"] = utils.nil_val,
@@ -506,12 +507,13 @@ use({
         "https://github.com/nvim-lua/plenary.nvim",
         {
             -- Fork of https://github.com/declancm/git-scripts.nvim is used here
-            -- because it inclueds a few small fixes.
+            -- because it includes a few small fixes.
             "https://github.com/vividboarder/git-scripts.nvim",
             branch = "dev",
             config = function()
                 local gs = require("git-scripts")
                 gs.setup({
+                    -- Disable keymaps becasue I only use this for auto pull and auto commit
                     default_keymaps = false,
                     commit_on_save = true,
                 })
@@ -545,6 +547,7 @@ use({
     config = function()
         require("sg").setup({
             enable_cody = false,
+            -- Empty attach because I dont want to use default keymaps. Maybe I'll remap something later.
             on_attach = function() end,
         })
     end,
