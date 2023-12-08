@@ -331,7 +331,12 @@ function M.config_lsp()
 
         -- Configure neovim dev for when sumneko_lua is installed
         utils.try_require("neodev", function(neodev)
-            neodev.setup({})
+            local config = {}
+            if utils.can_require("dapui") then
+                config.plugins = { "nvim-dap-ui" }
+                config.types = true
+            end
+            neodev.setup(config)
         end)
 
         -- Auto setup mason installed servers

@@ -216,12 +216,21 @@ function install_fixers() {
     echo ""
 }
 
+## Debuggers
+function install_debuggers() {
+    # Python
+    if want_lang python ;then
+        maybe_run pip3 install --user --upgrade debugpy
+    fi
+}
+
 function main() {
     maybe_run pip3 install --user --upgrade release-gitter
 
     install_language_servers
     install_linters
     install_fixers
+    install_debuggers
 
     echo ""
     echo "DONE"

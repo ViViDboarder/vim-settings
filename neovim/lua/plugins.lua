@@ -243,6 +243,61 @@ use({
     }),
 })
 
+-- Debug adapter protocol
+use({
+    "https://github.com/mfussenegger/nvim-dap",
+    -- TODO: Move to lazy.nvim and allow it to load this only when the required debuggers are loaded
+    ft = { "python", "rust" },
+})
+
+use({
+    "https://github.com/rcarriga/nvim-dap-ui",
+    requires = { "https://github.com/mfussenegger/nvim-dap" },
+    after = "nvim-dap",
+    config = function()
+        require("dapui").setup({
+            icons = {
+                expanded = "-",
+                collapsed = "+",
+                current_frame = ">",
+            },
+            controls = {
+                icons = {
+                    disconnect = "disconnect",
+                    pause = "pause",
+                    play = "play",
+                    run_last = "last",
+                    step_back = "back",
+                    step_into = "into",
+                    step_out = "out",
+                    step_over = "over",
+                    terminate = "term",
+                },
+            },
+        })
+        local dap, dapui = require("dap"), require("dapui")
+        dap.listeners.after.event_initialized["dapui_config"] = function()
+            dapui.open()
+        end
+        dap.listeners.before.event_terminated["dapui_config"] = function()
+            dapui.close()
+        end
+        dap.listeners.before.event_exited["dapui_config"] = function()
+            dapui.close()
+        end
+    end,
+})
+
+use({
+    "https://github.com/mfussenegger/nvim-dap-python",
+    requires = { "https://github.com/mfussenegger/nvim-dap" },
+    after = "nvim-dap",
+    config = function()
+        require("dap-python").setup()
+    end,
+    ft = "python",
+})
+
 -- Install language servers
 use({
     "https://github.com/williamboman/mason.nvim",
@@ -263,7 +318,12 @@ use({
 -- Rust analyzer
 use({
     "https://github.com/simrat39/rust-tools.nvim",
+    after = "nvim-dap",
     disable = vim.fn.has("nvim-0.7.0") ~= 1,
+    -- TODO: After switching to lazy, with better dependency ordering, can remove the after
+    config = function()
+        require("dap")
+    end,
 })
 
 -- Better display of lsp diagnostics
