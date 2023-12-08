@@ -300,12 +300,14 @@ function M.config_lsp()
             -- Prefer rust-tools, if present
             utils.try_require("rust-tools", function(rust_tools)
                 rust_tools.setup({
-                    capabilities = capabilities,
-                    on_attach = function(client, bufnr)
-                        default_attach(client, bufnr)
-                        -- TODO: override some bindings from rust-tools
-                        -- Eg. rust_tools.hover_actions.hover_actions or rt.code_action_group.code_action_group
-                    end,
+                    server = {
+                        capabilities = capabilities,
+                        on_attach = function(client, bufnr)
+                            default_attach(client, bufnr)
+                            -- TODO: override some bindings from rust-tools
+                            -- Eg. rust_tools.hover_actions.hover_actions or rt.code_action_group.code_action_group
+                        end,
+                    },
                 })
             end, function()
                 lsp_config.rust_analyzer.setup({
