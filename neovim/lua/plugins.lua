@@ -318,12 +318,7 @@ use({
 -- Rust analyzer
 use({
     "https://github.com/simrat39/rust-tools.nvim",
-    after = "nvim-dap",
     disable = vim.fn.has("nvim-0.7.0") ~= 1,
-    -- TODO: After switching to lazy, with better dependency ordering, can remove the after
-    config = function()
-        require("dap")
-    end,
 })
 
 -- Better display of lsp diagnostics
