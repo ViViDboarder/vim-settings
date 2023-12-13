@@ -93,7 +93,7 @@ function maybe_pip_install() {
 
     if command_exists pipx ;then
         # Prefer pipx to keep environments isolated
-        pipx upgrade "${user_bins[@]}"
+        pipx install "${user_bins[@]}"
     else
         if command_exists pip3 ;then
             # If pip3 is there, use it to ensure we're using python 3
