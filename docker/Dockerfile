@@ -47,8 +47,8 @@ RUN mkdir $HOME/bin
 ENV PATH $HOME/bin:$PATH
 
 # Install Language servers
-COPY --chown=vividboarder:users ./install-language-servers.sh ./
-RUN ./install-language-servers.sh
+COPY --chown=vividboarder:users ./install-coding-helpers.sh ./
+RUN ./install-coding-helpers.sh
 
 # Add config
 COPY --chown=vividboarder:users ./neovim $HOME/.config/nvim

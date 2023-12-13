@@ -13,9 +13,13 @@ install:
 update:
 	sh ./update-plugins.sh
 
+.PHONY: install-coding-helpers
+install-coding-helpers:
+	sh ./install-coding-helpers.sh
+
 .PHONY: install-language-servers
-install-language-servers:
-	sh ./install-language-servers.sh
+install-language-servers: install-coding-helpers
+	@echo "Using obsolete make target. Change to install-coding-helpers"
 
 .PHONY: uninstall
 uninstall:
