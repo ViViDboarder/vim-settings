@@ -102,7 +102,8 @@ function install_language_servers() {
 
     # Go
     if want_lang go ;then
-        maybe_run env GO111MODULE=on go install golang.org/x/tools/gopls@latest
+        export GO111MODULE=on
+        maybe_run go install golang.org/x/tools/gopls@latest
     fi
 
     echo ""
