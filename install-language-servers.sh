@@ -56,6 +56,22 @@ function maybe_run() {
     fi
 }
 
+# Runs the "right" pip for installing
+function maybe_pip_install() {
+    if command_exist pipx ;then
+        # Prefer pipx to keep environments isolated
+        pipx upgrade "$@"
+    else
+        if command_exist pip3 ;then
+            # If pip3 is there, use it to ensure we're using pytho3
+            pip3 install --user --upgrade "$@"
+        else
+            # Use pip and hope for the best
+            pip install --user --upgrade "$@"
+        fi
+    fi
+}
+
 ## Language servers
 function install_language_servers() {
     echo "### Installing language servers..."
@@ -98,9 +114,7 @@ function install_linters() {
 
     # Python
     if want_lang python ;then
-        maybe_run pip install --user --upgrade flake8
-        maybe_run pip install --user --upgrade mypy || echo "WARNING: mypy is py3 only"
-        maybe_run pip3 install --user --upgrade flake8 mypy
+        maybe_pip_install mypy || echo "WARNING: mypy is py3 only"
     fi
 
     # CSS
@@ -110,21 +124,18 @@ function install_linters() {
 
     # Vim
     if want_lang vim || want_lang neovim ;then
-        maybe_run pip install --user --upgrade vim-vint
-        maybe_run pip3 install --user --upgrade vim-vint
+        maybe_pip_install vim-vint
     fi
 
     # YAML
     if want_lang yaml ;then
-        maybe_run pip install --user --upgrade yamllint
-        maybe_run pip3 install --user --upgrade yamllint
+        maybe_pip_install yamllint
     fi
 
     # Text / Markdown
     if want_lang text || want_lang prose ;then
         maybe_run npm install -g alex write-good
-        maybe_run pip install --user --upgrade proselint
-        maybe_run pip3 install --user --upgrade proselint
+        maybe_pip_install proselint
     fi
 
     # Makefile
@@ -189,9 +200,7 @@ function install_fixers() {
 
     # Python
     if want_lang python ;then
-        maybe_run pip install --user --upgrade "'autopep8<1.7.0'" reorder-python-imports
-        maybe_run pip install --user --upgrade autopep8 reorder-python-imports black || echo "WARNING: black is py3 only"
-        maybe_run pip3 install --user --upgrade black autopep8 reorder-python-imports
+        maybe_pip_install black autopep8 reorder-python-imports
     fi
 
     # Rust
@@ -220,12 +229,12 @@ function install_fixers() {
 function install_debuggers() {
     # Python
     if want_lang python ;then
-        maybe_run pip3 install --user --upgrade debugpy
+        maybe_pip_install debugpy
     fi
 }
 
 function main() {
-    maybe_run pip3 install --user --upgrade release-gitter
+    maybe_pip_install release-gitter
 
     install_language_servers
     install_linters
