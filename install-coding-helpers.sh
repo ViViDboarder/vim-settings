@@ -41,13 +41,13 @@ else
 fi
 
 # Determines if a command exists or not
-function command_exist() {
+function command_exists() {
     command -v "$1" > /dev/null 2>&1;
 }
 
 # Runs a command or spits out the output
 function maybe_run() {
-    if command_exist "$1" ;then
+    if command_exists "$1" ;then
         echo "> $*"
         # shellcheck disable=2048,2086
         eval $*
@@ -56,20 +56,71 @@ function maybe_run() {
     fi
 }
 
-# Runs the "right" pip for installing
-function maybe_pip_install() {
-    if command_exist pipx ;then
-        # Prefer pipx to keep environments isolated
-        pipx upgrade "$@"
+# Determine if we should install a command using userspace commands
+function should_install_user() {
+    if ! command_exists "$1" ;then
+        # Install in userspace if command doesn't exist
+        return 0
+    fi
+
+    local bin_path=""
+    bin_path="$(which "$1")"
+
+    # Install in user space if it's already installed in a subdir of the user
+    # home dir
+    if [[ ${bin_path}/ = ${HOME}/* ]] ;then
+        return 0
     else
-        if command_exist pip3 ;then
-            # If pip3 is there, use it to ensure we're using pytho3
-            pip3 install --user --upgrade "$@"
+        echo "WARNING: $1 is already installed by the system."
+        return 1
+    fi
+}
+
+# Runs the "right" pip for installing if there is no global package
+function maybe_pip_install() {
+    # Filter for user path bins
+    local user_bins=()
+    for bin in "$@" ;do
+        if should_install_user "$bin" ;then
+            user_bins+=("$bin")
+        fi
+    done
+
+    # Short circuit if empty
+    if [ ${#user_bins[@]} -eq 0 ] ;then
+        return
+    fi
+
+    if command_exists pipx ;then
+        # Prefer pipx to keep environments isolated
+        pipx upgrade "${user_bins[@]}"
+    else
+        if command_exists pip3 ;then
+            # If pip3 is there, use it to ensure we're using python 3
+            pip3 install --user --upgrade "${user_bins[@]}"
         else
             # Use pip and hope for the best
-            pip install --user --upgrade "$@"
+            pip install --user --upgrade "${user_bins[@]}"
         fi
     fi
+}
+
+# Installs npm packages if there is no global package
+function maybe_npm_install() {
+    # Filter for user path bins
+    local user_bins=()
+    for bin in "$@" ;do
+        if should_install_user "$bin" ;then
+            user_bins+=("$bin")
+        fi
+    done
+
+    # Short circuit if empty
+    if [ ${#user_bins[@]} -eq 0 ] ;then
+        return
+    fi
+
+    maybe_run npm install -g "${user_bins[@]}"
 }
 
 ## Language servers
@@ -78,7 +129,7 @@ function install_language_servers() {
 
     # bash
     if want_lang bash ;then
-        maybe_run npm install -g bash-language-server
+        maybe_npm_install bash-language-server
     fi
 
     # Kotlin
@@ -86,7 +137,7 @@ function install_language_servers() {
 
     # Python
     if want_lang python ;then
-        maybe_run npm install -g pyright
+        maybe_npm_install pyright
     fi
 
     # Rust
@@ -102,8 +153,10 @@ function install_language_servers() {
 
     # Go
     if want_lang go ;then
-        export GO111MODULE=on
-        maybe_run go install golang.org/x/tools/gopls@latest
+        if should_install_user gopls ;then
+            export GO111MODULE=on
+            maybe_run go install golang.org/x/tools/gopls@latest
+        fi
     fi
 
     echo ""
@@ -120,7 +173,7 @@ function install_linters() {
 
     # CSS
     if want_lang css || want_lang web ;then
-        maybe_run npm install -g csslint
+        maybe_npm_install csslint
     fi
 
     # Vim
@@ -135,7 +188,7 @@ function install_linters() {
 
     # Text / Markdown
     if want_lang text || want_lang prose ;then
-        maybe_run npm install -g alex write-good
+        maybe_npm_install alex write-good
         maybe_pip_install proselint
     fi
 
@@ -153,22 +206,27 @@ function install_linters() {
 
     # Lua
     if want_lang lua || want_lang neovim ;then
-        maybe_run luarocks --local install luafilesystem
-        # Version pinned to version in pre-commit
+        if ! maybe_run lua -e "'require(\"lfs\")'" ;then
+            maybe_run luarocks --local install luafilesystem
+        fi
+
+        # Version pinned to version in pre-commit so we avoid global check
         maybe_run luarocks --local install luacheck 1.1.0
     fi
 
     # Docker
     if want_lang docker ;then
-        hadolint_arm64=arm64
-        if [ "$(uname -s)" == "Darwin" ]; then
-            hadolint_arm64=x86_64
+        if should_install_user hadolint ;then
+            local hadolint_arm64=arm64
+            if [ "$(uname -s)" == "Darwin" ] ;then
+                hadolint_arm64=x86_64
+            fi
+            maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
+                --map-arch aarch64=$hadolint_arm64 \
+                --map-arch arm64=$hadolint_arm64 \
+                --exec "'mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint'" \
+                "hadolint-{system}-{arch}" ~/bin
         fi
-        maybe_run release-gitter --git-url "https://github.com/hadolint/hadolint" \
-            --map-arch aarch64=$hadolint_arm64 \
-            --map-arch arm64=$hadolint_arm64 \
-            --exec "'mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint'" \
-            "hadolint-{system}-{arch}" ~/bin
     fi
 
     # Terraform
@@ -196,12 +254,12 @@ function install_fixers() {
 
     # CSS/JS/HTML/JSON/YAML/Markdown/and more!
     if want_lang javascript || want_lang html || want_lang css || want_lang web || want_lang json ;then
-        maybe_run npm install -g prettier
+        maybe_npm_install prettier
     fi
 
     # Python
     if want_lang python ;then
-        maybe_pip_install black autopep8 reorder-python-imports
+        maybe_pip_install black reorder-python-imports
     fi
 
     # Rust
@@ -212,12 +270,13 @@ function install_fixers() {
     # Lua
     if want_lang lua || want_lang neovim ;then
       # Version pinned to version in pre-commit
-      local stylua_version=0.17.1
+      local stylua_version=0.19.1
         if ! release-gitter --git-url "https://github.com/JohnnyMorganz/StyLua" \
             --version "v$stylua_version" \
+            --extract-files "stylua" \
             --map-arch arm64=aarch64 \
             --map-system Windows=windows --map-system Linux=linux --map-system Darwin=macos \
-            --extract-all --exec "chmod +x ~/bin/stylua" \
+            --exec "chmod +x ~/bin/stylua" \
             "stylua-{system}-{arch}.zip" ~/bin ; then
             maybe_run cargo install --version "$stylua_version" stylua
         fi
