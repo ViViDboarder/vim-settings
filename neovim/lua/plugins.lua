@@ -616,6 +616,7 @@ use({
         "SourcegraphLogin",
         "SourcegraphSearch",
     },
+    disable = not vim.g.install_sourcegraph,
 })
 
 -- Auto sync after bootstrapping on a fresh box
