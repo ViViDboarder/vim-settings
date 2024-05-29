@@ -37,16 +37,11 @@ o.mouse = "a"
 
 -- Autocomplete options
 o.completeopt = "menuone,noinsert,noselect,preview"
--- TODO: remove check when dropping v0.6.0
-if vim.fn.has("nvim-0.7.0") == 1 then
-    vim.api.nvim_create_autocmd({ "CompleteDone" }, {
-        pattern = "*",
-        command = "if pumvisible() == 0 | pclose | endif",
-        group = vim.api.nvim_create_augroup("close_preview", { clear = true }),
-    })
-else
-    utils.autocmd("close_preview", "CompleteDone * if pumvisible() == 0 | pclose | endif", true)
-end
+vim.api.nvim_create_autocmd({ "CompleteDone" }, {
+    pattern = "*",
+    command = "if pumvisible() == 0 | pclose | endif",
+    group = vim.api.nvim_create_augroup("close_preview", { clear = true }),
+})
 
 local has = vim.fn.has
 g.is_mac = (has("mac") or has("macunix") or has("gui_macvim") or vim.fn.system("uname"):find("^darwin") ~= nil)

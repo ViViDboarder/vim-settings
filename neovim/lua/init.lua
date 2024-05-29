@@ -1,5 +1,5 @@
-if vim.fn.has("nvim-0.6.0") ~= 1 then
-    print("ERROR: Requires nvim >= 0.6.0")
+if vim.fn.has("nvim-0.7.0") ~= 1 then
+    print("ERROR: Requires nvim >= 0.7.0")
 end
 
 local o = vim.o
@@ -26,4 +26,6 @@ vim.g.polyglot_disabled = { "go", "rust" }
 -- Plugins
 -- Packer auto installs and then lazy loads itself on PackerCommand and require the plugins module
 -- This command should only really be needed to bootstrap a new system
-vim.cmd([[command! PackerBootstrap lua require("plugins")]])
+vim.api.nvim_create_user_command("PackerBootstrap", function()
+    require("plugins")
+end, { desc = "Bootstrap Packer" })

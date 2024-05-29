@@ -55,16 +55,9 @@ function _G.complete_space()
 end
 utils.keymap_set("i", "<C-Space>", "v:lua.complete_space()", { expr = true })
 
--- TODO: remove check when dropping v0.6.0
-if vim.fn.has("nvim-0.7.0") == 1 then
-    vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
-    vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
-    vim.api.nvim_create_user_command("Spell", "setlocal spell! spelllang=en_us", { desc = "Toggle spelling" })
-else
-    vim.cmd("command! TagsUpdate !ctags -R .")
-    vim.cmd("command! Todo grep TODO")
-    vim.cmd("command Spell setlocal spell! spelllang=en_us")
-end
+vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
+vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
+vim.api.nvim_create_user_command("Spell", "setlocal spell! spelllang=en_us", { desc = "Toggle spelling" })
 
 -- Pop spelling completion for word under cursor
 utils.keymap_set("n", "<leader>s", "viw<esc>a<c-x>s", { desc = "Show spelling suggestions" })

@@ -5,23 +5,6 @@ function M.get_color(synID, what, mode)
     return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(synID)), what, mode)
 end
 
--- Create an autocmd
--- TODO: Remove this and use nvim_create_autocmd and nvim_create_augroup when dropping .6
-function M.autocmd(group, cmds, clear)
-    clear = clear == nil and false or clear
-    if type(cmds) == "string" then
-        cmds = { cmds }
-    end
-    vim.cmd("augroup " .. group)
-    if clear then
-        vim.cmd([[au!]])
-    end
-    for _, cmd in ipairs(cmds) do
-        vim.cmd("autocmd " .. cmd)
-    end
-    vim.cmd([[augroup END]])
-end
-
 -- Terminal escape a given string
 function M.t(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -195,37 +178,12 @@ end
 -- Calls keymap_set with preferred defaults
 function M.keymap_set(mode, lhs, rhs, opts)
     opts = vim.tbl_extend("keep", opts, { noremap = true, silent = true })
-    -- TODO: Remove this check when dropping 0.6 support
-    if vim.fn.has("nvim-0.7") == 1 then
-        vim.keymap.set(mode, lhs, rhs, opts)
-    else
-        -- Desc is not supported in 0.6
-        opts["desc"] = nil
-        if type(mode) ~= "string" then
-            for _, m in pairs(mode) do
-                M.keymap_set(m, lhs, rhs, opts)
-            end
-            return
-        end
-        -- Buffer requires a different function
-        local buffer = M.tbl_pop(opts, "buffer")
-        if buffer == nil then
-            vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-        else
-            vim.api.nvim_buf_set_keymap(buffer, mode, lhs, rhs, opts)
-        end
-    end
+    vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 -- Returns a curried function for passing data into vim.keymap.set
 function M.curry_keymap(mode, prefix, default_opts)
     default_opts = vim.tbl_extend("keep", default_opts or {}, { noremap = true, silent = true })
-
-    -- TODO: Remove when dropping 0.6
-    if vim.fn.has("nvim-0.7") ~= 1 then
-        -- NOTE: This is incompatible with a lua function on rhs and a bool buffer instead of number
-        return M.keymap_group(mode, prefix, default_opts)
-    end
 
     return function(lhs, rhs, opts)
         opts = vim.tbl_extend("keep", opts or {}, default_opts)
@@ -236,7 +194,6 @@ end
 
 -- Returns a function used to create keymaps with consistent prefixes
 function M.keymap_group(mode, prefix, default_opts)
-    -- TODO: Remove when dropping 0.6 since curry_keymap exists
     return function(lhs, rhs, opts)
         opts = opts or default_opts
         if opts ~= nil and default_opts ~= nil and opts ~= default_opts then

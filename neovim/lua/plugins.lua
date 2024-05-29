@@ -191,15 +191,8 @@ use({
 
 -- Custom status line
 use({
-    "https://github.com/SmiteshP/nvim-gps",
-    requires = "https://github.com/nvim-treesitter/nvim-treesitter",
-    disable = vim.fn.has("nvim-0.7.0") == 1,
-})
--- Replaces gps for 0.7+
-use({
     "https://github.com/SmiteshP/nvim-navic",
     requires = "https://github.com/neovim/nvim-lspconfig",
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 use({
@@ -207,7 +200,7 @@ use({
     config = function()
         require("plugins.lualine").config_lualine()
     end,
-    after = vim.fn.has("nvim-0.7.0") == 1 and "nvim-navic" or "nvim-gps",
+    after = "nvim-navic",
 })
 
 -- On Mac, update colors when dark mode changes
@@ -305,8 +298,6 @@ use({
         "https://github.com/neovim/nvim-lspconfig",
         "https://github.com/williamboman/mason-lspconfig.nvim",
     },
-    -- Only supports >=0.7.0
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 -- Lua dev for vim
@@ -318,7 +309,6 @@ use({
 -- Rust analyzer
 use({
     "https://github.com/simrat39/rust-tools.nvim",
-    disable = vim.fn.has("nvim-0.7.0") ~= 1,
 })
 
 -- Better display of lsp diagnostics
@@ -388,16 +378,6 @@ use({
         require("utils").require_with_local("plugins.treesitter").setup()
     end,
 })
---[[ TODO: Enable this as an alterantive or fallback for LSPs
-use({
-    "https://github.com/nvim-treesitter/nvim-treesitter-refactor",
-    requires = "https://github.com/nvim-treesitter/nvim-treesitter",
-    commit = utils.map_version_rule({
-        [">=0.7.0"] = utils.nil_val,
-        ["<0.7.0"] = "75f5895",
-    }),
-})
---]]
 use({
     "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
     requires = "https://github.com/nvim-treesitter/nvim-treesitter",
@@ -497,13 +477,17 @@ use("https://github.com/hsanson/vim-android")
 use({
     "https://github.com/sheerun/vim-polyglot",
     config = function()
-        -- TODO: Replace with api calls when dropping 0.6
-        vim.cmd([[
-        augroup polyglot_fts
-            au BufRead,BufNewFile */playbooks/*.yml,*/playbooks/*.yaml set filetype=yaml.ansible
-            au BufRead,BufNewFile go.mod,go.sum set filetype=gomod
-        augroup end
-        ]])
+        local gid = vim.api.nvim_create_augroup("polyglot_fts", { clear = true })
+        vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+            pattern = { "*/playbooks/*.yml", "*/playbooks/*.yaml" },
+            command = "set filetype=yaml.ansible",
+            group = gid,
+        })
+        vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+            pattern = { "go.mod", "go.sum" },
+            command = "set filetype=gomod",
+            group = gid,
+        })
     end,
 })
 

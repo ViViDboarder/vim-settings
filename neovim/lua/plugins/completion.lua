@@ -48,7 +48,9 @@ function M.config_cmp()
 
     -- Add a plug mapping to use in C-Space binding
     local utils = require("utils")
-    utils.keymap_set("i", "<Plug>(cmp_complete)", "<cmd>lua require('cmp').complete()<CR>", { desc = "Autocomplete" })
+    utils.keymap_set("i", "<Plug>(cmp_complete)", function()
+        require("cmp").complete()
+    end, { desc = "Autocomplete" })
 
     -- Maybe add obsidian and obsidian new. This is done here in case obsidian.nvim is loaded before cmp
     utils.try_require("cmp_obsidian", function(cmp_obsidian)
