@@ -619,6 +619,20 @@ use({
     disable = not vim.g.install_sourcegraph,
 })
 
+use({
+    "https://github.com/github/copilot.vim",
+    disable = not vim.g.install_copilot,
+})
+
+use({
+    "https://github.com/CopilotC-Nvim/CopilotChat.nvim",
+    disable = not vim.g.install_copilot,
+    branch = "canary",
+    config = function()
+        require("plugins.copilotchat").setup()
+    end,
+})
+
 -- Auto sync after bootstrapping on a fresh box
 if packer_bootstrap ~= "" then
     packer.sync()
