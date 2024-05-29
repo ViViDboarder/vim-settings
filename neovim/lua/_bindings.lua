@@ -40,31 +40,19 @@ utils.keymap_set("i", "``", "<esc>", { desc = "Escape insert" })
 utils.keymap_set("v", "``", "<esc>", { desc = "Escape visual" })
 
 -- C-Space completion
-function _G.complete_space()
+utils.keymap_set("i", "<C-Space>", function()
     if vim.fn.pumvisible() == 1 then
         return utils.t("<C-n>")
-    elseif utils.is_plugin_loaded("completion-nvim") then
-        return utils.t("<Plug>(completion_trigger)")
-    elseif utils.is_plugin_loaded("nvim-compe") then
-        return vim.fn["compe#complete"]()
     elseif utils.is_plugin_loaded("nvim-cmp") then
         return utils.t("<Plug>(cmp_complete)")
     else
         return utils.t("<C-x><C-o>")
     end
-end
-utils.keymap_set("i", "<C-Space>", "v:lua.complete_space()", { expr = true })
+end, { expr = true })
 
--- TODO: remove check when dropping v0.6.0
-if vim.fn.has("nvim-0.7.0") == 1 then
-    vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
-    vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
-    vim.api.nvim_create_user_command("Spell", "setlocal spell! spelllang=en_us", { desc = "Toggle spelling" })
-else
-    vim.cmd("command! TagsUpdate !ctags -R .")
-    vim.cmd("command! Todo grep TODO")
-    vim.cmd("command Spell setlocal spell! spelllang=en_us")
-end
+vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
+vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
+vim.api.nvim_create_user_command("Spell", "setlocal spell! spelllang=en_us", { desc = "Toggle spelling" })
 
 -- Pop spelling completion for word under cursor
 utils.keymap_set("n", "<leader>s", "viw<esc>a<c-x>s", { desc = "Show spelling suggestions" })
