@@ -16,7 +16,7 @@ function M.setup()
 
     local utils = require("utils")
     if utils.try_require("telescope") ~= nil then
-        local cc_keymap = utils.curry_keymap("n", "<leader>cc")
+        local cc_keymap = utils.curry_keymap("n", "<leader>cc", { group_desc = "CopilotChat" })
 
         cc_keymap("h", function()
             local actions = require("CopilotChat.actions")

@@ -184,23 +184,19 @@ end
 -- Returns a curried function for passing data into vim.keymap.set
 function M.curry_keymap(mode, prefix, default_opts)
     default_opts = vim.tbl_extend("keep", default_opts or {}, { noremap = true, silent = true })
+    local group_desc = M.tbl_pop(default_opts, "group_desc")
+    if group_desc ~= nil then
+        M.try_require("which-key", function(wk)
+            wk.register({
+                [prefix] = "+" .. group_desc,
+            }, default_opts)
+        end)
+    end
 
     return function(lhs, rhs, opts)
         opts = vim.tbl_extend("keep", opts or {}, default_opts)
         local opt_mode = M.tbl_pop(opts, "mode")
         vim.keymap.set(opt_mode or mode, prefix .. lhs, rhs, opts)
-    end
-end
-
--- Returns a function used to create keymaps with consistent prefixes
-function M.keymap_group(mode, prefix, default_opts)
-    return function(lhs, rhs, opts)
-        opts = opts or default_opts
-        if opts ~= nil and default_opts ~= nil and opts ~= default_opts then
-            opts = vim.tbl_extend("keep", opts, default_opts)
-        end
-        local opt_mode = M.tbl_pop(opts, "mode")
-        M.keymap_set(opt_mode or mode, prefix .. lhs, rhs, opts)
     end
 end
 

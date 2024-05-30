@@ -90,7 +90,7 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Mappings
-        local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr })
+        local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr, group_desc = "LSP" })
         lsp_keymap("h", vim.lsp.buf.hover, { desc = "Display hover" })
         lsp_keymap("rn", vim.lsp.buf.rename, { desc = "Refactor rename" })
         lsp_keymap("e", vim.diagnostic.open_float, { desc = "Open float dialog" })
@@ -123,28 +123,18 @@ local function get_default_attach(override_capabilities)
         utils.keymap_set("n", "[d", vim.diagnostic.goto_prev, { buffer = bufnr, desc = "Previous diagnostic" })
         utils.keymap_set("n", "]d", vim.diagnostic.goto_next, { buffer = bufnr, desc = "Next diagnostic" })
 
-        -- Older keymaps
-        --[[
-        buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-        buf_set_keymap("n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-        buf_set_keymap("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-        buf_set_keymap("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-        buf_set_keymap("n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-        buf_set_keymap("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-        buf_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-        buf_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-        buf_set_keymap("n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
-        --]]
-
         -- Open diagnostic on hold
-        if vim["diagnostic"] ~= nil then
-            -- TODO: When dropping 0.6, use lua aucommand api
-            vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]])
-        end
+        vim.api.nvim_create_autocmd({ "CursorHold" }, {
+            pattern = "<buffer>",
+            callback = function()
+                vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+            end,
+            group = vim.api.nvim_create_augroup("diagnostic_float", { clear = true }),
+            desc = "Open float dialog on hold",
+        })
 
         -- Use IncRename if available
         if utils.try_require("inc_rename") ~= nil then
-            -- TODO: Should I be using this for calling lua functions from keymaps?
             vim.keymap.set("n", "<leader>rn", function()
                 return ":IncRename " .. vim.fn.expand("<cword>")
             end, { expr = true, buffer = true, desc = "Rename current symbol" })
@@ -169,7 +159,7 @@ local function get_default_attach(override_capabilities)
                 })
             end
         else
-            -- HACK: Support for <0.8
+            -- HACK: Support for <0.8 with older formatting
             lsp_keymap("f", vim.lsp.buf.formatting, { desc = "Format code" })
             lsp_keymap("f", vim.lsp.buf.range_formatting, { mode = "v", desc = "Format selected code" })
             if server_capabilities.documentFormattingProvider then
@@ -201,25 +191,25 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Some override some fuzzy finder bindings to use lsp sources
-        utils.try_require("telescope.builtin", function(builtin)
+        utils.try_require("telescope.builtin", function(telescope_builtin)
             -- Replace some Telescope bindings with LSP versions
-            local telescope_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr })
+            local telescope_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
             if server_capabilities.documentSymbolProvider then
-                telescope_keymap("t", builtin.lsp_document_symbols, { desc = "Find buffer tags" })
+                telescope_keymap("t", telescope_builtin.lsp_document_symbols, { desc = "Find buffer tags" })
             end
             if server_capabilities.workspaceSymbolProvider then
-                telescope_keymap("T", builtin.lsp_dynamic_workspace_symbols, { desc = "Find tags" })
+                telescope_keymap("T", telescope_builtin.lsp_dynamic_workspace_symbols, { desc = "Find tags" })
             end
 
             -- Replace some LSP bindings with Telescope ones
             if server_capabilities.definitionProvider then
-                lsp_keymap("d", builtin.lsp_definitions, { desc = "Find definition" })
+                lsp_keymap("d", telescope_builtin.lsp_definitions, { desc = "Find definition" })
             end
             if server_capabilities.typeDefinitionProvider then
-                lsp_keymap("t", builtin.lsp_type_definition, { desc = "Find type definition" })
+                lsp_keymap("t", telescope_builtin.lsp_type_definitions, { desc = "Find type definition" })
             end
-            lsp_keymap("i", builtin.lsp_implementations, { desc = "Find implementations" })
-            lsp_keymap("r", builtin.lsp_references, { desc = "Find references" })
+            lsp_keymap("i", telescope_builtin.lsp_implementations, { desc = "Find implementations" })
+            lsp_keymap("r", telescope_builtin.lsp_references, { desc = "Find references" })
         end)
 
         -- Attach navic for statusline location
