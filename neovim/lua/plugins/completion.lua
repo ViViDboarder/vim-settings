@@ -23,8 +23,8 @@ function M.config_cmp()
         },
         mapping = cmp.mapping.preset.insert({
             -- Scroll docs with readline back - forward
-            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-            ["<C-f>"] = cmp.mapping.scroll_docs(4),
+            ["<C-U>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-D>"] = cmp.mapping.scroll_docs(4),
             -- Expand snippets with Tab
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if luasnip.expand_or_jumpable() then

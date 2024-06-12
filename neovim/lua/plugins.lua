@@ -622,6 +622,10 @@ use({
 use({
     "https://github.com/github/copilot.vim",
     disable = not vim.g.install_copilot,
+    config = function()
+        require("plugins.copilot")
+    end,
+    after = "vim-rsi",
 })
 
 use({
