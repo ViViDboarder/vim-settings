@@ -73,19 +73,15 @@ local function get_default_attach(override_capabilities)
             server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
         end
 
-        local function buf_set_option(...)
-            vim.api.nvim_buf_set_option(bufnr, ...)
-        end
-
         -- Set built in features to use lsp functions (automatic in nvim-0.8)
         -- HACK: Support for <0.8
         if vim.fn.has("nvim-0.8") ~= 1 then
-            buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+            vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
             if server_capabilities.documentSymbolProvider then
-                buf_set_option("tagfunc", "v:lua.vim.lsp.tagfunc")
+                vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
             end
             if server_capabilities.documentFormattingProvider then
-                buf_set_option("formatexpr", "v:lua.vim.lsp.formatexpr()")
+                vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
             end
         end
 
