@@ -1,35 +1,38 @@
 local utils = require("utils")
 return {
-    -- Colorschemes
     {
-        "https://github.com/vim-scripts/wombat256.vim",
-    },
-    {
-        "https://github.com/ViViDboarder/wombat.nvim",
-        dependencies = {
-            {
-                "https://github.com/rktjmp/lush.nvim",
-                tag = utils.map_version_rule({
-                    [">=0.7.0"] = utils.nil_val,
-                    [">=0.5.0"] = "v1.0.1",
-                }),
+        -- Colorschemes
+        {
+            "https://github.com/vim-scripts/wombat256.vim",
+        },
+        {
+            "https://github.com/ViViDboarder/wombat.nvim",
+            dependencies = {
+                {
+                    "https://github.com/rktjmp/lush.nvim",
+                    tag = utils.map_version_rule({
+                        [">=0.7.0"] = utils.nil_val,
+                        [">=0.5.0"] = "v1.0.1",
+                    }),
+                },
             },
         },
-    },
-    {
-        "https://github.com/ViViDboarder/wombuddy.nvim",
-        dependencies = { { "https://github.com/tjdevries/colorbuddy.vim" } },
-    },
-    {
-        "https://github.com/ishan9299/nvim-solarized-lua",
-        commit = utils.map_version_rule({
-            [">=0.7.0"] = utils.nil_val,
-            ["<0.7.0"] = "faba49b",
-        }),
-    },
-    {
-        "https://github.com/folke/tokyonight.nvim",
-        build = 'fish -c \'echo "set --path --prepend fish_themes_path "(pwd)"/extras" > ~/.config/fish/conf.d/tokyonight.fish\' || true', -- luacheck: no max line length
+        {
+            "https://github.com/ViViDboarder/wombuddy.nvim",
+            dependencies = { { "https://github.com/tjdevries/colorbuddy.vim" } },
+        },
+        {
+            "https://github.com/ishan9299/nvim-solarized-lua",
+            commit = utils.map_version_rule({
+                [">=0.7.0"] = utils.nil_val,
+                ["<0.7.0"] = "faba49b",
+            }),
+        },
+        {
+            "https://github.com/folke/tokyonight.nvim",
+            build = 'fish -c \'echo "set --path --prepend fish_themes_path "(pwd)"/extras" > ~/.config/fish/conf.d/tokyonight.fish\' || true', -- luacheck: no max line length
+        },
+        priority = 1000,
     },
     -- Some helpers
     -- Auto and ends to some ifs and dos
@@ -66,19 +69,17 @@ return {
     -- Better commenting
     {
         "https://github.com/tomtom/tcomment_vim",
-        config = function()
-            require("utils").keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
-            require("utils").keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
-        end,
+        keys = {
+            { "//", ":TComment<CR>", desc = "Toggle comment" },
+            { "//", ":TCommentBlock<CR>", mode = "v", desc = "Toggle comment" },
+        },
     },
     -- Allow wrapping and joining of arguments across multiple lines
     {
         "https://github.com/FooSoft/vim-argwrap",
-        config = function()
-            require("utils").keymap_set("n", "<Leader>a", "<cmd>ArgWrap<CR>", {
-                desc = "Wrap or unwrap arguments",
-            })
-        end,
+        keys = {
+            { "<Leader>a", "<cmd>ArgWrap<CR>", desc = "Wrap or unwrap arguments" },
+        },
     },
     -- Adds git operations to vim
     {
@@ -89,30 +90,27 @@ return {
             -- when used in status line.
             ["<0.9.2"] = "v3.6",
         }),
-        config = function()
-            require("utils").keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
-            require("utils").keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })
-            require("utils").keymap_set("n", "gd", "<cmd>Git diff<CR>", { desc = "Git diff" })
-            require("utils").keymap_set("n", "gs", "<cmd>Git<CR>", { desc = "Git status" })
-            require("utils").keymap_set("n", "gw", "<cmd>Git write<CR>", { desc = "Git write" })
-        end,
+        keys = {
+            { "gb", "<cmd>Git blame<CR>", desc = "Git blame" },
+            { "gc", "<cmd>Git commit<CR>", desc = "Git commit" },
+            { "gd", "<cmd>Git diff<CR>", desc = "Git diff" },
+            { "gs", "<cmd>Git<CR>", desc = "Git status" },
+            { "gw", "<cmd>Git write<CR>", desc = "Git write" },
+        },
+        command = { "Git" },
     },
     -- Quick toggling of Location and Quickfix lists
     {
         "https://github.com/milkypostman/vim-togglelist",
-        config = function()
-            require("utils").keymap_set("n", "<F6>", ":call ToggleQuickfixList()<CR>", { desc = "Toggle quickfix" })
-            require("utils").keymap_set(
-                "n",
-                "<F7>",
-                ":call ToggleLocationList()<CR>",
-                { desc = "Toggle location list" }
-            )
-        end,
+        keys = {
+            { "<F6>", ":call ToggleQuickfixList()<CR>", desc = "Toggle quickfix" },
+            { "<F7>", ":call ToggleLocationList()<CR>", desc = "Toggle location list" },
+        },
     },
 
     -- Find text everywhere!
     {
+        -- TODO: Maybe replace this with Telescope?
         "https://github.com/mhinz/vim-grepper",
         config = function()
             require("plugins.grepper")
@@ -123,6 +121,7 @@ return {
     {
         "https://github.com/norcalli/nvim-colorizer.lua",
         config = true,
+        cmd = { "ColorizerToggle" },
     },
 
     -- Custom status line
