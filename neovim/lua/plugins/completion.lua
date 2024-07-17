@@ -51,14 +51,6 @@ function M.config_cmp()
     utils.keymap_set("i", "<Plug>(cmp_complete)", function()
         require("cmp").complete()
     end, { desc = "Autocomplete" })
-
-    -- Maybe add obsidian and obsidian new. This is done here in case obsidian.nvim is loaded before cmp
-    utils.try_require("cmp_obsidian", function(cmp_obsidian)
-        cmp.register_source("obsidian", cmp_obsidian.new())
-    end)
-    utils.try_require("cmp_obsidian_new", function(cmp_obsidian_new)
-        cmp.register_source("obsidian_new", cmp_obsidian_new.new())
-    end)
 end
 
 return M

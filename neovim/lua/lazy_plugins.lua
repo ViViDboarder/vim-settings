@@ -186,6 +186,7 @@ return {
             { "https://github.com/mfussenegger/nvim-dap" },
             { "nvim-neotest/nvim-nio" },
         },
+        ft = { "python", "rust" },
         config = function()
             require("dapui").setup({
                 icons = {
@@ -483,9 +484,6 @@ return {
             })
             gs.async_pull()
         end,
-        dependencies = {
-            { "https://github.com/epwalsh/obsidian.nvim" },
-        },
         event = {
             "BufRead " .. vim.fn.expand("~") .. "/Documents/Obsidian/**.md",
             "BufNewFile " .. vim.fn.expand("~") .. "/Documents/Obsidian/**.md",
@@ -497,15 +495,11 @@ return {
             { "https://github.com/nvim-lua/plenary.nvim" },
         },
         version = "1.x.x",
-        config = function()
-            -- TODO: maybe move this to opts?
-            vim.g.vim_markdown_frontmatter = 1
-            require("obsidian").setup({
-                workspaces = {
-                    { name = "personal", path = "~/Documents/Obsidian" },
-                },
-            })
-        end,
+        opts = {
+            workspaces = {
+                { name = "personal", path = "~/Documents/Obsidian" },
+            },
+        },
         event = {
             "BufRead " .. vim.fn.expand("~") .. "/Documents/Obsidian/**.md",
             "BufNewFile " .. vim.fn.expand("~") .. "/Documents/Obsidian/**.md",
