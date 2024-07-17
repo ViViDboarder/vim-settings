@@ -24,8 +24,4 @@ end
 vim.g.polyglot_disabled = { "go", "rust" }
 
 -- Plugins
--- Packer auto installs and then lazy loads itself on PackerCommand and require the plugins module
--- This command should only really be needed to bootstrap a new system
-vim.api.nvim_create_user_command("PackerBootstrap", function()
-    require("plugins")
-end, { desc = "Bootstrap Packer" })
+require("lazy_init")
