@@ -198,9 +198,9 @@ return {
     -- Configure language servers
     {
         "https://github.com/neovim/nvim-lspconfig",
-        tag = utils.map_version_rule({
-            -- [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = utils.nil_val,
+        version = utils.map_version_rule({
+            [">=0.8.0"] = "v0.1.*",
+            [">=0.7.0"] = "v0.1.7",
             [">=0.6.1"] = "v0.1.2",
             [">=0.6.0"] = "v0.1.0",
         }),
@@ -365,7 +365,7 @@ return {
         -- Completion
         {
             "https://github.com/L3MON4D3/LuaSnip",
-            version = "1.x.x",
+            version = "2.x.x",
             event = "InsertEnter *",
             config = function()
                 require("luasnip.loaders.from_vscode").lazy_load()
