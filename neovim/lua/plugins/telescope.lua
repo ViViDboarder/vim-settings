@@ -1,14 +1,18 @@
 local function load_extensions()
     local utils = require("utils")
-    require("telescope").load_extension("file_browser")
+    if utils.is_plugin_loaded("telescope-file-browser.nvim") then
+        require("telescope").load_extension("file_browser")
+    end
     if utils.is_plugin_loaded("nvim-notify") then
         require("telescope").load_extension("notify")
     end
 end
 
 local function config_telescope()
+    local utils = require("utils")
+
     local actions = require("telescope.actions")
-    require("telescope").setup({
+    local opts = {
         defaults = {
             mappings = {
                 i = {
@@ -19,9 +23,19 @@ local function config_telescope()
             },
             layout_strategy = "flex",
         },
-    })
+        extensions = {},
+    }
+    if utils.is_plugin_loaded("telescope-file-browser.nvim") then
+        opts.extensions = {
+            file_browser = {
+                hidden = true,
+                show_hidden = true,
+                dir_icon = "📁",
+            },
+        }
+    end
+    require("telescope").setup(opts)
 
-    local utils = require("utils")
     local telescope_builtin = require("telescope.builtin")
 
     utils.keymap_set("n", "<C-t>", telescope_builtin.find_files, { desc = "Find files" })
@@ -40,6 +54,10 @@ local function config_telescope()
     finder_keymap("l", telescope_builtin.resume, { desc = "Resume finding" })
     finder_keymap("t", telescope_builtin.current_buffer_tags, { desc = "Find buffer tags" })
     finder_keymap("T", telescope_builtin.tags, { desc = "Find tags" })
+
+    if utils.is_plugin_loaded("telescope-file-browser.nvim") then
+        finder_keymap("F", require("telescope").extensions.file_browser.file_browser, { desc = "File browser" })
+    end
 
     utils.try_require("sg.telescope", function(telescope_sg)
         finder_keymap("G", telescope_sg.fuzzy_search_results, { desc = "Search Sourcegraph" })
