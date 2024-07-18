@@ -19,8 +19,6 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
-        -- TODO: Move plugins to be split by plugin or feature types
-        -- { import = "plugins" },
         { import = "lazy_plugins" },
     },
     lockfile = vim.fn.stdpath("config") .. utils.map_version_rule({
