@@ -5,7 +5,7 @@
   },
   "LuaSnip": {
     "branch": "master",
-    "commit": "500981ff6cefc7343e3959ef0f939bd0bfd49ba9"
+    "commit": "03c8e67eb7293c404845b3982db895d59c0d1538"
   },
   "cmp-buffer": {
     "branch": "main",
@@ -117,7 +117,7 @@
   },
   "nvim-lspconfig": {
     "branch": "master",
-    "commit": "df9c116cbcf0aa7e58f2b36b0296fa687e87f36f"
+    "commit": "0b8165cf95806bc4bb8f745bb0c92021b2ed4b98"
   },
   "nvim-navic": {
     "branch": "master",

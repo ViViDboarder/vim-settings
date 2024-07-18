@@ -170,6 +170,7 @@ return {
                 dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
             },
         },
+        event = "VeryLazy",
     },
 
     -- On Mac, update colors when dark mode changes
@@ -366,6 +367,14 @@ return {
             "https://github.com/L3MON4D3/LuaSnip",
             version = "1.x.x",
             event = "InsertEnter *",
+            config = function()
+                require("luasnip.loaders.from_vscode").lazy_load()
+            end,
+            dependencies = {
+                {
+                    "https://github.com/rafamadriz/friendly-snippets",
+                },
+            },
         },
         {
             "https://github.com/hrsh7th/cmp-nvim-lsp",
@@ -412,19 +421,13 @@ return {
         },
 
         -- Add snippets
-        {
-            "https://github.com/rafamadriz/friendly-snippets",
-            dependencies = { { "https://github.com/L3MON4D3/LuaSnip" } },
-            config = function()
-                require("luasnip.loaders.from_vscode").lazy_load()
-            end,
-            event = "InsertEnter *",
-        },
         event = "InsertEnter *",
     },
 
     {
         "https://github.com/ray-x/lsp_signature.nvim",
+        lazy = true,
+        event = "VeryLazy",
         opts = {
             extra_trigger_chars = { "(", "," },
             auto_close_after = nil,
