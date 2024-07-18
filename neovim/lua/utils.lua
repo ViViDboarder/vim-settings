@@ -165,11 +165,13 @@ function M.curry_keymap(mode, prefix, default_opts)
     default_opts = vim.tbl_extend("keep", default_opts or {}, { noremap = true, silent = true })
     local group_desc = M.tbl_pop(default_opts, "group_desc")
     if group_desc ~= nil then
-        M.try_require("which-key", function(wk)
-            wk.register({
-                [prefix] = "+" .. group_desc,
-            }, default_opts)
-        end)
+        if M.is_plugin_loaded("which-key") then
+            M.try_require("which-key", function(wk)
+                wk.register({
+                    [prefix] = "+" .. group_desc,
+                }, default_opts)
+            end)
+        end
     end
 
     return function(lhs, rhs, opts)
