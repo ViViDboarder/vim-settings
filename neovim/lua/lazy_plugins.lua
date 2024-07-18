@@ -61,9 +61,12 @@ return {
     -- Make it easier to discover some of my keymaps
     {
         "https://github.com/folke/which-key.nvim",
-        config = function()
-            require("plugins.whichkey").configure()
-        end,
+        opts = {
+            triggers_blacklist = {
+                i = { "j", "k", "`" },
+                v = { "j", "k" },
+            },
+        },
         version = "1.x.x",
     },
     -- Better commenting

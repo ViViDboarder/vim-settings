@@ -36,53 +36,14 @@ function M.config_lsp_ui()
     end)
 end
 
-local function get_server_capabilities(client)
-    -- HACK: Support for <0.8
-    if client.server_capabilities ~= nil then
-        return client.server_capabilities
-    end
-
-    local capabilities = client.resolved_capabilities
-    if capabilities.documentSymbolProvider == nil then
-        capabilities.documentSymbolProvider = capabilities.goto_definition
-    end
-    if capabilities.documentFormattingProvider == nil then
-        capabilities.documentFormattingProvider = capabilities.document_formatting
-    end
-    if capabilities.documentRangeFormattingProvider == nil then
-        capabilities.documentRangeFormattingProvider = capabilities.document_range_formatting
-    end
-    if capabilities.documentHighlightProvider == nil then
-        capabilities.documentHighlightProvider = capabilities.document_highlight
-    end
-    if capabilities.workspaceSymbolProvider == nil then
-        -- Not sure what the legacy version of this is
-        capabilities.workspaceSymbolProvider = capabilities.goto_definition
-    end
-
-    return capabilities
-end
-
 local function get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Allow overriding capabilities to avoid duplicate lsps with capabilities
 
         -- Using custom method to extract for <0.8 support
-        local server_capabilities = get_server_capabilities(client)
+        local server_capabilities = client.server_capabilities
         if override_capabilities ~= nil then
             server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
-        end
-
-        -- Set built in features to use lsp functions (automatic in nvim-0.8)
-        -- HACK: Support for <0.8
-        if vim.fn.has("nvim-0.8") ~= 1 then
-            vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-            if server_capabilities.documentSymbolProvider then
-                vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
-            end
-            if server_capabilities.documentFormattingProvider then
-                vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
-            end
         end
 
         -- Mappings
@@ -137,37 +98,21 @@ local function get_default_attach(override_capabilities)
         end
 
         -- Set some keybinds conditional on server capabilities
-        if vim.fn.has("nvim-0.8") == 1 then
-            lsp_keymap("f", function()
-                vim.lsp.buf.format({ async = true })
-            end, { desc = "Format code" })
-            lsp_keymap("f", function()
-                vim.lsp.buf.format({ async = true })
-            end, { mode = "v", desc = "Format selected code" })
-            if server_capabilities.documentFormattingProvider then
-                vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-                    pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
-                    callback = function()
-                        vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
-                    end,
-                    group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
-                    desc = "Auto format code on save",
-                })
-            end
-        else
-            -- HACK: Support for <0.8 with older formatting
-            lsp_keymap("f", vim.lsp.buf.formatting, { desc = "Format code" })
-            lsp_keymap("f", vim.lsp.buf.range_formatting, { mode = "v", desc = "Format selected code" })
-            if server_capabilities.documentFormattingProvider then
-                vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-                    pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
-                    callback = function()
-                        vim.lsp.buf.formatting_sync(nil, 1000)
-                    end,
-                    group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
-                    desc = "Auto format code on save",
-                })
-            end
+        lsp_keymap("f", function()
+            vim.lsp.buf.format({ async = true })
+        end, { desc = "Format code" })
+        lsp_keymap("f", function()
+            vim.lsp.buf.format({ async = true })
+        end, { mode = "v", desc = "Format selected code" })
+        if server_capabilities.documentFormattingProvider then
+            vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+                pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
+                callback = function()
+                    vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
+                end,
+                group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
+                desc = "Auto format code on save",
+            })
         end
 
         -- Set autocommands conditional on server_capabilities
