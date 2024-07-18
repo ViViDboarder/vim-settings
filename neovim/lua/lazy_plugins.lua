@@ -125,7 +125,6 @@ return {
     },
 
     -- Custom status line
-
     {
         "https://github.com/nvim-lualine/lualine.nvim",
         config = function()
@@ -245,6 +244,7 @@ return {
     -- Rust analyzer
     {
         "https://github.com/simrat39/rust-tools.nvim",
+        ft = { "rust" },
     },
 
     -- Better display of lsp diagnostics
@@ -262,13 +262,14 @@ return {
         opts = {
             input_buffer_type = "dressing",
         },
-        -- Only supports >=0.8.0
-        enabled = vim.fn.has("nvim-0.8.0") == 1,
+        lazy = true,
     },
 
     -- Generic linter/formatters in diagnostics API
     {
         "https://github.com/jose-elias-alvarez/null-ls.nvim",
+        -- This is lazy and configured after lspis loaded in plugins/lsp.lua
+        lazy = true,
         branch = utils.map_version_rule({
             [">=0.8.0"] = utils.nil_val,
             [">=0.7.0"] = "0.7-compat",
@@ -290,10 +291,6 @@ return {
     {
         "https://github.com/preservim/vim-pencil",
         cmd = { "Pencil" },
-    },
-    {
-        "https://github.com/preservim/vim-textobj-sentence",
-        dependencies = { { "https://github.com/kana/vim-textobj-user" } },
     },
     {
         "https://github.com/junegunn/goyo.vim",
@@ -329,59 +326,60 @@ return {
         }),
     },
 
-    -- Completion
     {
-        "https://github.com/L3MON4D3/LuaSnip",
-        version = "1.x.x",
-    },
-    {
-        "https://github.com/hrsh7th/cmp-nvim-lsp",
-        commit = utils.map_version_rule({
-            [">=0.7.0"] = utils.nil_val,
-            ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
-        }),
-        dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-    },
-    {
-        "https://github.com/hrsh7th/cmp-buffer",
-        dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-    },
-    {
-        "https://github.com/f3fora/cmp-spell",
-        dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-    },
-    {
-        "https://github.com/saadparwaiz1/cmp_luasnip",
-        commit = utils.map_version_rule({
-            [">0.7.0"] = utils.nil_val,
-            [">=0.5.0"] = "b10829736542e7cc9291e60bab134df1273165c9",
-        }),
-        dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-    },
-    {
-        "https://github.com/L3MON4D3/LuaSnip",
-        dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-    },
+        -- Completion
+        {
+            "https://github.com/L3MON4D3/LuaSnip",
+            version = "1.x.x",
+        },
+        {
+            "https://github.com/hrsh7th/cmp-nvim-lsp",
+            commit = utils.map_version_rule({
+                [">=0.7.0"] = utils.nil_val,
+                ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
+            }),
+            dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
+        },
+        {
+            "https://github.com/hrsh7th/cmp-buffer",
+            dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
+        },
+        {
+            "https://github.com/f3fora/cmp-spell",
+            dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
+        },
+        {
+            "https://github.com/saadparwaiz1/cmp_luasnip",
+            commit = utils.map_version_rule({
+                [">0.7.0"] = utils.nil_val,
+                [">=0.5.0"] = "b10829736542e7cc9291e60bab134df1273165c9",
+            }),
+            dependencies = {
+                { "https://github.com/hrsh7th/nvim-cmp" },
+                { "https://github.com/L3MON4D3/LuaSnip" },
+            },
+        },
 
-    {
-        "https://github.com/hrsh7th/nvim-cmp",
-        config = function()
-            require("plugins.completion").config_cmp()
-        end,
-        commit = utils.map_version_rule({
-            [">=0.7.0"] = utils.nil_val,
-            [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
-        }),
+        {
+            "https://github.com/hrsh7th/nvim-cmp",
+            config = function()
+                require("plugins.completion").config_cmp()
+            end,
+            commit = utils.map_version_rule({
+                [">=0.7.0"] = utils.nil_val,
+                [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
+            }),
+        },
+
+        -- Add snippets
+        {
+            "https://github.com/rafamadriz/friendly-snippets",
+            dependencies = { { "https://github.com/L3MON4D3/LuaSnip" } },
+            config = function()
+                require("luasnip.loaders.from_vscode").lazy_load()
+            end,
+        },
         event = "InsertEnter *",
-    },
-
-    -- Add snippets
-    {
-        "https://github.com/rafamadriz/friendly-snippets",
-        dependencies = { { "https://github.com/L3MON4D3/LuaSnip" } },
-        config = function()
-            require("luasnip.loaders.from_vscode").lazy_load()
-        end,
     },
 
     {

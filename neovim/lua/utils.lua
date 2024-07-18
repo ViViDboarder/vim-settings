@@ -16,32 +16,6 @@ function M.env_default(name, def)
     return val == nil and def or val
 end
 
--- Checks to see if a package can be required
-function M.can_require(name)
-    if package.loaded[name] then
-        return false
-    else
-        for _, searcher in ipairs(package.searchers or package.loaders) do
-            local loader = searcher(name)
-            if type(loader) == "function" then
-                package.preload[name] = loader
-                return true
-            end
-        end
-
-        return false
-    end
-end
-
--- Require a package if possible
-function M.maybe_require(name)
-    if M.can_require(name) then
-        return require(name)
-    end
-
-    return nil
-end
-
 -- Require a package and a "_local" suffixed one
 function M.require_with_local(name)
     -- Local should completely override the versioned module
@@ -50,7 +24,7 @@ function M.require_with_local(name)
     -- of boiler plate
     local rmod = require(name)
 
-    local lmod = M.maybe_require(name .. "_local")
+    local lmod = M.try_require(name .. "_local")
     if lmod ~= nil then
         return lmod
     end
@@ -58,9 +32,14 @@ function M.require_with_local(name)
     return rmod
 end
 
--- Returns whether or not packer plugin is loaded
+-- Returns whether or not lazy plugin is loaded
 function M.is_plugin_loaded(name)
-    return _G["packer_plugins"] and _G["packer_plugins"][name] and _G["packer_plugins"][name].loaded
+    local result = false
+    M.try_require("lazy.core.config", function(config)
+        result = config.plugins[name] ~= nil
+    end)
+
+    return result
 end
 
 -- Try to require something and perform some action if it was found

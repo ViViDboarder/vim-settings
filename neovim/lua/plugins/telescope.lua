@@ -41,9 +41,9 @@ local function config_telescope()
     finder_keymap("t", telescope_builtin.current_buffer_tags, { desc = "Find buffer tags" })
     finder_keymap("T", telescope_builtin.tags, { desc = "Find tags" })
 
-    if utils.can_require("sg.telescope") then
-        finder_keymap("G", require("sg.telescope").fuzzy_search_results, { desc = "Search Sourcegraph" })
-    end
+    utils.try_require("sg.telescope", function(telescope_sg)
+        finder_keymap("G", telescope_sg.fuzzy_search_results, { desc = "Search Sourcegraph" })
+    end)
 
     load_extensions()
 end
