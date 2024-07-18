@@ -62,12 +62,24 @@ return {
     {
         "https://github.com/folke/which-key.nvim",
         opts = {
-            triggers_blacklist = {
-                i = { "j", "k", "`" },
-                v = { "j", "k" },
+            -- Ignore warnings about config. Turn these on when switching major versions
+            notify = false,
+        },
+        version = utils.map_version_rule({
+            [">=0.9.4"] = "3.x.x",
+            [">=0.9.0"] = "<3.4.0",
+            ["<0.9.0"] = "1.x.x",
+        }),
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").show({ global = false })
+                end,
+                desc = "Buffer Local Keymaps (which-key)",
             },
         },
-        version = "1.x.x",
+        event = "VeryLazy",
     },
     -- Better commenting
     {
@@ -342,23 +354,18 @@ return {
     {
         "https://github.com/nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        commit = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = "4cccb6f494eb255b32a290d37c35ca12584c74d0",
-            [">=0.6.0"] = "bc25a6a5",
+        version = utils.map_version_rule({
+            [">=0.9.2"] = "0.9.x",
+            [">=0.9.0"] = "0.9.1",
         }),
         config = function()
             require("utils").require_with_local("plugins.treesitter").setup()
         end,
-    },
-    {
-        "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
-        dependencies = { { "https://github.com/nvim-treesitter/nvim-treesitter" } },
-        commit = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = "8673926519ea61069f9c1366d1ad1949316d250e",
-            ["<0.7.0"] = "eca3bf30334f85259d41dc060d50994f8f91ef7d",
-        }),
+        dependencies = {
+            {
+                "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+            },
+        },
     },
 
     {

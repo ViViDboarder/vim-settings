@@ -41,6 +41,7 @@ function M.setup()
             disable = {},
         },
         ensure_installed = M.ensure_installed,
+        auto_install = false,
     })
 end
 

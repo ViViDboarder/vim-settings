@@ -253,7 +253,7 @@
   },
   "which-key.nvim": {
     "branch": "main",
-    "commit": "4b7167f8fb2dba3d01980735e3509e172c024c29"
+    "commit": "8600b0029896ad2e36eb27a0808614ab8a0c057a"
   },
   "wombat.nvim": {
     "branch": "main",
