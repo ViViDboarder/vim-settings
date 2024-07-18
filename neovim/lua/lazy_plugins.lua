@@ -365,6 +365,7 @@ return {
         {
             "https://github.com/L3MON4D3/LuaSnip",
             version = "1.x.x",
+            event = "InsertEnter *",
         },
         {
             "https://github.com/hrsh7th/cmp-nvim-lsp",
@@ -373,14 +374,17 @@ return {
                 ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
             }),
             dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
+            event = "InsertEnter *",
         },
         {
             "https://github.com/hrsh7th/cmp-buffer",
             dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
+            event = "InsertEnter *",
         },
         {
             "https://github.com/f3fora/cmp-spell",
             dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
+            event = "InsertEnter *",
         },
         {
             "https://github.com/saadparwaiz1/cmp_luasnip",
@@ -392,6 +396,7 @@ return {
                 { "https://github.com/hrsh7th/nvim-cmp" },
                 { "https://github.com/L3MON4D3/LuaSnip" },
             },
+            event = "InsertEnter *",
         },
 
         {
@@ -403,6 +408,7 @@ return {
                 [">=0.7.0"] = utils.nil_val,
                 [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
             }),
+            event = "InsertEnter *",
         },
 
         -- Add snippets
@@ -412,6 +418,7 @@ return {
             config = function()
                 require("luasnip.loaders.from_vscode").lazy_load()
             end,
+            event = "InsertEnter *",
         },
         event = "InsertEnter *",
     },
@@ -432,7 +439,6 @@ return {
         "https://github.com/nvim-telescope/telescope.nvim",
         dependencies = {
             { "https://github.com/nvim-lua/plenary.nvim" },
-            { "https://github.com/nvim-lua/popup.nvim" },
             { "https://github.com/nvim-telescope/telescope-file-browser.nvim" },
         },
         version = "0.1.x",

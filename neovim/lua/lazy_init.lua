@@ -22,6 +22,7 @@ require("lazy").setup({
         { import = "lazy_plugins" },
     },
     lockfile = vim.fn.stdpath("config") .. utils.map_version_rule({
+        [">=0.10.0"] = "/lazylock-0.10.json",
         [">=0.9.0"] = "/lazylock-0.9.json",
         [">=0.8.0"] = "/lazylock-0.8.json",
         [">=0.7.0"] = "/lazylock-0.7.json",
@@ -44,9 +45,6 @@ require("lazy").setup({
             lazy = "💤 ",
         },
     },
-    -- Configure any other settings here. See the documentation for more details.
-    -- colorscheme that will be used when installing plugins.
-    install = { colorscheme = { "habamax" } },
     -- automatically check for plugin updates
-    checker = { enabled = true },
+    checker = { enabled = false },
 })

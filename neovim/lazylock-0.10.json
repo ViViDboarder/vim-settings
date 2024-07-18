@@ -151,10 +151,6 @@
     "branch": "master",
     "commit": "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683"
   },
-  "popup.nvim": {
-    "branch": "master",
-    "commit": "b7404d35d5d3548a82149238289fa71f7f6de4ac"
-  },
   "rust-tools.nvim": {
     "branch": "master",
     "commit": "676187908a1ce35ffcd727c654ed68d851299d3e"
