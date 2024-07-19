@@ -20,12 +20,6 @@ set hlsearch
 if IsGuiApp()
     if IsWindows()
         set guifont=Consolas:h10:b
-    elseif IsMac()
-        try
-            set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h12
-        catch
-            " Failed to set font, ok with default
-        endtry
     endif
 endif
 " }}
