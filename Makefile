@@ -9,13 +9,9 @@ default: check
 install:
 	sh ./vim-sync-append.sh
 
-.PHONY: update
-update:
-	sh ./update-plugins.sh
-
 .PHONY: install-coding-helpers
 install-coding-helpers:
-	sh ./install-coding-helpers.sh
+	sh ./install-helpers.py
 
 .PHONY: install-language-servers
 install-language-servers: install-coding-helpers
