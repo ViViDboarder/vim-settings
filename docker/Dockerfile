@@ -55,7 +55,7 @@ RUN ./install-helpers.py
 COPY --chown=vividboarder:users ./neovim $HOME/.config/nvim
 
 # Sync packer plugins
-RUN nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerBootstrap"
+RUN nvim --headless "+Lazy! sync" +qa
 # Bootstrap treesitter parsers
 RUN nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quitall
 
