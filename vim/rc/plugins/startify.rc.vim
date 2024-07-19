@@ -1,4 +1,4 @@
-Plug 'mhinz/vim-startify'
+Blink 'mhinz/vim-startify'
 let g:startify_list_order = [
     \ ['   My Bookmarks'], 'bookmarks',
     \ ['   Most recently used files in the current directory'], 'dir',

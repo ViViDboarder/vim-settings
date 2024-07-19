@@ -1,5 +1,5 @@
 " Install ALE
-Plug 'dense-analysis/ale'
+Blink 'dense-analysis/ale'
 let g:airline#extensions#ale#enabled = 1
 " Speed up first load time for quick editing
 let g:ale_lint_on_enter = 0

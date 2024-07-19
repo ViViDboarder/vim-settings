@@ -1,5 +1,5 @@
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Blink 'vim-airline/vim-airline'
+Blink 'vim-airline/vim-airline-themes'
 " Use short-form mode text
 let g:airline_mode_map = {
     \ '__' : '-',

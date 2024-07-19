@@ -1,4 +1,4 @@
-Plug 'mhinz/vim-grepper'
+Blink 'mhinz/vim-grepper'
 " Grepper settings and shortcuts
 let g:grepper = {
             \ 'quickfix': 1,

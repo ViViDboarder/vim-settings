@@ -1,5 +1,5 @@
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': 'yes \| ./install' }
-Plug 'junegunn/fzf.vim'
+Blink 'junegunn/fzf'
+Blink 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'FZF'
 " Jump to existing window if possible
 let g:fzf_buffers_jump = 1

@@ -1,4 +1,4 @@
-Plug 'airblade/vim-gitgutter', { 'on': ['GitGutterSignsToggle'] }
+Blink 'airblade/vim-gitgutter'
 " Settings to keep gitgutter fast
 let g:gitgutter_enabled = 1
 " Will toggle signs when I want them

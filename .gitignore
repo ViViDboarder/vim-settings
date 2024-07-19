@@ -10,6 +10,7 @@ neovim/tmp/
 vim/.netrwhist
 vim/UltiSnips
 vim/autoload/plug.vim
+vim/autoload/blink.vim
 vim/autoload/plug.vim.old
 vim/backup/
 vim/plugged/
@@ -19,3 +20,4 @@ vim/spell/
 vim/tmp/
 vim/tmp/viminfo.*
 vim/view/
+vim/pack/
