@@ -1,6 +1,6 @@
 " Both these plugins work well together for distraction free editing
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
-Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
+Blink 'junegunn/goyo.vim'
+Blink 'junegunn/limelight.vim'
 let g:goyo_width = 120
 
 command Zen :Goyo

@@ -1,4 +1,4 @@
-Plug 'ctrlpvim/ctrlp.vim'
+Blink 'ctrlpvim/ctrlp.vim'
 " Configuration for ctrlp.vim
 
 let g:ctrlp_in_use = 1

@@ -52,14 +52,16 @@ function! IsGuiApp()
                 \ || has('gui_vimr') || exists('g:gui_oni')
 endfunction
 
-" Auto install vim-plug
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    augroup pluginstall
-        autocmd VimEnter * PlugInstall
+" Auto install vim-blink
+let data_dir = expand('~/.vim')
+if empty(glob(data_dir . '/autoload/blink.vim'))
+    call mkdir(expand(data_dir.'/autoload'),'p')
+    silent execute '!curl -fLo ' . data_dir . '/autoload/blink.vim --create-dirs  https://raw.githubusercontent.com/IamTheFij/vim-blink/cmd-array/blink.vim'
+    augroup blinkinstall
+        autocmd VimEnter * BlinkUpdate
     augroup end
 endif
+call blink#init()
 
 call s:smart_source_rc('init')
 call s:smart_source_rc('input')
