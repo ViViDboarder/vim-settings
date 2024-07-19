@@ -23,6 +23,7 @@ M.ensure_installed = {
     "toml",
     "typescript",
     "vim",
+    "vimdoc",
     "yaml",
 }
 
