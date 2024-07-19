@@ -97,10 +97,10 @@ function maybe_pip_install() {
     else
         if command_exists pip3 ;then
             # If pip3 is there, use it to ensure we're using python 3
-            pip3 install --user --upgrade "${user_bins[@]}"
+            pip3 install --user --upgrade --break-system-packages "${user_bins[@]}"
         else
             # Use pip and hope for the best
-            pip install --user --upgrade "${user_bins[@]}"
+            pip install --user --upgrade --break-system-packages "${user_bins[@]}"
         fi
     fi
 }

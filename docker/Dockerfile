@@ -15,6 +15,7 @@ RUN apk add --no-cache \
     npm \
     py3-pip \
     py3-pynvim \
+    pipx \
     python3 \
     ;
 
@@ -47,8 +48,8 @@ RUN mkdir $HOME/bin
 ENV PATH $HOME/bin:$PATH
 
 # Install Language servers
-COPY --chown=vividboarder:users ./install-coding-helpers.sh ./
-RUN ./install-coding-helpers.sh
+COPY --chown=vividboarder:users ./install-helpers.py ./
+RUN ./install-helpers.py
 
 # Add config
 COPY --chown=vividboarder:users ./neovim $HOME/.config/nvim
