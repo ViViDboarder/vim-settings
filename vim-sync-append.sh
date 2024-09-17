@@ -24,12 +24,10 @@ mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
 # Install all bundles
 echo "Install all bundles"
 if hash nvim 2>/dev/null; then
-  # Install plugins for old Neovim (<0.5)
-  nvim --headless -c PlugInstall -c qall
-  # Install plugins for new Neovim (>0.5)
-  nvim --headless -c "autocmd User PackerComplete quitall" -c "PackerBootstrap" -c "PackerSync"
+  # Sync packer plugins
+  nvim --headless "+Lazy! sync" +qa
+  # Bootstrap treesitter parsers
   nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quitall
-  nvim --headless -c "TSUpdateSync" -c "quitall"
 fi
 if hash vim 2>/dev/null; then
   vim +PlugInstall +qall
