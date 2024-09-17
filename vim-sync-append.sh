@@ -25,7 +25,7 @@ mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
 echo "Install all bundles"
 if hash nvim 2>/dev/null; then
   # Sync packer plugins
-  nvim --headless "+Lazy! sync" +qa
+  nvim --headless "+Lazy! restore" +qa
   # Bootstrap treesitter parsers
   nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quitall
 fi
