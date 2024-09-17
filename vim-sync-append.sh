@@ -30,7 +30,7 @@ if hash nvim 2>/dev/null; then
   nvim --headless -c "lua require('plugins.treesitter').bootstrap()" -c quitall
 fi
 if hash vim 2>/dev/null; then
-  vim +PlugInstall +qall
+  vim +BlinkUpdate +qall
 fi
 
 
