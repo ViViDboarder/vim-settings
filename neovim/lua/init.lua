@@ -7,7 +7,6 @@ local o = vim.o
 -- Helpers
 require("_settings")
 require("_bindings")
-require("_colors")
 
 -- Use better grep programs
 if vim.fn.executable("rg") == 1 then
@@ -25,3 +24,6 @@ vim.g.polyglot_disabled = { "go", "rust" }
 
 -- Plugins
 require("lazy_init")
+
+-- Load colors after plugins
+require("_colors")
