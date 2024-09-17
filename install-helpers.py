@@ -201,6 +201,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ignore-missing", action="store_true")
     parser.add_argument("langs", nargs="*", type=Language)
+    parser.add_argument("--no-debuggers", action="store_true")
     args = parser.parse_args()
 
     maybe_pip_install("release-gitter")
@@ -226,7 +227,9 @@ def main():
     install_language_servers(langs)
     install_linters(langs)
     install_fixers(langs)
-    install_debuggers(langs)
+
+    if not args.no_debuggers:
+        install_debuggers(langs)
 
     print("DONE")
 
