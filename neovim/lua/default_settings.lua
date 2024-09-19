@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd({ "CompleteDone" }, {
 
 local has = vim.fn.has
 vim.g.is_mac = (has("mac") or has("macunix") or has("gui_macvim") or vim.fn.system("uname"):find("^darwin") ~= nil)
-vim.g.is_gui = vim.fn.exists("g:neovide")
+vim.g.is_gui = (vim.g.neovide or has("gui_macvim"))
 
 -- Require some local values
 utils.require_with_local("variables")
