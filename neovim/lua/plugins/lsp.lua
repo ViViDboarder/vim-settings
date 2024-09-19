@@ -178,10 +178,20 @@ function M.config_lsp()
         local default_attach = get_default_attach()
         local default_setup = { capabilities = capabilities, on_attach = default_attach }
 
+        local maybe_setup = function(config, options)
+            -- Setup LSP config if the lsp command exists
+            if vim.fn.executable(config.document_config.default_config.cmd[1]) == 1 then
+                config.setup(options)
+                return true
+            end
+
+            return false
+        end
+
         -- Configure each server
-        lsp_config.gopls.setup(default_setup)
-        lsp_config.pyright.setup(default_setup)
-        lsp_config.bashls.setup({
+        maybe_setup(lsp_config.gopls, default_setup)
+        maybe_setup(lsp_config.pyright, default_setup)
+        maybe_setup(lsp_config.bashls, {
             capabilities = capabilities,
             on_attach = default_attach,
             settings = {
@@ -223,10 +233,7 @@ function M.config_lsp()
                 })
             end)
         else
-            lsp_config.rls.setup({
-                capabilities = capabilities,
-                on_attach = default_attach,
-            })
+            maybe_setup(lsp_config.rls, default_setup)
         end
 
         -- Configure neovim dev for when sumneko_lua is installed
