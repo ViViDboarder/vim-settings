@@ -3,8 +3,8 @@ if vim.fn.has("nvim-0.9.0") ~= 1 then
 end
 
 -- Helpers
-require("_settings")
-require("_bindings")
+require("default_settings")
+require("default_bindings")
 
 -- Use better grep programs
 if vim.fn.executable("rg") == 1 then
@@ -24,4 +24,4 @@ vim.g.polyglot_disabled = { "go", "rust" }
 require("lazy_init")
 
 -- Load colors after plugins
-require("_colors")
+require("colors")
