@@ -195,6 +195,7 @@ return {
             require("plugins.darknotify")
         end,
         dependencies = { { "https://github.com/nvim-lualine/lualine.nvim" } },
+        lazy = true,
     },
 
     -- Custom start screen
@@ -221,7 +222,7 @@ return {
     -- Debug adapter protocol
     {
         "https://github.com/mfussenegger/nvim-dap",
-        -- TODO: Move to lazy.nvim and allow it to load this only when the required debuggers are loaded
+        -- TODO: Load this only when the required debuggers are loaded
         ft = { "python", "rust" },
     },
 
@@ -286,6 +287,7 @@ return {
     {
         "https://github.com/folke/neodev.nvim",
         dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
+        ft = { "lua" },
     },
 
     -- Rust analyzer
@@ -455,6 +457,7 @@ return {
         config = function()
             require("plugins.telescope")
         end,
+        lazy = true,
     },
 
     -- Filetypes
@@ -575,6 +578,7 @@ return {
             "SourcegraphSearch",
         },
         enabled = vim.g.install_sourcegraph,
+        lazy = true,
     },
 
     {
@@ -586,6 +590,7 @@ return {
         dependencies = {
             { "https://github.com/tpope/vim-rsi" },
         },
+        lazy = true,
     },
 
     {
@@ -595,5 +600,6 @@ return {
         config = function()
             require("plugins.copilotchat").setup()
         end,
+        lazy = true,
     },
 }
