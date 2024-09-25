@@ -16,6 +16,7 @@ return {
                     }),
                 },
             },
+            lazy = false,
         },
         {
             "https://github.com/ViViDboarder/wombuddy.nvim",
@@ -112,7 +113,7 @@ return {
             { "gs", "<cmd>Git<CR>", desc = "Git status" },
             { "gw", "<cmd>Git write<CR>", desc = "Git write" },
         },
-        command = { "Git" },
+        cmd = { "Git" },
     },
     -- Quick toggling of Location and Quickfix lists
     {
@@ -195,7 +196,7 @@ return {
             require("plugins.darknotify")
         end,
         dependencies = { { "https://github.com/nvim-lualine/lualine.nvim" } },
-        lazy = true,
+        event = "VeryLazy",
     },
 
     -- Custom start screen
@@ -280,6 +281,14 @@ return {
         dependencies = {
             { "https://github.com/neovim/nvim-lspconfig" },
             { "https://github.com/williamboman/mason-lspconfig.nvim" },
+        },
+        cmd = {
+            "Mason",
+            "MasonInstall",
+            "MasonLog",
+            "MasonUninstall",
+            "MasonUninstallAll",
+            "MasonUpdate",
         },
     },
 
@@ -391,9 +400,7 @@ return {
                 require("luasnip.loaders.from_vscode").lazy_load()
             end,
             dependencies = {
-                {
-                    "https://github.com/rafamadriz/friendly-snippets",
-                },
+                { "https://github.com/rafamadriz/friendly-snippets" },
             },
         },
         {
@@ -589,7 +596,6 @@ return {
             "SourcegraphSearch",
         },
         enabled = vim.g.install_sourcegraph,
-        lazy = true,
     },
 
     {
@@ -601,16 +607,37 @@ return {
         dependencies = {
             { "https://github.com/tpope/vim-rsi" },
         },
-        lazy = true,
     },
 
     {
         "https://github.com/CopilotC-Nvim/CopilotChat.nvim",
         enabled = vim.g.install_copilot,
         branch = "canary",
+        build = "make tiktoken",
+        dependencies = {
+            { "https://github.com/github/copilot.vim" },
+            { "https://github.com/nvim-lua/plenary.nvim" },
+        },
         config = function()
             require("plugins.copilotchat").setup()
         end,
+        keys = {
+            { "<leader>cc", ":echo 'Lazy load copilot chat'<cr>", desc = "Load copilot chat" },
+        },
+        cmd = {
+            "CopilotChat",
+            "CopilotChatOpen",
+            "CopilotChatToggle",
+            "CopilotChatModels",
+            "CopilotChatExplain",
+            "CopilotChatReview",
+            "CopilotChatOptimize",
+            "CopilotChatDocs",
+            "CopilotChatTests",
+            "CopilotChatFixDiagnostic",
+            "CopilotChatCommit",
+            "CopilotChatCommitStaged",
+        },
         lazy = true,
     },
 }
