@@ -339,6 +339,17 @@ return {
     -- abolish/pencil
     {
         "https://github.com/preservim/vim-pencil",
+        dependencies = {
+            {
+                "https://github.com/preservim/vim-textobj-sentence",
+                dependencies = {
+                    { "https://github.com/kana/vim-textobj-user" },
+                },
+                config = function()
+                    vim.fn["textobj#sentence#init"]()
+                end,
+            },
+        },
         cmd = { "Pencil" },
     },
     {
