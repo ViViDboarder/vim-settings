@@ -377,16 +377,16 @@ return {
         "https://github.com/nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         version = utils.map_version_rule({
-            [">=0.9.2"] = "0.9.x",
-            [">=0.9.0"] = "0.9.1",
+            [">=0.9.2"] = utils.nil_val,
+            ["==0.9.2"] = "0.9.2",
+            ["==0.9.1"] = "0.9.1",
+            ["==0.9.0"] = "0.9.0",
         }),
         config = function()
             require("utils").require_with_local("plugins.treesitter").setup()
         end,
         dependencies = {
-            {
-                "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
-            },
+            { "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
         },
     },
 
