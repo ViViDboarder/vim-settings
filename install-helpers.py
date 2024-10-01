@@ -8,23 +8,24 @@ from enum import Enum
 
 
 class Language(Enum):
-    PYTHON = "python"
-    CSS = "css"
-    VIM = "vim"
-    NEOVIM = "neovim"
-    YAML = "yaml"
-    TEXT = "text"
-    GO = "go"
-    LUA = "lua"
-    DOCKER = "docker"
-    TERRAFORM = "terraform"
-    RUST = "rust"
+    ANSIBLE = "ansible"
     BASH = "bash"
-    KOTLIN = "kotlin"
-    JAVASCRIPT = "javascript"
+    CSS = "css"
+    DOCKER = "docker"
+    GO = "go"
     HTML = "html"
+    JAVASCRIPT = "javascript"
     JSON = "json"
+    KOTLIN = "kotlin"
+    LUA = "lua"
+    NEOVIM = "neovim"
+    PYTHON = "python"
+    RUST = "rust"
+    TERRAFORM = "terraform"
+    TEXT = "text"
+    VIM = "vim"
     WEB = "web"
+    YAML = "yaml"
 
 
 def command_exists(command: str) -> bool:
@@ -118,6 +119,8 @@ def install_linters(langs: set[Language]):
     if Language.TEXT in langs:
         maybe_npm_install("alex", "write-good")
         maybe_pip_install("proselint")
+    if Language.ANSIBLE in langs:
+        maybe_pip_install("ansible-lint")
     if Language.GO in langs:
         maybe_run(
             "release-gitter",
