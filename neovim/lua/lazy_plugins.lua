@@ -325,8 +325,10 @@ return {
 
     -- Generic linter/formatters in diagnostics API
     {
+        -- TODO: null-ls is archived and no longer maintained. It is replaced by none-ls
+        -- Replace with https://github.com/nvimtools/none-ls.nvim
         "https://github.com/jose-elias-alvarez/null-ls.nvim",
-        -- This is lazy and configured after lspis loaded in plugins/lsp.lua
+        -- This is lazy and configured after lsps loaded in plugins/lsp.lua
         lazy = true,
         branch = utils.map_version_rule({
             [">=0.8.0"] = utils.nil_val,
