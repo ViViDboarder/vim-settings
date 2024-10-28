@@ -201,4 +201,38 @@ if vim.env["TERM"] == "xterm-kitty" then
     }
 end
 
+M.debug_icons = {
+    breakpoint = "🛑",
+    conditional_breakpoint = "🔍",
+    log_point = "📝",
+    current = "👉",
+    breakpoint_rejected = "🚫",
+}
+
+M.debug_control_icons = {
+    disconnect = "⏏️",
+    pause = "⏸️",
+    play = "▶️",
+    run_last = "⏮️",
+    step_back = "◀️",
+    step_into = "⤵️",
+    step_out = "⤴️",
+    step_over = "⏭️",
+    terminate = "⏹️",
+}
+
+if vim.env["TERM"] == "xterm-kitty" then
+    M.debug_control_icons = {
+        disconnect = "⏏",
+        pause = "⏸",
+        play = "▶",
+        run_last = "⏮",
+        step_back = "◀",
+        step_into = "⤵",
+        step_out = "⤴",
+        step_over = "⏭",
+        terminate = "⏹",
+    }
+end
+
 return M

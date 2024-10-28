@@ -223,17 +223,58 @@ return {
     -- Debug adapter protocol
     {
         "https://github.com/mfussenegger/nvim-dap",
-        -- TODO: Load this only when the required debuggers are loaded
-        ft = { "python", "rust" },
-    },
+        config = function()
+            local dap = require("dap")
+            local dap_mapping = utils.curry_keymap("n", "<leader>d", {
+                group_desc = "Debugging",
+                silent = true,
+                noremap = true,
+            })
+            dap_mapping("d", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
+            dap_mapping("b", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
+            dap_mapping("p", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
 
+            dap_mapping("c", dap.continue, { desc = "Continue" })
+            dap_mapping("C", dap.run_to_cursor, { desc = "Run to cursor" })
+            dap_mapping("s", dap.stop, { desc = "Stop" })
+            dap_mapping("n", dap.step_over, { desc = "Step over" })
+            dap_mapping("i", dap.step_into, { desc = "Step into" })
+            dap_mapping("O", dap.step_out, { desc = "Step out" })
+
+            -- dap_mapping("h", dap.toggle_hover, { desc = "Toggle hover" })
+            dap_mapping("D", dap.disconnect, { desc = "Disconnect" })
+            -- dap_mapping("r", dap.repl.open, { desc = "Open REPL" })
+            -- dap_mapping("R", dap.repl.run_last, { desc = "Run last" })
+
+            -- Set dap signs
+            vim.fn.sign_define(
+                "DapBreakpoint",
+                { text = utils.debug_icons.breakpoint, texthl = "", linehl = "", numhl = "" }
+            )
+
+            vim.fn.sign_define(
+                "DapLogPoint",
+                { text = utils.debug_icons.log_point, texthl = "", linehl = "", numhl = "" }
+            )
+            vim.fn.sign_define(
+                "DapBreakpointCondition",
+                { text = utils.debug_icons.conditional_breakpoint, texthl = "", linehl = "", numhl = "" }
+            )
+            vim.fn.sign_define("DapStopped", { text = utils.debug_icons.current, texthl = "", linehl = "", numhl = "" })
+            vim.fn.sign_define(
+                "DapBreakpointRejected",
+                { text = utils.debug_icons.breakpoint_rejected, texthl = "", linehl = "", numhl = "" }
+            )
+        end,
+        lazy = true,
+    },
     {
         "https://github.com/rcarriga/nvim-dap-ui",
         dependencies = {
             { "https://github.com/mfussenegger/nvim-dap" },
             { "nvim-neotest/nvim-nio" },
         },
-        ft = { "python", "rust" },
+        ft = { "python", "rust", "go" },
         config = function()
             require("dapui").setup({
                 icons = {
@@ -242,17 +283,7 @@ return {
                     current_frame = ">",
                 },
                 controls = {
-                    icons = {
-                        disconnect = "disconnect",
-                        pause = "pause",
-                        play = "play",
-                        run_last = "last",
-                        step_back = "back",
-                        step_into = "into",
-                        step_out = "out",
-                        step_over = "over",
-                        terminate = "term",
-                    },
+                    icons = utils.debug_control_icons,
                 },
             })
             local dap, dapui = require("dap"), require("dapui")
@@ -270,8 +301,16 @@ return {
 
     {
         "https://github.com/mfussenegger/nvim-dap-python",
-        dependencies = { { "https://github.com/mfussenegger/nvim-dap" } },
-        config = true,
+        dependencies = {
+            { "https://github.com/rcarriga/nvim-dap-ui" },
+            { "https://github.com/mfussenegger/nvim-dap" },
+        },
+        config = function()
+            -- This is where pipx is installing debugpy via ./install-helpers.py
+            -- Could maybe detect by doing a which debugpy and then reading the interpreter
+            -- from the shebang line.
+            require("dap-python").setup("~/.local/pipx/venvs/debugpy/bin/python3")
+        end,
         ft = { "python" },
     },
 
@@ -483,6 +522,39 @@ return {
     -- Filetypes
     { "https://github.com/ViViDboarder/vim-forcedotcom" },
     { "https://github.com/hsanson/vim-android" },
+    {
+        "https://github.com/ray-x/go.nvim",
+        dependencies = { -- optional packages
+            -- "https://github.com/ray-x/guihua.lua",
+            "https://github.com/neovim/nvim-lspconfig",
+            "https://github.com/nvim-treesitter/nvim-treesitter",
+            "https://github.com/rcarriga/nvim-dap-ui",
+        },
+        config = function()
+            require("go").setup({
+                icons = false,
+                -- I don't like the normal mode keymap because it overrides `w`
+                dap_debug_keymap = false,
+                -- Disable gui setup becuase this is set up with dap-ui
+                dap_debug_gui = false,
+            })
+
+            -- Override some keymaps because this plugin needs to start with debug run
+            local godap = require("go.dap")
+            utils.keymap_set("n", "<leader>dc", function()
+                if require("dap").session() == nil then
+                    godap.run()
+                else
+                    godap.continue()
+                end
+            end, { desc = "Continue" })
+            utils.keymap_set("n", "<leader>dR", godap.run, { desc = "Debug" })
+            utils.keymap_set("n", "<leader>ds", godap.stop, { desc = "Stop" })
+        end,
+        event = { "CmdlineEnter" },
+        ft = { "go", "gomod" },
+        build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+    },
     {
         "https://github.com/sheerun/vim-polyglot",
         config = function()

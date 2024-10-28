@@ -51,6 +51,10 @@
     "branch": "dev",
     "commit": "2f7c075f485ea9b9d834814028c691492d52445c"
   },
+  "go.nvim": {
+    "branch": "master",
+    "commit": "12ab6ac0fdd03b1ec9ee4e5378dd204f744a55bf"
+  },
   "goyo.vim": {
     "branch": "master",
     "commit": "fa0263d456dd43f5926484d1c4c7022dfcb21ba9"
