@@ -567,6 +567,11 @@ return {
         event = { "CmdlineEnter" },
         ft = { "go", "gomod" },
         build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+        version = utils.map_version_rule({
+            [">=0.10.0"] = utils.nil_val,
+            ["<0.10.0"] = "v0.9.0",
+        }),
+        enabled = vim.fn.has("nvim-0.9") == 1,
     },
     {
         "https://github.com/sheerun/vim-polyglot",
