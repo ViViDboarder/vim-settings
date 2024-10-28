@@ -36,7 +36,7 @@ function M.config_lsp_ui()
     end)
 end
 
-local function get_default_attach(override_capabilities)
+function M.get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Allow overriding capabilities to avoid duplicate lsps with capabilities
 
@@ -162,7 +162,7 @@ local function get_default_attach(override_capabilities)
     end
 end
 
-local function merged_capabilities()
+function M.merged_capabilities()
     -- Maybe update capabilities
     local capabilities = nil
     utils.try_require("cmp-nvim-lsp", function(cmp_nvim_lsp)
@@ -174,8 +174,8 @@ end
 
 function M.config_lsp()
     utils.try_require("lspconfig", function(lsp_config)
-        local capabilities = merged_capabilities()
-        local default_attach = get_default_attach()
+        local capabilities = M.merged_capabilities()
+        local default_attach = M.get_default_attach()
         local default_setup = { capabilities = capabilities, on_attach = default_attach }
 
         local maybe_setup = function(config, options)
@@ -205,34 +205,20 @@ function M.config_lsp()
         })
 
         -- Set up rust analyzer (preferred) or rls
-        -- TODO: Remove rls and all configuration for it when all machines are up to date
-        if vim.fn.executable("rust-analyzer") == 1 then
-            -- Prefer rust-tools, if present
-            utils.try_require("rust-tools", function(rust_tools)
-                rust_tools.setup({
-                    server = {
-                        capabilities = capabilities,
-                        on_attach = function(client, bufnr)
-                            default_attach(client, bufnr)
-                            -- TODO: override some bindings from rust-tools
-                            -- Eg. rust_tools.hover_actions.hover_actions or rt.code_action_group.code_action_group
-                        end,
-                    },
-                })
-            end, function()
-                lsp_config.rust_analyzer.setup({
-                    capabilities = capabilities,
-                    on_attach = default_attach,
-                    settings = {
-                        ["rust-analyzer"] = {
-                            cargo = {
-                                features = "all",
-                            },
+        -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
+        -- Maybe all lsp configs should be set up as part of their ftconfig
+        if vim.fn.has("nvim-0.10") == 1 then
+            maybe_setup(lsp_config.rust_analyzer, {
+                capabilities = capabilities,
+                on_attach = default_attach,
+                settings = {
+                    ["rust-analyzer"] = {
+                        cargo = {
+                            features = "all",
                         },
                     },
-                })
-            end)
-        else
+                },
+            })
             maybe_setup(lsp_config.rls, default_setup)
         end
 

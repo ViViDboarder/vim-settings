@@ -155,9 +155,9 @@
     "branch": "master",
     "commit": "2d9b06177a975543726ce5c73fca176cedbffe9d"
   },
-  "rust-tools.nvim": {
+  "rustaceanvim": {
     "branch": "master",
-    "commit": "676187908a1ce35ffcd727c654ed68d851299d3e"
+    "commit": "e1f9464d9e1addeccb170eb7968471966965f5a3"
   },
   "sg.nvim": {
     "branch": "master",

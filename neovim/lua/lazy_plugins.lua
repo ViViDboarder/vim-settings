@@ -340,8 +340,21 @@ return {
 
     -- Rust analyzer
     {
-        "https://github.com/simrat39/rust-tools.nvim",
+        "https://github.com/mrcjkb/rustaceanvim",
+        version = "^5",
+        -- Already loads on ft
+        lazy = false,
         ft = { "rust" },
+        init = function()
+            local lsp = require("plugins.lsp")
+            vim.g.rustaceanvim = {
+                server = {
+                    capabilities = lsp.merged_capabilities(),
+                    on_attach = lsp.get_default_attach(),
+                },
+            }
+        end,
+        enabled = vim.fn.has("nvim-0.10") == 1,
     },
 
     -- Better display of lsp diagnostics
