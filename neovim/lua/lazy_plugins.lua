@@ -274,7 +274,7 @@ return {
             { "https://github.com/mfussenegger/nvim-dap" },
             { "nvim-neotest/nvim-nio" },
         },
-        ft = { "python", "rust", "go" },
+        lazy = true,
         config = function()
             require("dapui").setup({
                 icons = {
