@@ -197,7 +197,9 @@ def install_fixers(langs: set[Language]):
 
 def install_debuggers(langs):
     if Language.PYTHON in langs:
-        maybe_pip_install("debugpy", library=True)
+        maybe_pip_install("debugpy")
+    if Language.GO in langs:
+        maybe_run("go", "install", "github.com/go-delve/delve/cmd/dlv@latest")
 
 
 def main():
