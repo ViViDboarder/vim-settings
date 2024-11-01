@@ -566,7 +566,6 @@ return {
         end,
         event = { "CmdlineEnter" },
         ft = { "go", "gomod" },
-        build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
         version = utils.map_version_rule({
             [">=0.10.0"] = utils.nil_val,
             ["<0.10.0"] = "v0.9.0",
