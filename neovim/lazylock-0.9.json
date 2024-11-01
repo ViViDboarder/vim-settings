@@ -51,6 +51,10 @@
     "branch": "dev",
     "commit": "2f7c075f485ea9b9d834814028c691492d52445c"
   },
+  "go.nvim": {
+    "branch": "master",
+    "commit": "4348ba67c29338af648ed9a0455bebb44fdb3ef3"
+  },
   "goyo.vim": {
     "branch": "master",
     "commit": "fa0263d456dd43f5926484d1c4c7022dfcb21ba9"
@@ -150,10 +154,6 @@
   "plenary.nvim": {
     "branch": "master",
     "commit": "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683"
-  },
-  "rust-tools.nvim": {
-    "branch": "master",
-    "commit": "676187908a1ce35ffcd727c654ed68d851299d3e"
   },
   "sg.nvim": {
     "branch": "master",
