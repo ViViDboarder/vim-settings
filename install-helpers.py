@@ -60,7 +60,7 @@ def maybe_pip_install(*args: str, library=False) -> bool:
         return True
 
     if not library and command_exists("pipx"):
-        return maybe_run("pipx", "install", *user_bins)
+        return all([maybe_run("pipx", "upgrade", "--install", bin) for bin in user_bins])
     elif command_exists("pip3"):
         return maybe_run(
             "pip3",
