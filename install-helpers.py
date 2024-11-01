@@ -89,6 +89,35 @@ def maybe_npm_install(*args: str) -> bool:
     return maybe_run("npm", "install", "-g", *user_bins)
 
 
+def maybe_go_install(**kwargs: str) -> bool:
+    urls = [url for name, url in kwargs.items() if should_install_user(name)]
+    if not urls:
+        return True
+
+    return maybe_run("go", "install", *urls)
+
+
+def maybe_cargo_install(*args: str) -> bool:
+    user_bins = [arg for arg in args if should_install_user(arg)]
+    if not user_bins:
+        return True
+
+    return maybe_run("cargo", "install", *user_bins)
+
+
+def maybe_release_gitter(**commands: list[str]) -> bool:
+    command_names = [key for key in commands.keys() if should_install_user(key)]
+    if not command_names:
+        return True
+
+    result = True
+    for command in command_names:
+        args = commands[command]
+        result = result and maybe_run("release-gitter", *args)
+
+    return result
+
+
 def install_language_servers(langs: set[Language]):
     if Language.PYTHON in langs:
         maybe_npm_install("pyright")
@@ -98,13 +127,12 @@ def install_language_servers(langs: set[Language]):
             "component",
             "add",
             "rustfmt",
-            "rust-analysis",
             "rust-src",
             "clippy",
             "rust-analyzer",
         )
     if Language.GO in langs:
-        maybe_run("go", "install", "golang.org/x/tools/gopls@latest")
+        maybe_go_install(gopls="golang.org/x/tools/gopls@latest")
 
 
 def install_linters(langs: set[Language]):
@@ -122,15 +150,16 @@ def install_linters(langs: set[Language]):
     if Language.ANSIBLE in langs:
         maybe_pip_install("ansible-lint")
     if Language.GO in langs:
+        # NOTE: Can't use maybe_release_gitter because name has a -
         maybe_run(
             "release-gitter",
             "--git-url",
             "https://github.com/golangci/golangci-lint",
-            "--map-arch",
-            "armv7l=armv7",
             "--extract-all",
             "--exec",
-            os.path.expanduser("mv /tmp/$(echo {}|sed s/\\.tar\\.gz$//)/golangci-lint ~/bin/"),
+            os.path.expanduser(
+                "mv /tmp/$(echo {}|sed s/\\.tar\\.gz$//)/golangci-lint ~/bin/"
+            ),
             "golangci-lint-{version}-{system}-{arch}.tar.gz",
             "/tmp/",
         )
@@ -139,12 +168,11 @@ def install_linters(langs: set[Language]):
             maybe_run("luarocks", "--local", "install", "luafilesystem")
         maybe_run("luarocks", "--local", "install", "luacheck", "1.1.0")
     if Language.DOCKER in langs:
-        if should_install_user("hadolint"):
-            hadolint_arm64 = "arm64"
-            if sys.platform == "darwin":
-                hadolint_arm64 = "x86_64"
-            maybe_run(
-                "release-gitter",
+        hadolint_arm64 = "arm64"
+        if sys.platform == "darwin":
+            hadolint_arm64 = "x86_64"
+        maybe_release_gitter(
+            hadolint=[
                 "--git-url",
                 "https://github.com/hadolint/hadolint",
                 "--map-arch",
@@ -152,29 +180,32 @@ def install_linters(langs: set[Language]):
                 "--map-arch",
                 f"arm64={hadolint_arm64}",
                 "--exec",
-                os.path.expanduser("mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint"),
+                os.path.expanduser(
+                    "mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint"
+                ),
                 "hadolint-{system}-{arch}",
                 os.path.expanduser("~/bin"),
-            )
-    if Language.TERRAFORM in langs:
-        maybe_run(
-            "release-gitter",
-            "--git-url",
-            "https://github.com/aquasecurity/tfsec",
-            "--exec",
-            os.path.expanduser("mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec"),
-            "tfsec-{system}-{arch}",
-            os.path.expanduser("~/bin"),
+            ]
         )
-        maybe_run(
-            "release-gitter",
-            "--git-url",
-            "https://github.com/terraform-linters/tflint",
-            "--extract-all",
-            "--exec",
-            os.path.expanduser("chmod +x ~/bin/tflint"),
-            "tflint_{system}_{arch}.zip",
-            os.path.expanduser("~/bin"),
+    if Language.TERRAFORM in langs:
+        maybe_release_gitter(
+            tfsec=[
+                "--git-url",
+                "https://github.com/aquasecurity/tfsec",
+                "--exec",
+                os.path.expanduser("mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec"),
+                "tfsec-{system}-{arch}",
+                os.path.expanduser("~/bin"),
+            ],
+            tflint=[
+                "--git-url",
+                "https://github.com/terraform-linters/tflint",
+                "--extract-all",
+                "--exec",
+                os.path.expanduser("chmod +x ~/bin/tflint"),
+                "tflint_{system}_{arch}.zip",
+                os.path.expanduser("~/bin"),
+            ],
         )
 
 
@@ -192,14 +223,31 @@ def install_fixers(langs: set[Language]):
     if Language.RUST in langs:
         maybe_run("rustup", "component", "add", "rustfmt")
     if {Language.LUA, Language.NEOVIM} in langs:
-        maybe_run("luarocks", "--local", "install", "stylua", "0.19.1")
+        _ = maybe_release_gitter(
+            stylua=[
+                "--git-url",
+                "https://github.com/JohnnyMorganz/StyLua",
+                "--extract",
+                "stylua",
+                "--exec",
+                os.path.expanduser("chmod +x ~/bin/stylua"),
+                "stylua-{system}-{arch}.zip",
+                os.path.expanduser("~/bin"),
+            ]
+        ) or maybe_cargo_install("stylua")
+
+    if Language.GO in langs:
+        maybe_go_install(
+            gofumpt="mvdan.cc/gofumpt@latest",
+            goimports="golang.org/x/tools/cmd/goimports@latest",
+        )
 
 
 def install_debuggers(langs):
     if Language.PYTHON in langs:
         maybe_pip_install("debugpy")
     if Language.GO in langs:
-        maybe_run("go", "install", "github.com/go-delve/delve/cmd/dlv@latest")
+        maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest")
 
 
 def main():
