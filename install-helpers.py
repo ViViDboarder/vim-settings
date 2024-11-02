@@ -262,9 +262,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--ignore-missing", action="store_true")
     parser.add_argument("langs", nargs="*", type=Language)
+    parser.add_argument("--no-language-servers", action="store_true")
     parser.add_argument("--no-debuggers", action="store_true")
     args = parser.parse_args()
 
+    # Release gitter is required for some tools
     maybe_pip_install("release-gitter")
 
     os.environ["PYTHONPATH"] = ""
@@ -281,8 +283,9 @@ def main():
         if lang in langs:
             langs.update(aliases)
 
+    if not args.no_language_servers:
+        install_language_servers(langs)
 
-    install_language_servers(langs)
     install_linters(langs)
     install_fixers(langs)
 
