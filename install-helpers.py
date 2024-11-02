@@ -28,6 +28,12 @@ class Language(Enum):
     YAML = "yaml"
 
 
+META_LANGS: dict[Language, set[Language]] = {
+    Language.NEOVIM: {Language.VIM, Language.LUA},
+    Language.WEB: {Language.CSS, Language.JAVASCRIPT, Language.HTML},
+}
+
+
 def command_exists(command: str) -> bool:
     return shutil.which(command) is not None
 
@@ -60,7 +66,9 @@ def maybe_pip_install(*args: str, library=False) -> bool:
         return True
 
     if not library and command_exists("pipx"):
-        return all([maybe_run("pipx", "upgrade", "--install", bin) for bin in user_bins])
+        return all(
+            [maybe_run("pipx", "upgrade", "--install", bin) for bin in user_bins]
+        )
     elif command_exists("pip3"):
         return maybe_run(
             "pip3",
@@ -138,9 +146,9 @@ def install_language_servers(langs: set[Language]):
 def install_linters(langs: set[Language]):
     if Language.PYTHON in langs:
         maybe_pip_install("mypy")
-    if {Language.CSS, Language.WEB} & langs:
+    if Language.CSS in langs:
         maybe_npm_install("csslint")
-    if {Language.VIM, Language.NEOVIM} in langs:
+    if Language.VIM in langs:
         maybe_pip_install("vim-vint")
     if Language.YAML in langs:
         maybe_pip_install("yamllint")
@@ -163,7 +171,7 @@ def install_linters(langs: set[Language]):
             "golangci-lint-{version}-{system}-{arch}.tar.gz",
             "/tmp/",
         )
-    if {Language.LUA, Language.NEOVIM} & langs:
+    if Language.LUA in langs:
         if not maybe_run("lua", "-e", "require('lfs')"):
             maybe_run("luarocks", "--local", "install", "luafilesystem")
         maybe_run("luarocks", "--local", "install", "luacheck", "1.1.0")
@@ -216,13 +224,13 @@ def install_fixers(langs: set[Language]):
         Language.CSS,
         Language.WEB,
         Language.JSON,
-    } & set(langs):
+    } & langs:
         maybe_npm_install("prettier")
     if Language.PYTHON in langs:
         maybe_pip_install("black", "reorder-python-imports", "isort")
     if Language.RUST in langs:
         maybe_run("rustup", "component", "add", "rustfmt")
-    if {Language.LUA, Language.NEOVIM} in langs:
+    if Language.LUA in langs:
         _ = maybe_release_gitter(
             stylua=[
                 "--git-url",
@@ -268,14 +276,11 @@ def main():
 
     langs = set(args.langs or Language)
 
-    # Handle some aliases
-    if Language.NEOVIM in langs:
-        langs.add(Language.VIM)
-        langs.add(Language.LUA)
-    if Language.WEB in langs:
-        langs.add(Language.CSS)
-        langs.add(Language.JAVASCRIPT)
-        langs.add(Language.HTML)
+    # Expand meta languages
+    for lang, aliases in META_LANGS.items():
+        if lang in langs:
+            langs.update(aliases)
+
 
     install_language_servers(langs)
     install_linters(langs)
