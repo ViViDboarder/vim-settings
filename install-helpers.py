@@ -235,7 +235,7 @@ def install_fixers(langs: set[Language]):
             stylua=[
                 "--git-url",
                 "https://github.com/JohnnyMorganz/StyLua",
-                "--extract",
+                "--extract-files",
                 "stylua",
                 "--exec",
                 os.path.expanduser("chmod +x ~/bin/stylua"),
