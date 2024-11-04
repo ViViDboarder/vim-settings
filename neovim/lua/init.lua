@@ -28,4 +28,4 @@ vim.g.polyglot_disabled = { "go", "rust" }
 require("lazy_init")
 
 -- Load colors after plugins
-require("colors")
+require("colors").init()

@@ -13,18 +13,6 @@ repos:
           (?x)^(
             vim/colors/.*\.vim
           )$
-  - repo: https://github.com/johnnymorganz/stylua
-    rev: v0.17.1
-    hooks:
-      - id: stylua-github
-  - repo: https://github.com/lunarmodules/luacheck
-    rev: v1.1.0
-    hooks:
-      - id: luacheck
-        args:
-          - --globals
-          - vim
-          - --
   - repo: local
     hooks:
       - id: sort-json
@@ -33,3 +21,13 @@ repos:
         entry: ./scripts/sort-json.sh
         files: "(\\.json$|^neovim/packer_snapshots/)"
         types: [text]
+      - id: selene
+        name: An opinionated Lua code linter
+        entry: selene
+        language: system
+        types: [lua]
+      - id: stylua
+        name: An opinionated Lua code formatter
+        entry: selene
+        language: system
+        types: [lua]

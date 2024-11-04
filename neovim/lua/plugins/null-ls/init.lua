@@ -41,14 +41,15 @@ function M.configure(options)
         local sources = {
             -- Generic
             null_ls.builtins.formatting.prettier,
-            null_ls.builtins.formatting.trim_whitespace,
-            null_ls.builtins.formatting.trim_newlines,
+            -- From extras
+            require("none-ls.formatting.trim_whitespace"),
+            require("none-ls.formatting.trim_newlines"),
             -- Ansible
             null_ls.builtins.diagnostics.ansiblelint.with({ filetypes = { "yaml.ansible" } }),
             -- Fish
             null_ls.builtins.formatting.fish_indent,
             -- Python
-            null_ls.builtins.formatting.reorder_python_imports,
+            -- null_ls.builtins.formatting.reorder_python_imports,
             null_ls.builtins.formatting.isort,
             null_ls.builtins.formatting.black,
             null_ls.builtins.diagnostics.mypy,
@@ -65,9 +66,9 @@ function M.configure(options)
                 end,
             }),
             -- Shell
-            null_ls.builtins.diagnostics.shellcheck,
+            -- null_ls.builtins.diagnostics.shellcheck,
             -- Lua
-            null_ls.builtins.diagnostics.luacheck,
+            null_ls.builtins.diagnostics.selene,
             null_ls.builtins.formatting.stylua,
             -- Docker
             null_ls.builtins.diagnostics.hadolint,

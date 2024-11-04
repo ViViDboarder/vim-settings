@@ -1,5 +1,7 @@
 -- Update colors based on environment variables
-function _G.update_colors()
+local M = {}
+
+function M.update_colors()
     local function maybe_set(scope, name, val, force)
         force = force or false
         local changed = vim[scope][name] ~= val
@@ -63,10 +65,14 @@ local utils = require("utils")
 if not utils.is_plugin_loaded("dark-notify") then
     vim.api.nvim_create_autocmd({ "FocusGained" }, {
         pattern = "*",
-        callback = _G.update_colors,
+        callback = M.update_colors,
         group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
     })
 end
 
 -- Initial setting of colors
-_G.update_colors()
+function M.init()
+    M.update_colors()
+end
+
+return M

@@ -175,6 +175,16 @@ def install_linters(langs: set[Language]):
         if not maybe_run("lua", "-e", "require('lfs')"):
             maybe_run("luarocks", "--local", "install", "luafilesystem")
         maybe_run("luarocks", "--local", "install", "luacheck", "1.1.0")
+        maybe_run(
+            "release-gitter",
+            "--git-url",
+            "https://github.com/Kampfkarren/selene",
+            "--exec",
+            os.path.expanduser("chmod +x ~/bin/selene"),
+            "--extract-files", "selene",
+            "selene-{version}-{system}.zip",
+            os.path.expanduser("~/bin"),
+        )
     if Language.DOCKER in langs:
         hadolint_arm64 = "arm64"
         if sys.platform == "darwin":

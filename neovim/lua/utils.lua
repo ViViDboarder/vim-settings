@@ -1,4 +1,3 @@
--- luacheck: globals packer_plugins
 local M = {}
 
 function M.get_color(synID, what, mode)

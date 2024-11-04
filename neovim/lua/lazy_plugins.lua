@@ -1,3 +1,4 @@
+-- #selene: allow(mixed_table)
 local utils = require("utils")
 return {
     {
@@ -377,9 +378,7 @@ return {
 
     -- Generic linter/formatters in diagnostics API
     {
-        -- TODO: null-ls is archived and no longer maintained. It is replaced by none-ls
-        -- Replace with https://github.com/nvimtools/none-ls.nvim
-        "https://github.com/jose-elias-alvarez/null-ls.nvim",
+        "https://github.com/nvimtools/none-ls.nvim",
         -- This is lazy and configured after lsps loaded in plugins/lsp.lua
         lazy = true,
         branch = utils.map_version_rule({
@@ -393,6 +392,7 @@ return {
             [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
         }),
         dependencies = {
+            { "https://github.com/nvimtools/none-ls-extras.nvim" },
             { "https://github.com/nvim-lua/plenary.nvim" },
             { "https://github.com/neovim/nvim-lspconfig" },
         },

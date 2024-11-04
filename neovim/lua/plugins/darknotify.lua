@@ -1,6 +1,5 @@
 require("dark_notify").run({
     onchange = function(_)
-        -- Defined in _colors
-        _G.update_colors()
+        require("colors").update_colors()
     end,
 })

@@ -1,3 +1,4 @@
+-- #selene: allow(mixed_table)
 local M = {}
 local utils = require("utils")
 
@@ -50,9 +51,7 @@ function M.config_lualine(theme_name)
     -- Theme name transformations
     if theme_name == nil then
         theme_name = "auto"
-    elseif theme_name:find("wombat") then
-        theme_name = "wombat"
-    elseif theme_name == "wombuddy" then
+    elseif theme_name:find("wombat") or theme_name == "wombuddy" then
         theme_name = "wombat"
     end
 
