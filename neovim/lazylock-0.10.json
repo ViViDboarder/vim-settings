@@ -95,9 +95,13 @@
     "branch": "main",
     "commit": "46aa467dca16cf3dfe27098042402066d2ae242d"
   },
-  "null-ls.nvim": {
+  "none-ls-extras.nvim": {
     "branch": "main",
-    "commit": "0010ea927ab7c09ef0ce9bf28c2b573fc302f5a7"
+    "commit": "f2bb002c8aa644d1f253772ff5d4e75e45ff7f4f"
+  },
+  "none-ls.nvim": {
+    "branch": "main",
+    "commit": "dcc8cd4efdcb29275681a3c95786a816330dbca6"
   },
   "nvim-cmp": {
     "branch": "main",
