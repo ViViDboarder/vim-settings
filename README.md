@@ -18,7 +18,7 @@ You can also remove any installed plugins or uninstall this configuration using 
 
 ## Version support
 
-Nearly every version of Vim or Neovim found on major distros is supported right now. To simplify things, I am considering adopting the following rule: Supporting only the lowest version of each found in the latest Ubuntu LTS and Debian Stable releases. I'll also make tags for commits where I drop support for a version.
+Vim configs are in maintenance mode and will not be updated, however are expected to be able to run anywhere. Neovim configs target the Neovim version in the latest LTS release of Ubuntu. I try to add tags to commits when I drop support for older versions of Neovim.
 
 ## Project Layout
 
