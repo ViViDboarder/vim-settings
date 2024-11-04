@@ -175,8 +175,7 @@ def install_linters(langs: set[Language]):
         if not maybe_run("lua", "-e", "require('lfs')"):
             maybe_run("luarocks", "--local", "install", "luafilesystem")
         maybe_run("luarocks", "--local", "install", "luacheck", "1.1.0")
-        maybe_run(
-            "release-gitter",
+        maybe_release_gitter(selene=[
             "--git-url",
             "https://github.com/Kampfkarren/selene",
             "--exec",
@@ -184,7 +183,7 @@ def install_linters(langs: set[Language]):
             "--extract-files", "selene",
             "selene-{version}-{system}.zip",
             os.path.expanduser("~/bin"),
-        )
+        ])
     if Language.DOCKER in langs:
         hadolint_arm64 = "arm64"
         if sys.platform == "darwin":
@@ -277,7 +276,15 @@ def main():
     args = parser.parse_args()
 
     # Release gitter is required for some tools
-    maybe_pip_install("release-gitter")
+    if not maybe_pip_install("release-gitter"):
+        # Manual install
+        maybe_run(
+            "wget",
+            "-O",
+            os.path.expanduser("~/bin/release-gitter"),
+            "https://git.iamthefij.com/iamthefij/release-gitter/raw/branch/main/release_gitter.py",
+        )
+        maybe_run("chmod", "+x", os.path.expanduser("~/bin/release-gitter"))
 
     os.environ["PYTHONPATH"] = ""
 
