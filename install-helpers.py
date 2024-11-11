@@ -144,6 +144,18 @@ def install_language_servers(langs: set[Language]):
 
 
 def install_linters(langs: set[Language]):
+    if Language.BASH in langs:
+        maybe_release_gitter(
+            shellcheck=[
+                "--git-url",
+                "https://github.com/koalaman/shellcheck",
+                "--extract-files", "shellcheck-{version}/shellcheck",
+                "--exec", "mv /tmp/shellcheck-{version}/shellcheck ~/bin/ && chmod +x ~/bin/shellcheck",
+                "shellcheck-{version}.{system}.{arch}.tar.xz",
+                "/tmp/",
+            ]
+        )
+
     if Language.PYTHON in langs:
         maybe_pip_install("mypy")
     if Language.CSS in langs:
