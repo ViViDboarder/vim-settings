@@ -149,10 +149,14 @@ def install_linters(langs: set[Language]):
             shellcheck=[
                 "--git-url",
                 "https://github.com/koalaman/shellcheck",
-                "--extract-files", "shellcheck-{version}/shellcheck",
-                "--exec", "mv /tmp/shellcheck-{version}/shellcheck ~/bin/ && chmod +x ~/bin/shellcheck",
+                "--extract-files",
+                "shellcheck-{version}/shellcheck",
+                "--exec",
+                os.path.expanduser(
+                    "mv shellcheck-{version}/shellcheck ~/bin/ && chmod +x ~/bin/shellcheck"
+                ),
+                "--use-temp-dir",
                 "shellcheck-{version}.{system}.{arch}.tar.xz",
-                "/tmp/",
             ]
         )
 
@@ -175,13 +179,14 @@ def install_linters(langs: set[Language]):
             "release-gitter",
             "--git-url",
             "https://github.com/golangci/golangci-lint",
-            "--extract-all",
+            "--extract-files",
+            "golangci-lint-{version}-{system}-{arch}/golangci-lint",
             "--exec",
             os.path.expanduser(
-                "mv /tmp/$(echo {}|sed s/\\.tar\\.gz$//)/golangci-lint ~/bin/"
+                "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/ && chmod +x ~/bin/golangci-lint"
             ),
+            "--use-temp-dir",
             "golangci-lint-{version}-{system}-{arch}.tar.gz",
-            "/tmp/",
         )
     if Language.LUA in langs:
         if not maybe_run("lua", "-e", "require('lfs')"):
