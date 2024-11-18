@@ -183,7 +183,7 @@ def install_linters(langs: set[Language]):
             "golangci-lint-{version}-{system}-{arch}/golangci-lint",
             "--exec",
             os.path.expanduser(
-                "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/ && chmod +x ~/bin/golangci-lint"
+                "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/"
             ),
             "--use-temp-dir",
             "golangci-lint-{version}-{system}-{arch}.tar.gz",
