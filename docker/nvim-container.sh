@@ -9,6 +9,7 @@ if ! docker inspect "${container_name}-home" > /dev/null ; then
 fi
 
 docker run --interactive --rm --tty \
+    --detach-keys "ctrl-z" \
     --name "$container_name" \
     --env "NVIM_COLOR=$NVIM_COLOR" \
     --volume "${container_name}-home:/home/vividboarder/.data" \
