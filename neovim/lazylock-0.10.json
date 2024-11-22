@@ -47,6 +47,10 @@
     "branch": "main",
     "commit": "de8fce94985873666bd9712ea3e49ee17aadb1ed"
   },
+  "git-scripts.nvim": {
+    "branch": "dev",
+    "commit": "2f7c075f485ea9b9d834814028c691492d52445c"
+  },
   "go.nvim": {
     "branch": "master",
     "commit": "6368756601a358b1491ac2ff10d0e2939a76df5e"
