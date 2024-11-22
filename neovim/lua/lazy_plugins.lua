@@ -653,7 +653,7 @@ return {
         dependencies = {
             { "https://github.com/nvim-lua/plenary.nvim" },
         },
-        version = "1.x.x",
+        version = "3.x.x",
         opts = {
             workspaces = {
                 { name = "personal", path = "~/Documents/Obsidian" },
