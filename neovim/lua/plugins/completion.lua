@@ -18,8 +18,10 @@ function M.config_cmp()
             { name = "luasnip" },
             { name = "buffer" },
             { name = "spell" },
+            -- TODO: Refactor to use the lazy opt expansion feature
             { name = "obsidian" },
             { name = "obsidian_new" },
+            { name = "lazydev" },
         },
         mapping = cmp.mapping.preset.insert({
             -- Scroll docs with readline back - forward

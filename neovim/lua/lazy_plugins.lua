@@ -337,6 +337,15 @@ return {
         "https://github.com/folke/neodev.nvim",
         dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
         ft = { "lua" },
+        -- Disable for nvim 0.10 because there is lazydev
+        enabled = vim.fn.has("nvim-0.10") ~= 1,
+    },
+    {
+        "https://github.com/folke/lazydev.nvim",
+        dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
+        ft = "lua",
+        opts = {},
+        enabled = vim.fn.has("nvim-0.10") == 1,
     },
 
     -- Rust analyzer
