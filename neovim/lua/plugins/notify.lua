@@ -1,5 +1,8 @@
 local utils = require("utils")
-require("notify").setup({
+
+local notify = require("notify")
+
+notify.setup({
     icons = {
         ERROR = utils.diagnostic_signs.Error,
         WARN = utils.diagnostic_signs.Warn,
@@ -8,4 +11,10 @@ require("notify").setup({
         INFO = utils.diagnostic_signs.Info,
     },
 })
-vim.notify = require("notify")
+
+vim.notify = notify
+
+-- Add Telescope keymap
+utils.try_require("telescope", function(telescope)
+    utils.keymap_set("n", "<leader>fn", telescope.extensions.notify.notify, { desc = "Find notifications" })
+end)
