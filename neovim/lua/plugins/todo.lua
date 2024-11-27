@@ -1,4 +1,4 @@
-local utils = require("utils")
+local icons = require("icons")
 
 require("todo-comments").setup({
     signs = false,
@@ -7,7 +7,7 @@ require("todo-comments").setup({
             icon = "🩹",
         },
         TODO = {
-            icon = utils.diagnostic_signs.Pencil,
+            icon = icons.diagnostic_signs.Pencil,
         },
         HACK = {
             icon = "🙈",
@@ -19,7 +19,7 @@ require("todo-comments").setup({
             icon = "📓",
         },
         WARNING = {
-            icon = utils.diagnostic_signs.Warn,
+            icon = icons.diagnostic_signs.Warn,
         },
     },
 })

@@ -58,8 +58,9 @@ function M.config_lualine(theme_name)
     -- navic
     local code_loc = {}
     utils.try_require("nvim-navic", function(navic)
-        navic.setup({
-            icons = {
+        local opts = {}
+        if not require("icons").nerd_font then
+            opts.icons = {
                 Array = "𝐴 ",
                 Boolean = "𝐵 ",
                 Class = "ℂ ",
@@ -86,15 +87,17 @@ function M.config_lualine(theme_name)
                 Struct = "𝑆 ",
                 TypeParameter = "𝑇𝑃 ",
                 Variable = "𝑉 ",
-            },
-        })
+            }
+        end
+
+        navic.setup(opts)
         code_loc = { "navic" }
     end)
 
     require("lualine").setup({
         options = {
             theme = theme_name,
-            icons_enabled = false,
+            icons_enabled = require("icons").nerd_font,
             component_separators = { left = "|", right = "|" },
             section_separators = { left = "", right = "" },
         },

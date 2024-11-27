@@ -66,6 +66,9 @@ return {
         opts = {
             -- Ignore warnings about config. Turn these on when switching major versions
             notify = false,
+            icons = {
+                mappings = require("icons").nerd_font,
+            },
         },
         version = utils.map_version_rule({
             [">=0.9.4"] = "3.x.x",
@@ -247,24 +250,26 @@ return {
             -- dap_mapping("r", dap.repl.open, { desc = "Open REPL" })
             -- dap_mapping("R", dap.repl.run_last, { desc = "Run last" })
 
+            local icons = require("icons")
+
             -- Set dap signs
             vim.fn.sign_define(
                 "DapBreakpoint",
-                { text = utils.debug_icons.breakpoint, texthl = "", linehl = "", numhl = "" }
+                { text = icons.debug_icons.breakpoint, texthl = "", linehl = "", numhl = "" }
             )
 
             vim.fn.sign_define(
                 "DapLogPoint",
-                { text = utils.debug_icons.log_point, texthl = "", linehl = "", numhl = "" }
+                { text = icons.debug_icons.log_point, texthl = "", linehl = "", numhl = "" }
             )
             vim.fn.sign_define(
                 "DapBreakpointCondition",
-                { text = utils.debug_icons.conditional_breakpoint, texthl = "", linehl = "", numhl = "" }
+                { text = icons.debug_icons.conditional_breakpoint, texthl = "", linehl = "", numhl = "" }
             )
-            vim.fn.sign_define("DapStopped", { text = utils.debug_icons.current, texthl = "", linehl = "", numhl = "" })
+            vim.fn.sign_define("DapStopped", { text = icons.debug_icons.current, texthl = "", linehl = "", numhl = "" })
             vim.fn.sign_define(
                 "DapBreakpointRejected",
-                { text = utils.debug_icons.breakpoint_rejected, texthl = "", linehl = "", numhl = "" }
+                { text = icons.debug_icons.breakpoint_rejected, texthl = "", linehl = "", numhl = "" }
             )
         end,
         lazy = true,
@@ -284,7 +289,7 @@ return {
                     current_frame = ">",
                 },
                 controls = {
-                    icons = utils.debug_control_icons,
+                    icons = require("icons").debug_control_icons,
                 },
             })
             local dap, dapui = require("dap"), require("dapui")

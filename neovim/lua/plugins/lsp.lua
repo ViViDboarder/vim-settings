@@ -21,7 +21,7 @@ function M.config_lsp_ui()
     end
 
     -- Diagnostics signs
-    for type, icon in pairs(utils.diagnostic_signs) do
+    for type, icon in pairs(require("icons").diagnostic_signs) do
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
@@ -30,7 +30,7 @@ function M.config_lsp_ui()
         trouble.setup({
             fold_open = "▼",
             fold_closed = "▶",
-            icons = false,
+            icons = require("icons").nerd_font,
             use_diagnostic_signs = true,
         })
     end)
