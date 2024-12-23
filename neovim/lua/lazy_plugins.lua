@@ -809,6 +809,7 @@ return {
     {
         "https://github.com/github/copilot.vim",
         enabled = vim.g.install_copilot,
+        version = "1.x.x",
         config = function()
             require("plugins.copilot")
         end,
@@ -820,7 +821,7 @@ return {
     {
         "https://github.com/CopilotC-Nvim/CopilotChat.nvim",
         enabled = vim.g.install_copilot,
-        branch = "canary",
+        version = "3.x.x",
         build = "make tiktoken",
         dependencies = {
             { "https://github.com/github/copilot.vim" },
