@@ -8,6 +8,7 @@ from enum import Enum
 
 
 class Language(Enum):
+    """Supported languages for helper installation."""
     ANSIBLE = "ansible"
     BASH = "bash"
     CSS = "css"
@@ -28,6 +29,7 @@ class Language(Enum):
     YAML = "yaml"
 
 
+# Meta langs are for platforms that consist of multiple languages
 META_LANGS: dict[Language, set[Language]] = {
     Language.NEOVIM: {Language.VIM, Language.LUA},
     Language.WEB: {Language.CSS, Language.JAVASCRIPT, Language.HTML},
@@ -35,10 +37,12 @@ META_LANGS: dict[Language, set[Language]] = {
 
 
 def command_exists(command: str) -> bool:
+    """Checks if a command exists in path."""
     return shutil.which(command) is not None
 
 
 def maybe_run(*args: str) -> bool:
+    """Tries to run a command and returns boolean success."""
     if command_exists(args[0]):
         print("> " + " ".join(args))
         result = subprocess.run(args)
@@ -88,6 +92,12 @@ def maybe_upgrade_pipx():
 
 
 def maybe_pip_install(*args: str, library=False) -> bool:
+    """
+    Install user packages using pip.
+
+    Installation will be skipped if there is a system install, or if none of
+    pipx, pip3, or pip are present.
+    """
     user_bins = [arg for arg in args if should_install_user(arg)]
     if not user_bins:
         return True
@@ -117,6 +127,11 @@ def maybe_pip_install(*args: str, library=False) -> bool:
 
 
 def maybe_npm_install(*args: str) -> bool:
+    """
+    Install user packages using npm.
+
+    Installation will be skipped if there is a system install or npm is missing.
+    """
     user_bins = [arg for arg in args if should_install_user(arg)]
     if not user_bins:
         return True
@@ -125,6 +140,11 @@ def maybe_npm_install(*args: str) -> bool:
 
 
 def maybe_go_install(**kwargs: str) -> bool:
+    """
+    Install user packages using go.
+
+    Installation will be skipped if there is a system install or go is missing.
+    """
     urls = [url for name, url in kwargs.items() if should_install_user(name)]
     if not urls:
         return True
@@ -133,6 +153,11 @@ def maybe_go_install(**kwargs: str) -> bool:
 
 
 def maybe_cargo_install(*args: str) -> bool:
+    """
+    Install user packages using cargo.
+
+    Installation will be skipped if there is a system install or cargo is missing.
+    """
     user_bins = [arg for arg in args if should_install_user(arg)]
     if not user_bins:
         return True
@@ -141,6 +166,11 @@ def maybe_cargo_install(*args: str) -> bool:
 
 
 def maybe_release_gitter(**commands: list[str]) -> bool:
+    """
+    Try to install user binary using release-gitter.
+
+    Attempt to install binary packages using release-gitter.
+    """
     command_names = [key for key in commands.keys() if should_install_user(key)]
     if not command_names:
         return True
@@ -154,6 +184,7 @@ def maybe_release_gitter(**commands: list[str]) -> bool:
 
 
 def install_language_servers(langs: set[Language]):
+    """Install language servers for requested languages."""
     if Language.PYTHON in langs:
         maybe_npm_install("pyright")
     if Language.RUST in langs:
@@ -171,6 +202,7 @@ def install_language_servers(langs: set[Language]):
 
 
 def install_linters(langs: set[Language]):
+    """Install linters for requested languages."""
     if Language.BASH in langs:
         maybe_release_gitter(
             shellcheck=[
@@ -271,6 +303,7 @@ def install_linters(langs: set[Language]):
 
 
 def install_fixers(langs: set[Language]):
+    """Install fixers for requested languages."""
     if {
         Language.PYTHON,
         Language.HTML,
@@ -305,23 +338,19 @@ def install_fixers(langs: set[Language]):
 
 
 def install_debuggers(langs):
+    """Install debuggers for the requested languages."""
     if Language.PYTHON in langs:
         maybe_pip_install("debugpy")
     if Language.GO in langs:
         maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest")
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--ignore-missing", action="store_true")
-    parser.add_argument("langs", nargs="*", type=Language)
-    parser.add_argument("--no-language-servers", action="store_true")
-    parser.add_argument("--no-debuggers", action="store_true")
-    args = parser.parse_args()
+def install_release_gitter():
+    """
+    Install release-gitter.
 
-    maybe_upgrade_pipx()
-
-    # Release gitter is required for some tools
+    release-gitter is used to install precompiled binaries from GitHub.
+    """
     if not maybe_pip_install("release-gitter"):
         # Manual install
         maybe_run(
@@ -332,19 +361,49 @@ def main():
         )
         maybe_run("chmod", "+x", os.path.expanduser("~/bin/release-gitter"))
 
+
+def parse_args() -> argparse.Namespace:
+    """Parse command line arguments."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ignore-missing", action="store_true")
+    parser.add_argument("langs", nargs="*", type=Language)
+    parser.add_argument("--no-language-servers", action="store_true")
+    parser.add_argument("--no-debuggers", action="store_true")
+    return parser.parse_args()
+
+def get_langs(langs: list[Language]) -> set[Language]:
+    """
+    Gets all langs to be installed from user selection.
+
+    Defaults to all languages and handles expanding meta langs.
+    """
+    lang_set = set(langs or Language)
+
+    # Expand meta languages
+    for lang, aliases in META_LANGS.items():
+        if lang in lang_set:
+            lang_set.update(aliases)
+
+    return lang_set
+
+
+def main():
+    args = parse_args()
+    langs = get_langs(args.langs)
+
+    # Try to upgrade pipx
+    maybe_upgrade_pipx()
+
+    # Release gitter is required for some tools
+    install_release_gitter()
+
+    # Keep a clean PYTHONPATH
     os.environ["PYTHONPATH"] = ""
 
     if args.ignore_missing:
         os.environ["set"] = "+e"
     else:
         os.environ["set"] = "-e"
-
-    langs = set(args.langs or Language)
-
-    # Expand meta languages
-    for lang, aliases in META_LANGS.items():
-        if lang in langs:
-            langs.update(aliases)
 
     if not args.no_language_servers:
         install_language_servers(langs)
