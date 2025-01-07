@@ -49,6 +49,14 @@ def maybe_run(*args: str) -> bool:
 
 
 def should_install_user(command: str) -> bool:
+    """
+    Indicates if a local user version of a command should be installed.
+
+    I don't want to shadow system installed packages, so this function
+    checks for an existing installation and checks whether or not it's
+    installed only for the current user. If it's not present or within
+    the user's home directory, it will indiciate that we should install.
+    """
     bin_path = shutil.which(command)
     if not bin_path:
         return True
@@ -56,8 +64,27 @@ def should_install_user(command: str) -> bool:
     if bin_path.startswith(os.path.expanduser("~")):
         return True
 
-    print("WARNING: Already installed by system. Skipping installation of", command)
+    print(f"WARNING: Already installed by system. Skipping installation of {command}")
     return False
+
+
+def maybe_upgrade_pipx():
+    """
+    Try to upgrade pipx if it's installed.
+
+    To simplify installation, I use `pipx upgrade --install`, but some
+    systems don't have a new enough version of pipx. If pipx is present,
+    this will ensure there is an updated version of pipx installed.
+    """
+    if not command_exists("pipx"):
+        return
+
+    if maybe_run("pipx", "upgrade", "--install", "pipx"):
+        return
+    if maybe_run("pipx", "upgrade", "pipx"):
+        return
+    if maybe_run("pipx", "install", "pipx"):
+        return
 
 
 def maybe_pip_install(*args: str, library=False) -> bool:
@@ -291,6 +318,8 @@ def main():
     parser.add_argument("--no-language-servers", action="store_true")
     parser.add_argument("--no-debuggers", action="store_true")
     args = parser.parse_args()
+
+    maybe_upgrade_pipx()
 
     # Release gitter is required for some tools
     if not maybe_pip_install("release-gitter"):
