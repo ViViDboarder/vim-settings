@@ -1,7 +1,7 @@
 {
   "CopilotChat.nvim": {
     "branch": "canary",
-    "commit": "d480e399c4e3221b16aa66fcf913e6c57eaa46b7"
+    "commit": "2ebe591cff06018e265263e71e1dbc4c5aa8281e"
   },
   "LuaSnip": {
     "branch": "master",
@@ -22,10 +22,6 @@
   "cmp_luasnip": {
     "branch": "master",
     "commit": "98d9cb5c2c38532bd9bdb481067b20fea8f32e90"
-  },
-  "colorbuddy.vim": {
-    "branch": "master",
-    "commit": "8b968581e5c19d22a861d5f3fe5dbd83394fa681"
   },
   "copilot.vim": {
     "branch": "release",
@@ -101,7 +97,7 @@
   },
   "none-ls.nvim": {
     "branch": "main",
-    "commit": "83c7c008a486d6b2d09d3937179ef281f679c998"
+    "commit": "7bebb35a05871aeb99825f29d869cbd9a46bdbba"
   },
   "nvim-cmp": {
     "branch": "main",
@@ -113,7 +109,7 @@
   },
   "nvim-dap": {
     "branch": "master",
-    "commit": "b768c8d0ce6da614ac17ed097bf2d94e35fe1a58"
+    "commit": "99807078c5089ed30e0547aa4b52c5867933f426"
   },
   "nvim-dap-python": {
     "branch": "master",
@@ -145,7 +141,7 @@
   },
   "nvim-treesitter": {
     "branch": "master",
-    "commit": "622a4a6ba76d1de52b72a965159213ae655b4ac7"
+    "commit": "8ca76960ae75e0a3bb231402558eb50e79433161"
   },
   "nvim-treesitter-textobjects": {
     "branch": "master",
@@ -165,7 +161,7 @@
   },
   "sg.nvim": {
     "branch": "master",
-    "commit": "76c97d91f8d8818a4fcf14817fadd98412aa44c8"
+    "commit": "7c423ebeb028b3534eb20fe54972825384dbe7d6"
   },
   "startuptime.vim": {
     "branch": "master",
@@ -193,7 +189,7 @@
   },
   "trouble.nvim": {
     "branch": "main",
-    "commit": "f1168feada93c0154ede4d1fe9183bf69bac54ea"
+    "commit": "40c5317a6e90fe3393f07b0fee580d9e93a216b4"
   },
   "vim-android": {
     "branch": "master",
@@ -273,14 +269,10 @@
   },
   "wombat.nvim": {
     "branch": "main",
-    "commit": "efdfe7ec9d2d961247d00b7178356407f4c9d241"
+    "commit": "e41359fa29d1e09ae8339b8f4f1f0c2be2cb82fa"
   },
   "wombat256.vim": {
     "branch": "master",
     "commit": "8734ba45dcf5e38c4d2686b35c94f9fcb30427e2"
-  },
-  "wombuddy.nvim": {
-    "branch": "main",
-    "commit": "29deb8fa68a1b9121b551d3d9530a8c1e4153f9c"
   }
 }
