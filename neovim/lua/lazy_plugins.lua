@@ -394,6 +394,7 @@ return {
             input_buffer_type = "dressing",
         },
         lazy = true,
+        enabled = vim.fn.has("nvim-0.8") == 1,
     },
 
     -- Generic linter/formatters in diagnostics API
