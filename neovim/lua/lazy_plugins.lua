@@ -20,10 +20,6 @@ return {
             lazy = false,
         },
         {
-            "https://github.com/ViViDboarder/wombuddy.nvim",
-            dependencies = { { "https://github.com/tjdevries/colorbuddy.vim" } },
-        },
-        {
             "https://github.com/ishan9299/nvim-solarized-lua",
             commit = utils.map_version_rule({
                 [">=0.7.0"] = utils.nil_val,

@@ -49,10 +49,16 @@ M.csv_col = {
 -- Configure lualine witha  provided theme
 function M.config_lualine(theme_name)
     -- Theme name transformations
+    --
     if theme_name == nil then
         theme_name = "auto"
-    elseif theme_name:find("wombat") or theme_name == "wombuddy" then
-        theme_name = "wombat"
+
+        if vim.g.colors_name:find("wombat") ~= nil then
+            -- NOTE: This helps make sure wombat variants work with lualine, however it pins
+            -- the theme to wombat if attempting to change it after lualine is loaded. This
+            -- can be reset using `:lua require('plugins.lualine').config_lualine()`
+            theme_name = "wombat"
+        end
     end
 
     -- navic
