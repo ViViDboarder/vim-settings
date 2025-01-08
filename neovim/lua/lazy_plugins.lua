@@ -379,7 +379,9 @@ return {
     -- Better display of lsp diagnostics
     {
         "https://github.com/folke/trouble.nvim",
+        config = true,
         version = utils.map_version_rule({
+            [">=0.9.2"] = "3.x.x",
             [">=0.7.2"] = "2.x.x",
             ["<0.7.2"] = "1.x.x",
         }),

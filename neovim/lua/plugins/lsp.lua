@@ -25,15 +25,6 @@ function M.config_lsp_ui()
         local hl = "DiagnosticSign" .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
     end
-
-    utils.try_require("trouble", function(trouble)
-        trouble.setup({
-            fold_open = "▼",
-            fold_closed = "▶",
-            icons = require("icons").nerd_font,
-            use_diagnostic_signs = true,
-        })
-    end)
 end
 
 function M.get_default_attach(override_capabilities)
