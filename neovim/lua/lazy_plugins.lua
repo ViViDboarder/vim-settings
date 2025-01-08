@@ -209,6 +209,10 @@ return {
         config = function()
             require("utils").require_with_local("plugins.startify")
         end,
+        dependencies = {
+            -- Plenary isn't used by startify, but it is used in my config
+            { "https://github.com/nvim-lua/plenary.nvim" },
+        },
     },
 
     -- LSP
