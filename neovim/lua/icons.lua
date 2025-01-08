@@ -7,6 +7,11 @@ function M.init()
         M.nerd_font = false
     end
 
+    M.fold = {
+        open = "▼",
+        closed = "▶",
+    }
+
     -- Diagnostics signs
     if vim.env["TERM"] == "xterm-kitty" then
         -- Don't use double width emoji for Kitty
