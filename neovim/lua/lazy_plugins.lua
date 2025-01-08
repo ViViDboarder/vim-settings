@@ -106,7 +106,7 @@ return {
         "https://github.com/tpope/vim-fugitive",
         tag = utils.map_version_rule({
             [">=0.9.2"] = utils.nil_val,
-            -- HACK: Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
+            -- Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
             -- when used in status line.
             ["<0.9.2"] = "v3.6",
         }),
@@ -713,6 +713,7 @@ return {
             require("plugins.copilot")
         end,
         dependencies = {
+            -- To avoid conflicts with Ctrl+F, load vim-rsi first
             { "https://github.com/tpope/vim-rsi" },
         },
     },
