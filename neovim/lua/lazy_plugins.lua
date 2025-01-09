@@ -628,6 +628,10 @@ return {
     -- Fancy notifications
     {
         "https://github.com/rcarriga/nvim-notify",
+        version = utils.map_version_rule({
+            [">=0.10.0"] = "3.x.x",
+            ["<0.10.0"] = "3.13.5",
+        }),
         config = function()
             require("plugins.notify")
         end,

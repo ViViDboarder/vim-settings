@@ -129,7 +129,7 @@
   },
   "nvim-notify": {
     "branch": "master",
-    "commit": "bd9cd51f9ef2f6326fc2bc9931d0718c1794e247"
+    "commit": "d333b6f167900f6d9d42a59005d82919830626bf"
   },
   "nvim-solarized-lua": {
     "branch": "master",
@@ -137,7 +137,7 @@
   },
   "nvim-treesitter": {
     "branch": "master",
-    "commit": "8ca76960ae75e0a3bb231402558eb50e79433161"
+    "commit": "cfc6f2c117aaaa82f19bcce44deec2c194d900ab"
   },
   "nvim-treesitter-textobjects": {
     "branch": "master",
