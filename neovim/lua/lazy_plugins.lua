@@ -448,7 +448,8 @@ return {
         "https://github.com/nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         version = utils.map_version_rule({
-            [">=0.9.2"] = utils.nil_val,
+            [">=0.10.0"] = utils.nil_val,
+            [">=0.9.2"] = "0.9.3",
             ["==0.9.2"] = "0.9.2",
             ["==0.9.1"] = "0.9.1",
             ["==0.9.0"] = "0.9.0",
