@@ -1,37 +1,7 @@
 -- #selene: allow(mixed_table)
 local utils = require("utils")
 return {
-    {
-        -- Colorschemes
-        {
-            "https://github.com/vim-scripts/wombat256.vim",
-        },
-        {
-            "https://github.com/ViViDboarder/wombat.nvim",
-            dependencies = {
-                {
-                    "https://github.com/rktjmp/lush.nvim",
-                    tag = utils.map_version_rule({
-                        [">=0.7.0"] = utils.nil_val,
-                        [">=0.5.0"] = "v1.0.1",
-                    }),
-                },
-            },
-            lazy = false,
-        },
-        {
-            "https://github.com/ishan9299/nvim-solarized-lua",
-            commit = utils.map_version_rule({
-                [">=0.7.0"] = utils.nil_val,
-                ["<0.7.0"] = "faba49b",
-            }),
-        },
-        {
-            "https://github.com/folke/tokyonight.nvim",
-            build = 'fish -c \'echo "set --path --prepend fish_themes_path "(pwd)"/extras" > ~/.config/fish/conf.d/tokyonight.fish\' || true', -- luacheck: no max line length
-        },
-        priority = 1000,
-    },
+    { import = "lazy.colorschemes" },
     -- Some helpers
     -- Auto and ends to some ifs and dos
     { "https://github.com/tpope/vim-endwise" },
@@ -56,6 +26,7 @@ return {
 
     -- Auto ctags generation
     { "https://github.com/ludovicchabant/vim-gutentags" },
+
     -- Make it easier to discover some of my keymaps
     {
         "https://github.com/folke/which-key.nvim",
@@ -213,164 +184,9 @@ return {
 
     -- LSP
 
-    -- Configure language servers
-    {
-        "https://github.com/neovim/nvim-lspconfig",
-        version = utils.map_version_rule({
-            [">=0.8.0"] = "v0.1.*",
-            [">=0.7.0"] = "v0.1.7",
-            [">=0.6.1"] = "v0.1.2",
-            [">=0.6.0"] = "v0.1.0",
-        }),
-    },
-
     -- Debug adapter protocol
-    {
-        "https://github.com/mfussenegger/nvim-dap",
-        config = function()
-            local dap = require("dap")
-            local dap_mapping = utils.curry_keymap("n", "<leader>d", {
-                group_desc = "Debugging",
-                silent = true,
-                noremap = true,
-            })
-            dap_mapping("d", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
-            dap_mapping("b", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
-            dap_mapping("p", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
-
-            dap_mapping("c", dap.continue, { desc = "Continue" })
-            dap_mapping("C", dap.run_to_cursor, { desc = "Run to cursor" })
-            dap_mapping("s", dap.stop, { desc = "Stop" })
-            dap_mapping("n", dap.step_over, { desc = "Step over" })
-            dap_mapping("i", dap.step_into, { desc = "Step into" })
-            dap_mapping("O", dap.step_out, { desc = "Step out" })
-
-            -- dap_mapping("h", dap.toggle_hover, { desc = "Toggle hover" })
-            dap_mapping("D", dap.disconnect, { desc = "Disconnect" })
-            -- dap_mapping("r", dap.repl.open, { desc = "Open REPL" })
-            -- dap_mapping("R", dap.repl.run_last, { desc = "Run last" })
-
-            local icons = require("icons")
-
-            -- Set dap signs
-            vim.fn.sign_define(
-                "DapBreakpoint",
-                { text = icons.debug_icons.breakpoint, texthl = "", linehl = "", numhl = "" }
-            )
-
-            vim.fn.sign_define(
-                "DapLogPoint",
-                { text = icons.debug_icons.log_point, texthl = "", linehl = "", numhl = "" }
-            )
-            vim.fn.sign_define(
-                "DapBreakpointCondition",
-                { text = icons.debug_icons.conditional_breakpoint, texthl = "", linehl = "", numhl = "" }
-            )
-            vim.fn.sign_define("DapStopped", { text = icons.debug_icons.current, texthl = "", linehl = "", numhl = "" })
-            vim.fn.sign_define(
-                "DapBreakpointRejected",
-                { text = icons.debug_icons.breakpoint_rejected, texthl = "", linehl = "", numhl = "" }
-            )
-        end,
-        lazy = true,
-    },
-    {
-        "https://github.com/rcarriga/nvim-dap-ui",
-        dependencies = {
-            { "https://github.com/mfussenegger/nvim-dap" },
-            { "nvim-neotest/nvim-nio" },
-        },
-        lazy = true,
-        config = function()
-            require("dapui").setup({
-                icons = {
-                    expanded = "-",
-                    collapsed = "+",
-                    current_frame = ">",
-                },
-                controls = {
-                    icons = require("icons").debug_control_icons,
-                },
-            })
-            local dap, dapui = require("dap"), require("dapui")
-            dap.listeners.after.event_initialized["dapui_config"] = function()
-                dapui.open()
-            end
-            dap.listeners.before.event_terminated["dapui_config"] = function()
-                dapui.close()
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function()
-                dapui.close()
-            end
-        end,
-    },
-
-    {
-        "https://github.com/mfussenegger/nvim-dap-python",
-        dependencies = {
-            { "https://github.com/rcarriga/nvim-dap-ui" },
-            { "https://github.com/mfussenegger/nvim-dap" },
-        },
-        config = function()
-            -- This is where pipx is installing debugpy via ./install-helpers.py
-            -- Could maybe detect by doing a which debugpy and then reading the interpreter
-            -- from the shebang line.
-            require("dap-python").setup("~/.local/pipx/venvs/debugpy/bin/python3")
-        end,
-        ft = { "python" },
-    },
-
-    -- Install language servers
-    {
-        "https://github.com/williamboman/mason.nvim",
-        dependencies = {
-            { "https://github.com/neovim/nvim-lspconfig" },
-            { "https://github.com/williamboman/mason-lspconfig.nvim" },
-        },
-        cmd = {
-            "Mason",
-            "MasonInstall",
-            "MasonLog",
-            "MasonUninstall",
-            "MasonUninstallAll",
-            "MasonUpdate",
-        },
-    },
-
-    -- Lua dev for vim
-    {
-        "https://github.com/folke/neodev.nvim",
-        dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
-        ft = { "lua" },
-        -- Disable for nvim 0.10 because there is lazydev
-        enabled = vim.fn.has("nvim-0.10") ~= 1,
-    },
-    {
-        "https://github.com/folke/lazydev.nvim",
-        dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
-        ft = "lua",
-        opts = {},
-        enabled = vim.fn.has("nvim-0.10") == 1,
-    },
-
-    -- Rust analyzer
-    {
-        "https://github.com/mrcjkb/rustaceanvim",
-        version = "^5",
-        -- Already loads on ft
-        lazy = false,
-        ft = { "rust" },
-        init = function()
-            local lsp = require("plugins.lsp")
-            vim.g.rustaceanvim = {
-                server = {
-                    capabilities = lsp.merged_capabilities(),
-                    on_attach = lsp.get_default_attach(),
-                },
-            }
-        end,
-        enabled = vim.fn.has("nvim-0.10") == 1,
-    },
+    { import = "lazy.dap" },
+    { import = "lazy.language_servers" },
 
     -- Better display of lsp diagnostics
     {
@@ -391,28 +207,6 @@ return {
         },
         lazy = true,
         enabled = vim.fn.has("nvim-0.8") == 1,
-    },
-
-    -- Generic linter/formatters in diagnostics API
-    {
-        "https://github.com/nvimtools/none-ls.nvim",
-        -- This is lazy and configured after lsps loaded in plugins/lsp.lua
-        lazy = true,
-        branch = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = "0.7-compat",
-            ["<0.7.0"] = utils.nil_val, -- use pinned commit
-        }),
-        commit = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = utils.nil_val, -- Use pinned branch
-            [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
-        }),
-        dependencies = {
-            { "https://github.com/nvimtools/none-ls-extras.nvim" },
-            { "https://github.com/nvim-lua/plenary.nvim" },
-            { "https://github.com/neovim/nvim-lspconfig" },
-        },
     },
 
     -- Writing
@@ -463,70 +257,8 @@ return {
     },
 
     {
-        -- Completion
-        {
-            "https://github.com/L3MON4D3/LuaSnip",
-            version = "2.x.x",
-            event = "InsertEnter *",
-            config = function()
-                require("luasnip.loaders.from_vscode").lazy_load()
-            end,
-            dependencies = {
-                { "https://github.com/rafamadriz/friendly-snippets" },
-            },
-        },
-        {
-            "https://github.com/hrsh7th/cmp-nvim-lsp",
-            commit = utils.map_version_rule({
-                [">=0.7.0"] = utils.nil_val,
-                ["<0.7.0"] = "3cf38d9c957e95c397b66f91967758b31be4abe6",
-            }),
-            dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-            event = "InsertEnter *",
-        },
-        {
-            "https://github.com/hrsh7th/cmp-buffer",
-            dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-            event = "InsertEnter *",
-        },
-        {
-            "https://github.com/f3fora/cmp-spell",
-            dependencies = { { "https://github.com/hrsh7th/nvim-cmp" } },
-            event = "InsertEnter *",
-        },
-        {
-            "https://github.com/saadparwaiz1/cmp_luasnip",
-            commit = utils.map_version_rule({
-                [">0.7.0"] = utils.nil_val,
-                [">=0.5.0"] = "b10829736542e7cc9291e60bab134df1273165c9",
-            }),
-            dependencies = {
-                { "https://github.com/hrsh7th/nvim-cmp" },
-                { "https://github.com/L3MON4D3/LuaSnip" },
-            },
-            event = "InsertEnter *",
-        },
-
-        {
-            "https://github.com/hrsh7th/nvim-cmp",
-            config = function()
-                require("plugins.completion").config_cmp()
-            end,
-            commit = utils.map_version_rule({
-                [">=0.7.0"] = utils.nil_val,
-                [">=0.5.0"] = "bba6fb67fdafc0af7c5454058dfbabc2182741f4",
-            }),
-            event = "InsertEnter *",
-        },
-
-        -- Add snippets
-        event = "InsertEnter *",
-    },
-
-    {
         "https://github.com/ray-x/lsp_signature.nvim",
         lazy = true,
-        event = "VeryLazy",
         opts = {
             extra_trigger_chars = { "(", "," },
             auto_close_after = nil,
@@ -534,6 +266,7 @@ return {
             floating_window = true,
             hint_enable = false,
         },
+        event = "InsertEnter *",
     },
 
     -- Fuzzy Finder
@@ -592,6 +325,9 @@ return {
     },
     {
         "https://github.com/sheerun/vim-polyglot",
+        init = function()
+            vim.g.polyglot_disabled = { "go", "rust" }
+        end,
         config = function()
             local gid = vim.api.nvim_create_augroup("polyglot_fts", { clear = true })
             vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
@@ -646,44 +382,8 @@ return {
         config = true,
     },
 
-    -- Obsidian notes
-    -- This loads an Obsidian plugin for better vault interraction as well as auto pulls
-    -- and commits to my vault git repo. On iOS devices, I use Working Copy to sync the
-    -- repo and use Shortcuts to automate pulling on open and auto committing and pushing
-    -- after closing Obsidian.
-    {
-        "https://github.com/epwalsh/obsidian.nvim",
-        dependencies = {
-            { "https://github.com/nvim-lua/plenary.nvim" },
-        },
-        version = "3.x.x",
-        opts = {
-            workspaces = {
-                { name = "personal", path = require("plugins.obsidian").vault_path },
-            },
-            ui = {
-                checkboxes = {
-                    [" "] = { char = "☐", hl_group = "ObsidianTodo" },
-                    ["x"] = { char = "✔", hl_group = "ObsidianDone" },
-                },
-                external_link_icon = { char = "🔗", hl_group = "ObsidianExtLinkIcon" },
-            },
-        },
-        config = function(_, opts)
-            require("plugins.obsidian").config(opts)
-        end,
-        event = {
-            "BufRead " .. require("plugins.obsidian").vault_path .. "/**",
-            "BufNewFile " .. require("plugins.obsidian").vault_path .. "/**",
-        },
-        cmd = {
-            "ObsidianOpen",
-            "ObsidianNew",
-            "ObsidianSearch",
-            "ObsidianNewFromTemplate",
-            "ObsidianWorkspace",
-        },
-    },
+    { import = "lazy.completion" },
+    { import = "lazy.obsidian" },
 
     -- Work things
     -- Sourcegraph
@@ -709,48 +409,5 @@ return {
         enabled = vim.g.install_sourcegraph,
     },
 
-    {
-        "https://github.com/github/copilot.vim",
-        enabled = vim.g.install_copilot,
-        version = "1.x.x",
-        config = function()
-            require("plugins.copilot")
-        end,
-        dependencies = {
-            -- To avoid conflicts with Ctrl+F, load vim-rsi first
-            { "https://github.com/tpope/vim-rsi" },
-        },
-    },
-
-    {
-        "https://github.com/CopilotC-Nvim/CopilotChat.nvim",
-        enabled = vim.g.install_copilot,
-        version = "3.x.x",
-        build = "make tiktoken",
-        dependencies = {
-            { "https://github.com/github/copilot.vim" },
-            { "https://github.com/nvim-lua/plenary.nvim" },
-        },
-        config = function()
-            require("plugins.copilotchat").setup()
-        end,
-        keys = {
-            { "<leader>cc", ":echo 'Lazy load copilot chat'<cr>", desc = "Load copilot chat" },
-        },
-        cmd = {
-            "CopilotChat",
-            "CopilotChatOpen",
-            "CopilotChatToggle",
-            "CopilotChatModels",
-            "CopilotChatExplain",
-            "CopilotChatReview",
-            "CopilotChatOptimize",
-            "CopilotChatDocs",
-            "CopilotChatTests",
-            "CopilotChatFixDiagnostic",
-            "CopilotChatCommit",
-            "CopilotChatCommitStaged",
-        },
-        lazy = true,
-    },
+    { import = "lazy.copilot" },
 }

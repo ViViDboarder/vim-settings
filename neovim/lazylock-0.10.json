@@ -69,7 +69,7 @@
   },
   "lsp_signature.nvim": {
     "branch": "master",
-    "commit": "fc38521ea4d9ec8dbd4c2819ba8126cea743943b"
+    "commit": "5b64964ed02098c85613ee3d20f96bed1dfb64cc"
   },
   "lualine.nvim": {
     "branch": "master",
@@ -117,7 +117,7 @@
   },
   "nvim-dap-ui": {
     "branch": "master",
-    "commit": "e94d98649dccb6a3884b66aabc2e07beb279e535"
+    "commit": "727c032a8f63899baccb42a1c26f27687e62fc5e"
   },
   "nvim-lspconfig": {
     "branch": "master",
@@ -133,7 +133,7 @@
   },
   "nvim-notify": {
     "branch": "master",
-    "commit": "bd9cd51f9ef2f6326fc2bc9931d0718c1794e247"
+    "commit": "a3020c2cf4dfc4c4f390c4a21e84e35e46cf5d17"
   },
   "nvim-solarized-lua": {
     "branch": "master",
@@ -141,7 +141,7 @@
   },
   "nvim-treesitter": {
     "branch": "master",
-    "commit": "8ca76960ae75e0a3bb231402558eb50e79433161"
+    "commit": "306dd6e9dc806db1d79568d26e1c9b6c98b95fbc"
   },
   "nvim-treesitter-textobjects": {
     "branch": "master",
@@ -269,7 +269,7 @@
   },
   "wombat.nvim": {
     "branch": "main",
-    "commit": "e41359fa29d1e09ae8339b8f4f1f0c2be2cb82fa"
+    "commit": "5b50320c994aca444e56f47ca86806651831e9ea"
   },
   "wombat256.vim": {
     "branch": "master",
