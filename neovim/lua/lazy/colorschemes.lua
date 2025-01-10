@@ -3,6 +3,18 @@ local utils = require("utils")
 return {
     {
         "https://github.com/ViViDboarder/wombat.nvim",
+        opts = function(_, opts)
+            -- Set ansi base colors for wombat theme based on terminal program
+            local term_program = vim.env.TERM_PROGRAM
+
+            if term_program == "ghostty" then
+                opts.ansi_colors_name = "ghostty"
+            elseif term_program == "iTerm.app" then
+                opts.ansi_colors_name = "iterm2"
+            end
+
+            return opts
+        end,
         dependencies = {
             {
                 "https://github.com/rktjmp/lush.nvim",
