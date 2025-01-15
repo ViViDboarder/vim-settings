@@ -4,7 +4,7 @@ return {
     {
         "https://github.com/github/copilot.vim",
         enabled = vim.g.install_copilot,
-        version = "1.x.x",
+        version = "^1",
         config = function()
             require("plugins.copilot")
         end,
@@ -17,7 +17,7 @@ return {
     {
         "https://github.com/CopilotC-Nvim/CopilotChat.nvim",
         enabled = vim.g.install_copilot,
-        version = "3.x.x",
+        version = "^3",
         build = "make tiktoken",
         dependencies = {
             { "https://github.com/github/copilot.vim" },

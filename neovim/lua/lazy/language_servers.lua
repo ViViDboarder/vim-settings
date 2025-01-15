@@ -4,7 +4,7 @@ return {
     {
         "https://github.com/neovim/nvim-lspconfig",
         version = utils.map_version_rule({
-            [">=0.8.0"] = "v0.1.*",
+            [">=0.8.0"] = "^1",
             [">=0.7.0"] = "v0.1.7",
             [">=0.6.1"] = "v0.1.2",
             [">=0.6.0"] = "v0.1.0",
@@ -13,6 +13,7 @@ return {
     {
         -- Language server installer
         "https://github.com/williamboman/mason.nvim",
+        version = "^1",
         dependencies = {
             { "https://github.com/neovim/nvim-lspconfig" },
             { "https://github.com/williamboman/mason-lspconfig.nvim" },
@@ -30,6 +31,7 @@ return {
         -- Neovim language server config
         {
             "https://github.com/folke/neodev.nvim",
+            version = "^3",
             dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
             ft = { "lua" },
             -- Disable for nvim 0.10 because there is lazydev
@@ -37,6 +39,7 @@ return {
         },
         {
             "https://github.com/folke/lazydev.nvim",
+            version = "^1",
             dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
             ft = "lua",
             opts = {},

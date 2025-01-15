@@ -27,8 +27,8 @@ return {
     -- Auto ctags generation
     { "https://github.com/ludovicchabant/vim-gutentags" },
 
-    -- Make it easier to discover some of my keymaps
     {
+        -- Make it easier to discover some of my keymaps
         "https://github.com/folke/which-key.nvim",
         opts = {
             -- Ignore warnings about config. Turn these on when switching major versions
@@ -38,7 +38,7 @@ return {
             },
         },
         version = utils.map_version_rule({
-            [">=0.9.4"] = "3.x.x",
+            [">=0.9.4"] = "^3",
             [">=0.9.0"] = "<3.4.0",
             ["<0.9.0"] = "1.x.x",
         }),
@@ -53,29 +53,29 @@ return {
         },
         event = "VeryLazy",
     },
-    -- Better commenting
     {
+        -- Better commenting
         "https://github.com/tomtom/tcomment_vim",
         keys = {
             { "//", ":TComment<CR>", desc = "Toggle comment" },
             { "//", ":TCommentBlock<CR>", mode = "v", desc = "Toggle comment" },
         },
     },
-    -- Allow wrapping and joining of arguments across multiple lines
     {
-        "https://github.com/FooSoft/vim-argwrap",
+        -- Allow wrapping and joining of arguments across multiple lines
+        "https://git.foosoft.net/alex/vim-argwrap",
         keys = {
             { "<Leader>a", "<cmd>ArgWrap<CR>", desc = "Wrap or unwrap arguments" },
         },
     },
-    -- Adds git operations to vim
     {
+        -- Adds git operations to vim
         "https://github.com/tpope/vim-fugitive",
-        tag = utils.map_version_rule({
-            [">=0.9.2"] = utils.nil_val,
+        version = utils.map_version_rule({
+            [">=0.9.2"] = "^3",
             -- Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
             -- when used in status line.
-            ["<0.9.2"] = "v3.6",
+            ["<0.9.2"] = "3.6",
         }),
         keys = {
             { "gb", "<cmd>Git blame<CR>", desc = "Git blame" },
@@ -86,17 +86,19 @@ return {
         },
         cmd = { "Git" },
     },
-    -- Quick toggling of Location and Quickfix lists
     {
+        -- Quick toggling of Location and Quickfix lists
         "https://github.com/milkypostman/vim-togglelist",
+        -- Stable plugin, pinning to avoid any issues stemming from possible takeover
+        commit = "48f0d30292efdf20edc883e61b121e6123e03df7",
         keys = {
             { "<F6>", ":call ToggleQuickfixList()<CR>", desc = "Toggle quickfix" },
             { "<F7>", ":call ToggleLocationList()<CR>", desc = "Toggle location list" },
         },
     },
 
-    -- Find text everywhere!
     {
+        -- Find text everywhere!
         "https://github.com/mhinz/vim-grepper",
         config = function()
             -- Grepper settings and shortcuts
@@ -135,15 +137,15 @@ return {
         end,
     },
 
-    -- Highlight inline colors
     {
+        -- Highlight inline colors
         "https://github.com/norcalli/nvim-colorizer.lua",
         config = true,
         cmd = { "ColorizerToggle" },
     },
 
-    -- Custom status line
     {
+        -- Custom status line
         "https://github.com/nvim-lualine/lualine.nvim",
         config = function()
             require("plugins.lualine").config_lualine()
@@ -157,9 +159,11 @@ return {
         event = "VeryLazy",
     },
 
-    -- On Mac, update colors when dark mode changes
     {
+        -- On Mac, update colors when dark mode changes
         "https://github.com/cormacrelf/dark-notify",
+        -- Pinned because project has had no commits in 4 years
+        commit = "891adc07dd7b367b840f1e9875b075fd8af4dc52",
         enabled = vim.g.is_mac,
         -- Download latest release on install
         build = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/", -- luacheck: no max line length
@@ -170,8 +174,8 @@ return {
         event = "VeryLazy",
     },
 
-    -- Custom start screen
     {
+        -- Custom start screen
         "https://github.com/mhinz/vim-startify",
         config = function()
             require("utils").require_with_local("plugins.startify")
@@ -188,14 +192,14 @@ return {
     { import = "lazy.dap" },
     { import = "lazy.language_servers" },
 
-    -- Better display of lsp diagnostics
     {
+        -- Better display of lsp diagnostics
         "https://github.com/folke/trouble.nvim",
         config = true,
         version = utils.map_version_rule({
-            [">=0.9.2"] = "3.x.x",
-            [">=0.7.2"] = "2.x.x",
-            ["<0.7.2"] = "1.x.x",
+            [">=0.9.2"] = "^3",
+            [">=0.7.2"] = "^2",
+            ["<0.7.2"] = "^1",
         }),
     },
 
@@ -213,6 +217,7 @@ return {
     -- abolish/pencil
     {
         "https://github.com/preservim/vim-pencil",
+        version = "^1",
         dependencies = {
             {
                 "https://github.com/preservim/vim-textobj-sentence",

@@ -3,6 +3,7 @@ local utils = require("utils")
 return {
     {
         "https://github.com/mfussenegger/nvim-dap",
+        version = "^0.9",
         config = function()
             local dap = require("dap")
             local dap_mapping = utils.curry_keymap("n", "<leader>d", {

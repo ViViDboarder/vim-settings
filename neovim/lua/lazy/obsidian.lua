@@ -10,7 +10,7 @@ return {
     dependencies = {
         { "https://github.com/nvim-lua/plenary.nvim" },
     },
-    version = "3.x.x",
+    version = "^3",
     opts = {
         workspaces = {
             { name = "personal", path = require("plugins.obsidian").vault_path },

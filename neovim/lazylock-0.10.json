@@ -61,7 +61,7 @@
   },
   "lazydev.nvim": {
     "branch": "main",
-    "commit": "8620f82ee3f59ff2187647167b6b47387a13a018"
+    "commit": "f59bd14a852ca43db38e3662395354cb2a9b13e0"
   },
   "limelight.vim": {
     "branch": "master",
@@ -81,11 +81,11 @@
   },
   "mason-lspconfig.nvim": {
     "branch": "main",
-    "commit": "97d9f1d3ad205dece6bcafd1d71cf1507608f3c7"
+    "commit": "e942edf5c85b6a2ab74059ea566cac5b3e1514a4"
   },
   "mason.nvim": {
     "branch": "main",
-    "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22"
+    "commit": "c43eeb5614a09dc17c03a7fb49de2e05de203924"
   },
   "neodev.nvim": {
     "branch": "main",
@@ -97,7 +97,7 @@
   },
   "none-ls.nvim": {
     "branch": "main",
-    "commit": "7bebb35a05871aeb99825f29d869cbd9a46bdbba"
+    "commit": "3291afdff94e5083c7d6a4e9e661c3682c4b9b2a"
   },
   "nvim-cmp": {
     "branch": "main",
@@ -109,7 +109,7 @@
   },
   "nvim-dap": {
     "branch": "master",
-    "commit": "99807078c5089ed30e0547aa4b52c5867933f426"
+    "commit": "04ce47fc5a6ef2b717f33c320fc003091cebac40"
   },
   "nvim-dap-python": {
     "branch": "master",
@@ -121,7 +121,7 @@
   },
   "nvim-lspconfig": {
     "branch": "master",
-    "commit": "0ef64599b8aa0187ee5f6d92cb39c951f348f041"
+    "commit": "343ac34abc7ab53fae33357f915024aaacb76a3e"
   },
   "nvim-navic": {
     "branch": "master",
@@ -141,7 +141,7 @@
   },
   "nvim-treesitter": {
     "branch": "master",
-    "commit": "306dd6e9dc806db1d79568d26e1c9b6c98b95fbc"
+    "commit": "f0c928dbe93533b7e35894a8f957f40150d1f663"
   },
   "nvim-treesitter-textobjects": {
     "branch": "master",
@@ -153,7 +153,7 @@
   },
   "plenary.nvim": {
     "branch": "master",
-    "commit": "2d9b06177a975543726ce5c73fca176cedbffe9d"
+    "commit": "3707cdb1e43f5cea73afb6037e6494e7ce847a66"
   },
   "rustaceanvim": {
     "branch": "master",
@@ -185,7 +185,7 @@
   },
   "tokyonight.nvim": {
     "branch": "main",
-    "commit": "7bb270adaa7692c2c33befc35f5567fc596a2504"
+    "commit": "775f82f08a3d1fb55a37fc6d3a4ab10cd7ed8a10"
   },
   "trouble.nvim": {
     "branch": "main",
@@ -197,7 +197,7 @@
   },
   "vim-argwrap": {
     "branch": "master",
-    "commit": "f3e26a5ad249d09467804b92e760d08b1cc457a1"
+    "commit": "b532cb6805864da4cfcfe0bb6a1ced61e291be02"
   },
   "vim-endwise": {
     "branch": "master",
@@ -213,7 +213,7 @@
   },
   "vim-fugitive": {
     "branch": "master",
-    "commit": "174230d6a7f2df94705a7ffd8d5413e27ec10a80"
+    "commit": "96c1009fcf8ce60161cc938d149dd5a66d570756"
   },
   "vim-grepper": {
     "branch": "master",
