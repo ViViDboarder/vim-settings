@@ -31,7 +31,10 @@ return {
     {
         "https://github.com/folke/tokyonight.nvim",
         -- Install fish theme
-        build = 'fish -c \'echo "set --path --prepend fish_themes_path "(pwd)"/extras" > ~/.config/fish/conf.d/tokyonight.fish\' || true', -- luacheck: no max line length
+        build = (
+            'fish -c \'echo "set --path --prepend fish_themes_path (pwd)"/extras"'
+            .. "> ~/.config/fish/conf.d/tokyonight.fish' || true"
+        ),
     },
     priority = 1000,
 }
