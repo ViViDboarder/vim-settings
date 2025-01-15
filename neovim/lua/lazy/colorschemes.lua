@@ -6,11 +6,12 @@ return {
         opts = function(_, opts)
             -- Set ansi base colors for wombat theme based on terminal program
             local term_program = vim.env.TERM_PROGRAM
+            local term_profile = vim.env.TERM_PROFILE
 
-            if term_program == "ghostty" then
-                opts.ansi_colors_name = "ghostty"
-            elseif term_program == "iTerm.app" then
+            if term_program == "iTerm.app" or term_profile == "wombat-iterm" then
                 opts.ansi_colors_name = "iterm2"
+            elseif term_program == "ghostty" then
+                opts.ansi_colors_name = "ghostty"
             end
 
             return opts
