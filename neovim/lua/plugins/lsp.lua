@@ -128,6 +128,13 @@ function M.get_default_attach(override_capabilities)
             local telescope_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
             if server_capabilities.documentSymbolProvider then
                 telescope_keymap("t", telescope_builtin.lsp_document_symbols, { desc = "Find buffer tags" })
+                -- Also override the default tag finder
+                utils.keymap_set(
+                    "n",
+                    "<leader>t",
+                    telescope_builtin.lsp_document_symbols,
+                    { desc = "Find buffer tags" }
+                )
             end
             if server_capabilities.workspaceSymbolProvider then
                 telescope_keymap("T", telescope_builtin.lsp_dynamic_workspace_symbols, { desc = "Find tags" })
