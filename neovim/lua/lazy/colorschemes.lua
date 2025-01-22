@@ -8,7 +8,7 @@ return {
             local term_program = vim.env.TERM_PROGRAM
             local term_profile = vim.env.TERM_PROFILE
 
-            if term_program == "iTerm.app" or term_profile == "wombat-iterm" then
+            if term_program == "iTerm.app" or term_profile == "Wombat-iTerm" then
                 opts.ansi_colors_name = "iterm2"
             elseif term_program == "ghostty" then
                 opts.ansi_colors_name = "ghostty"
