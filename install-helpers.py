@@ -397,6 +397,16 @@ def main():
     # Release gitter is required for some tools
     install_release_gitter()
 
+    # Install fzf
+    maybe_release_gitter(fzf=[
+        "--git-url",
+        "https://github.com/junegunn/fzf",
+        "--extract-files",
+        "fzf",
+        "fzf-{version}-{system}_{arch}.tar.gz",
+        os.path.expanduser("~/bin/"),
+    ])
+
     # Keep a clean PYTHONPATH
     os.environ["PYTHONPATH"] = ""
 
