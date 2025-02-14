@@ -9,7 +9,7 @@ function M.auto_git()
     -- Create auto pull on open
     local autopull = function()
         local Job = require("plenary.job")
-        vim.notify("Pulling Obsidian notes", vim.log.levels.INFO, { title = "Obsidian" })
+        vim.notify("Pulling Obsidian notes", vim.log.levels.DEBUG, { title = "Obsidian" })
         Job:new({
             command = "git",
             args = { "pull" },
