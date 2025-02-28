@@ -22,6 +22,28 @@ return {
             },
             external_link_icon = { char = "🔗", hl_group = "ObsidianExtLinkIcon" },
         },
+        templates = {
+            folder = "Templates",
+            substitutions = {
+                next_monday = function()
+                    local current_time = os.time()
+                    -- 1 = Sunday, 2 = Monday, ..., 7 = Saturday
+                    local current_weekday = os.date("*t", current_time).wday
+
+                    -- Calculate the number of days to add to reach next Monday
+                    local days_to_add = (9 - current_weekday) % 7
+                    if days_to_add == 0 then
+                        days_to_add = 7 -- If today is Monday, get the next Monday
+                    end
+
+                    -- Get the timestamp for the next Monday
+                    local next_monday_time = current_time + (days_to_add * 24 * 60 * 60)
+
+                    -- Return the formatted date
+                    return os.date("%Y-%m-%d", next_monday_time)
+                end,
+            },
+        },
     },
     config = function(_, opts)
         require("plugins.obsidian").config(opts)
