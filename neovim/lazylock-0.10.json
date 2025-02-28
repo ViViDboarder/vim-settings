@@ -155,6 +155,10 @@
     "branch": "master",
     "commit": "3707cdb1e43f5cea73afb6037e6494e7ce847a66"
   },
+  "quicker.nvim": {
+    "branch": "master",
+    "commit": "76bfadd8f29895e79429fe0d30f0b3df82cd466a"
+  },
   "rustaceanvim": {
     "branch": "master",
     "commit": "0a1876b970ab946be3f4d341e9d743a5d62d646a"

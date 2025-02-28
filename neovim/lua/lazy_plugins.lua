@@ -86,16 +86,6 @@ return {
         },
         cmd = { "Git" },
     },
-    {
-        -- Quick toggling of Location and Quickfix lists
-        "https://github.com/milkypostman/vim-togglelist",
-        -- Stable plugin, pinning to avoid any issues stemming from possible takeover
-        commit = "48f0d30292efdf20edc883e61b121e6123e03df7",
-        keys = {
-            { "<F6>", ":call ToggleQuickfixList()<CR>", desc = "Toggle quickfix" },
-            { "<F7>", ":call ToggleLocationList()<CR>", desc = "Toggle location list" },
-        },
-    },
 
     {
         -- Find text everywhere!
@@ -135,6 +125,52 @@ return {
                 vim.api.nvim_create_user_command("Ack", ":GrepperAck <args>", { nargs = "+", desc = "Ack search" })
             end
         end,
+    },
+    {
+        -- Quick toggling of Location and Quickfix lists
+        "https://github.com/milkypostman/vim-togglelist",
+        -- Stable plugin, pinning to avoid any issues stemming from possible takeover
+        commit = "48f0d30292efdf20edc883e61b121e6123e03df7",
+        keys = {
+            { "<F6>", ":call ToggleQuickfixList()<CR>", desc = "Toggle quickfix" },
+            { "<F7>", ":call ToggleLocationList()<CR>", desc = "Toggle location list" },
+        },
+    },
+    {
+        "https://github.com/stevearc/quicker.nvim",
+        -- NOTE: I could use this to toggle quickfix and location lists, but the vim-togglelist plugin is
+        -- stable and has a lower load time. That could be irrelevant though if quicker.nvim is loaded
+        -- every time I toggle the quickfix list anyway.
+        event = "FileType qf",
+        version = "^1",
+        ---@module "quicker"
+        ---@type quicker.SetupOptions
+        opts = {
+            keys = {
+                {
+                    ">",
+                    function()
+                        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+                    end,
+                    desc = "Expand quickfix context",
+                },
+                {
+                    "<",
+                    function()
+                        require("quicker").collapse()
+                    end,
+                    desc = "Collapse quickfix context",
+                },
+                {
+                    "<C-r>",
+                    function()
+                        require("quicker").refresh()
+                    end,
+                    desc = "Refresh quickfix context",
+                },
+            },
+        },
+        enabled = vim.fn.has("nvim-0.10") == 1,
     },
 
     {
