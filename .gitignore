@@ -5,7 +5,7 @@ tags
 neovim/backup/
 neovim/plugged/
 neovim/plugin/packer_compiled.lua
-neovim/spell/
+neovim/spell/*.spl
 neovim/tmp/
 vim/.netrwhist
 vim/UltiSnips
@@ -16,7 +16,7 @@ vim/backup/
 vim/plugged/
 vim/rc/*.local.rc.vim
 vim/rc/plugins/*.local.rc.vim
-vim/spell/
+vim/spell/*.spl
 vim/tmp/
 vim/tmp/viminfo.*
 vim/view/
