@@ -63,9 +63,15 @@ return {
     },
     {
         -- Allow wrapping and joining of arguments across multiple lines
-        "https://git.foosoft.net/alex/vim-argwrap",
+        "https://git.sr.ht/~foosoft/argonaut.nvim",
         keys = {
-            { "<Leader>a", "<cmd>ArgWrap<CR>", desc = "Wrap or unwrap arguments" },
+            {
+                "<Leader>a",
+                function()
+                    require("argonaut").reflow(true)
+                end,
+                desc = "Wrap or unwrap arguments",
+            },
         },
     },
     {

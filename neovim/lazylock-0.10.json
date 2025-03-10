@@ -7,6 +7,10 @@
     "branch": "master",
     "commit": "03c8e67eb7293c404845b3982db895d59c0d1538"
   },
+  "argonaut.nvim": {
+    "branch": "master",
+    "commit": "7505ccfd4c3c6040a306521f38dd2640704cea10"
+  },
   "cmp-buffer": {
     "branch": "main",
     "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa"
@@ -198,10 +202,6 @@
   "vim-android": {
     "branch": "master",
     "commit": "62192c9079b942aa3c9f6d34a1bc312bf54d0301"
-  },
-  "vim-argwrap": {
-    "branch": "master",
-    "commit": "663707b64000857d03690ec935bf885341fc93d9"
   },
   "vim-endwise": {
     "branch": "master",
