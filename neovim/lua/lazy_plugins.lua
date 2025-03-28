@@ -90,7 +90,16 @@ return {
             { "gs", "<cmd>Git<CR>", desc = "Git status" },
             { "gw", "<cmd>Git write<CR>", desc = "Git write" },
         },
-        cmd = { "Git" },
+        cmd = {
+            "Git",
+            "Gedit",
+            "Gdiffsplit",
+            "Gread",
+            "Gwrite",
+            "Ggrep",
+            "GMove",
+            "GDelete",
+        },
     },
 
     {
