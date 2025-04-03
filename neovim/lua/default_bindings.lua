@@ -43,6 +43,9 @@ utils.keymap_set("v", "``", "<esc>", { desc = "Escape visual" })
 utils.keymap_set("i", "<C-Space>", function()
     if vim.fn.pumvisible() == 1 then
         return utils.t("<C-n>")
+    elseif utils.is_plugin_loaded("blink.cmp") then
+        -- Pass through because we have this bound in blink
+        return utils.t("<C-Space>")
     elseif utils.is_plugin_loaded("nvim-cmp") then
         return utils.t("<Plug>(cmp_complete)")
     else

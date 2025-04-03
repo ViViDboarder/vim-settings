@@ -323,6 +323,7 @@ return {
             hint_enable = false,
         },
         event = "InsertEnter *",
+        enabled = vim.fn.has("nvim-0.10") ~= 1,
     },
 
     -- Fuzzy Finder
