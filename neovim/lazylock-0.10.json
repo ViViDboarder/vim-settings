@@ -11,6 +11,10 @@
     "branch": "master",
     "commit": "7505ccfd4c3c6040a306521f38dd2640704cea10"
   },
+  "blink.cmp": {
+    "branch": "main",
+    "commit": "cb5e346d9e0efa7a3eee7fd4da0b690c48d2a98e"
+  },
   "cmp-buffer": {
     "branch": "main",
     "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa"

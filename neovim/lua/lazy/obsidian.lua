@@ -6,7 +6,7 @@
 -- repo and use Shortcuts to automate pulling on open and auto committing and pushing
 -- after closing Obsidian.
 return {
-    "https://github.com/epwalsh/obsidian.nvim",
+    "https://github.com/obsidian-nvim/obsidian.nvim",
     dependencies = {
         { "https://github.com/nvim-lua/plenary.nvim" },
     },
@@ -43,6 +43,10 @@ return {
                     return os.date("%Y-%m-%d", next_monday_time)
                 end,
             },
+        },
+        completion = {
+            nvim_cmp = require("utils").is_plugin_loaded("cmp"),
+            blink = require("utils").is_plugin_loaded("blink.cmp"),
         },
     },
     config = function(_, opts)
