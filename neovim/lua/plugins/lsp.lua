@@ -163,8 +163,14 @@ end
 function M.merged_capabilities()
     -- Maybe update capabilities
     local capabilities = nil
-    utils.try_require("cmp-nvim-lsp", function(cmp_nvim_lsp)
-        capabilities = cmp_nvim_lsp.default_capabilities()
+    -- Try to load blink
+    utils.try_require("blink.cmp", function(blink_cmp)
+        capabilities = blink_cmp.get_lsp_capabilities()
+    end, function()
+        -- Fall back to cmp
+        utils.try_require("cmp-nvim-lsp", function(cmp_nvim_lsp)
+            capabilities = cmp_nvim_lsp.default_capabilities()
+        end)
     end)
 
     return capabilities
