@@ -204,8 +204,9 @@ function M.config_lsp()
 
         -- Set up rust analyzer (preferred) or rls
         -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
+        -- Remove this after min version is >= 0.10
         -- Maybe all lsp configs should be set up as part of their ftconfig
-        if vim.fn.has("nvim-0.10") ~= 1 then
+        if not utils.is_plugin_loaded("rustaceanvim") then
             maybe_setup(lsp_config.rust_analyzer, {
                 capabilities = capabilities,
                 on_attach = default_attach,
