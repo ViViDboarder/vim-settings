@@ -93,41 +93,16 @@ M.nil_val = {}
 -- If more than one rule matches, the one with the greatest version number is used
 function M.map_version_rule(rules)
     local v = vim.version()
-    local current_version = { v and v.major, v and v.minor, v and v.patch }
-
-    -- Parse a constraint and version of a string
-    local parse_rule = function(rule_string)
-        local cmp, major, minor, patch = string.gmatch(rule_string, "([=<>]+)(%d+).(%d+).(%d+)")()
-        return cmp, tonumber(major), tonumber(minor), tonumber(patch)
-    end
-
-    -- Checks if a constraint matches the current nvim instance
-    local matches = function(cmp, major, minor, patch)
-        local c = M.cmp_versions(current_version, { major, minor, patch })
-        if c == 1 then
-            if vim.tbl_contains({ ">", ">=" }, cmp) then
-                return true
-            end
-        elseif c == 0 then
-            if vim.tbl_contains({ "==", ">=", "<=" }, cmp) then
-                return true
-            end
-        elseif c == -1 then
-            if vim.tbl_contains({ "<", "<=" }, cmp) then
-                return true
-            end
-        end
-        return false
-    end
-
     local latest_version, latest_value = nil, nil
     for rule, value in pairs(rules) do
-        local cmp, major, minor, patch = parse_rule(rule)
-        if matches(cmp, major, minor, patch) then
-            -- If the rule matches and the version that it matches is greater than the previous matches, save it
-            if latest_version == nil or M.cmp_versions({ major, minor, patch }, latest_version) == 1 then
-                latest_version = { major, minor, patch }
+        local range = vim.version.range(rule)
+        if not range then
+            vim.notify("Could not parse version range: " .. rule, vim.log.levels.WARN)
+        else
+            local newer_from = latest_version == nil or range.from > latest_version
+            if newer_from and range:has(v) then
                 latest_value = value
+                latest_version = range.from
             end
         end
     end
