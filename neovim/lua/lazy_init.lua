@@ -1,4 +1,3 @@
-local utils = require("utils")
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -21,13 +20,7 @@ require("lazy").setup({
     spec = {
         { import = "lazy_plugins" },
     },
-    lockfile = vim.fn.stdpath("config") .. utils.map_version_rule({
-        [">=0.10.0"] = "/lazylock-0.10.json",
-        [">=0.9.0"] = "/lazylock-0.9.json",
-        [">=0.8.0"] = "/lazylock-0.8.json",
-        [">=0.7.0"] = "/lazylock-0.7.json",
-        [">=0.6.0"] = "/lazylock-0.6.json",
-    }),
+    lockfile = vim.fn.stdpath("config") .. "/lazylock-" .. vim.version().major .. "." .. vim.version().minor .. ".json",
     ui = {
         icons = {
             cmd = "⌘",
