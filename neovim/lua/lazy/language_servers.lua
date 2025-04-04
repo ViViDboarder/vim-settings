@@ -9,6 +9,9 @@ return {
             [">=0.6.1"] = "v0.1.2",
             [">=0.6.0"] = "v0.1.0",
         }),
+        config = function()
+            require("plugins.lsp").setup()
+        end,
     },
     {
         -- Language server installer

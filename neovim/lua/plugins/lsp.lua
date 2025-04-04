@@ -272,4 +272,10 @@ function M.config_lsp_intaller()
     end)
 end
 
+function M.setup()
+    M.config_lsp_intaller()
+    M.config_lsp()
+    M.config_lsp_ui()
+end
+
 return M
