@@ -165,12 +165,17 @@ def maybe_cargo_install(*args: str) -> bool:
     return maybe_run("cargo", "install", *user_bins)
 
 
-def maybe_release_gitter(**commands: list[str]) -> bool:
+def maybe_release_gitter(commands_arg: dict[str, list[str]]|None = None, **commands_kwargs: list[str]) -> bool:
     """
     Try to install user binary using release-gitter.
 
     Attempt to install binary packages using release-gitter.
     """
+    if commands_arg is None:
+        commands_arg = {}
+
+    commands = commands_arg | commands_kwargs
+
     command_names = [key for key in commands.keys() if should_install_user(key)]
     if not command_names:
         return True
