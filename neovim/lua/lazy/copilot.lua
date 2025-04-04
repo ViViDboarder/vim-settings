@@ -4,7 +4,7 @@ return {
     {
         "https://github.com/github/copilot.vim",
         enabled = vim.g.install_copilot,
-        version = "^1",
+        version = "1.43",
         config = function()
             require("plugins.copilot")
         end,
