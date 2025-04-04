@@ -238,20 +238,20 @@ def install_linters(langs: set[Language]):
     if Language.ANSIBLE in langs:
         maybe_pip_install("ansible-lint")
     if Language.GO in langs:
-        # NOTE: Can't use maybe_release_gitter because name has a -
-        maybe_run(
-            "release-gitter",
-            "--git-url",
-            "https://github.com/golangci/golangci-lint",
-            "--extract-files",
-            "golangci-lint-{version}-{system}-{arch}/golangci-lint",
-            "--exec",
-            os.path.expanduser(
-                "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/"
-            ),
-            "--use-temp-dir",
-            "golangci-lint-{version}-{system}-{arch}.tar.gz",
-        )
+        maybe_release_gitter({
+            "golangci-lint": [
+                "--git-url",
+                "https://github.com/golangci/golangci-lint",
+                "--extract-files",
+                "golangci-lint-{version}-{system}-{arch}/golangci-lint",
+                "--exec",
+                os.path.expanduser(
+                    "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/"
+                ),
+                "--use-temp-dir",
+                "golangci-lint-{version}-{system}-{arch}.tar.gz",
+            ]
+        })
     if Language.LUA in langs:
         maybe_release_gitter(
             selene=[
