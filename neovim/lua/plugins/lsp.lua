@@ -220,7 +220,8 @@ function M.config_lsp()
             maybe_setup(lsp_config.rls, default_setup)
         end
 
-        -- Configure neovim dev for when sumneko_lua is installed
+        -- Configure neodev for when lua-languge-server is installed
+        -- NOTE: Remove when min version is >= 0.10
         utils.try_require("neodev", function(neodev)
             local config = {}
             utils.try_require("dapui", function()
@@ -229,6 +230,19 @@ function M.config_lsp()
             end)
             neodev.setup(config)
         end)
+
+        -- Configure lua_ls after neodev
+        maybe_setup(lsp_config.lua_ls, {
+            capabilities = capabilities,
+            on_attach = default_attach,
+            settings = {
+                Lua = {
+                    format = {
+                        enable = false,
+                    },
+                },
+            },
+        })
 
         -- Auto setup mason installed servers
         utils.try_require("mason-lspconfig", function(mason_lspconfig)

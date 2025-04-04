@@ -204,6 +204,24 @@ def install_language_servers(langs: set[Language]):
         )
     if Language.GO in langs:
         maybe_go_install(gopls="golang.org/x/tools/gopls@latest")
+    if Language.LUA in langs:
+        maybe_release_gitter({
+            "lua-language-server": [
+                "--git-url",
+                "https://github.com/LuaLS/lua-language-server",
+                "--map-arch", "x86_64=x64",
+                "--extract-all",
+                "--exec",
+                os.path.expanduser(
+                    "echo '#!/bin/sh\\n"
+                    "exec \"$HOME/.local/share/lua-language-server/bin/lua-language-server\" \"$@\"' >"
+                    " ~/.local/bin/lua-language-server &&"
+                    " chmod +x ~/.local/bin/lua-language-server"
+                ),
+                "lua-language-server-{version}-{system}-{arch}.tar.gz",
+                os.path.expanduser("~/.local/share/lua-language-server"),
+            ],
+        })
 
 
 def install_linters(langs: set[Language]):
