@@ -31,7 +31,7 @@ if vim.fn.has("nvim-0.10") == 1 then
             keymap = {
                 preset = "default",
                 ["<C-Space>"] = { "show", "select_next" },
-                ["<CR>"] = { "select_and_accept" },
+                ["<CR>"] = { "select_and_accept", "fallback" },
                 ["<C-u>"] = { "scroll_documentation_up", "fallback" },
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
             },
