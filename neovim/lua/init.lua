@@ -20,10 +20,6 @@ if vim.g.neovide then
     require("neovide")
 end
 
--- Disable polyglot for langauges I've added special support for
--- TODO: Can this be moved somewhere better?
-vim.g.polyglot_disabled = { "go", "rust" }
-
 -- Plugins
 require("lazy_init")
 
