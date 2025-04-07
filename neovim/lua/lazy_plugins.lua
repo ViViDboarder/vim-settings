@@ -423,9 +423,29 @@ return {
         dependencies = {
             { "https://github.com/nvim-lua/plenary.nvim" },
         },
-        config = function()
-            require("plugins.todo")
-        end,
+        opts = {
+            signs = false,
+            keywords = {
+                FIX = {
+                    icon = "🩹",
+                },
+                TODO = {
+                    icon = require("icons").diagnostic_signs.Pencil,
+                },
+                HACK = {
+                    icon = "🙈",
+                },
+                PERF = {
+                    icon = "🚀",
+                },
+                NOTE = {
+                    icon = "📓",
+                },
+                WARNING = {
+                    icon = require("icons").diagnostic_signs.Warn,
+                },
+            },
+        },
         version = "1.x.x",
     },
 
