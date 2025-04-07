@@ -385,7 +385,6 @@ return {
             utils.keymap_set("n", "<leader>dR", godap.run, { desc = "Debug" })
             utils.keymap_set("n", "<leader>ds", godap.stop, { desc = "Stop" })
         end,
-        event = { "CmdlineEnter" },
         ft = { "go", "gomod" },
         version = utils.map_version_rule({
             [">=0.10.0"] = utils.nil_val,
