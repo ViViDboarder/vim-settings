@@ -150,14 +150,28 @@ return {
             { "<F6>", ":call ToggleQuickfixList()<CR>", desc = "Toggle quickfix" },
             { "<F7>", ":call ToggleLocationList()<CR>", desc = "Toggle location list" },
         },
+        enabled = vim.fn.has("nvim-0.10") ~= 1,
     },
     {
         "https://github.com/stevearc/quicker.nvim",
-        -- NOTE: I could use this to toggle quickfix and location lists, but the vim-togglelist plugin is
-        -- stable and has a lower load time. That could be irrelevant though if quicker.nvim is loaded
-        -- every time I toggle the quickfix list anyway.
         event = "FileType qf",
         version = "^1",
+        keys = {
+            {
+                "<F6>",
+                function()
+                    require("quicker").toggle()
+                end,
+                desc = "Toggle quickfix",
+            },
+            {
+                "<F7>",
+                function()
+                    require("quicker").toggle({ loclist = true })
+                end,
+                desc = "Toggle quickfix",
+            },
+        },
         ---@module "quicker"
         ---@type quicker.SetupOptions
         opts = {
