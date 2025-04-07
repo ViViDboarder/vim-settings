@@ -275,7 +275,6 @@ return {
             input_buffer_type = "dressing",
         },
         lazy = true,
-        enabled = vim.fn.has("nvim-0.8") == 1,
     },
 
     -- Writing
@@ -392,7 +391,6 @@ return {
             [">=0.10.0"] = utils.nil_val,
             ["<0.10.0"] = "v0.9.0",
         }),
-        enabled = vim.fn.has("nvim-0.9") == 1,
     },
     {
         "https://github.com/sheerun/vim-polyglot",
