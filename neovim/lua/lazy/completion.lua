@@ -92,6 +92,17 @@ else
         "https://github.com/hrsh7th/nvim-cmp",
         dependencies = {
             {
+                "https://github.com/ray-x/lsp_signature.nvim",
+                lazy = true,
+                opts = {
+                    extra_trigger_chars = { "(", "," },
+                    auto_close_after = nil,
+                    -- Toggle these to use hint only
+                    floating_window = true,
+                    hint_enable = false,
+                },
+            },
+            {
                 "https://github.com/hrsh7th/cmp-nvim-lsp",
                 commit = utils.map_version_rule({
                     [">=0.7.0"] = utils.nil_val,

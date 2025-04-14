@@ -325,20 +325,6 @@ return {
         },
     },
 
-    {
-        "https://github.com/ray-x/lsp_signature.nvim",
-        lazy = true,
-        opts = {
-            extra_trigger_chars = { "(", "," },
-            auto_close_after = nil,
-            -- Toggle these to use hint only
-            floating_window = true,
-            hint_enable = false,
-        },
-        event = "InsertEnter *",
-        enabled = vim.fn.has("nvim-0.10") ~= 1,
-    },
-
     -- Fuzzy Finder
     {
         "https://github.com/nvim-telescope/telescope.nvim",
