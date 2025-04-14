@@ -46,8 +46,6 @@ utils.keymap_set("i", "<C-Space>", function()
     elseif utils.is_plugin_loaded("blink.cmp") then
         -- Pass through because we have this bound in blink
         return utils.t("<C-Space>")
-    elseif utils.is_plugin_loaded("nvim-cmp") then
-        return utils.t("<Plug>(cmp_complete)")
     else
         return utils.t("<C-x><C-o>")
     end
