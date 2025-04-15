@@ -49,7 +49,6 @@ function M.configure(options)
             -- Fish
             null_ls.builtins.formatting.fish_indent,
             -- Python
-            -- null_ls.builtins.formatting.reorder_python_imports,
             null_ls.builtins.formatting.isort,
             null_ls.builtins.formatting.black,
             null_ls.builtins.diagnostics.mypy,
@@ -66,7 +65,8 @@ function M.configure(options)
                 end,
             }),
             -- Shell
-            -- null_ls.builtins.diagnostics.shellcheck,
+            require("none-ls-shellcheck.diagnostics"),
+            require("none-ls-shellcheck.code_actions"),
             -- Lua
             null_ls.builtins.diagnostics.selene,
             null_ls.builtins.formatting.stylua,

@@ -85,6 +85,7 @@ return {
         }),
         dependencies = {
             { "https://github.com/nvimtools/none-ls-extras.nvim" },
+            { "https://github.com/gbprod/none-ls-shellcheck.nvim" },
             { "https://github.com/nvim-lua/plenary.nvim" },
             { "https://github.com/neovim/nvim-lspconfig" },
         },
