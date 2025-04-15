@@ -31,7 +31,6 @@ function M.get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Allow overriding capabilities to avoid duplicate lsps with capabilities
 
-        -- Using custom method to extract for <0.8 support
         local server_capabilities = client.server_capabilities
         if override_capabilities ~= nil then
             server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
@@ -161,6 +160,8 @@ function M.get_default_attach(override_capabilities)
 end
 
 function M.merged_capabilities()
+    -- TODO: Remove after 11+
+
     -- Maybe update capabilities
     local capabilities = nil
     -- Try to load blink
@@ -176,28 +177,31 @@ function M.merged_capabilities()
     return capabilities
 end
 
-function M.config_lsp()
-    utils.try_require("lspconfig", function(lsp_config)
-        local capabilities = M.merged_capabilities()
-        local default_attach = M.get_default_attach()
-        local default_setup = { capabilities = capabilities, on_attach = default_attach }
-
-        local maybe_setup = function(config, options)
-            -- Setup LSP config if the lsp command exists
-            if vim.fn.executable(config.document_config.default_config.cmd[1]) == 1 then
-                config.setup(options)
-                return true
-            end
-
-            return false
+-- Function to conditionally enable LSP servers based on their configuration and availability.
+-- @param name_or_list (string|table): A single server name (string) or a list of server names (table).
+local maybe_lsp_enable = function(name_or_list)
+    -- Helper function to enable a single LSP server if it is configured and its executable is available.
+    -- @param name (string): The name of the LSP server to enable.
+    local maybe_enable_one = function(name)
+        if vim.lsp.config[name] ~= nil and vim.fn.executable(vim.lsp.config[name].cmd[1]) == 1 then
+            vim.lsp.enable(name)
         end
+    end
 
-        -- Configure each server
-        maybe_setup(lsp_config.gopls, default_setup)
-        maybe_setup(lsp_config.pyright, default_setup)
-        maybe_setup(lsp_config.bashls, {
-            capabilities = capabilities,
-            on_attach = default_attach,
+    if type(name_or_list) == "string" then
+        -- Enable a single LSP server.
+        maybe_enable_one(name_or_list)
+    else
+        -- Handle a list of LSP server names.
+        for _, name in ipairs(name_or_list) do
+            maybe_enable_one(name)
+        end
+    end
+end
+
+function M.config_lsp()
+    if vim.fn.has("nvim-0.11") == 1 then
+        vim.lsp.config("bashls", {
             settings = {
                 bashIde = {
                     -- Disable shellcheck linting because we have it enabled in null-ls
@@ -208,80 +212,163 @@ function M.config_lsp()
             },
         })
 
-        -- Set up rust analyzer (preferred) or rls
-        -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
-        -- Remove this after min version is >= 0.10
-        -- Maybe all lsp configs should be set up as part of their ftconfig
-        if not utils.is_plugin_loaded("rustaceanvim") then
-            maybe_setup(lsp_config.rust_analyzer, {
-                capabilities = capabilities,
-                on_attach = default_attach,
-                settings = {
-                    ["rust-analyzer"] = {
-                        cargo = {
-                            features = "all",
-                        },
-                    },
-                },
-            })
-            maybe_setup(lsp_config.rls, default_setup)
-        end
-
-        -- Configure neodev for when lua-languge-server is installed
-        -- NOTE: Remove when min version is >= 0.10
-        utils.try_require("neodev", function(neodev)
-            local config = {}
-            utils.try_require("dapui", function()
-                config.plugins = { "nvim-dap-ui" }
-                config.types = true
-            end)
-            neodev.setup(config)
-        end)
-
-        -- Configure lua_ls after neodev
-        maybe_setup(lsp_config.lua_ls, {
-            capabilities = capabilities,
-            on_attach = default_attach,
+        vim.lsp.config("lua_ls", {
             settings = {
                 Lua = {
                     format = {
+                        -- Disable because I use StyLua via null-ls
                         enable = false,
                     },
                 },
             },
         })
 
+        maybe_lsp_enable({
+            "bashls",
+            "gopls",
+            "lua_ls",
+            "pyright",
+        })
+
         -- Auto setup mason installed servers
         utils.try_require("mason-lspconfig", function(mason_lspconfig)
             -- Get list of servers that are installed but not set up
-            local already_setup = lsp_config.util.available_servers()
             local needs_setup = vim.tbl_filter(function(server)
-                return not vim.tbl_contains(already_setup, server)
+                return not vim.tbl_contains(vim.lsp.config, server)
             end, mason_lspconfig.get_installed_servers())
 
             -- Setup each server with default config
             vim.tbl_map(function(server)
-                if server == "lua_ls" then
-                    -- Disable formatting with lua_ls because I use stylua
-                    local config = vim.tbl_extend("force", default_setup, {
-                        settings = {
-                            Lua = {
-                                format = {
-                                    enable = false,
-                                },
-                            },
-                        },
-                    })
-                    lsp_config[server].setup(config)
-                else
-                    lsp_config[server].setup(default_setup)
-                end
+                vim.lsp.enable(server)
             end, needs_setup)
         end)
 
         -- Config null-ls after lsps so we can disable for languages that have language servers
-        require("plugins.null-ls").configure(default_setup)
-    end)
+        require("plugins.null-ls").configure({ on_attach = M.get_default_attach() })
+
+        -- Set up attach functions
+        vim.lsp.handlers["client/registerCapability"] = (function(overridden)
+            return function(err, res, ctx)
+                local result = overridden(err, res, ctx)
+                local client = vim.lsp.get_client_by_id(ctx.client_id)
+                if not client then
+                    return
+                end
+
+                M.get_default_attach()(client, vim.api.nvim_get_current_buf())
+
+                return result
+            end
+        end)(vim.lsp.handlers["client/registerCapability"])
+    else
+        -- TODO: Delete when dropping support for nvim < 0.11
+        utils.try_require("lspconfig", function(lsp_config)
+            local capabilities = M.merged_capabilities()
+            local default_attach = M.get_default_attach()
+            local default_setup = { capabilities = capabilities, on_attach = default_attach }
+
+            local maybe_setup = function(config, options)
+                -- Setup LSP config if the lsp command exists
+                if vim.fn.executable(config.document_config.default_config.cmd[1]) == 1 then
+                    config.setup(options)
+                    return true
+                end
+
+                return false
+            end
+
+            -- Configure each server
+            maybe_setup(lsp_config.gopls, default_setup)
+            maybe_setup(lsp_config.pyright, default_setup)
+            maybe_setup(lsp_config.bashls, {
+                capabilities = capabilities,
+                on_attach = default_attach,
+                settings = {
+                    bashIde = {
+                        -- Disable shellcheck linting because we have it enabled in null-ls
+                        -- Some machines I use aren't configured with npm so bashls cannot
+                        -- be relied on as the sole source of shellcheck linting.
+                        shellcheckPath = "",
+                    },
+                },
+            })
+
+            -- Set up rust analyzer (preferred) or rls
+            -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
+            -- Remove this after min version is >= 0.10
+            -- Maybe all lsp configs should be set up as part of their ftconfig
+            if not utils.is_plugin_loaded("rustaceanvim") then
+                maybe_setup(lsp_config.rust_analyzer, {
+                    capabilities = capabilities,
+                    on_attach = default_attach,
+                    settings = {
+                        ["rust-analyzer"] = {
+                            cargo = {
+                                features = "all",
+                            },
+                        },
+                    },
+                })
+                maybe_setup(lsp_config.rls, default_setup)
+            end
+
+            -- Configure neodev for when lua-languge-server is installed
+            -- NOTE: Remove when min version is >= 0.10
+            utils.try_require("neodev", function(neodev)
+                local config = {}
+                utils.try_require("dapui", function()
+                    config.plugins = { "nvim-dap-ui" }
+                    config.types = true
+                end)
+                neodev.setup(config)
+            end)
+
+            -- Configure lua_ls after neodev
+            maybe_setup(lsp_config.lua_ls, {
+                capabilities = capabilities,
+                on_attach = default_attach,
+                settings = {
+                    Lua = {
+                        format = {
+                            enable = false,
+                        },
+                    },
+                },
+            })
+
+            -- Auto setup mason installed servers
+            utils.try_require("mason-lspconfig", function(mason_lspconfig)
+                -- Get list of servers that are installed but not set up
+                local already_setup = lsp_config.util.available_servers()
+                local needs_setup = vim.tbl_filter(function(server)
+                    return not vim.tbl_contains(already_setup, server)
+                end, mason_lspconfig.get_installed_servers())
+
+                -- Setup each server with default config
+                vim.tbl_map(function(server)
+                    vim.lsp.enable(server)
+                    if server == "lua_ls" then
+                        -- Disable formatting with lua_ls because I use stylua
+                        local config = vim.tbl_extend("force", default_setup, {
+                            settings = {
+                                Lua = {
+                                    format = {
+                                        enable = false,
+                                    },
+                                },
+                            },
+                        })
+                        lsp_config[server].setup(config)
+                    else
+                        lsp_config[server].setup(default_setup)
+                    end
+                end, needs_setup)
+            end)
+
+            -- Config null-ls after lsps so we can disable for languages that have language servers
+            require("plugins.null-ls").configure(default_setup)
+        end)
+    end
 end
 
 function M.config_lsp_intaller()

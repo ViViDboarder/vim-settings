@@ -6,12 +6,24 @@ local function disable_formatter_filetypes_for_existing_servers(sources, preserv
     local server_filetypes = {}
     utils.try_require("lspconfig", function(lsp_config)
         local available_servers
-        available_servers = lsp_config.util.available_servers()
-        vim.tbl_map(function(server)
-            if lsp_config[server].filetypes ~= nil then
-                vim.list_extend(server_filetypes, lsp_config[server].filetypes)
+        if vim.lsp.config == nil then
+            -- TODO: Remove when dropping support for nvim 0.10
+            available_servers = {}
+            for name, _ in pairs(lsp_config.util.available_servers()) do
+                available_servers[name] = lsp_config[name]
             end
-        end, available_servers)
+        else
+            -- TODO: Fix this. It doesn't work because vim.lsp.config won't resolve unless I have an override
+            -- It doesn't look like there is a way to get "enabled" servers. Might instead need to do something
+            -- less fancy and simply disable any fixers for languages I don't want them running on.
+            available_servers = vim.lsp.config
+        end
+
+        for _, server in ipairs(available_servers) do
+            if server.filetypes ~= nil then
+                vim.list_extend(server_filetypes, server.filetypes)
+            end
+        end
     end)
 
     -- Remove filetypes for formatters I want to preserve

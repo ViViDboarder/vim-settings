@@ -4,6 +4,8 @@ return {
     {
         "https://github.com/neovim/nvim-lspconfig",
         version = utils.map_version_rule({
+            [">=0.11.0"] = utils.nil_val,
+            [">=0.10.0"] = "^2",
             [">=0.8.0"] = "^1",
             [">=0.7.0"] = "v0.1.7",
             [">=0.6.1"] = "v0.1.2",
@@ -52,11 +54,20 @@ return {
     {
         -- Rust analyzer
         "https://github.com/mrcjkb/rustaceanvim",
-        version = "^5",
+        version = utils.map_version_rule({
+            [">=0.11.0"] = "^6",
+            [">=0.10.0"] = "^5",
+        }),
         -- Already loads on ft
         lazy = false,
         ft = { "rust" },
         init = function()
+            if vim.fn.has("nvim-0.11") == 1 then
+                -- Don't need this for nvim 0.11
+                return
+            end
+
+            -- TODO: Remove when dropping nvim 0.10
             local lsp = require("plugins.lsp")
             vim.g.rustaceanvim = {
                 server = {
