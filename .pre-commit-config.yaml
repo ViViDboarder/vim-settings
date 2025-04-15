@@ -15,12 +15,6 @@ repos:
           )$
   - repo: local
     hooks:
-      - id: sort-json
-        name: sort json files with jq
-        language: script
-        entry: ./scripts/sort-json.sh
-        files: "(\\.json$|^neovim/packer_snapshots/)"
-        types: [text]
       - id: selene
         name: An opinionated Lua code linter
         entry: selene
