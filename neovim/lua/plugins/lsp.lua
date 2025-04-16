@@ -182,15 +182,22 @@ end
 local maybe_lsp_enable = function(name_or_list)
     -- Helper function to enable a single LSP server if it is configured and its executable is available.
     -- @param name (string): The name of the LSP server to enable.
+    -- @return (boolean): Returns true if the server was successfully enabled, false otherwise.
     local maybe_enable_one = function(name)
+        -- Check if the LSP server is configured and its executable is available.
         if vim.lsp.config[name] ~= nil and vim.fn.executable(vim.lsp.config[name].cmd[1]) == 1 then
             vim.lsp.enable(name)
+
+            return true
         end
+
+        return false
     end
 
+    -- Check if the input is a single server name or a list of server names.
     if type(name_or_list) == "string" then
         -- Enable a single LSP server.
-        maybe_enable_one(name_or_list)
+        return maybe_enable_one(name_or_list)
     else
         -- Handle a list of LSP server names.
         for _, name in ipairs(name_or_list) do
@@ -227,8 +234,12 @@ function M.config_lsp()
             "bashls",
             "gopls",
             "lua_ls",
-            "pyright",
         })
+
+        if not maybe_lsp_enable("basedpyright") then
+            -- If basedpyright is not available, enable pyright instead.
+            maybe_lsp_enable("pyright")
+        end
 
         -- Auto setup mason installed servers
         utils.try_require("mason-lspconfig", function(mason_lspconfig)
@@ -279,7 +290,9 @@ function M.config_lsp()
 
             -- Configure each server
             maybe_setup(lsp_config.gopls, default_setup)
-            maybe_setup(lsp_config.pyright, default_setup)
+            if not maybe_setup(lsp_config.basedpyright, default_setup) then
+                maybe_setup(lsp_config.pyright, default_setup)
+            end
             maybe_setup(lsp_config.bashls, {
                 capabilities = capabilities,
                 on_attach = default_attach,
