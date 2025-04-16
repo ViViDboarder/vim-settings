@@ -5,10 +5,12 @@ import shutil
 import subprocess
 import sys
 from enum import Enum
+from typing import cast
 
 
 class Language(Enum):
     """Supported languages for helper installation."""
+
     ANSIBLE = "ansible"
     BASH = "bash"
     CSS = "css"
@@ -92,7 +94,7 @@ def maybe_upgrade_pipx():
         return
 
 
-def maybe_pip_install(*args: str, library=False) -> bool:
+def maybe_pip_install(*args: str, library: bool = False) -> bool:
     """
     Install user packages using pip.
 
@@ -166,7 +168,9 @@ def maybe_cargo_install(*args: str) -> bool:
     return maybe_run("cargo", "install", *user_bins)
 
 
-def maybe_release_gitter(commands_arg: dict[str, list[str]]|None = None, **commands_kwargs: list[str]) -> bool:
+def maybe_release_gitter(
+    commands_arg: dict[str, list[str]] | None = None, **commands_kwargs: list[str]
+) -> bool:
     """
     Try to install user binary using release-gitter.
 
@@ -192,9 +196,9 @@ def maybe_release_gitter(commands_arg: dict[str, list[str]]|None = None, **comma
 def install_language_servers(langs: set[Language]):
     """Install language servers for requested languages."""
     if Language.PYTHON in langs:
-        maybe_npm_install("pyright")
+        _ = maybe_npm_install("pyright")
     if Language.RUST in langs:
-        maybe_run(
+        _ = maybe_run(
             "rustup",
             "component",
             "add",
@@ -204,31 +208,34 @@ def install_language_servers(langs: set[Language]):
             "rust-analyzer",
         )
     if Language.GO in langs:
-        maybe_go_install(gopls="golang.org/x/tools/gopls@latest")
+        _ = maybe_go_install(gopls="golang.org/x/tools/gopls@latest")
     if Language.LUA in langs:
-        maybe_release_gitter({
-            "lua-language-server": [
-                "--git-url",
-                "https://github.com/LuaLS/lua-language-server",
-                "--map-arch", "x86_64=x64",
-                "--extract-all",
-                "--exec",
-                os.path.expanduser(
-                    "echo '#!/bin/sh\n"
-                    "exec \"$HOME/.local/share/lua-language-server/bin/lua-language-server\" \"$@\"' >"
-                    " ~/.local/bin/lua-language-server &&"
-                    " chmod +x ~/.local/bin/lua-language-server"
-                ),
-                "lua-language-server-{version}-{system}-{arch}.tar.gz",
-                os.path.expanduser("~/.local/share/lua-language-server"),
-            ],
-        })
+        _ = maybe_release_gitter(
+            {
+                "lua-language-server": [
+                    "--git-url",
+                    "https://github.com/LuaLS/lua-language-server",
+                    "--map-arch",
+                    "x86_64=x64",
+                    "--extract-all",
+                    "--exec",
+                    os.path.expanduser(
+                        "echo '#!/bin/sh\\n"
+                        + 'exec "$HOME/.local/share/lua-language-server/bin/lua-language-server" "$@"\' >'
+                        + " ~/.local/bin/lua-language-server &&"
+                        + " chmod +x ~/.local/bin/lua-language-server"
+                    ),
+                    "lua-language-server-{version}-{system}-{arch}.tar.gz",
+                    os.path.expanduser("~/.local/share/lua-language-server"),
+                ],
+            }
+        )
 
 
 def install_linters(langs: set[Language]):
     """Install linters for requested languages."""
     if Language.BASH in langs:
-        maybe_release_gitter(
+        _ = maybe_release_gitter(
             shellcheck=[
                 "--git-url",
                 "https://github.com/koalaman/shellcheck",
@@ -244,35 +251,37 @@ def install_linters(langs: set[Language]):
         )
 
     if Language.PYTHON in langs:
-        maybe_pip_install("mypy")
+        _ = maybe_pip_install("mypy")
     if Language.CSS in langs:
-        maybe_npm_install("csslint")
+        _ = maybe_npm_install("csslint")
     if Language.VIM in langs:
-        maybe_pip_install("vim-vint")
+        _ = maybe_pip_install("vim-vint")
     if Language.YAML in langs:
-        maybe_pip_install("yamllint")
+        _ = maybe_pip_install("yamllint")
     if Language.TEXT in langs:
-        maybe_npm_install("alex", "write-good")
-        maybe_pip_install("proselint")
+        _ = maybe_npm_install("alex", "write-good")
+        _ = maybe_pip_install("proselint")
     if Language.ANSIBLE in langs:
-        maybe_pip_install("ansible-lint")
+        _ = maybe_pip_install("ansible-lint")
     if Language.GO in langs:
-        maybe_release_gitter({
-            "golangci-lint": [
-                "--git-url",
-                "https://github.com/golangci/golangci-lint",
-                "--extract-files",
-                "golangci-lint-{version}-{system}-{arch}/golangci-lint",
-                "--exec",
-                os.path.expanduser(
-                    "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/"
-                ),
-                "--use-temp-dir",
-                "golangci-lint-{version}-{system}-{arch}.tar.gz",
-            ]
-        })
+        _ = maybe_release_gitter(
+            {
+                "golangci-lint": [
+                    "--git-url",
+                    "https://github.com/golangci/golangci-lint",
+                    "--extract-files",
+                    "golangci-lint-{version}-{system}-{arch}/golangci-lint",
+                    "--exec",
+                    os.path.expanduser(
+                        "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/"
+                    ),
+                    "--use-temp-dir",
+                    "golangci-lint-{version}-{system}-{arch}.tar.gz",
+                ]
+            }
+        )
     if Language.LUA in langs:
-        maybe_release_gitter(
+        _ = maybe_release_gitter(
             selene=[
                 "--git-url",
                 "https://github.com/Kampfkarren/selene",
@@ -288,7 +297,7 @@ def install_linters(langs: set[Language]):
         hadolint_arm64 = "arm64"
         if sys.platform == "darwin":
             hadolint_arm64 = "x86_64"
-        maybe_release_gitter(
+        _ = maybe_release_gitter(
             hadolint=[
                 "--git-url",
                 "https://github.com/hadolint/hadolint",
@@ -305,7 +314,7 @@ def install_linters(langs: set[Language]):
             ]
         )
     if Language.TERRAFORM in langs:
-        maybe_release_gitter(
+        _ = maybe_release_gitter(
             tfsec=[
                 "--git-url",
                 "https://github.com/aquasecurity/tfsec",
@@ -337,11 +346,11 @@ def install_fixers(langs: set[Language]):
         Language.WEB,
         Language.JSON,
     } & langs:
-        maybe_npm_install("prettier")
+        _ = maybe_npm_install("prettier")
     if Language.PYTHON in langs:
-        maybe_pip_install("black", "reorder-python-imports", "isort")
+        _ = maybe_pip_install("black", "reorder-python-imports", "isort")
     if Language.RUST in langs:
-        maybe_run("rustup", "component", "add", "rustfmt")
+        _ = maybe_run("rustup", "component", "add", "rustfmt")
     if Language.LUA in langs:
         _ = maybe_release_gitter(
             stylua=[
@@ -357,18 +366,18 @@ def install_fixers(langs: set[Language]):
         ) or maybe_cargo_install("stylua")
 
     if Language.GO in langs:
-        maybe_go_install(
+        _ = maybe_go_install(
             gofumpt="mvdan.cc/gofumpt@latest",
             goimports="golang.org/x/tools/cmd/goimports@latest",
         )
 
 
-def install_debuggers(langs):
+def install_debuggers(langs: set[Language]):
     """Install debuggers for the requested languages."""
     if Language.PYTHON in langs:
-        maybe_pip_install("debugpy")
+        _ = maybe_pip_install("debugpy")
     if Language.GO in langs:
-        maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest")
+        _ = maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest")
 
 
 def install_release_gitter():
@@ -379,23 +388,24 @@ def install_release_gitter():
     """
     if not maybe_pip_install("release-gitter"):
         # Manual install
-        maybe_run(
+        _ = maybe_run(
             "wget",
             "-O",
             os.path.expanduser("~/bin/release-gitter"),
             "https://git.iamthefij.com/iamthefij/release-gitter/raw/branch/main/release_gitter.py",
         )
-        maybe_run("chmod", "+x", os.path.expanduser("~/bin/release-gitter"))
+        _ = maybe_run("chmod", "+x", os.path.expanduser("~/bin/release-gitter"))
 
 
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ignore-missing", action="store_true")
-    parser.add_argument("langs", nargs="*", type=Language)
-    parser.add_argument("--no-language-servers", action="store_true")
-    parser.add_argument("--no-debuggers", action="store_true")
+    _ = parser.add_argument("--ignore-missing", action="store_true")
+    _ = parser.add_argument("langs", nargs="*", type=Language)
+    _ = parser.add_argument("--no-language-servers", action="store_true")
+    _ = parser.add_argument("--no-debuggers", action="store_true")
     return parser.parse_args()
+
 
 def get_langs(langs: list[Language]) -> set[Language]:
     """
@@ -415,7 +425,7 @@ def get_langs(langs: list[Language]) -> set[Language]:
 
 def main():
     args = parse_args()
-    langs = get_langs(args.langs)
+    langs = get_langs(cast(list[Language], args.langs))
 
     # Try to upgrade pipx
     maybe_upgrade_pipx()
@@ -424,30 +434,32 @@ def main():
     install_release_gitter()
 
     # Install fzf
-    maybe_release_gitter(fzf=[
-        "--git-url",
-        "https://github.com/junegunn/fzf",
-        "--extract-files",
-        "fzf",
-        "fzf-{version}-{system}_{arch}.tar.gz",
-        os.path.expanduser("~/bin/"),
-    ])
+    _ = maybe_release_gitter(
+        fzf=[
+            "--git-url",
+            "https://github.com/junegunn/fzf",
+            "--extract-files",
+            "fzf",
+            "fzf-{version}-{system}_{arch}.tar.gz",
+            os.path.expanduser("~/bin/"),
+        ]
+    )
 
     # Keep a clean PYTHONPATH
     os.environ["PYTHONPATH"] = ""
 
-    if args.ignore_missing:
+    if cast(bool, args.ignore_missing):
         os.environ["set"] = "+e"
     else:
         os.environ["set"] = "-e"
 
-    if not args.no_language_servers:
+    if not cast(bool, args.no_language_servers):
         install_language_servers(langs)
 
     install_linters(langs)
     install_fixers(langs)
 
-    if not args.no_debuggers:
+    if not cast(bool, args.no_debuggers):
         install_debuggers(langs)
 
     print("DONE")
