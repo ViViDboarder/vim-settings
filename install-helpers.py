@@ -197,6 +197,7 @@ def install_language_servers(langs: set[Language]):
     """Install language servers for requested languages."""
     if Language.PYTHON in langs:
         _ = maybe_npm_install("pyright")
+        _ = maybe_pip_install("basedpyright")
     if Language.RUST in langs:
         _ = maybe_run(
             "rustup",
