@@ -2,9 +2,9 @@
 local utils = require("utils")
 if vim.fn.has("nvim-0.10") == 1 then
     return {
-        "saghen/blink.cmp",
+        "https://github.com/saghen/blink.cmp",
         -- optional: provides snippets for the snippet source
-        dependencies = { "rafamadriz/friendly-snippets" },
+        dependencies = { "https://github.com/rafamadriz/friendly-snippets" },
 
         -- use a release tag to download pre-built binaries
         version = "1.*",
