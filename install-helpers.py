@@ -213,7 +213,7 @@ def install_language_servers(langs: set[Language]):
                 "--extract-all",
                 "--exec",
                 os.path.expanduser(
-                    "echo '#!/bin/sh\\n"
+                    "echo '#!/bin/sh\n"
                     "exec \"$HOME/.local/share/lua-language-server/bin/lua-language-server\" \"$@\"' >"
                     " ~/.local/bin/lua-language-server &&"
                     " chmod +x ~/.local/bin/lua-language-server"
