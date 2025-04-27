@@ -19,6 +19,7 @@ class Language(Enum):
     JSON = "json"
     KOTLIN = "kotlin"
     LUA = "lua"
+    LLM = "llm"
     NEOVIM = "neovim"
     PYTHON = "python"
     RUST = "rust"
@@ -323,6 +324,8 @@ def install_linters(langs: set[Language]):
                 os.path.expanduser("~/bin"),
             ],
         )
+    if Language.LLM in langs:
+        maybe_pip_install("vectorcode")
 
 
 def install_fixers(langs: set[Language]):
