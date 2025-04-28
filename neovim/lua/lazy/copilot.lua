@@ -96,9 +96,35 @@ if vim.g.use_locallm then
             -- model = "qwen2.5-coder-7b-instruct",
             -- model = "deepseek-coder-v2-lite-instruct",
             debounce_ms = 500,
-            accept_keymap = "<C-F>",
-            dismiss_keymap = "<C-D>",
         },
+        config = function(_, opts)
+            local llm = require("llm")
+            local utils = require("utils")
+            local completion = require("llm.completion")
+
+            local function accept_suggestion()
+                if not completion.suggestion then
+                    return utils.t("<Right>")
+                end
+                vim.schedule(completion.complete)
+            end
+
+            local function dismiss_suggestion()
+                if not completion.suggestion then
+                    return utils.t("<C-D>")
+                end
+                vim.schedule(function()
+                    completion.cancel()
+                    completion.suggestion = nil
+                end)
+            end
+
+            llm.setup(opts)
+
+            vim.keymap.set("i", "<C-F>", accept_suggestion, { expr = true })
+            vim.keymap.set("i", "<Right>", accept_suggestion, { expr = true })
+            vim.keymap.set("i", "<C-D>", dismiss_suggestion, { expr = true })
+        end,
     })
 elseif vim.g.install_copilot then
     -- Otherwise we're using copilot.vim
