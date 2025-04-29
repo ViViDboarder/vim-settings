@@ -198,7 +198,7 @@ local maybe_lsp_enable = function(name_or_list)
     -- @return (boolean): Returns true if the server was successfully enabled, false otherwise.
     local maybe_enable_one = function(name)
         -- Check if the LSP server is configured and its executable is available.
-        if vim.lsp.config[name] ~= nil and vim.fn.executable(vim.lsp.config[name].cmd[1]) == 1 then
+        if vim.lsp.config[name] ~= nil and vim.lsp.config[name].cmd ~= nil and vim.fn.executable(vim.lsp.config[name].cmd[1]) == 1 then
             vim.lsp.enable(name)
 
             return true
