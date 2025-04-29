@@ -1,5 +1,12 @@
 -- #selene: allow(mixed_table)
 
+-- Relies on the following variagbles
+--      vim.g.install_copilot to use GitHub Copilot
+--      vim.g.use_locallm to set a local LLM provider (default ollama, optional openai)
+--      vim.g.local_llm_url to change the URL for the local llm
+--      vim.g.local_llm_chat_model to change the chat model used by the local llm
+--      vim.g.local_llm_completion_model to change the completion model used by the local llm
+
 local specs = {}
 
 -- We don't need any of these things if we're not using Copilot or LocalLM
@@ -12,7 +19,7 @@ local function lm_studio(model)
     return function()
         return require("codecompanion.adapters").extend("openai_compatible", {
             env = {
-                url = "http://localhost:1234",
+                url = vim.g.local_llm_url or "http://localhost:1234",
             },
             schema = {
                 model = {
@@ -21,6 +28,41 @@ local function lm_studio(model)
             },
         })
     end
+end
+
+-- Helper function to create local model adapters for Ollama
+local function ollama(model)
+    return function()
+        return require("codecompanion.adapters").extend("ollama", {
+            env = {
+                url = vim.g.local_llm_url or "http://localhost:11434",
+            },
+            schema = {
+                model = {
+                    default = model,
+                },
+            },
+        })
+    end
+end
+
+--- Helper that returns the adapter for CodeCompanion to use
+---@return string the name of the LLM adapter to use
+local function codecompanion_adapter()
+    if not vim.g.use_locallm then
+        return "copilot"
+    end
+
+    if vim.g.local_llm_chat_model ~= nil then
+        return "dynamic"
+    end
+
+    if vim.g.use_locallm == "openai" then
+        return "lm_qwen_coder"
+    end
+
+    -- Return ollama qwen as default
+    return "ol_qwen_coder"
 end
 
 vim.list_extend(specs, {
@@ -48,12 +90,15 @@ vim.list_extend(specs, {
         opts = {
             adapters = {
                 lm_qwen_coder = lm_studio("qwen2.5-coder-7b-instruct"),
-                deepseek_coder = lm_studio("deepseek-coder-v2-lite-instruct"),
+                lm_deepseek_coder = lm_studio("deepseek-coder-v2-lite-instruct"),
                 lm_starcoder2 = lm_studio("starcoder2-7b"),
+                ol_qwen_coder = ollama("qwen2.5-coder:7b"),
+                ol_starcoder2 = ollama("starcoder2:7b"),
+                dynamic = (vim.g.use_locallm ~= "openai" and ollama or lm_studio)(vim.g.local_llm_chat_model),
             },
             strategies = {
                 chat = {
-                    adapter = vim.g.use_locallm and "lm_qwen_coder" or "copilot",
+                    adapter = codecompanion_adapter(),
                     tools = {
                         vectorcode = {
                             description = "Run VectorCode to retrieve the project context.",
@@ -64,13 +109,12 @@ vim.list_extend(specs, {
                     },
                 },
                 inline = {
-                    adapter = vim.g.use_locallm and "lm_qwen_coder" or "copilot",
+                    adapter = codecompanion_adapter(),
                 },
                 cmd = {
-                    adapter = vim.g.use_locallm and "lm_qwen_coder" or "copilot",
+                    adapter = codecompanion_adapter(),
                 },
             },
-            log_level = "DEBUG",
         },
         dependencies = {
             "https://github.com/nvim-lua/plenary.nvim",
@@ -91,11 +135,10 @@ if vim.g.use_locallm then
         "https://github.com/ViViDboarder/llm.nvim",
         branch = "keymap-passthrough",
         opts = {
-            backend = "openai",
-            url = "http://localhost:1234",
-            model = "starcoder2-7b",
-            -- model = "qwen2.5-coder-7b-instruct",
-            -- model = "deepseek-coder-v2-lite-instruct",
+            backend = vim.g.use_locallm ~= "openai" and "ollama" or "openai",
+            url = vim.g.local_llm_url
+                or (vim.g.use_locallm ~= "openai" and "http://localhost:11434" or "http://localhost:1234"),
+            model = vim.g.use_locallm ~= "openai" and "starcoder2:7b" or "starcoder2-7b",
             debounce_ms = 500,
             accept_keymap = "<C-F>",
             dismiss_keymap = "<C-D>",
