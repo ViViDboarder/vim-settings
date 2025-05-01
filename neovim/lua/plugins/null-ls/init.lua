@@ -9,7 +9,7 @@ local function disable_formatter_filetypes_for_existing_servers(sources, preserv
         if vim.lsp.config == nil then
             -- TODO: Remove when dropping support for nvim 0.10
             available_servers = {}
-            for name, _ in pairs(lsp_config.util.available_servers()) do
+            for _, name in pairs(lsp_config.util.available_servers()) do
                 available_servers[name] = lsp_config[name]
             end
         else
