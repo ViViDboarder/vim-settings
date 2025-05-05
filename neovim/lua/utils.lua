@@ -160,7 +160,7 @@ function M.tbl_pop(t, key)
 end
 
 --- Calls keymap_set with preferred defaults
----@param mode string The mode
+---@param mode string|string[] The mode
 ---@param lhs string The left-hand side of the mapping
 ---@param rhs string|function The right-hand side of the mapping
 ---@param opts table? The options (optional)
@@ -173,7 +173,7 @@ end
 ---@param mode string The mode
 ---@param prefix string The prefix for the mapping
 ---@param default_opts table? The default options (optional)
----@return fun(lhs: string, rhs: string, opts: table) A curried keymap set function
+---@return fun(lhs: string, rhs: string|function, opts?: table) A curried keymap set function
 function M.curry_keymap(mode, prefix, default_opts)
     default_opts = vim.tbl_extend("keep", default_opts or {}, { noremap = true, silent = true })
     local group_desc = M.tbl_pop(default_opts, "group_desc")

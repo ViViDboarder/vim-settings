@@ -57,8 +57,12 @@ function M.get_default_attach(override_capabilities)
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         end, { desc = "Workspace: List folders" })
         lsp_keymap("r", vim.lsp.buf.references, { desc = "References" })
-        lsp_keymap("p", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
-        lsp_keymap("n", vim.diagnostic.goto_next, { desc = "Next diagnostic" })
+        lsp_keymap("p", function()
+            vim.diagnostic.jump({ count = -1, float = true })
+        end, { desc = "Previous diagnostic" })
+        lsp_keymap("n", function()
+            vim.diagnostic.jump({ count = 1, float = true })
+        end, { desc = "Next diagnostic" })
         if server_capabilities.codeActionProvider then
             lsp_keymap("A", vim.lsp.buf.code_action, { desc = "Select code actions" })
             lsp_keymap("A", vim.lsp.buf.code_action, { mode = "v", desc = "Select code actions" })
@@ -72,8 +76,12 @@ function M.get_default_attach(override_capabilities)
         utils.keymap_set("n", "gD", vim.lsp.buf.declaration, { buffer = bufnr, desc = "Go to declaration" })
         utils.keymap_set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
         utils.keymap_set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, desc = "Refactor rename" })
-        utils.keymap_set("n", "[d", vim.diagnostic.goto_prev, { buffer = bufnr, desc = "Previous diagnostic" })
-        utils.keymap_set("n", "]d", vim.diagnostic.goto_next, { buffer = bufnr, desc = "Next diagnostic" })
+        utils.keymap_set("n", "[d", function()
+            vim.diagnostic.jump({ count = -1, float = true })
+        end, { buffer = bufnr, desc = "Previous diagnostic" })
+        utils.keymap_set("n", "]d", function()
+            vim.diagnostic.jump({ count = 1, float = true })
+        end, { buffer = bufnr, desc = "Next diagnostic" })
 
         -- Open diagnostic on hold
         vim.api.nvim_create_autocmd({ "CursorHold" }, {
@@ -165,7 +173,7 @@ function M.get_default_attach(override_capabilities)
 end
 
 function M.merged_capabilities()
-    -- TODO: Remove after 11+
+    -- TODO: Remove after 0.11+
 
     -- Maybe update capabilities
     local capabilities = nil
