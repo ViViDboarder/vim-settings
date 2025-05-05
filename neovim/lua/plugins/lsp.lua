@@ -3,21 +3,26 @@ local M = {}
 local utils = require("utils")
 
 function M.config_lsp_ui()
-    local border = {
-        { "┌", "FloatBorder" },
-        { "─", "FloatBorder" },
-        { "┐", "FloatBorder" },
-        { "│", "FloatBorder" },
-        { "┘", "FloatBorder" },
-        { "─", "FloatBorder" },
-        { "└", "FloatBorder" },
-        { "│", "FloatBorder" },
-    }
-    local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-        opts = opts or {}
-        opts.border = opts.border or border
-        return orig_util_open_floating_preview(contents, syntax, opts, ...)
+    if vim.fn.has("nvim-0.11") then
+        vim.o.winborder = "rounded"
+    else
+        -- TODO: remove when 0.11+
+        local border = {
+            { "┌", "FloatBorder" },
+            { "─", "FloatBorder" },
+            { "┐", "FloatBorder" },
+            { "│", "FloatBorder" },
+            { "┘", "FloatBorder" },
+            { "─", "FloatBorder" },
+            { "└", "FloatBorder" },
+            { "│", "FloatBorder" },
+        }
+        local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+        function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+            opts = opts or {}
+            opts.border = opts.border or border
+            return orig_util_open_floating_preview(contents, syntax, opts, ...)
+        end
     end
 
     -- Diagnostics signs
