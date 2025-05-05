@@ -8,6 +8,20 @@
 
 local vault_path = vim.fn.expand("~/Documents/Obsidian")
 
+--- project_note creates or opens a note for a project based on it's git repo
+---
+--- Using fugitive for identifying the remote, it will create or open a note
+--- for the project in the vault.
+local function project_note()
+    local remote = vim.fn.FugitiveRemote()
+    if remote == nil or remote["path"] == nil then
+        vim.notify("Could not identify repo name")
+        return
+    end
+
+    vim.cmd(":ObsidianNew " .. "Projects/" .. remote["path"] .. ".md")
+end
+
 local function auto_git()
     -- Set up auto pull and commit
     local group_id = vim.api.nvim_create_augroup("obsidian-git", { clear = true })
@@ -126,6 +140,7 @@ return {
     "https://github.com/obsidian-nvim/obsidian.nvim",
     dependencies = {
         { "https://github.com/nvim-lua/plenary.nvim" },
+        { "https://github.com/tpope/vim-fugitive" },
     },
     version = "^3",
     opts = {
@@ -170,6 +185,12 @@ return {
         require("obsidian").setup(opts)
 
         auto_git()
+
+        vim.api.nvim_create_user_command(
+            "ProjectNote",
+            project_note,
+            { desc = "Open a note for this project in Obsidian" }
+        )
     end,
     event = {
         "BufRead " .. vault_path .. "/**",
@@ -181,5 +202,6 @@ return {
         "ObsidianSearch",
         "ObsidianNewFromTemplate",
         "ObsidianWorkspace",
+        "ProjectNote",
     },
 }
