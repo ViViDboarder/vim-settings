@@ -31,7 +31,11 @@ local function lm_studio(model)
 end
 
 -- Helper function to create local model adapters for Ollama
-local function ollama(model)
+local function ollama(model, num_ctx)
+    if num_ctx == nil then
+        num_ctx = 8192
+    end
+
     return function()
         return require("codecompanion.adapters").extend("ollama", {
             env = {
@@ -40,6 +44,7 @@ local function ollama(model)
             schema = {
                 model = {
                     default = model,
+                    num_ctx = { default = num_ctx },
                 },
             },
         })
@@ -94,7 +99,8 @@ vim.list_extend(specs, {
             -- TODO: Refactor to a function and dynamically set more values based on copilot or not
             -- so I can use non-default copilot models as well in the strategy config.
             adapters = {
-                qwen_coder = use_ollama() and ollama("qwen2.5-coder:7b") or lm_studio("qwen2.5-coder-7b-instruct"),
+                qwen_coder = use_ollama() and ollama("qwen2.5-coder:7b", 16384)
+                    or lm_studio("qwen2.5-coder-7b-instruct"),
                 starcoder2 = use_ollama() and ollama("starcoder2:7b") or lm_studio("starcoder2-7b"),
                 dynamic = (use_ollama() and ollama or lm_studio)(vim.g.local_llm_chat_model),
             },
