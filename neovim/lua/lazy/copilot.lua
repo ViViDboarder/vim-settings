@@ -46,6 +46,10 @@ local function ollama(model)
     end
 end
 
+local function use_ollama()
+    return vim.g.use_locallm ~= "openai"
+end
+
 --- Helper that returns the adapter for CodeCompanion to use
 ---@return string the name of the LLM adapter to use
 local function codecompanion_adapter()
@@ -57,12 +61,8 @@ local function codecompanion_adapter()
         return "dynamic"
     end
 
-    if vim.g.use_locallm == "openai" then
-        return "lm_qwen_coder"
-    end
-
-    -- Return ollama qwen as default
-    return "ol_qwen_coder"
+    -- Return qwen_coder as the default
+    return "qwen_coder"
 end
 
 vim.list_extend(specs, {
@@ -88,13 +88,15 @@ vim.list_extend(specs, {
     {
         "olimorris/codecompanion.nvim",
         opts = {
+            -- TODO: After some time, decide if I'm going to keep lm_studio around
+            -- if not, this can probably be simpler.
+
+            -- TODO: Refactor to a function and dynamically set more values based on copilot or not
+            -- so I can use non-default copilot models as well in the strategy config.
             adapters = {
-                lm_qwen_coder = lm_studio("qwen2.5-coder-7b-instruct"),
-                lm_deepseek_coder = lm_studio("deepseek-coder-v2-lite-instruct"),
-                lm_starcoder2 = lm_studio("starcoder2-7b"),
-                ol_qwen_coder = ollama("qwen2.5-coder:7b"),
-                ol_starcoder2 = ollama("starcoder2:7b"),
-                dynamic = (vim.g.use_locallm ~= "openai" and ollama or lm_studio)(vim.g.local_llm_chat_model),
+                qwen_coder = use_ollama() and ollama("qwen2.5-coder:7b") or lm_studio("qwen2.5-coder-7b-instruct"),
+                starcoder2 = use_ollama() and ollama("starcoder2:7b") or lm_studio("starcoder2-7b"),
+                dynamic = (use_ollama() and ollama or lm_studio)(vim.g.local_llm_chat_model),
             },
             strategies = {
                 chat = {
@@ -132,13 +134,13 @@ vim.list_extend(specs, {
 if vim.g.use_locallm then
     -- For local llms, we use llm.nvim sinc eit will talk to LM Studio
     table.insert(specs, {
+        -- TODO: Maybe get rid of this and use a local copilot proxy
         "https://github.com/ViViDboarder/llm.nvim",
         branch = "keymap-passthrough",
         opts = {
-            backend = vim.g.use_locallm ~= "openai" and "ollama" or "openai",
-            url = vim.g.local_llm_url
-                or (vim.g.use_locallm ~= "openai" and "http://localhost:11434" or "http://localhost:1234"),
-            model = vim.g.use_locallm ~= "openai" and "starcoder2:7b" or "starcoder2-7b",
+            backend = use_ollama() and "ollama" or "openai",
+            url = vim.g.local_llm_url or (use_ollama() and "http://localhost:11434" or "http://localhost:1234"),
+            model = use_ollama() and "starcoder2:7b" or "starcoder2-7b",
             debounce_ms = 500,
             accept_keymap = "<C-F>",
             dismiss_keymap = "<C-D>",
