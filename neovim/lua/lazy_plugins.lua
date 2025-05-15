@@ -352,7 +352,7 @@ return {
         },
         config = function()
             require("go").setup({
-                icons = false,
+                icons = require("icons").nerd_font,
                 -- I don't like the normal mode keymap because it overrides `w`
                 dap_debug_keymap = false,
                 -- Disable gui setup becuase this is set up with dap-ui
