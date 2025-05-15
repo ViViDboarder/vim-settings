@@ -18,10 +18,13 @@ return {
     {
         -- Language server installer
         "https://github.com/williamboman/mason.nvim",
-        version = "^1",
+        version = "^2",
         dependencies = {
             { "https://github.com/neovim/nvim-lspconfig" },
-            { "https://github.com/williamboman/mason-lspconfig.nvim" },
+            {
+                "https://github.com/williamboman/mason-lspconfig.nvim",
+                version = "^2",
+            },
         },
         cmd = {
             "Mason",
