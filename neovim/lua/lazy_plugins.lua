@@ -325,19 +325,8 @@ return {
         },
     },
 
-    -- Fuzzy Finder
-    {
-        "https://github.com/nvim-telescope/telescope.nvim",
-        dependencies = {
-            { "https://github.com/nvim-lua/plenary.nvim" },
-            { "https://github.com/nvim-telescope/telescope-file-browser.nvim" },
-        },
-        version = "0.1.x",
-        config = function()
-            require("plugins.telescope")
-        end,
-        lazy = true,
-    },
+    -- Snacks
+    { import = "lazy.snacks" },
 
     -- Filetypes
     { "https://github.com/ViViDboarder/vim-forcedotcom" },
