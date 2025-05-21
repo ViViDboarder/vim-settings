@@ -14,22 +14,6 @@ if not vim.g.install_copilot and not vim.g.use_locallm then
     return specs
 end
 
--- Helper function to create local model adapters for LM Studio
-local function lm_studio(model)
-    return function()
-        return require("codecompanion.adapters").extend("openai_compatible", {
-            env = {
-                url = vim.g.local_llm_url or "http://localhost:1234",
-            },
-            schema = {
-                model = {
-                    default = model,
-                },
-            },
-        })
-    end
-end
-
 -- Helper function to create local model adapters for Ollama
 local function ollama(model, num_ctx)
     if num_ctx == nil then
@@ -49,10 +33,6 @@ local function ollama(model, num_ctx)
             },
         })
     end
-end
-
-local function use_ollama()
-    return vim.g.use_locallm ~= "openai"
 end
 
 --- Helper that returns the adapter for CodeCompanion to use
@@ -93,16 +73,13 @@ vim.list_extend(specs, {
     {
         "olimorris/codecompanion.nvim",
         opts = {
-            -- TODO: After some time, decide if I'm going to keep lm_studio around
-            -- if not, this can probably be simpler.
-
             -- TODO: Refactor to a function and dynamically set more values based on copilot or not
             -- so I can use non-default copilot models as well in the strategy config.
             adapters = {
-                qwen_coder = use_ollama() and ollama("qwen2.5-coder:7b", 16384)
-                    or lm_studio("qwen2.5-coder-7b-instruct"),
-                starcoder2 = use_ollama() and ollama("starcoder2:7b") or lm_studio("starcoder2-7b"),
-                dynamic = (use_ollama() and ollama or lm_studio)(vim.g.local_llm_chat_model),
+                qwen_coder = ollama("qwen2.5-coder:7b", 16384),
+                starcoder2 = ollama("starcoder2:7b"),
+                devstral = ollama("devstral:24b", 16384),
+                dynamic = ollama(vim.g.local_llm_chat_model),
             },
             strategies = {
                 chat = {
@@ -143,9 +120,9 @@ if vim.g.use_locallm then
         -- TODO: Maybe get rid of this and use a local copilot proxy
         "https://github.com/ViViDboarder/llm.nvim",
         opts = {
-            backend = use_ollama() and "ollama" or "openai",
-            url = vim.g.local_llm_url or (use_ollama() and "http://localhost:11434" or "http://localhost:1234"),
-            model = use_ollama() and "starcoder2:7b" or "starcoder2-7b",
+            backend = "ollama",
+            url = vim.g.local_llm_url or "http://localhost:11434",
+            model = "starcoder2:7b",
             debounce_ms = 500,
             keymap = {
                 modes = { "i" },
