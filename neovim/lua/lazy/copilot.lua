@@ -142,7 +142,6 @@ if vim.g.use_locallm then
     table.insert(specs, {
         -- TODO: Maybe get rid of this and use a local copilot proxy
         "https://github.com/ViViDboarder/llm.nvim",
-        branch = "flexible-keymaps",
         opts = {
             backend = use_ollama() and "ollama" or "openai",
             url = vim.g.local_llm_url or (use_ollama() and "http://localhost:11434" or "http://localhost:1234"),
