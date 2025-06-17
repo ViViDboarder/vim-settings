@@ -233,7 +233,7 @@ return {
         -- Download latest release on install
         build = "cargo install --git https://github.com/cormacrelf/dark-notify --rev 0d8501ca027b4355ed958b937ed51b37632c60cf",
         config = function()
-            require("plugins.darknotify")
+            require("plugins.darknotify").run()
         end,
         dependencies = { { "https://github.com/nvim-lualine/lualine.nvim" } },
         event = "VeryLazy",
