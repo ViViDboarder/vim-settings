@@ -1,6 +1,4 @@
 .PHONY: all test
-PRE_COMMIT_ENV ?= .pre_commit_env
-PRE_COMMIT_ENV_BIN ?= $(PRE_COMMIT_ENV)/bin
 
 .PHONY: default
 default: check
@@ -32,21 +30,14 @@ clean:
 	# Clean Packer
 	rm -fr ~/.local/share/nvim/site/pack/packer
 
-# Installs pre-commit hooks
-$(PRE_COMMIT_ENV):
-	virtualenv $(PRE_COMMIT_ENV)
-
-$(PRE_COMMIT_ENV_BIN)/pre-commit: $(PRE_COMMIT_ENV)
-	$(PRE_COMMIT_ENV_BIN)/pip install pre-commit
-
 .PHONY: install-hooks
-install-hooks: $(PRE_COMMIT_ENV_BIN)/pre-commit
-	$(PRE_COMMIT_ENV_BIN)/pre-commit install --install-hooks
+install-hooks:
+	pre-commit install --install-hooks
 
 # Checks files for encryption
 .PHONY: check
-check: $(PRE_COMMIT_ENV_BIN)/pre-commit
-	$(PRE_COMMIT_ENV_BIN)/pre-commit run --all-files
+check:
+	pre-commit run --all-files
 
 # Build Docker images
 .PHONY: docker-build
