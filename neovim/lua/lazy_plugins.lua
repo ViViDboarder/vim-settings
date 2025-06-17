@@ -227,11 +227,11 @@ return {
     {
         -- On Mac, update colors when dark mode changes
         "https://github.com/cormacrelf/dark-notify",
-        -- Pinned because project has had no commits in 4 years
-        commit = "891adc07dd7b367b840f1e9875b075fd8af4dc52",
+        -- Pinned to latest commit that builds since old release won't anymore
+        commit = "0d8501ca027b4355ed958b937ed51b37632c60cf",
         enabled = vim.g.is_mac == 1,
         -- Download latest release on install
-        build = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/", -- luacheck: no max line length
+        build = "cargo install --git https://github.com/cormacrelf/dark-notify --rev 0d8501ca027b4355ed958b937ed51b37632c60cf",
         config = function()
             require("plugins.darknotify")
         end,
