@@ -231,7 +231,7 @@ return {
         commit = "891adc07dd7b367b840f1e9875b075fd8af4dc52",
         enabled = vim.g.is_mac == 1,
         -- Download latest release on install
-        build = "curl -s https://api.github.com/repos/cormacrelf/dark-notify/releases/latest | jq '.assets[].browser_download_url' | xargs curl -Ls | tar xz -C ~/.local/bin/", -- luacheck: no max line length
+        build = "cargo install --git https://github.com/cormacrelf/dark-notify --rev 891adc07dd7b367b840f1e9875b075fd8af4dc52",
         config = function()
             require("plugins.darknotify")
         end,
