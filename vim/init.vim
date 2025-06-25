@@ -65,7 +65,5 @@ call blink#init()
 
 call s:smart_source_rc('init')
 call s:smart_source_rc('input')
-call plug#begin()
 call s:smart_source_rc('plugins')
-call plug#end()
 call s:smart_source_rc('ui')
