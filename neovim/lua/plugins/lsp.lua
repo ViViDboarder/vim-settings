@@ -81,7 +81,7 @@ function M.get_default_attach(override_capabilities)
             lsp_keymap("A", vim.lsp.buf.code_action, { mode = "v", desc = "Select code actions" })
         end
 
-        utils.try_require("trouble", function(_)
+        if utils.is_plugin_installed("trouble.nvim") then
             lsp_keymap(
                 "x",
                 "<cmd>Trouble diagnostics toggle filter.buf=" .. bufnr .. "<cr>",
@@ -92,9 +92,9 @@ function M.get_default_attach(override_capabilities)
                 "<cmd>Trouble diagnostics toggle<cr>",
                 { buffer = bufnr, desc = "Show project diagnostics" }
             )
-        end, function(_)
+        else
             lsp_keymap("x", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Show buffer diagnostics" })
-        end)
+        end
 
         -- Set insert keymap for signature help
         utils.keymap_set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
@@ -122,8 +122,9 @@ function M.get_default_attach(override_capabilities)
         })
 
         -- Use IncRename if available
-        if utils.try_require("inc_rename") ~= nil then
+        if utils.is_plugin_installed("inc-rename.nvim") then
             vim.keymap.set("n", "<leader>rn", function()
+                _ = require("inc_rename")
                 return ":IncRename " .. vim.fn.expand("<cword>")
             end, { expr = true, buffer = true, desc = "Rename current symbol" })
         end
@@ -162,28 +163,33 @@ function M.get_default_attach(override_capabilities)
             )
         end
 
-        utils.try_require("fzf-lua", function(fzf)
+        if utils.is_plugin_installed("fzf-lua") then
+            local lazy_fzf = function(method_name)
+                return function()
+                    require("fzf-lua")[method_name]()
+                end
+            end
             -- Replace some fzf bindings with LSP versions
             local finder_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
             if server_capabilities.documentSymbolProvider then
-                finder_keymap("t", fzf.lsp_document_symbols, { desc = "Find buffer tags" })
+                finder_keymap("t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
                 -- Also override the default tag finder
-                utils.keymap_set("n", "<leader>t", fzf.lsp_document_symbols, { desc = "Find buffer tags" })
+                utils.keymap_set("n", "<leader>t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
             end
             if server_capabilities.workspaceSymbolProvider then
-                finder_keymap("T", fzf.lsp_live_workspace_symbols, { desc = "Find tags" })
+                finder_keymap("T", lazy_fzf("lsp_live_workspace_symbols"), { desc = "Find tags" })
             end
 
             -- Replace some LSP bindings with Telescope ones
             if server_capabilities.definitionProvider then
-                lsp_keymap("d", fzf.lsp_definitions, { desc = "Find definition" })
+                lsp_keymap("d", lazy_fzf("lsp_definitions"), { desc = "Find definition" })
             end
             if server_capabilities.typeDefinitionProvider then
-                lsp_keymap("t", fzf.lsp_typedefs, { desc = "Find type definition" })
+                lsp_keymap("t", lazy_fzf("lsp_typedefs"), { desc = "Find type definition" })
             end
-            lsp_keymap("i", fzf.lsp_implementations, { desc = "Find implementations" })
-            lsp_keymap("r", fzf.lsp_references, { desc = "Find references" })
-        end)
+            lsp_keymap("i", lazy_fzf("lsp_implementations"), { desc = "Find implementations" })
+            lsp_keymap("r", lazy_fzf("lsp_references"), { desc = "Find references" })
+        end
 
         -- Attach navic for statusline location
         if server_capabilities.documentSymbolProvider then
@@ -349,7 +355,7 @@ function M.config_lsp()
             -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
             -- Remove this after min version is >= 0.10
             -- Maybe all lsp configs should be set up as part of their ftconfig
-            if not utils.is_plugin_loaded("rustaceanvim") then
+            if not utils.is_plugin_installed("rustaceanvim") then
                 maybe_setup(lsp_config.rust_analyzer, {
                     capabilities = capabilities,
                     on_attach = default_attach,

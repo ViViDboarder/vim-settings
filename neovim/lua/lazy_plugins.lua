@@ -278,6 +278,9 @@ return {
             input_buffer_type = "dressing",
         },
         lazy = true,
+        cmd = {
+            "IncRename",
+        },
     },
 
     -- Writing

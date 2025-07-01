@@ -43,16 +43,34 @@ function M.require_with_local(name)
     return rmod
 end
 
+--- Returns whether or not lazy plugin is installed
+---@param name string The plugin name
+---@return boolean Whether the plugin is installed
+function M.is_plugin_installed(name)
+    local is_installed = false
+    M.try_require("lazy.core.config", function(config)
+        local plugin = config.plugins[name]
+        if plugin ~= nil then
+            is_installed = plugin._.installed
+        end
+    end)
+
+    return is_installed
+end
+
 --- Returns whether or not lazy plugin is loaded
 ---@param name string The plugin name
 ---@return boolean Whether the plugin is loaded
 function M.is_plugin_loaded(name)
-    local result = false
+    local is_loaded = false
     M.try_require("lazy.core.config", function(config)
-        result = config.plugins[name] ~= nil
+        local plugin = config.plugins[name]
+        if plugin ~= nil then
+            is_loaded = plugin._.loaded ~= nil
+        end
     end)
 
-    return result
+    return is_loaded
 end
 
 --- Try to require something and perform some action if it was found

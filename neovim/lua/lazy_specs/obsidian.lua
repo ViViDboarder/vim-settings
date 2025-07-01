@@ -177,8 +177,8 @@ return {
             },
         },
         completion = {
-            nvim_cmp = require("utils").is_plugin_loaded("cmp"),
-            blink = require("utils").is_plugin_loaded("blink.cmp"),
+            nvim_cmp = require("utils").is_plugin_installed("cmp"),
+            blink = require("utils").is_plugin_installed("blink.cmp"),
         },
     },
     config = function(_, opts)

@@ -52,7 +52,7 @@ function M.update_colors()
     if change then
         if vim.fn.exists(":AirlineRefresh") == 1 then
             vim.cmd(":AirlineRefresh")
-        elseif utils.is_plugin_loaded("lualine.nvim") then
+        elseif utils.is_plugin_installed("lualine.nvim") then
             require("plugins.lualine").config_lualine()
         end
     end
@@ -62,7 +62,7 @@ end
 
 -- Don't need the autocommand when dark-notify is installed
 local utils = require("utils")
-if not utils.is_plugin_loaded("dark-notify") then
+if not utils.is_plugin_installed("dark-notify") then
     vim.api.nvim_create_autocmd({ "FocusGained" }, {
         pattern = "*",
         callback = M.update_colors,
