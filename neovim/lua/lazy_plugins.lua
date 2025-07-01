@@ -116,12 +116,6 @@ return {
                 dir = "repo,cwd",
             }
 
-            require("utils").keymap_set({ "n", "x" }, "gs", "<plug>(GrepperOperator)", {
-                silent = true,
-                noremap = false,
-                desc = "Grepper",
-            })
-
             -- Override Todo command to use Grepper
             vim.api.nvim_create_user_command(
                 "Todo",
@@ -140,6 +134,12 @@ return {
                 vim.api.nvim_create_user_command("Ack", ":GrepperAck <args>", { nargs = "+", desc = "Ack search" })
             end
         end,
+        cmd = {
+            "Todo",
+            "Rg",
+            "Ag",
+            "Ack",
+        },
     },
     {
         -- Quick toggling of Location and Quickfix lists
