@@ -81,6 +81,21 @@ function M.get_default_attach(override_capabilities)
             lsp_keymap("A", vim.lsp.buf.code_action, { mode = "v", desc = "Select code actions" })
         end
 
+        utils.try_require("trouble", function(_)
+            lsp_keymap(
+                "x",
+                "<cmd>Trouble diagnostics toggle filter.buf=" .. bufnr .. "<cr>",
+                { buffer = bufnr, desc = "Show buffer diagnostics" }
+            )
+            lsp_keymap(
+                "X",
+                "<cmd>Trouble diagnostics toggle<cr>",
+                { buffer = bufnr, desc = "Show project diagnostics" }
+            )
+        end, function(_)
+            lsp_keymap("x", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Show buffer diagnostics" })
+        end)
+
         -- Set insert keymap for signature help
         utils.keymap_set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
 

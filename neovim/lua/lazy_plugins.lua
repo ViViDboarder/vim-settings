@@ -266,6 +266,9 @@ return {
             [">=0.7.2"] = "^2",
             ["<0.7.2"] = "^1",
         }),
+        cmd = {
+            "Trouble",
+        },
     },
 
     -- Incremental lsp rename view
