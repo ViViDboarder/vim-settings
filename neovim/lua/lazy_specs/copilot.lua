@@ -114,70 +114,67 @@ vim.list_extend(specs, {
     },
 })
 
-if vim.g.use_locallm then
-    -- For local llms, we use llm.nvim sinc eit will talk to LM Studio
-    table.insert(specs, {
-        -- TODO: Maybe get rid of this and use a local copilot proxy
-        "https://github.com/ViViDboarder/llm.nvim",
-        opts = {
-            backend = "ollama",
-            url = vim.g.local_llm_url or "http://localhost:11434",
-            model = "starcoder2:7b",
-            debounce_ms = 500,
-            keymap = {
-                modes = { "i" },
-                accept = "<C-F>",
-                dismiss = "<C-U>",
-            },
+-- For local llms, we use llm.nvim sinc eit will talk to LM Studio
+table.insert(specs, {
+    -- TODO: Maybe get rid of this and use a local copilot proxy
+    "https://github.com/ViViDboarder/llm.nvim",
+    opts = {
+        backend = "ollama",
+        url = vim.g.local_llm_url or "http://localhost:11434",
+        model = "starcoder2:7b",
+        debounce_ms = 500,
+        keymap = {
+            modes = { "i" },
+            accept = "<C-F>",
+            dismiss = "<C-U>",
         },
-        dependencies = {
-            -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
-            { "https://github.com/tpope/vim-rsi" },
-        },
-    })
-elseif vim.g.install_copilot then
-    -- Otherwise we're using copilot.vim
-    table.insert(specs, {
-        "https://github.com/github/copilot.vim",
-        enabled = vim.g.install_copilot,
-        version = "1.43",
-        config = function()
-            -- Replace keymap for copilot to accept with <C-F> and <Right>, similar to fish shell
-            local utils = require("utils")
+    },
+    dependencies = {
+        -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
+        { "https://github.com/tpope/vim-rsi" },
+    },
+    cond = vim.g.use_locallm,
+})
+table.insert(specs, {
+    "https://github.com/github/copilot.vim",
+    cond = vim.g.install_copilot and not vim.g.use_locallm,
+    version = "1.43",
+    config = function()
+        -- Replace keymap for copilot to accept with <C-F> and <Right>, similar to fish shell
+        local utils = require("utils")
 
-            local function copilot_accept()
-                local suggest = vim.fn["copilot#GetDisplayedSuggestion"]()
-                if next(suggest.item) ~= nil then
-                    return vim.fn["copilot#Accept"]("\\<CR>")
-                else
-                    return utils.t("<Right>")
-                end
+        local function copilot_accept()
+            local suggest = vim.fn["copilot#GetDisplayedSuggestion"]()
+            if next(suggest.item) ~= nil then
+                return vim.fn["copilot#Accept"]("\\<CR>")
+            else
+                return utils.t("<Right>")
             end
+        end
 
-            --[[
-            -- Point to local copilot proxy if using ollama
-            vim.g.copilot_proxy = "http://localhost:11435"
-            vim.g.copilot_proxy_strict_ssl = false
-            --]]
+        --[[
+        -- Point to local copilot proxy if using ollama
+        vim.g.copilot_proxy = "http://localhost:11435"
+        vim.g.copilot_proxy_strict_ssl = false
+        --]]
 
-            vim.g.copilot_no_tab_map = false
-            utils.keymap_set("i", "<C-F>", copilot_accept, { expr = true, replace_keycodes = false, noremap = true })
-            utils.keymap_set("i", "<Right>", copilot_accept, { expr = true, replace_keycodes = false, noremap = true })
+        vim.g.copilot_no_tab_map = false
+        utils.keymap_set("i", "<C-F>", copilot_accept, { expr = true, replace_keycodes = false, noremap = true })
+        utils.keymap_set("i", "<Right>", copilot_accept, { expr = true, replace_keycodes = false, noremap = true })
 
-            -- Create autocmd to disable copilot for certain filetypes that may contain sensitive information
-            vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-                pattern = { ".env*", "*secret*", "*API_KEY*", "*TOKEN*" },
-                command = "let b:copilot_enabled = 0",
-                group = vim.api.nvim_create_augroup("CopilotDisable", {
-                    clear = true,
-                }),
-            })
-        end,
-        dependencies = {
-            -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
-            { "https://github.com/tpope/vim-rsi" },
-        },
-    })
-end
+        -- Create autocmd to disable copilot for certain filetypes that may contain sensitive information
+        vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+            pattern = { ".env*", "*secret*", "*API_KEY*", "*TOKEN*" },
+            command = "let b:copilot_enabled = 0",
+            group = vim.api.nvim_create_augroup("CopilotDisable", {
+                clear = true,
+            }),
+        })
+    end,
+    dependencies = {
+        -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
+        { "https://github.com/tpope/vim-rsi" },
+    },
+})
 
 return specs
