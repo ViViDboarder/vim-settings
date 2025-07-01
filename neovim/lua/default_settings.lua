@@ -45,9 +45,13 @@ vim.api.nvim_create_autocmd({ "CompleteDone" }, {
     group = vim.api.nvim_create_augroup("close_preview", { clear = true }),
 })
 
-local has = vim.fn.has
-vim.g.is_mac = (has("mac") or has("macunix") or has("gui_macvim") or vim.fn.system("uname"):find("^darwin") ~= nil)
-vim.g.is_gui = (vim.g.neovide or has("gui_macvim"))
+vim.g.is_mac = (
+    vim.fn.has("mac")
+    or vim.fn.has("macunix")
+    or vim.fn.has("gui_macvim")
+    or vim.fn.system("uname"):find("^darwin") ~= nil
+)
+vim.g.is_gui = (vim.g.neovide or vim.fn.has("gui_macvim"))
 
 -- Require some local values
 utils.require_with_local("variables")
