@@ -134,33 +134,27 @@ function M.get_default_attach(override_capabilities)
             )
         end
 
-        -- Some override some fuzzy finder bindings to use lsp sources
-        utils.try_require("telescope.builtin", function(telescope_builtin)
-            -- Replace some Telescope bindings with LSP versions
-            local telescope_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
+        utils.try_require("fzf-lua", function(fzf)
+            -- Replace some fzf bindings with LSP versions
+            local finder_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
             if server_capabilities.documentSymbolProvider then
-                telescope_keymap("t", telescope_builtin.lsp_document_symbols, { desc = "Find buffer tags" })
+                finder_keymap("t", fzf.lsp_document_symbols, { desc = "Find buffer tags" })
                 -- Also override the default tag finder
-                utils.keymap_set(
-                    "n",
-                    "<leader>t",
-                    telescope_builtin.lsp_document_symbols,
-                    { desc = "Find buffer tags" }
-                )
+                utils.keymap_set("n", "<leader>t", fzf.lsp_document_symbols, { desc = "Find buffer tags" })
             end
             if server_capabilities.workspaceSymbolProvider then
-                telescope_keymap("T", telescope_builtin.lsp_dynamic_workspace_symbols, { desc = "Find tags" })
+                finder_keymap("T", fzf.lsp_live_workspace_symbols, { desc = "Find tags" })
             end
 
             -- Replace some LSP bindings with Telescope ones
             if server_capabilities.definitionProvider then
-                lsp_keymap("d", telescope_builtin.lsp_definitions, { desc = "Find definition" })
+                lsp_keymap("d", fzf.lsp_definitions, { desc = "Find definition" })
             end
             if server_capabilities.typeDefinitionProvider then
-                lsp_keymap("t", telescope_builtin.lsp_type_definitions, { desc = "Find type definition" })
+                lsp_keymap("t", fzf.lsp_typedefs, { desc = "Find type definition" })
             end
-            lsp_keymap("i", telescope_builtin.lsp_implementations, { desc = "Find implementations" })
-            lsp_keymap("r", telescope_builtin.lsp_references, { desc = "Find references" })
+            lsp_keymap("i", fzf.lsp_implementations, { desc = "Find implementations" })
+            lsp_keymap("r", fzf.lsp_references, { desc = "Find references" })
         end)
 
         -- Attach navic for statusline location
@@ -198,7 +192,11 @@ local maybe_lsp_enable = function(name_or_list)
     -- @return (boolean): Returns true if the server was successfully enabled, false otherwise.
     local maybe_enable_one = function(name)
         -- Check if the LSP server is configured and its executable is available.
-        if vim.lsp.config[name] ~= nil and vim.lsp.config[name].cmd ~= nil and vim.fn.executable(vim.lsp.config[name].cmd[1]) == 1 then
+        if
+            vim.lsp.config[name] ~= nil
+            and vim.lsp.config[name].cmd ~= nil
+            and vim.fn.executable(vim.lsp.config[name].cmd[1]) == 1
+        then
             vim.lsp.enable(name)
 
             return true

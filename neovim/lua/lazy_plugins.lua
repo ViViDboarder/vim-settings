@@ -327,15 +327,19 @@ return {
 
     -- Fuzzy Finder
     {
-        "https://github.com/nvim-telescope/telescope.nvim",
-        dependencies = {
-            { "https://github.com/nvim-lua/plenary.nvim" },
-            { "https://github.com/nvim-telescope/telescope-file-browser.nvim" },
+        "https://github.com/ibhagwan/fzf-lua",
+        version = "0.0.x",
+        opts = {},
+        config = require("plugins.fzf-lua").setup,
+        keys = {
+            { "<C-t>", desc = "Find files" },
+            { "<leader>b", desc = "Find buffers" },
+            { "<leader>t", desc = "Find buffer tags" },
+            { "<leader>*", desc = "Find strings" },
+            { "<leader>s", desc = "Spell suggest" },
+            { "<leader>f", desc = "Finder" },
         },
-        version = "0.1.x",
-        config = function()
-            require("plugins.telescope")
-        end,
+        -- This also ends up getting loaded by lsp configs when bound
         lazy = true,
     },
 

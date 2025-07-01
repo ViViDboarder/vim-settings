@@ -1,4 +1,3 @@
-local utils = require("utils")
 local notify = require("notify")
 local icons = require("icons")
 
@@ -13,8 +12,3 @@ notify.setup({
 })
 
 vim.notify = notify
-
--- Add Telescope keymap
-utils.try_require("telescope", function(telescope)
-    utils.keymap_set("n", "<leader>fn", telescope.extensions.notify.notify, { desc = "Find notifications" })
-end)
