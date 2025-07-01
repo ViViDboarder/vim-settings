@@ -30,6 +30,10 @@ vim.o.scrolljump = 5
 vim.o.scrolloff = 3
 -- vim.o.backspace = "2"
 
+if vim.fn.has("nvim-0.11") == 1 then
+    vim.o.winborder = "rounded"
+end
+
 -- vim.o.mousehide = true
 vim.o.mouse = "a"
 

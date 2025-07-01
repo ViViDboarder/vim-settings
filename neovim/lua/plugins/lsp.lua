@@ -3,9 +3,7 @@ local M = {}
 local utils = require("utils")
 
 function M.config_lsp_ui()
-    if vim.fn.has("nvim-0.11") == 1 then
-        vim.o.winborder = "rounded"
-    else
+    if vim.fn.has("nvim-0.11") ~= 1 then
         -- TODO: remove when 0.11+
         local border = {
             { "┌", "FloatBorder" },
