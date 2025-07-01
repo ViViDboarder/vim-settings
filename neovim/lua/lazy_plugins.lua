@@ -1,7 +1,7 @@
 -- #selene: allow(mixed_table)
 local utils = require("utils")
 return {
-    { import = "lazy.colorschemes" },
+    { import = "lazy_specs.colorschemes" },
     -- Some helpers
     -- Auto and ends to some ifs and dos
     { "https://github.com/tpope/vim-endwise" },
@@ -254,8 +254,8 @@ return {
     -- LSP
 
     -- Debug adapter protocol
-    { import = "lazy.dap" },
-    { import = "lazy.language_servers" },
+    { import = "lazy_specs.dap" },
+    { import = "lazy_specs.language_servers" },
 
     {
         -- Better display of lsp diagnostics
@@ -460,8 +460,8 @@ return {
         config = true,
     },
 
-    { import = "lazy.completion" },
-    { import = "lazy.obsidian" },
+    { import = "lazy_specs.completion" },
+    { import = "lazy_specs.obsidian" },
 
     -- Work things
     -- Sourcegraph
@@ -487,5 +487,5 @@ return {
         enabled = vim.g.install_sourcegraph,
     },
 
-    { import = "lazy.copilot" },
+    { import = "lazy_specs.copilot" },
 }
