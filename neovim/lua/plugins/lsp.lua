@@ -24,9 +24,24 @@ function M.config_lsp_ui()
     end
 
     -- Diagnostics signs
-    for type, icon in pairs(require("icons").diagnostic_signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+    local signs = { text = {}, linehl = {}, numhl = {} }
+    for level_name, icon in pairs(require("icons").diagnostic_signs) do
+        local hl = "DiagnosticSign" .. level_name
+
+        if vim.fn.has("nvim-0.11") == 1 then
+            local level = vim.diagnostic.severity[string.upper(level_name)]
+            if level ~= nil then
+                signs.text[level] = icon
+                signs.linehl[level] = hl
+                signs.numhl[level] = hl
+            end
+        else
+            -- TODO: Remove else block when 0.11+
+            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+        end
+    end
+    if vim.fn.has("nvim-0.11") == 1 then
+        vim.diagnostic.config({ signs = signs })
     end
 end
 
@@ -335,7 +350,7 @@ function M.config_lsp()
             end
 
             -- Configure neodev for when lua-languge-server is installed
-            -- NOTE: Remove when min version is >= 0.10
+            -- TODO: Remove when min version is >= 0.10
             utils.try_require("neodev", function(neodev)
                 local config = {}
                 utils.try_require("dapui", function()
