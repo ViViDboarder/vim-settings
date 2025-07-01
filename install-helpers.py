@@ -335,7 +335,7 @@ def install_linters(langs: set[Language]):
             ],
         )
     if Language.LLM in langs:
-        maybe_pip_install("vectorcode")
+        _ = maybe_pip_install("vectorcode")
 
 
 def install_fixers(langs: set[Language]):
