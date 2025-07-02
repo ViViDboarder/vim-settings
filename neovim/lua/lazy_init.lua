@@ -22,7 +22,7 @@ require("lazy").setup({
     },
     lockfile = vim.fn.stdpath("config") .. "/lazylock-" .. vim.version().major .. "." .. vim.version().minor .. ".json",
     ui = {
-        border = "single",
+        border = "rounded",
         icons = {
             cmd = "⌘",
             config = "🛠",
