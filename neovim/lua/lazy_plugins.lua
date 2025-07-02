@@ -62,6 +62,27 @@ return {
         },
     },
     {
+        "lukas-reineke/indent-blankline.nvim",
+        main = "ibl",
+        ---@module "ibl"
+        ---@type ibl.config
+        opts = {
+            exclude = {
+                filetypes = {
+                    "help",
+                    "markdown",
+                    "text",
+                    "gitcommit",
+                    "gitrebase",
+                    "diff",
+                    "fugitive",
+                    "fugitiveblame",
+                    "startify",
+                },
+            },
+        },
+    },
+    {
         -- Allow wrapping and joining of arguments across multiple lines
         "https://git.sr.ht/~foosoft/argonaut.nvim",
         keys = {
