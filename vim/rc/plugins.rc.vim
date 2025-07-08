@@ -79,6 +79,7 @@ command! TagsUpdate :GutentagsUpdate
 
 " Languages with custom configuration
 " Custom Go
+let g:go_version_warning = 0  " Since I can't pin to specific tags, hide the warning
 Blink 'fatih/vim-go'
 " Custom rust
 let g:rustfmt_autosave = 1
@@ -99,7 +100,6 @@ Blink 'ViViDboarder/force-vim'
 Blink 'ViViDboarder/vim-forcedotcom'
 Blink 'hsanson/vim-android'
 Blink 'pdurbin/vim-tsv'
-" }}
 
 " Themes
 Blink 'altercation/vim-colors-solarized'
