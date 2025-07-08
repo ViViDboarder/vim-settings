@@ -63,6 +63,6 @@
   "vim-togglelist": { "branch": "master", "commit": "48f0d30292efdf20edc883e61b121e6123e03df7" },
   "vim-vinegar": { "branch": "master", "commit": "bb1bcddf43cfebe05eb565a84ab069b357d0b3d6" },
   "which-key.nvim": { "branch": "main", "commit": "fcbf4eea17cb299c02557d576f0d568878e354a4" },
-  "wombat.nvim": { "branch": "main", "commit": "d450f6bc61aeafc1c4792c96c888701e9a6a196b" },
+  "wombat.nvim": { "branch": "plugin-highlights", "commit": "5c792e42f22a5a17013b78d7e3c09df3a1826481" },
   "wombat256.vim": { "branch": "master", "commit": "8734ba45dcf5e38c4d2686b35c94f9fcb30427e2" }
 }
