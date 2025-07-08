@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 from enum import Enum
+from os.path import expanduser
 from typing import cast
 
 
@@ -68,7 +69,7 @@ def should_install_user(command: str) -> bool:
     if not bin_path:
         return True
 
-    if bin_path.startswith(os.path.expanduser("~")):
+    if bin_path.startswith(expanduser("~")):
         return True
 
     print(f"WARNING: Already installed by system. Skipping installation of {command}")
@@ -220,14 +221,14 @@ def install_language_servers(langs: set[Language]):
                     "x86_64=x64",
                     "--extract-all",
                     "--exec",
-                    os.path.expanduser(
+                    expanduser(
                         "echo '#!/bin/sh\\n"
                         + 'exec "$HOME/.local/share/lua-language-server/bin/lua-language-server" "$@"\' >'
                         + " ~/.local/bin/lua-language-server &&"
                         + " chmod +x ~/.local/bin/lua-language-server"
                     ),
                     "lua-language-server-{version}-{system}-{arch}.tar.gz",
-                    os.path.expanduser("~/.local/share/lua-language-server"),
+                    expanduser("~/.local/share/lua-language-server"),
                 ],
             }
         )
@@ -243,7 +244,7 @@ def install_linters(langs: set[Language]):
                 "--extract-files",
                 "shellcheck-{version}/shellcheck",
                 "--exec",
-                os.path.expanduser(
+                expanduser(
                     "mv shellcheck-{version}/shellcheck ~/bin/ && chmod +x ~/bin/shellcheck"
                 ),
                 "--use-temp-dir",
@@ -273,7 +274,7 @@ def install_linters(langs: set[Language]):
                     "--extract-files",
                     "golangci-lint-{version}-{system}-{arch}/golangci-lint",
                     "--exec",
-                    os.path.expanduser(
+                    expanduser(
                         "mv golangci-lint-{version}-{system}-{arch}/golangci-lint ~/bin/"
                     ),
                     "--use-temp-dir",
@@ -287,11 +288,11 @@ def install_linters(langs: set[Language]):
                 "--git-url",
                 "https://github.com/Kampfkarren/selene",
                 "--exec",
-                os.path.expanduser("chmod +x ~/bin/selene"),
+                expanduser("chmod +x ~/bin/selene"),
                 "--extract-files",
                 "selene",
                 "selene-{version}-{system}.zip",
-                os.path.expanduser("~/bin"),
+                expanduser("~/bin"),
             ]
         )
     if Language.DOCKER in langs:
@@ -307,11 +308,11 @@ def install_linters(langs: set[Language]):
                 "--map-arch",
                 f"arm64={hadolint_arm64}",
                 "--exec",
-                os.path.expanduser(
+                expanduser(
                     "mv ~/bin/{} ~/bin/hadolint && chmod +x ~/bin/hadolint"
                 ),
                 "hadolint-{system}-{arch}",
-                os.path.expanduser("~/bin"),
+                expanduser("~/bin"),
             ]
         )
     if Language.TERRAFORM in langs:
@@ -320,18 +321,18 @@ def install_linters(langs: set[Language]):
                 "--git-url",
                 "https://github.com/aquasecurity/tfsec",
                 "--exec",
-                os.path.expanduser("mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec"),
+                expanduser("mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec"),
                 "tfsec-{system}-{arch}",
-                os.path.expanduser("~/bin"),
+                expanduser("~/bin"),
             ],
             tflint=[
                 "--git-url",
                 "https://github.com/terraform-linters/tflint",
                 "--extract-all",
                 "--exec",
-                os.path.expanduser("chmod +x ~/bin/tflint"),
+                expanduser("chmod +x ~/bin/tflint"),
                 "tflint_{system}_{arch}.zip",
-                os.path.expanduser("~/bin"),
+                expanduser("~/bin"),
             ],
         )
     if Language.LLM in langs:
@@ -360,9 +361,9 @@ def install_fixers(langs: set[Language]):
                 "--extract-files",
                 "stylua",
                 "--exec",
-                os.path.expanduser("chmod +x ~/bin/stylua"),
+                expanduser("chmod +x ~/bin/stylua"),
                 "stylua-{system}-{arch}.zip",
-                os.path.expanduser("~/bin"),
+                expanduser("~/bin"),
             ]
         ) or maybe_cargo_install("stylua")
 
@@ -392,10 +393,10 @@ def install_release_gitter():
         _ = maybe_run(
             "wget",
             "-O",
-            os.path.expanduser("~/bin/release-gitter"),
+            expanduser("~/bin/release-gitter"),
             "https://git.iamthefij.com/iamthefij/release-gitter/raw/branch/main/release_gitter.py",
         )
-        _ = maybe_run("chmod", "+x", os.path.expanduser("~/bin/release-gitter"))
+        _ = maybe_run("chmod", "+x", expanduser("~/bin/release-gitter"))
 
 
 def parse_args() -> argparse.Namespace:
@@ -442,7 +443,7 @@ def main():
             "--extract-files",
             "fzf",
             "fzf-{version}-{system}_{arch}.tar.gz",
-            os.path.expanduser("~/bin/"),
+            expanduser("~/bin/"),
         ]
     )
 
