@@ -36,32 +36,7 @@ function M.trailing_whitespace()
     return ""
 end
 
--- Plugin to print name of current CSV column
-M.csv_col = {
-    function()
-        return vim.fn.CSVCol(1)
-    end,
-    cond = function()
-        return vim.bo.filetype == "csv" and vim.fn.exists("*CSVCol") == 1
-    end,
-}
-
--- Configure lualine witha  provided theme
-function M.config_lualine(theme_name)
-    -- Theme name transformations
-    --
-    if theme_name == nil then
-        theme_name = "auto"
-
-        if vim.g.colors_name:find("wombat") ~= nil then
-            -- NOTE: This helps make sure wombat variants work with lualine, however it pins
-            -- the theme to wombat if attempting to change it after lualine is loaded. This
-            -- can be reset using `:lua require('plugins.lualine').config_lualine()`
-            theme_name = "wombat"
-        end
-    end
-
-    -- navic
+function M.navic()
     local code_loc = {}
     utils.try_require("nvim-navic", function(navic)
         local opts = {}
@@ -100,6 +75,34 @@ function M.config_lualine(theme_name)
         code_loc = { "navic" }
     end)
 
+    return code_loc
+end
+
+-- Plugin to print name of current CSV column
+M.csv_col = {
+    function()
+        return vim.fn.CSVCol(1)
+    end,
+    cond = function()
+        return vim.bo.filetype == "csv" and vim.fn.exists("*CSVCol") == 1
+    end,
+}
+
+-- Configure lualine witha  provided theme
+function M.config_lualine(theme_name)
+    -- Theme name transformations
+    --
+    if theme_name == nil then
+        theme_name = "auto"
+
+        if vim.g.colors_name:find("wombat") ~= nil then
+            -- NOTE: This helps make sure wombat variants work with lualine, however it pins
+            -- the theme to wombat if attempting to change it after lualine is loaded. This
+            -- can be reset using `:lua require('plugins.lualine').config_lualine()`
+            theme_name = "wombat"
+        end
+    end
+
     require("lualine").setup({
         options = {
             theme = theme_name,
@@ -117,7 +120,7 @@ function M.config_lualine(theme_name)
                 },
             },
             lualine_b = { "FugitiveHead", "diff" },
-            lualine_c = { { "filename", path = 1 }, code_loc, M.csv_col },
+            lualine_c = { { "filename", path = 1 }, M.navic(), M.csv_col },
             lualine_x = { M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
