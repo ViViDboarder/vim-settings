@@ -7,6 +7,7 @@
 --      vim.g.local_llm_chat_model to change the chat model used by the local llm
 --      vim.g.local_llm_completion_model to change the completion model used by the local llm
 
+local utils = require("utils")
 local specs = {}
 
 -- We don't need any of these things if we're not using Copilot or LocalLM
@@ -72,6 +73,10 @@ vim.list_extend(specs, {
     },
     {
         "olimorris/codecompanion.nvim",
+        version = utils.map_version_rule({
+            [">=0.11.0"] = "^17",
+            ["<0.11.0"] = "^16",
+        }),
         opts = {
             -- TODO: Refactor to a function and dynamically set more values based on copilot or not
             -- so I can use non-default copilot models as well in the strategy config.
@@ -141,8 +146,6 @@ table.insert(specs, {
     version = "1.43",
     config = function()
         -- Replace keymap for copilot to accept with <C-F> and <Right>, similar to fish shell
-        local utils = require("utils")
-
         local function copilot_accept()
             local suggest = vim.fn["copilot#GetDisplayedSuggestion"]()
             if next(suggest.item) ~= nil then
