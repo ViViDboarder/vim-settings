@@ -1,7 +1,7 @@
 {
   "VectorCode": { "branch": "main", "commit": "1820aceec402074cc5a372d871f9b6588062fd67" },
   "argonaut.nvim": { "branch": "master", "commit": "7f03ad8914d815d6a857158e8443dce987f4c890" },
-  "blink.cmp": { "branch": "main", "commit": "3536ce464e82843b00c76718d9bfe1994647d686" },
+  "blink.cmp": { "branch": "main", "commit": "02ee0a164117aa3caf7af80cde3b917ad5effcde" },
   "codecompanion.nvim": { "branch": "main", "commit": "a1a5431e7effefc83ee2422c633ac7ca11880bb5" },
   "copilot.vim": { "branch": "release", "commit": "5015939f131627a6a332c9e3ecad9a7cb4c2e549" },
   "dark-notify": { "branch": "master", "commit": "891adc07dd7b367b840f1e9875b075fd8af4dc52" },
