@@ -4,7 +4,7 @@ local utils = require("utils")
 
 function M.config_lsp_ui()
     if vim.fn.has("nvim-0.11") ~= 1 then
-        -- TODO: remove when 0.11+
+        -- TODO: remove when min version is 0.11
         local border = {
             { "┌", "FloatBorder" },
             { "─", "FloatBorder" },
@@ -36,7 +36,7 @@ function M.config_lsp_ui()
                 signs.numhl[level] = hl
             end
         else
-            -- TODO: Remove else block when 0.11+
+            -- TODO: Remove else block when min version is 0.11
             vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
         end
     end
@@ -317,7 +317,7 @@ function M.config_lsp()
             end
         end)(vim.lsp.handlers["client/registerCapability"])
     else
-        -- TODO: Delete when dropping support for nvim < 0.11
+        -- TODO: Delete when min version is 0.11
         utils.try_require("lspconfig", function(lsp_config)
             local capabilities = M.merged_capabilities()
             local default_attach = M.get_default_attach()
@@ -352,8 +352,8 @@ function M.config_lsp()
             })
 
             -- Set up rust analyzer (preferred) or rls
+            -- TODO: Remove this after min version is 0.10
             -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
-            -- Remove this after min version is >= 0.10
             -- Maybe all lsp configs should be set up as part of their ftconfig
             if not utils.is_plugin_installed("rustaceanvim") then
                 maybe_setup(lsp_config.rust_analyzer, {
@@ -371,7 +371,7 @@ function M.config_lsp()
             end
 
             -- Configure neodev for when lua-languge-server is installed
-            -- TODO: Remove when min version is >= 0.10
+            -- TODO: Remove when min version is 0.10
             utils.try_require("neodev", function(neodev)
                 local config = {}
                 utils.try_require("dapui", function()

@@ -87,6 +87,8 @@ if vim.fn.has("nvim-0.10") == 1 then
         event = "InsertEnter *",
     }
 else
+    -- TODO: Remove when min version is 0.10
+
     -- Fall back to cmp if blink.cmp older nvim
     return {
         "https://github.com/hrsh7th/nvim-cmp",

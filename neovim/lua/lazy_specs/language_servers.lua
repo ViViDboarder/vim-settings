@@ -38,6 +38,7 @@ return {
     {
         -- Neovim language server config
         {
+            -- TODO: Remove when min version is nvim 0.10
             "https://github.com/folke/neodev.nvim",
             version = "^3",
             dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
@@ -70,7 +71,7 @@ return {
                 return
             end
 
-            -- TODO: Remove when dropping nvim 0.10
+            -- TODO: Remove when min version is 0.11
             local lsp = require("plugins.lsp")
             vim.g.rustaceanvim = {
                 server = {

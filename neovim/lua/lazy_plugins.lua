@@ -168,6 +168,7 @@ return {
         },
     },
     {
+        -- TODO: Remove when min version is 0.10
         -- Quick toggling of Location and Quickfix lists
         "https://github.com/milkypostman/vim-togglelist",
         -- Stable plugin, pinning to avoid any issues stemming from possible takeover
