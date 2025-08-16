@@ -490,7 +490,17 @@ return {
             [">=0.8.0"] = utils.nil_val,
             ["<0.8.0"] = "nvim-0.7",
         }),
-        config = true,
+        config = {
+            select = {
+                -- backend = { "builtin" },
+                fzf_lua = {
+                    winopts = {
+                        height = 0.5,
+                        width = 0.5,
+                    },
+                },
+            },
+        },
     },
 
     { import = "lazy_specs.completion" },
