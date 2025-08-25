@@ -36,6 +36,11 @@ if vim.fn.has("nvim-0.10") == 1 then
                 ["<C-d>"] = { "scroll_documentation_down", "fallback" },
             },
 
+            cmdline = {
+                keymap = { preset = "inherit" },
+                completion = { menu = { auto_show = false } },
+            },
+
             appearance = {
                 -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
                 -- Adjusts spacing to ensure icons are aligned
