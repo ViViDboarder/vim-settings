@@ -82,27 +82,4 @@ return {
         end,
         enabled = vim.fn.has("nvim-0.10") == 1,
     },
-
-    {
-        -- Generic linter/formatters in diagnostics API
-        "https://github.com/nvimtools/none-ls.nvim",
-        -- This is lazy and configured after lsps loaded in plugins/lsp.lua
-        lazy = true,
-        branch = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = "0.7-compat",
-            ["<0.7.0"] = utils.nil_val, -- use pinned commit
-        }),
-        commit = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            [">=0.7.0"] = utils.nil_val, -- Use pinned branch
-            [">=0.6.0"] = "4b403d2d724f48150ded41189ae4866492a8158b",
-        }),
-        dependencies = {
-            { "https://github.com/nvimtools/none-ls-extras.nvim" },
-            { "https://github.com/gbprod/none-ls-shellcheck.nvim" },
-            { "https://github.com/nvim-lua/plenary.nvim" },
-            { "https://github.com/neovim/nvim-lspconfig" },
-        },
-    },
 }

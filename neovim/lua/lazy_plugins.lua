@@ -280,9 +280,10 @@ return {
 
     -- LSP
 
-    -- Debug adapter protocol
     { import = "lazy_specs.dap" },
     { import = "lazy_specs.language_servers" },
+    { import = "lazy_specs.linters" },
+    { import = "lazy_specs.fixers" },
 
     {
         -- Better display of lsp diagnostics
