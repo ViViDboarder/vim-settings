@@ -1,8 +1,7 @@
 -- #selene: allow(mixed_table)
 
--- Relies on the following variagbles
---      vim.g.install_copilot to use GitHub Copilot
---      vim.g.use_locallm to set a local LLM provider (default ollama, optional openai)
+-- Relies on the following variable:
+--      vim.g.llm_provider: "github" for GitHub Copilot, "ollama" for local LLM (Ollama), or nil/undefined for none
 --      vim.g.local_llm_url to change the URL for the local llm
 --      vim.g.local_llm_chat_model to change the chat model used by the local llm
 --      vim.g.local_llm_completion_model to change the completion model used by the local llm
@@ -10,8 +9,8 @@
 local utils = require("utils")
 local specs = {}
 
--- We don't need any of these things if we're not using Copilot or LocalLM
-if not vim.g.install_copilot and not vim.g.use_locallm then
+-- Only proceed if a provider is set
+if not vim.g.llm_provider or vim.g.llm_provider == "none" then
     return specs
 end
 
@@ -39,16 +38,18 @@ end
 --- Helper that returns the adapter for CodeCompanion to use
 ---@return string the name of the LLM adapter to use
 local function codecompanion_adapter()
-    if not vim.g.use_locallm then
+    if vim.g.llm_provider == "github" then
         return "copilot"
+    elseif vim.g.llm_provider == "ollama" then
+        if vim.g.local_llm_chat_model ~= nil then
+            return "dynamic"
+        end
+        return "qwen_coder"
     end
 
-    if vim.g.local_llm_chat_model ~= nil then
-        return "dynamic"
-    end
+    vim.notify("Unknown llm_provider: " .. tostring(vim.g.llm_provider), vim.log.levels.WARN)
 
-    -- Return qwen_coder as the default
-    return "qwen_coder"
+    return "unknown"
 end
 
 vim.list_extend(specs, {
@@ -138,11 +139,11 @@ table.insert(specs, {
         -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
         { "https://github.com/tpope/vim-rsi" },
     },
-    cond = vim.g.use_locallm,
+    cond = vim.g.llm_provider == "ollama",
 })
 table.insert(specs, {
     "https://github.com/github/copilot.vim",
-    cond = vim.g.install_copilot and not vim.g.use_locallm,
+    cond = vim.g.llm_provider == "github",
     version = "1.43",
     config = function()
         -- Replace keymap for copilot to accept with <C-F> and <Right>, similar to fish shell
