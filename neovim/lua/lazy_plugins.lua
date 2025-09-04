@@ -25,7 +25,10 @@ return {
     { "https://github.com/vim-scripts/file-line" },
 
     -- Auto ctags generation
-    { "https://github.com/ludovicchabant/vim-gutentags" },
+    {
+        "https://github.com/ludovicchabant/vim-gutentags",
+        event = "VeryLazy",
+    },
 
     {
         -- Make it easier to discover some of my keymaps
