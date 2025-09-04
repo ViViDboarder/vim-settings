@@ -47,6 +47,9 @@ end
 
 function M.get_default_attach(override_capabilities)
     return function(client, bufnr)
+        -- Disable gutentags since we have an LSP
+        vim.g.gutentags_enabled = 0
+
         -- Allow overriding capabilities to avoid duplicate lsps with capabilities
 
         local server_capabilities = client.server_capabilities
