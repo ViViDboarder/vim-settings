@@ -44,7 +44,7 @@ local function codecompanion_adapter()
         if vim.g.local_llm_chat_model ~= nil then
             return "dynamic"
         end
-        return "qwen_coder"
+        return "qwen3_coder"
     end
 
     vim.notify("Unknown llm_provider: " .. tostring(vim.g.llm_provider), vim.log.levels.WARN)
@@ -85,6 +85,8 @@ vim.list_extend(specs, {
                 qwen_coder = ollama("qwen2.5-coder:7b", 16384),
                 starcoder2 = ollama("starcoder2:7b"),
                 devstral = ollama("devstral:24b", 16384),
+                qwen3 = ollama("qwen3:8b", 100000),
+                qwen3_coder = ollama("qwen3-coder:30b", 100000),
                 dynamic = ollama(vim.g.local_llm_chat_model),
             },
             strategies = {
