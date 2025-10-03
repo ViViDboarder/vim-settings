@@ -19,7 +19,9 @@ local function project_note()
         return
     end
 
-    vim.cmd(":ObsidianNew " .. "Projects/" .. remote["path"] .. ".md")
+    local project_name = remote["path"]:gsub("%.git$", "")
+
+    vim.cmd(":ObsidianNew " .. "Projects/" .. project_name .. ".md")
 end
 
 local function auto_git()
