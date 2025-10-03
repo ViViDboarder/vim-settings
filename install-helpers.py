@@ -212,6 +212,9 @@ def install_language_servers(langs: set[Language]):
     if Language.GO in langs:
         _ = maybe_go_install(gopls="golang.org/x/tools/gopls@latest")
     if Language.LUA in langs:
+        lua_ls_share = expanduser("~/.local/share/lua-language-server")
+        shutil.rmtree(lua_ls_share, ignore_errors=True)
+        os.mkdir(lua_ls_share)
         _ = maybe_release_gitter(
             {
                 "lua-language-server": [
@@ -228,7 +231,7 @@ def install_language_servers(langs: set[Language]):
                         + " chmod +x ~/.local/bin/lua-language-server"
                     ),
                     "lua-language-server-{version}-{system}-{arch}.tar.gz",
-                    expanduser("~/.local/share/lua-language-server"),
+                    lua_ls_share,
                 ],
             }
         )
