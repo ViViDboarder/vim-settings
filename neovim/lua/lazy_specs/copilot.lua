@@ -127,7 +127,7 @@ vim.list_extend(specs, {
     },
 })
 
--- For local llms, we use llm.nvim sinc eit will talk to LM Studio
+-- For local llms, we use llm.nvim since it will talk to Ollama
 table.insert(specs, {
     -- TODO: Maybe get rid of this and use a local copilot proxy
     "https://github.com/ViViDboarder/llm.nvim",
