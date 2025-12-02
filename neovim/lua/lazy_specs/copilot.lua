@@ -25,6 +25,9 @@ local function ollama(model, num_ctx)
             env = {
                 url = vim.g.local_llm_url or "http://localhost:11434",
             },
+            opts = {
+                stream = true,
+            },
             schema = {
                 model = {
                     default = model,
@@ -82,12 +85,14 @@ vim.list_extend(specs, {
             -- TODO: Refactor to a function and dynamically set more values based on copilot or not
             -- so I can use non-default copilot models as well in the strategy config.
             adapters = {
-                qwen_coder = ollama("qwen2.5-coder:7b", 16384),
-                starcoder2 = ollama("starcoder2:7b"),
-                devstral = ollama("devstral:24b", 16384),
-                qwen3 = ollama("qwen3:8b", 100000),
-                qwen3_coder = ollama("qwen3-coder:30b", 100000),
-                dynamic = ollama(vim.g.local_llm_chat_model),
+                http = {
+                    qwen_coder = ollama("qwen2.5-coder:7b", 16384),
+                    starcoder2 = ollama("starcoder2:7b"),
+                    devstral = ollama("devstral:24b", 16384),
+                    qwen3 = ollama("qwen3:8b", 100000),
+                    qwen3_coder = ollama("qwen3-coder:30b", 100000),
+                    dynamic = ollama(vim.g.local_llm_chat_model),
+                },
             },
             strategies = {
                 chat = {
