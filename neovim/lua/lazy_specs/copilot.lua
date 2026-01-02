@@ -76,7 +76,7 @@ vim.list_extend(specs, {
         },
     },
     {
-        "olimorris/codecompanion.nvim",
+        "https://github.com/olimorris/codecompanion.nvim",
         version = utils.map_version_rule({
             [">=0.11.0"] = "^17",
             ["<0.11.0"] = "^16",
