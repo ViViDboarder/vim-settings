@@ -21,7 +21,7 @@ local function project_note()
 
     local project_name = remote["path"]:gsub("%.git$", "")
 
-    vim.cmd(":ObsidianNew " .. "Projects/" .. project_name .. ".md")
+    vim.cmd(":Obsidian new " .. "Projects/" .. project_name .. ".md")
 end
 
 local function auto_git()
@@ -200,11 +200,7 @@ return {
         "BufNewFile " .. vault_path .. "/**",
     },
     cmd = {
-        "ObsidianOpen",
-        "ObsidianNew",
-        "ObsidianSearch",
-        "ObsidianNewFromTemplate",
-        "ObsidianWorkspace",
+        "Obsidian",
         "ProjectNote",
     },
 }
