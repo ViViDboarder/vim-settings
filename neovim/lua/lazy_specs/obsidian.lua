@@ -154,10 +154,6 @@ return {
             order = { " ", "x" },
         },
         ui = {
-            checkboxes = {
-                [" "] = { char = "☐", hl_group = "ObsidianTodo" },
-                ["x"] = { char = "✔", hl_group = "ObsidianDone" },
-            },
             external_link_icon = { char = "🔗", hl_group = "ObsidianExtLinkIcon" },
         },
         templates = {
