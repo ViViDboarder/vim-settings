@@ -135,6 +135,7 @@ table.insert(specs, {
         backend = "ollama",
         url = vim.g.local_llm_url or "http://localhost:11434",
         model = "starcoder2:7b",
+        context = 4096,
         debounce_ms = 500,
         keymap = {
             modes = { "i" },
