@@ -98,6 +98,50 @@ return {
             -- Could maybe detect by doing a which debugpy and then reading the interpreter
             -- from the shebang line.
             require("dap-python").setup("~/.local/pipx/venvs/debugpy/bin/python3")
+
+            local py_ath2mod = function(path)
+                local cwd = vim.fn.getcwd()
+                local relative_path = vim.fn.fnamemodify(path, ":." .. cwd)
+                local module_path = relative_path:gsub("%.py$", ""):gsub("/", ".")
+                return module_path
+            end
+
+            table.insert(require("dap").configurations.python, {
+                type = "python",
+                request = "launch",
+                name = "module",
+
+                module = function()
+                    local file_path = vim.fn.expand("%:p")
+                    return py_ath2mod(file_path)
+                end,
+                cwd = "${workspaceFolder}",
+
+                console = "integratedTerminal",
+
+                -- Other options:
+                -- See https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+            })
+            table.insert(require("dap").configurations.python, {
+                type = "python",
+                request = "launch",
+                name = "module:args",
+
+                module = function()
+                    local file_path = vim.fn.expand("%:p")
+                    return py_ath2mod(file_path)
+                end,
+                cwd = "${workspaceFolder}",
+                args = function()
+                    local input = vim.fn.input("Arguments: ")
+                    return vim.split(input, " ")
+                end,
+
+                console = "integratedTerminal",
+
+                -- Other options:
+                -- See https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+            })
         end,
         ft = { "python" },
     },
