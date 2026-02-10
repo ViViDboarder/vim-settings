@@ -12,6 +12,8 @@
 local utils = require("utils")
 local specs = {}
 
+local avante = true
+
 -- Only proceed if a provider is set
 if not vim.g.llm_provider or vim.g.llm_provider == "none" then
     return specs
@@ -93,8 +95,12 @@ vim.list_extend(specs, {
         -- Formatting chat buffers for CodeCompanion can be lazy loaded
         "https://github.com/MeanderingProgrammer/render-markdown.nvim",
         version = "*",
-        ft = { "codecompanion" },
+        ft = {
+            "codecompanion",
+            "Avante",
+        },
         opts = {
+            file_types = { "markdown", "codecompanion", "Avante" },
             render_modes = true, -- Render in ALL modes
             sign = {
                 enabled = false, -- Turn off in the status column
@@ -166,6 +172,30 @@ vim.list_extend(specs, {
             "CodeCompanionChat",
             "CodeCompanionCmd",
         },
+        cond = not avante,
+    },
+    {
+        "https://github.com/yetone/avante.nvim",
+        build = "make",
+        version = false,
+        opts = {
+            instructions_file = "CLAUDE.md",
+            provider = "claude-code",
+            providers = {
+                ollama = {},
+            },
+            acp_providers = {
+                ["claude-code"] = {
+                    -- Assume claude-code-acp is set up outside of nvim using helper installer
+                    command = "claude-code-acp",
+                },
+            },
+        },
+        dependencies = {
+            "https://github.com/nvim-lua/plenary.nvim",
+            "https://github.com/MunifTanjim/nui.nvim",
+        },
+        cond = avante,
     },
 })
 
