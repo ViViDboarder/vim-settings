@@ -1,10 +1,11 @@
 -- #selene: allow(mixed_table)
 
 -- Relies on the following variable:
---      vim.g.llm_provider: "github" for GitHub Copilot, "ollama" for local LLM (Ollama), or nil/undefined for none
+--      vim.g.llm_provider set to "github" for GitHub Copilot, "ollama" for local LLM (Ollama), or nil/undefined for none
 --      vim.g.local_llm_url to change the URL for the local llm
 --      vim.g.local_llm_chat_model to change the chat model used by the local llm
 --      vim.g.local_llm_completion_model to change the completion model used by the local llm
+--      vim.g.llm_claude_code_model: model for use with claude_code
 
 local utils = require("utils")
 local specs = {}
@@ -38,15 +39,33 @@ local function ollama(model, num_ctx)
     end
 end
 
+-- Helper function to return a claude code adapter with a provided model
+local function claude_code(model)
+    if model == nil then
+        model = "opus"
+    end
+
+    return function()
+        return require("codecompanion.adapters").extend("claude_code", {
+            defaults = {
+                model = model,
+            },
+        })
+    end
+end
+
 --- Helper that returns the adapter for CodeCompanion to use
 ---@return string the name of the LLM adapter to use
 local function codecompanion_adapter()
     if vim.g.llm_provider == "github" then
         return "copilot"
+    elseif vim.g.llm_provider == "claude_code" then
+        return "claude_code"
     elseif vim.g.llm_provider == "ollama" then
         if vim.g.local_llm_chat_model ~= nil then
             return "dynamic"
         end
+        -- Default ollama chat model
         return "qwen3_coder"
     end
 
@@ -85,6 +104,9 @@ vim.list_extend(specs, {
             -- TODO: Refactor to a function and dynamically set more values based on copilot or not
             -- so I can use non-default copilot models as well in the strategy config.
             adapters = {
+                acp = {
+                    claude_code = claude_code(vim.g.llm_caude_code_model),
+                },
                 http = {
                     qwen_coder = ollama("qwen2.5-coder:7b", 16384),
                     starcoder2 = ollama("starcoder2:7b"),
