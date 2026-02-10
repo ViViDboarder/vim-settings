@@ -12,6 +12,8 @@ from typing import cast
 class Language(Enum):
     """Supported languages for helper installation."""
 
+    ACP_CLAUDE_CODE = "claude_code"
+    AI = "ai"
     ANSIBLE = "ansible"
     BASH = "bash"
     CSS = "css"
@@ -21,8 +23,8 @@ class Language(Enum):
     JAVASCRIPT = "javascript"
     JSON = "json"
     KOTLIN = "kotlin"
-    LUA = "lua"
     LLM = "llm"
+    LUA = "lua"
     NEOVIM = "neovim"
     PYTHON = "python"
     RUST = "rust"
@@ -35,6 +37,7 @@ class Language(Enum):
 
 # Meta langs are for platforms that consist of multiple languages
 META_LANGS: dict[Language, set[Language]] = {
+    Language.AI: {Language.ACP_CLAUDE_CODE},
     Language.NEOVIM: {Language.VIM, Language.LUA},
     Language.WEB: {Language.CSS, Language.JAVASCRIPT, Language.HTML},
 }
@@ -385,6 +388,12 @@ def install_debuggers(langs: set[Language]):
         _ = maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest")
 
 
+def install_acps(langs: set[Language]):
+    """Install ACP clients."""
+    if Language.ACP_CLAUDE_CODE in langs:
+        _ = maybe_npm_install("@zed-industries/claude-code-acp")
+
+
 def install_release_gitter():
     """
     Install release-gitter.
@@ -409,6 +418,7 @@ def parse_args() -> argparse.Namespace:
     _ = parser.add_argument("langs", nargs="*", type=Language)
     _ = parser.add_argument("--no-language-servers", action="store_true")
     _ = parser.add_argument("--no-debuggers", action="store_true")
+    _ = parser.add_argument("--ai", action="store_true")
     return parser.parse_args()
 
 
@@ -466,6 +476,9 @@ def main():
 
     if not cast(bool, args.no_debuggers):
         install_debuggers(langs)
+
+    if cast(bool, args.ai):
+        install_acps(langs)
 
     print("DONE")
 
