@@ -6,6 +6,7 @@
 --      vim.g.local_llm_chat_model to change the chat model used by the local llm
 --      vim.g.local_llm_completion_model to change the completion model used by the local llm
 --      vim.g.llm_claude_code_model: model for use with claude_code
+--      vim.g.llm_claude_http_model: model to use for claude HTTP
 
 local utils = require("utils")
 local specs = {}
@@ -61,6 +62,11 @@ local function codecompanion_adapter()
         return "copilot"
     elseif vim.g.llm_provider == "claude_code" then
         return "claude_code"
+    elseif vim.g.llm_provider == "claude" then
+        return {
+            name = "anthropic",
+            model = vim.g.llm_claude_http_model or "opus-latest",
+        }
     elseif vim.g.llm_provider == "ollama" then
         if vim.g.local_llm_chat_model ~= nil then
             return "dynamic"
