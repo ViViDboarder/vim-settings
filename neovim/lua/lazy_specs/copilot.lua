@@ -5,8 +5,9 @@
 --      vim.g.local_llm_url to change the URL for the local llm
 --      vim.g.local_llm_chat_model to change the chat model used by the local llm
 --      vim.g.local_llm_completion_model to change the completion model used by the local llm
+--      vim.g.llm_anthropic_url: url to use for anthropic API
+--      vim.g.llm_anthropic_model: model to use for anthropic API
 --      vim.g.llm_claude_code_model: model for use with claude_code
---      vim.g.llm_claude_http_model: model to use for claude HTTP
 
 local utils = require("utils")
 local specs = {}
@@ -62,7 +63,7 @@ local function codecompanion_adapter()
         return "copilot"
     elseif vim.g.llm_provider == "claude_code" then
         return "claude_code"
-    elseif vim.g.llm_provider == "claude" then
+    elseif vim.g.llm_provider == "anthropic" then
         return {
             name = "anthropic",
             model = vim.g.llm_claude_http_model or "opus-latest",
@@ -120,6 +121,19 @@ vim.list_extend(specs, {
                     qwen3 = ollama("qwen3:8b", 100000),
                     qwen3_coder = ollama("qwen3-coder:30b", 100000),
                     dynamic = ollama(vim.g.local_llm_chat_model),
+                    anthropic = function()
+                        local opts = {
+                            env = {
+                                -- Read auth token from claude code settings
+                                -- api_key = "cmd: jq -r .env.ANTHROPIC_AUTH_TOKEN ~/.claude/settings.json",
+                                api_key = "ifij/nvim",
+                            },
+                        }
+                        if vim.g.llm_anthropic_url ~= nil then
+                            opts.url = vim.g.llm_anthropic_url
+                        end
+                        return require("codecompanion.adapters").extend("anthropic", opts)
+                    end,
                 },
             },
             strategies = {
