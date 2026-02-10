@@ -1,13 +1,14 @@
 -- #selene: allow(mixed_table)
+--
+-- Supported llm_providers = copilot | ollama | claude_code | anthropic
 
 -- Relies on the following variable:
 --      vim.g.llm_provider set to "github" for GitHub Copilot, "ollama" for local LLM (Ollama), or nil/undefined for none
---      vim.g.local_llm_url to change the URL for the local llm
---      vim.g.local_llm_chat_model to change the chat model used by the local llm
---      vim.g.local_llm_completion_model to change the completion model used by the local llm
+--      vim.g.llm_completion_provider: provider name for llm completions only. Defaults to vim.g.llm_provider
+--      vim.g.llm_ollama_url to change the URL for the local llm
 --      vim.g.llm_anthropic_url: url to use for anthropic API
---      vim.g.llm_anthropic_model: model to use for anthropic API
---      vim.g.llm_claude_code_model: model for use with claude_code
+--      vim.g.llm_chat_model to change the chat model used by the local llm
+--      vim.g.llm_completion_model to change the completion model used by the local llm, defaults to llm_chat_model
 
 local utils = require("utils")
 local specs = {}
@@ -18,7 +19,7 @@ if not vim.g.llm_provider or vim.g.llm_provider == "none" then
 end
 
 -- Helper function to create local model adapters for Ollama
-local function ollama(model, num_ctx)
+local function ollama_chat_adapter(model, num_ctx)
     if num_ctx == nil then
         num_ctx = 8192
     end
@@ -26,7 +27,7 @@ local function ollama(model, num_ctx)
     return function()
         return require("codecompanion.adapters").extend("ollama", {
             env = {
-                url = vim.g.local_llm_url or "http://localhost:11434",
+                url = vim.g.llm_ollama_url or "http://localhost:11434",
             },
             opts = {
                 stream = true,
@@ -42,9 +43,9 @@ local function ollama(model, num_ctx)
 end
 
 -- Helper function to return a claude code adapter with a provided model
-local function claude_code(model)
+local function claude_code_adapter(model)
     if model == nil then
-        model = "opus"
+        model = vim.g.llm_chat_model or "opus"
     end
 
     return function()
@@ -57,26 +58,45 @@ local function claude_code(model)
 end
 
 --- Helper that returns the adapter for CodeCompanion to use
----@return string the name of the LLM adapter to use
+---@return string|table the name of the LLM adapter to use
 local function codecompanion_adapter()
     if vim.g.llm_provider == "github" then
         return "copilot"
     elseif vim.g.llm_provider == "claude_code" then
         return "claude_code"
-    elseif vim.g.llm_provider == "anthropic" then
+    elseif vim.g.llm_provider == "anthropic" or vim.g.llm_provider == "claude" then
         return {
             name = "anthropic",
-            model = vim.g.llm_claude_http_model or "opus-latest",
+            model = vim.g.llm_chat_model or "opus",
         }
     elseif vim.g.llm_provider == "ollama" then
-        if vim.g.local_llm_chat_model ~= nil then
-            return "dynamic"
+        if vim.g.llm_chat_model ~= nil then
+            return "ollama_dynamic"
         end
         -- Default ollama chat model
         return "qwen3_coder"
     end
 
     vim.notify("Unknown llm_provider: " .. tostring(vim.g.llm_provider), vim.log.levels.WARN)
+
+    return "unknown"
+end
+
+--- Helper that returns provider name for Minuet
+---@return string the name of the provider
+local function minuet_provider()
+    local provider = vim.g.llm_completion_provider or vim.g.llm_provider
+
+    if provider == "claude_code" then
+        -- Might not be strictly compatible, but worth a shot
+        return "claude"
+    elseif provider == "anthropic" or provider == "claude" then
+        return "claude"
+    elseif provider == "ollama" then
+        return "openai_fim_compatible"
+    end
+
+    vim.notify("Unknown llm_provider: " .. tostring(provider), vim.log.levels.WARN)
 
     return "unknown"
 end
@@ -112,21 +132,19 @@ vim.list_extend(specs, {
             -- so I can use non-default copilot models as well in the strategy config.
             adapters = {
                 acp = {
-                    claude_code = claude_code(vim.g.llm_caude_code_model),
+                    claude_code = claude_code_adapter(vim.g.llm_chat_model),
                 },
                 http = {
-                    qwen_coder = ollama("qwen2.5-coder:7b", 16384),
-                    starcoder2 = ollama("starcoder2:7b"),
-                    devstral = ollama("devstral:24b", 16384),
-                    qwen3 = ollama("qwen3:8b", 100000),
-                    qwen3_coder = ollama("qwen3-coder:30b", 100000),
-                    dynamic = ollama(vim.g.local_llm_chat_model),
+                    qwen_coder = ollama_chat_adapter("qwen2.5-coder:7b", 16384),
+                    starcoder2 = ollama_chat_adapter("starcoder2:7b"),
+                    devstral = ollama_chat_adapter("devstral:24b", 16384),
+                    qwen3 = ollama_chat_adapter("qwen3:8b", 100000),
+                    qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
+                    ollama_dynamic = ollama_chat_adapter(vim.g.llm_chat_model),
                     anthropic = function()
                         local opts = {
                             env = {
-                                -- Read auth token from claude code settings
-                                -- api_key = "cmd: jq -r .env.ANTHROPIC_AUTH_TOKEN ~/.claude/settings.json",
-                                api_key = "ifij/nvim",
+                                api_key = "ANTHROPIC_API_KEY",
                             },
                         }
                         if vim.g.llm_anthropic_url ~= nil then
@@ -174,31 +192,58 @@ table.insert(specs, {
     "https://github.com/milanglacier/minuet-ai.nvim",
     opts = {
         virtualtext = {
-            auto_trigger_ft = { "*" },
+            -- auto_trigger_ft = { "*" },
             keymap = {
                 accept = "<A-A>",
                 accept_line = "<C-F>",
                 dismiss = "<C-C>",
             },
         },
-        provider = "openai_fim_compatible",
+        provider = minuet_provider(),
         n_completions = 1,
         context_window = 4096,
         provider_options = {
+            claude = {
+                model = vim.g.llm_completion_model or vim.g.llm_chat_model,
+                end_point = vim.g.llm_anthropic_url,
+            },
             openai_fim_compatible = {
                 api_key = "TERM",
                 name = "Ollama",
-                end_point = (vim.g.local_llm_url or "http://localhost:11434") .. "/v1/completions",
-                model = "qwen2.5-coder:7b",
+                end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
+                model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
             },
         },
     },
+    config = function(_, opts)
+        require("minuet").setup(opts)
+
+        -- Create autocmd to disable completion for certain filetypes that may contain sensitive information
+        vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+            -- pattern = { ".env*", "*secret*", "*API_KEY*", "*TOKEN*" },
+            callback = function(args)
+                if
+                    args.file:match("%.env")
+                    or args.file:match("secret")
+                    or args.file:match("API_KEY")
+                    or args.file:match("TOKEN")
+                then
+                    vim.b.minuet_virtual_text_auto_trigger = false
+                else
+                    vim.b.minuet_virtual_text_auto_trigger = true
+                end
+            end,
+            group = vim.api.nvim_create_augroup("MinuetDisable", {
+                clear = true,
+            }),
+        })
+    end,
     dependencies = {
         -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
         "https://github.com/tpope/vim-rsi",
         "https://github.com/nvim-lua/plenary.nvim",
     },
-    cond = vim.g.llm_provider == "ollama",
+    cond = vim.g.llm_provider ~= "github",
     -- TODO: remove condition when nvim min is 0.10
     enabled = vim.fn.has("nvim-0.10") == 1,
 })
