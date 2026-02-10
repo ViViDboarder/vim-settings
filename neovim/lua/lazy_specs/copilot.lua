@@ -127,27 +127,38 @@ vim.list_extend(specs, {
     },
 })
 
--- For local llms, we use llm.nvim since it will talk to Ollama
+-- For local llms, we use minuet-ai.nvim since it will talk to Ollama
 table.insert(specs, {
-    -- TODO: Maybe get rid of this and use a local copilot proxy
-    "https://github.com/ViViDboarder/llm.nvim",
+    "https://github.com/milanglacier/minuet-ai.nvim",
     opts = {
-        backend = "ollama",
-        url = vim.g.local_llm_url or "http://localhost:11434",
-        model = "starcoder2:7b",
-        context = 4096,
-        debounce_ms = 500,
-        keymap = {
-            modes = { "i" },
-            accept = "<C-F>",
-            dismiss = "<C-U>",
+        virtualtext = {
+            auto_trigger_ft = { "*" },
+            keymap = {
+                accept = "<A-A>",
+                accept_line = "<C-F>",
+                dismiss = "<C-C>",
+            },
+        },
+        provider = "openai_fim_compatible",
+        n_completions = 1,
+        context_window = 4096,
+        provider_options = {
+            openai_fim_compatible = {
+                api_key = "TERM",
+                name = "Ollama",
+                end_point = (vim.g.local_llm_url or "http://localhost:11434") .. "/v1/completions",
+                model = "qwen2.5-coder:7b",
+            },
         },
     },
     dependencies = {
         -- To avoid keymapping conflicts with Ctrl+F, load vim-rsi first
-        { "https://github.com/tpope/vim-rsi" },
+        "https://github.com/tpope/vim-rsi",
+        "https://github.com/nvim-lua/plenary.nvim",
     },
     cond = vim.g.llm_provider == "ollama",
+    -- TODO: remove condition when nvim min is 0.10
+    enabled = vim.fn.has("nvim-0.10") == 1,
 })
 table.insert(specs, {
     "https://github.com/github/copilot.vim",
