@@ -78,6 +78,15 @@ function M.navic()
     return code_loc
 end
 
+function M.minuet()
+    local minuet_status = {}
+    utils.try_require("minuet.lualine", function(minuet_line)
+        minuet_status = { minuet_line }
+    end)
+
+    return minuet_status
+end
+
 -- Plugin to print name of current CSV column
 M.csv_col = {
     function()
@@ -121,7 +130,7 @@ function M.config_lualine(theme_name)
             },
             lualine_b = { "FugitiveHead", "diff" },
             lualine_c = { { "filename", path = 1 }, M.navic(), M.csv_col },
-            lualine_x = { M.custom_ffenc, "filetype" },
+            lualine_x = { M.minuet(), M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
                 { "diagnostics", sources = { "nvim_diagnostic" } },
