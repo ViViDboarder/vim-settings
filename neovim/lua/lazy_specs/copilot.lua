@@ -109,7 +109,10 @@ end
 local function minuet_preset()
     local provider = vim.g.llm_completion_provider or vim.g.llm_provider
 
-    if provider == "claude_code" then
+    if provider == "github" then
+        -- This should not actually be used since we don't load minute for github
+        return "unknown"
+    elseif provider == "claude_code" then
         -- Might not be strictly compatible, but worth a shot
         return "claude"
     elseif provider == "anthropic" or provider == "claude" then
