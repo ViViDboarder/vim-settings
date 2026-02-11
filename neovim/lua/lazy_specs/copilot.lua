@@ -123,7 +123,7 @@ vim.list_extend(specs, {
     {
         "https://github.com/olimorris/codecompanion.nvim",
         version = utils.map_version_rule({
-            [">=0.11.0"] = "^17",
+            [">=0.11.0"] = "^18",
             ["<0.11.0"] = "^16",
         }),
         opts = {
@@ -135,6 +135,9 @@ vim.list_extend(specs, {
                     claude_code_opus = claude_code_adapter("opus-latest"),
                     claude_code_sonnet = claude_code_adapter("sonnet-latest"),
                     claude_code_haiku = claude_code_adapter("haiku-latest"),
+                    opts = {
+                        show_presets = false,
+                    },
                 },
                 http = {
                     ollama = ollama_chat_adapter(vim.g.llm_chat_model),
@@ -152,6 +155,9 @@ vim.list_extend(specs, {
                         end
                         return require("codecompanion.adapters").extend("anthropic", opts)
                     end,
+                    opts = {
+                        show_presets = false,
+                    },
                 },
             },
             strategies = {
