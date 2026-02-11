@@ -22,6 +22,6 @@ repos:
         types: [lua]
       - id: stylua
         name: An opinionated Lua code formatter
-        entry: selene
+        entry: stylua
         language: system
         types: [lua]
