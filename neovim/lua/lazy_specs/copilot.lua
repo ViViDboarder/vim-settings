@@ -82,8 +82,8 @@ local function codecompanion_adapter()
 end
 
 --- Helper that returns provider name for Minuet
----@return string the name of the provider
-local function minuet_provider()
+---@return string the name of the preset
+local function minuet_preset()
     local provider = vim.g.llm_completion_provider or vim.g.llm_provider
 
     if provider == "claude_code" then
@@ -92,7 +92,7 @@ local function minuet_provider()
     elseif provider == "anthropic" or provider == "claude" then
         return "claude"
     elseif provider == "ollama" then
-        return "openai_fim_compatible"
+        return "ollama"
     end
 
     vim.notify("Unknown llm_provider: " .. tostring(provider), vim.log.levels.WARN)
@@ -189,29 +189,42 @@ vim.list_extend(specs, {
 
 -- For local llms, we use minuet-ai.nvim since it will talk to Ollama
 table.insert(specs, {
-    "https://github.com/milanglacier/minuet-ai.nvim",
+    -- "https://github.com/milanglacier/minuet-ai.nvim",
+    "https://github.com/ViViDboarder/minuet-ai.nvim",
+    branch = "initial-preset",
     opts = {
         virtualtext = {
-            -- auto_trigger_ft = { "*" },
             keymap = {
                 accept = "<A-A>",
                 accept_line = "<C-F>",
                 dismiss = "<C-C>",
             },
         },
-        provider = minuet_provider(),
-        n_completions = 1,
-        context_window = 4096,
-        provider_options = {
+        initial_preset = minuet_preset(),
+        presets = {
             claude = {
-                model = vim.g.llm_completion_model or vim.g.llm_chat_model,
-                end_point = vim.g.llm_anthropic_url,
+                provider = "claude",
+                n_completions = 1,
+                context_window = 20000,
+                provider_options = {
+                    claude = {
+                        model = vim.g.llm_completion_model or vim.g.llm_chat_model,
+                        end_point = vim.g.llm_anthropic_url,
+                    },
+                },
             },
-            openai_fim_compatible = {
-                api_key = "TERM",
-                name = "Ollama",
-                end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
-                model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
+            ollama = {
+                provider = "openai_fim_compatible",
+                n_completions = 1,
+                context_window = 4096,
+                provider_options = {
+                    openai_fim_compatible = {
+                        api_key = "TERM",
+                        name = "Ollama",
+                        end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
+                        model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
+                    },
+                },
             },
         },
     },
