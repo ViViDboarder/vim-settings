@@ -6,7 +6,24 @@ import subprocess
 import sys
 from enum import Enum
 from os.path import expanduser
-from typing import cast
+from typing import NamedTuple, cast
+
+
+class SemVer(NamedTuple):
+    """Basic semver parser."""
+    major: int
+    minor: int
+    patch: int
+
+    @classmethod
+    def from_str(cls, s: str) -> "SemVer":
+        parts = s.split(".")
+
+        major = int(parts[0])
+        minor = int(parts[1]) if len(parts) > 1 else 0
+        patch = int(parts[2]) if len(parts) > 2 else 0
+
+        return cls(major, minor, patch)
 
 
 class Language(Enum):
@@ -173,7 +190,7 @@ def maybe_cargo_install(*args: str) -> bool:
 
 
 def maybe_release_gitter(
-    commands_arg: dict[str, list[str]] | None = None, **commands_kwargs: list[str]
+    commands_arg: dict[str, list[str]] | None = None, _force: bool = True, **commands_kwargs: list[str]
 ) -> bool:
     """
     Try to install user binary using release-gitter.
@@ -185,7 +202,7 @@ def maybe_release_gitter(
 
     commands = commands_arg | commands_kwargs
 
-    command_names = [key for key in commands.keys() if should_install_user(key)]
+    command_names = [key for key in commands.keys() if _force or should_install_user(key)]
     if not command_names:
         return True
 
@@ -411,6 +428,36 @@ def install_release_gitter():
         _ = maybe_run("chmod", "+x", expanduser("~/bin/release-gitter"))
 
 
+def install_fzf():
+    """
+    Install fzf
+
+    Checks min version and will override system if version is incompatible with fzf-lua
+    """
+    force_fzf_user = not command_exists("fzf")
+    if not force_fzf_user:
+        # Check min version
+        out = subprocess.check_output(["fzf", "--version"]).decode()
+        version_string = out.split(" ")
+        current_fzf = SemVer.from_str(version_string[0])
+        force_fzf_user = current_fzf < SemVer(0, 39, 0)
+        if force_fzf_user:
+            print("FZF version is too low, installing user")
+
+    _ = maybe_release_gitter(
+        fzf=[
+            "--git-url",
+            "https://github.com/junegunn/fzf",
+            "--extract-files",
+            "fzf",
+            "fzf-{version}-{system}_{arch}.tar.gz",
+            expanduser("~/bin/"),
+        ],
+        _force=force_fzf_user
+    )
+
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
@@ -448,17 +495,8 @@ def main():
     # Release gitter is required for some tools
     install_release_gitter()
 
-    # Install fzf
-    _ = maybe_release_gitter(
-        fzf=[
-            "--git-url",
-            "https://github.com/junegunn/fzf",
-            "--extract-files",
-            "fzf",
-            "fzf-{version}-{system}_{arch}.tar.gz",
-            expanduser("~/bin/"),
-        ]
-    )
+    # Install fzf because it's used by nvim plugin
+    install_fzf()
 
     # Keep a clean PYTHONPATH
     os.environ["PYTHONPATH"] = ""
