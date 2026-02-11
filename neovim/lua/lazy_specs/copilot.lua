@@ -45,6 +45,32 @@ local function ollama_chat_adapter(model, num_ctx)
     end
 end
 
+--- Helper function to return an anthropic adapter for CodeCompanion
+local function anthropic_chat_adapter(model)
+    if model == nil then
+        model = vim.g.llm_chat_model or "opus"
+    end
+
+    local opts = {
+        -- has_token_efficient_tools = false,
+        env = {
+            api_key = "ANTHROPIC_API_KEY",
+        },
+        schema = {
+            model = {
+                default = model,
+            },
+        },
+    }
+    if vim.g.llm_anthropic_url ~= nil then
+        opts.url = vim.g.llm_anthropic_url
+    end
+
+    return function()
+        return require("codecompanion.adapters").extend("anthropic", opts)
+    end
+end
+
 -- Helper function to return a claude code adapter with a provided model
 local function claude_code_adapter(model)
     if model == nil then
@@ -68,10 +94,7 @@ local function codecompanion_adapter()
     elseif vim.g.llm_provider == "claude_code" then
         return "claude_code"
     elseif vim.g.llm_provider == "anthropic" or vim.g.llm_provider == "claude" then
-        return {
-            name = "anthropic",
-            model = vim.g.llm_chat_model or "opus",
-        }
+        return "anthropic"
     elseif vim.g.llm_provider == "ollama" then
         return "ollama"
     end
@@ -144,17 +167,7 @@ vim.list_extend(specs, {
                     ollama_qwen2_5_coder = ollama_chat_adapter("qwen2.5-coder:7b", 16384),
                     ollama_qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
                     ollama_gptoss = ollama_chat_adapter("gpt-oss:20b", 100000),
-                    anthropic = function()
-                        local opts = {
-                            env = {
-                                api_key = "ANTHROPIC_API_KEY",
-                            },
-                        }
-                        if vim.g.llm_anthropic_url ~= nil then
-                            opts.url = vim.g.llm_anthropic_url
-                        end
-                        return require("codecompanion.adapters").extend("anthropic", opts)
-                    end,
+                    anthropic = anthropic_chat_adapter(vim.g.llm_chat_model),
                     opts = {
                         show_presets = false,
                     },
