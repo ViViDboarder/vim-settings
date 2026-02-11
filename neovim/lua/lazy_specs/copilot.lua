@@ -20,6 +20,9 @@ end
 
 -- Helper function to create local model adapters for Ollama
 local function ollama_chat_adapter(model, num_ctx)
+    if model == nil then
+        model = "qwen3-coder:30b"
+    end
     if num_ctx == nil then
         num_ctx = 8192
     end
@@ -70,11 +73,7 @@ local function codecompanion_adapter()
             model = vim.g.llm_chat_model or "opus",
         }
     elseif vim.g.llm_provider == "ollama" then
-        if vim.g.llm_chat_model ~= nil then
-            return "ollama_dynamic"
-        end
-        -- Default ollama chat model
-        return "qwen3_coder"
+        return "ollama"
     end
 
     vim.notify("Unknown llm_provider: " .. tostring(vim.g.llm_provider), vim.log.levels.WARN)
@@ -133,14 +132,15 @@ vim.list_extend(specs, {
             adapters = {
                 acp = {
                     claude_code = claude_code_adapter(vim.g.llm_chat_model),
+                    claude_code_opus = claude_code_adapter("opus-latest"),
+                    claude_code_sonnet = claude_code_adapter("sonnet-latest"),
+                    claude_code_haiku = claude_code_adapter("haiku-latest"),
                 },
                 http = {
-                    qwen_coder = ollama_chat_adapter("qwen2.5-coder:7b", 16384),
-                    starcoder2 = ollama_chat_adapter("starcoder2:7b"),
-                    devstral = ollama_chat_adapter("devstral:24b", 16384),
-                    qwen3 = ollama_chat_adapter("qwen3:8b", 100000),
-                    qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
-                    ollama_dynamic = ollama_chat_adapter(vim.g.llm_chat_model),
+                    ollama = ollama_chat_adapter(vim.g.llm_chat_model),
+                    ollama_qwen2_5_coder = ollama_chat_adapter("qwen2.5-coder:7b", 16384),
+                    ollama_qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
+                    ollama_gptoss = ollama_chat_adapter("gpt-oss:20b", 100000),
                     anthropic = function()
                         local opts = {
                             env = {
