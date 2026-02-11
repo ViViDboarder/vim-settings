@@ -49,7 +49,7 @@ utils.keymap_set("i", "<C-Space>", function()
     else
         return utils.t("<C-x><C-o>")
     end
-end, { expr = true })
+end, { expr = true, desc = "Completion" })
 
 vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
 vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })

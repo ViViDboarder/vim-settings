@@ -37,7 +37,10 @@ if vim.fn.has("nvim-0.10") == 1 then
             },
 
             cmdline = {
-                keymap = { preset = "inherit" },
+                keymap = {
+                    preset = "cmdline",
+                    ["<C-Space>"] = { "show", "select_next" },
+                },
                 completion = { menu = { auto_show = false } },
             },
 
