@@ -375,6 +375,9 @@ return {
             { "<leader>s", desc = "Spell suggest" },
             { "<leader>f", desc = "Finder" },
         },
+        cmd = {
+            "FzfLua",
+        },
         -- This also ends up getting loaded by lsp configs when bound
         lazy = true,
     },
