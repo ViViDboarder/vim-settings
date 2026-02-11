@@ -36,6 +36,7 @@ function M.trailing_whitespace()
     return ""
 end
 
+-- Dynamic navic code location in line
 function M.navic()
     local code_loc = {}
     utils.try_require("nvim-navic", function(navic)
@@ -78,6 +79,7 @@ function M.navic()
     return code_loc
 end
 
+-- Add dynamic minuet fidget
 function M.minuet()
     local minuet_status = {}
     utils.try_require("minuet.lualine", function(minuet_line)
@@ -85,6 +87,68 @@ function M.minuet()
     end)
 
     return minuet_status
+end
+
+local function code_companion_spinner()
+    local cc = require("lualine.component"):extend()
+
+    cc.processing = false
+    cc.spinner_index = 1
+
+    local spinner_symbols = {
+        "⠋",
+        "⠙",
+        "⠹",
+        "⠸",
+        "⠼",
+        "⠴",
+        "⠦",
+        "⠧",
+        "⠇",
+        "⠏",
+    }
+    local spinner_symbols_len = 10
+
+    -- Initializer
+    function cc:init(options)
+        cc.super.init(self, options)
+
+        local group = vim.api.nvim_create_augroup("CodeCompanionHooks", {})
+
+        vim.api.nvim_create_autocmd({ "User" }, {
+            pattern = "CodeCompanionRequest*",
+            group = group,
+            callback = function(request)
+                if request.match == "CodeCompanionRequestStarted" then
+                    self.processing = true
+                elseif request.match == "CodeCompanionRequestFinished" then
+                    self.processing = false
+                end
+            end,
+        })
+    end
+
+    -- Function that runs every time statusline is updated
+    function cc:update_status()
+        if self.processing then
+            self.spinner_index = (self.spinner_index % spinner_symbols_len) + 1
+            return spinner_symbols[self.spinner_index]
+        else
+            return nil
+        end
+    end
+
+    return cc
+end
+
+-- Add dynamic CodeCompanion fidget
+function M.codecompanion()
+    local codecompanion_status = {}
+    utils.try_require("codecompanion.lualine", function(_)
+        codecompanion_status = { code_companion_spinner() }
+    end)
+
+    return codecompanion_status
 end
 
 -- Plugin to print name of current CSV column
@@ -128,7 +192,7 @@ function M.config_lualine(theme_name)
                     end,
                 },
             },
-            lualine_b = { "FugitiveHead", "diff" },
+            lualine_b = { "FugitiveHead", "diff", M.codecompanion() },
             lualine_c = { { "filename", path = 1 }, M.navic(), M.csv_col },
             lualine_x = { M.minuet(), M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
