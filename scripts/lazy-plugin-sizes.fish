@@ -9,7 +9,7 @@ end
 
 function _lazy_plugin_sizes
     echo "Calculating plugin sizes..."
-    _list_loc | sort -h | awk '{printf "%8s %s\n", $1, $2}'
+    _list_loc | sort -h | awk '{sum += $1; printf "%8s %s\n", $1, $2} END { printf" Total: %s\n", sum }'
 end
 
 _lazy_plugin_sizes
