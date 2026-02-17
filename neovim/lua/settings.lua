@@ -1,5 +1,3 @@
-local utils = require("utils")
-
 -- Set backup on
 vim.o.backup = true
 vim.o.backupdir = table.concat({
@@ -53,5 +51,12 @@ vim.g.is_mac = (
 )
 vim.g.is_gui = (vim.g.neovide or vim.fn.has("gui_macvim"))
 
--- Require some local values
-utils.require_with_local("variables")
+-- Use better grep programs
+if vim.fn.executable("rg") == 1 then
+    vim.o.grepprg = "rg --vimgrep --no-heading --color=never"
+    vim.o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
+elseif vim.fn.executable("ag") == 1 then
+    vim.o.grepprg = "ag --vimgrep --nogroup --nocolor"
+elseif vim.fn.executable("ack") == 1 then
+    vim.o.grepprg = "ack"
+end

@@ -3,18 +3,11 @@ if vim.fn.has("nvim-0.9.0") ~= 1 then
 end
 
 -- Helpers
-require("default_settings")
-require("default_bindings")
+local utils = require("utils")
 
--- Use better grep programs
-if vim.fn.executable("rg") == 1 then
-    vim.o.grepprg = "rg --vimgrep --no-heading --color=never"
-    vim.o.grepformat = "%f:%l:%c:%m,%f:%l:%m"
-elseif vim.fn.executable("ag") == 1 then
-    vim.o.grepprg = "ag --vimgrep --nogroup --nocolor"
-elseif vim.fn.executable("ack") == 1 then
-    vim.o.grepprg = "ack"
-end
+utils.require_with_local("variables")
+utils.require_with_local("settings")
+utils.require_with_local("bindings")
 
 if vim.g.neovide then
     require("neovide")
