@@ -50,9 +50,7 @@ function M.update_colors()
 
     -- Update status line theme
     if change then
-        if vim.fn.exists(":AirlineRefresh") == 1 then
-            vim.cmd(":AirlineRefresh")
-        elseif utils.is_plugin_installed("lualine.nvim") then
+        if utils.is_plugin_installed("lualine.nvim") then
             require("plugins.lualine").config_lualine()
         end
     end
