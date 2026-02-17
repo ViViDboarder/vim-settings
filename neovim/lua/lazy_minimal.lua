@@ -108,6 +108,4 @@ return {
         "https://github.com/tweekmonster/startuptime.vim",
         cmd = { "StartupTime" },
     },
-
-    { import = "lazy_specs.completion" },
 }
