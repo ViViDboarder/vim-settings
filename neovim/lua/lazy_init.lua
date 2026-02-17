@@ -17,10 +17,23 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim
 require("lazy").setup({
+    root = vim.fn.stdpath("data") .. "/lazy" .. (vim.g.minimal and "_minimal" or ""),
     spec = {
-        { import = "lazy_plugins" },
+        {
+            import = "lazy_minimal",
+        },
+        {
+            import = "lazy_plugins",
+            enabled = not vim.g.minimal,
+        },
     },
-    lockfile = vim.fn.stdpath("config") .. "/lazylock-" .. vim.version().major .. "." .. vim.version().minor .. ".json",
+    lockfile = vim.fn.stdpath("config")
+        .. "/lazylock-"
+        .. vim.version().major
+        .. "."
+        .. vim.version().minor
+        .. (vim.g.minimal and "-min" or "")
+        .. ".json",
     ui = {
         border = "rounded",
         icons = {

@@ -37,6 +37,7 @@ return {
             'fish -c \'echo "set --path --prepend fish_themes_path (pwd)"/extras"'
             .. "> ~/.config/fish/conf.d/tokyonight.fish' || true"
         ),
+        enabled = not vim.g.minimal,
     },
     priority = 1000,
 }

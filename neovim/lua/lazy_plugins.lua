@@ -1,35 +1,6 @@
 -- #selene: allow(mixed_table)
 local utils = require("utils")
 return {
-    { import = "lazy_specs.colorschemes" },
-    -- Some helpers
-    -- Auto and ends to some ifs and dos
-    { "https://github.com/tpope/vim-endwise" },
-
-    -- Unix commands from vim? Yup!
-    { "https://github.com/tpope/vim-eunuch" },
-
-    -- Adds repeats for custom motions
-    { "https://github.com/tpope/vim-repeat" },
-
-    -- Readline shortcuts
-    { "https://github.com/tpope/vim-rsi" },
-
-    -- Surround motions
-    { "https://github.com/tpope/vim-surround" },
-
-    -- Better netrw
-    { "https://github.com/tpope/vim-vinegar" },
-
-    -- Easier jumping to lines
-    { "https://github.com/vim-scripts/file-line" },
-
-    -- Auto ctags generation
-    {
-        "https://github.com/ludovicchabant/vim-gutentags",
-        event = "VeryLazy",
-    },
-
     {
         -- Make it easier to discover some of my keymaps
         "https://github.com/folke/which-key.nvim",
@@ -57,14 +28,6 @@ return {
         event = "VeryLazy",
     },
     {
-        -- Better commenting
-        "https://github.com/tomtom/tcomment_vim",
-        keys = {
-            { "//", ":TComment<CR>", desc = "Toggle comment" },
-            { "//", ":TCommentBlock<CR>", mode = "v", desc = "Toggle comment" },
-        },
-    },
-    {
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
         ---@module "ibl"
@@ -87,19 +50,6 @@ return {
                     "fugitiveblame",
                     "startify",
                 },
-            },
-        },
-    },
-    {
-        -- Allow wrapping and joining of arguments across multiple lines
-        "https://git.sr.ht/~foosoft/argonaut.nvim",
-        keys = {
-            {
-                "<Leader>a",
-                function()
-                    require("argonaut").reflow(true)
-                end,
-                desc = "Wrap or unwrap arguments",
             },
         },
     },
@@ -130,7 +80,6 @@ return {
             "GDelete",
         },
     },
-
     {
         -- Find text everywhere!
         "https://github.com/mhinz/vim-grepper",
@@ -231,29 +180,12 @@ return {
         },
         enabled = vim.fn.has("nvim-0.10") == 1,
     },
-
     {
         -- Highlight inline colors
         "https://github.com/norcalli/nvim-colorizer.lua",
         config = true,
         cmd = { "ColorizerToggle" },
     },
-
-    {
-        -- Custom status line
-        "https://github.com/nvim-lualine/lualine.nvim",
-        config = function()
-            require("plugins.lualine").config_lualine()
-        end,
-        dependencies = {
-            {
-                "https://github.com/SmiteshP/nvim-navic",
-                dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
-            },
-        },
-        event = "VeryLazy",
-    },
-
     {
         -- On Mac, update colors when dark mode changes
         "https://github.com/cormacrelf/dark-notify",
@@ -268,7 +200,6 @@ return {
         dependencies = { { "https://github.com/nvim-lualine/lualine.nvim" } },
         event = "VeryLazy",
     },
-
     {
         -- Custom start screen
         "https://github.com/mhinz/vim-startify",
@@ -299,6 +230,12 @@ return {
         cmd = {
             "Trouble",
         },
+    },
+    {
+        -- LSP locations in status line
+        "https://github.com/SmiteshP/nvim-navic",
+        dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
+        lazy = true,
     },
 
     -- Incremental lsp rename view
@@ -361,27 +298,6 @@ return {
         },
     },
 
-    -- Fuzzy Finder
-    {
-        "https://github.com/ibhagwan/fzf-lua",
-        version = "0.0.x",
-        opts = {},
-        config = require("plugins.fzf-lua").setup,
-        keys = {
-            { "<C-t>", desc = "Find files" },
-            { "<leader>b", desc = "Find buffers" },
-            { "<leader>t", desc = "Find buffer tags" },
-            { "<leader>*", desc = "Find strings" },
-            { "<leader>s", desc = "Spell suggest" },
-            { "<leader>f", desc = "Finder" },
-        },
-        cmd = {
-            "FzfLua",
-        },
-        -- This also ends up getting loaded by lsp configs when bound
-        lazy = true,
-    },
-
     -- Filetypes
     { "https://github.com/ViViDboarder/vim-forcedotcom" },
     { "https://github.com/hsanson/vim-android" },
@@ -420,32 +336,6 @@ return {
             ["<0.10.0"] = "v0.9.0",
         }),
     },
-    {
-        "https://github.com/sheerun/vim-polyglot",
-        init = function()
-            vim.g.polyglot_disabled = { "go", "rust" }
-        end,
-        config = function()
-            local gid = vim.api.nvim_create_augroup("polyglot_fts", { clear = true })
-            vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-                pattern = { "*/playbooks/*.yml", "*/playbooks/*.yaml" },
-                command = "set filetype=yaml.ansible",
-                group = gid,
-            })
-            vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-                pattern = { "go.mod", "go.sum" },
-                command = "set filetype=gomod",
-                group = gid,
-            })
-        end,
-    },
-
-    -- Debuging nvim config
-    {
-        "https://github.com/tweekmonster/startuptime.vim",
-        cmd = { "StartupTime" },
-    },
-
     -- Fancy todo highlighting
     {
         "https://github.com/folke/todo-comments.nvim",
@@ -509,7 +399,6 @@ return {
         },
     },
 
-    { import = "lazy_specs.completion" },
     { import = "lazy_specs.obsidian" },
 
     -- Work things
