@@ -425,5 +425,5 @@ return {
         enabled = vim.g.install_sourcegraph,
     },
 
-    { import = "lazy_specs.copilot" },
+    { import = "lazy_specs.llm_assist" },
 }

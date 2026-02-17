@@ -183,7 +183,7 @@ vim.list_extend(specs, {
                         vectorcode = {
                             description = "Run VectorCode to retrieve the project context.",
                             callback = function()
-                                return require("vectorcode.integrations").codecompanion.chat.make_tool()
+                                return require("vectorcode.integrations").codecompanion.chat.make_tool("vectorize", nil)
                             end,
                         },
                     },
