@@ -51,7 +51,14 @@ return {
             version = "^1",
             dependencies = { { "https://github.com/neovim/nvim-lspconfig" } },
             ft = "lua",
-            opts = {},
+            opts = {
+                library = {
+                    -- See the configuration section for more details
+                    -- Load luvit types when the `vim.uv` word is found
+                    vim.env.VIMRUNTIME,
+                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                },
+            },
             enabled = vim.fn.has("nvim-0.10") == 1,
         },
     },

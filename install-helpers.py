@@ -239,6 +239,8 @@ def install_language_servers(langs: set[Language]):
             {
                 "lua-language-server": [
                     "--git-url",
+                    "--version",
+                    "3.16.4",  # Pin version due to bug with lazydev.nvim https://github.com/folke/lazydev.nvim/issues/136
                     "https://github.com/LuaLS/lua-language-server",
                     "--map-arch",
                     "x86_64=x64",
