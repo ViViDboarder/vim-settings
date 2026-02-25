@@ -12,8 +12,17 @@ function M.init()
         closed = "▶",
     }
 
+    -- Terms that bug out on double-width unicode characters
+    local known_bad_terms = {
+        ["xterm-kitty"] = true,
+        ["screen"] = true,
+        ["screen-256color"] = true,
+        ["xterm-256color"] = true,
+    }
+    local current_term = vim.env["TERM"] or "unknown"
+
     -- Diagnostics signs
-    if vim.env["TERM"] == "xterm-kitty" then
+    if known_bad_terms[current_term] ~= nil then
         -- Don't use double width emoji for Kitty
         M.diagnostic_signs = {
             Error = "🔥",
@@ -42,7 +51,7 @@ function M.init()
     }
 
     -- Debug control icons
-    if vim.env["TERM"] == "xterm-kitty" then
+    if known_bad_terms[current_term] ~= nil then
         -- Don't use double width emoji for Kitty
         M.debug_control_icons = {
             disconnect = "⏏",
