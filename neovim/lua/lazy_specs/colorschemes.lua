@@ -3,7 +3,7 @@ local utils = require("utils")
 return {
     {
         "https://github.com/ViViDboarder/wombat.nvim",
-        branch = "plugin-highlights",
+        branch = "pack-support",
         opts = function(_, opts)
             -- Set ansi base colors for wombat theme based on terminal program
             local term_program = vim.env.TERM_PROGRAM

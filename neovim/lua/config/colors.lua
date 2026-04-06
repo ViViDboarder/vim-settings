@@ -1,6 +1,8 @@
 -- Update colors based on environment variables
 local M = {}
 
+-- TODO: Maybe put vim.pack.add(...) for colorschemes in here
+
 function M.update_colors()
     local function maybe_set(scope, name, val, force)
         force = force or false
@@ -50,7 +52,7 @@ function M.update_colors()
 
     -- Update status line theme
     if change then
-        if utils.is_plugin_installed("lualine.nvim") then
+        if utils.is_plugin_loaded("lualine.nvim") then
             require("plugins.lualine").config_lualine()
         end
     end

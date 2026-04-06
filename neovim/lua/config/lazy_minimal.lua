@@ -2,26 +2,6 @@
 return {
     { import = "lazy_specs.colorschemes" },
     -- Some helpers
-    -- Auto and ends to some ifs and dos
-    { "https://github.com/tpope/vim-endwise" },
-
-    -- Unix commands from vim? Yup!
-    { "https://github.com/tpope/vim-eunuch" },
-
-    -- Adds repeats for custom motions
-    { "https://github.com/tpope/vim-repeat" },
-
-    -- Readline shortcuts
-    { "https://github.com/tpope/vim-rsi" },
-
-    -- Surround motions
-    { "https://github.com/tpope/vim-surround" },
-
-    -- Better netrw
-    { "https://github.com/tpope/vim-vinegar" },
-
-    -- Easier jumping to lines
-    { "https://github.com/vim-scripts/file-line" },
 
     -- Auto ctags generation
     {

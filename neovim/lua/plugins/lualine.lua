@@ -41,7 +41,7 @@ function M.navic()
     local code_loc = { "" }
     utils.try_require("nvim-navic", function(navic)
         local opts = {}
-        if not require("icons").nerd_font then
+        if not require("config.icons").nerd_font then
             opts.icons = {
                 Array = "𝐴 ",
                 Boolean = "𝐵 ",
@@ -178,7 +178,7 @@ function M.config_lualine(theme_name)
     require("lualine").setup({
         options = {
             theme = theme_name,
-            icons_enabled = require("icons").nerd_font,
+            icons_enabled = require("config.icons").nerd_font,
             component_separators = { left = "|", right = "|" },
             section_separators = { left = "", right = "" },
         },

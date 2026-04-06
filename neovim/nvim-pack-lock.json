@@ -1,0 +1,122 @@
+{
+  "plugins": {
+    "VectorCode": {
+      "rev": "3eacce5ad1c8e439e7dbeab3a8d6bdb6b8aa1cab",
+      "src": "https://github.com/Davidyz/VectorCode",
+      "version": ">=0.0.0"
+    },
+    "argonaut.nvim": {
+      "rev": "7f03ad8914d815d6a857158e8443dce987f4c890",
+      "src": "https://git.sr.ht/~foosoft/argonaut.nvim"
+    },
+    "codecompanion.nvim": {
+      "rev": "7a0bb798cc8ba5736d220aad0bbd4771c9ec676d",
+      "src": "https://github.com/olimorris/codecompanion.nvim",
+      "version": "18.0.0 - 19.0.0"
+    },
+    "copilot.vim": {
+      "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
+      "src": "https://github.com/github/copilot.vim"
+    },
+    "file-line": {
+      "rev": "67c3590b25703444663edcd4188991147b1bc846",
+      "src": "https://github.com/vim-scripts/file-line"
+    },
+    "fzf-lua": {
+      "rev": "9f0432fdd7825ab163520045831a40b6df82ea28",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "lualine.nvim": {
+      "rev": "8811f3f3f4dc09d740c67e9ce399e7a541e2e5b2",
+      "src": "https://github.com/nvim-lualine/lualine.nvim"
+    },
+    "lush.nvim": {
+      "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
+      "src": "https://github.com/rktjmp/lush.nvim"
+    },
+    "minuet-ai.nvim": {
+      "rev": "3d25c24487876676d29d325c01ce108cbdbd0753",
+      "src": "https://github.com/ViViDboarder/minuet-ai.nvim"
+    },
+    "nvim-notify": {
+      "rev": "8701bece920b38ea289b457f902e2ad184131a5d",
+      "src": "https://github.com/rcarriga/nvim-notify"
+    },
+    "nvim-treesitter": {
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "obsidian.nvim": {
+      "rev": "c18b19a08035b57092384f6d28f113bae725baa1",
+      "src": "https://github.com/obsidian-nvim/obsidian.nvim",
+      "version": "3.0.0 - 4.0.0"
+    },
+    "plenary.nvim": {
+      "rev": "b9fd5226c2f76c951fc8ed5923d85e4de065e509",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "quicker.nvim": {
+      "rev": "fc041830fa7cf093786b0d5990d99cf3c7b0c129",
+      "src": "https://github.com/stevearc/quicker.nvim",
+      "version": "1.0.0 - 2.0.0"
+    },
+    "render-markdown.nvim": {
+      "rev": "687de727de91a63b0bff9cff4e71d73f9d40fa77",
+      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+      "version": ">=0.0.0"
+    },
+    "startuptime.vim": {
+      "rev": "dfa57f522d6f61793fe5fea65bca7484751b8ca2",
+      "src": "https://github.com/tweekmonster/startuptime.vim"
+    },
+    "tcomment_vim": {
+      "rev": "48ab639a461d9b8344f7fee06cb69b4374863b13",
+      "src": "https://github.com/tomtom/tcomment_vim"
+    },
+    "vim-endwise": {
+      "rev": "4994afb0cdf956d9a665a14b9c834869e602c396",
+      "src": "https://github.com/tpope/vim-endwise"
+    },
+    "vim-eunuch": {
+      "rev": "e86bb794a1c10a2edac130feb0ea590a00d03f1e",
+      "src": "https://github.com/tpope/vim-eunuch"
+    },
+    "vim-fugitive": {
+      "rev": "96c1009fcf8ce60161cc938d149dd5a66d570756",
+      "src": "https://github.com/tpope/vim-fugitive"
+    },
+    "vim-grepper": {
+      "rev": "acaaf32edaa11d82fb972d2af36b949ec3042928",
+      "src": "https://github.com/mhinz/vim-grepper"
+    },
+    "vim-gutentags": {
+      "rev": "aa47c5e29c37c52176c44e61c780032dfacef3dd",
+      "src": "https://github.com/ludovicchabant/vim-gutentags"
+    },
+    "vim-polyglot": {
+      "rev": "f061eddb7cdcc614c8406847b2bfb53099832a4e",
+      "src": "https://github.com/sheerun/vim-polyglot"
+    },
+    "vim-repeat": {
+      "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",
+      "src": "https://github.com/tpope/vim-repeat"
+    },
+    "vim-rsi": {
+      "rev": "45540637ead22f011e8215f1c90142e49d946a54",
+      "src": "https://github.com/tpope/vim-rsi"
+    },
+    "vim-surround": {
+      "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
+      "src": "https://github.com/tpope/vim-surround"
+    },
+    "vim-vinegar": {
+      "rev": "bb1bcddf43cfebe05eb565a84ab069b357d0b3d6",
+      "src": "https://github.com/tpope/vim-vinegar"
+    },
+    "wombat.nvim": {
+      "rev": "d8e0a3e7e4b57d92f0648c7f50ab5daa32e59f12",
+      "src": "https://github.com/ViViDboarder/wombat.nvim",
+      "version": "'pack-support'"
+    }
+  }
+}

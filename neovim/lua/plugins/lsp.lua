@@ -25,7 +25,7 @@ function M.config_lsp_ui()
 
     -- Diagnostics signs
     local signs = { text = {}, linehl = {}, numhl = {} }
-    for level_name, icon in pairs(require("icons").diagnostic_signs) do
+    for level_name, icon in pairs(require("config.icons").diagnostic_signs) do
         local hl = "DiagnosticSign" .. level_name
 
         if vim.fn.has("nvim-0.11") == 1 then

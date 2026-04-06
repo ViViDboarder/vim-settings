@@ -43,7 +43,7 @@ function M.require_with_local(name)
     return rmod
 end
 
---- Returns whether or not lazy plugin is installed
+--- Returns whether or not plugin is installed
 ---@param name string The plugin name
 ---@return boolean Whether the plugin is installed
 function M.is_plugin_installed(name)
@@ -53,12 +53,21 @@ function M.is_plugin_installed(name)
         if plugin ~= nil then
             is_installed = plugin._.installed
         end
+    end, function()
+        local status, pack_infos = pcall(vim.pack.get, { name }, { info = false })
+        if not status then
+            return
+        end
+
+        for _, _ in ipairs(pack_infos) do
+            is_installed = true
+        end
     end)
 
     return is_installed
 end
 
---- Returns whether or not lazy plugin is loaded
+--- Returns whether or not plugin is loaded
 ---@param name string The plugin name
 ---@return boolean Whether the plugin is loaded
 function M.is_plugin_loaded(name)
@@ -67,6 +76,15 @@ function M.is_plugin_loaded(name)
         local plugin = config.plugins[name]
         if plugin ~= nil then
             is_loaded = plugin._.loaded ~= nil
+        end
+    end, function()
+        local status, pack_infos = pcall(vim.pack.get, { name }, { info = false })
+        if not status then
+            return
+        end
+
+        for _, info in ipairs(pack_infos) do
+            is_loaded = info.active
         end
     end)
 
