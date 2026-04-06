@@ -7,7 +7,7 @@
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
   "file-line": { "branch": "master", "commit": "67c3590b25703444663edcd4188991147b1bc846" },
   "friendly-snippets": { "branch": "main", "commit": "6cd7280adead7f586db6fccbd15d2cac7e2188b9" },
-  "fzf-lua": { "branch": "main", "commit": "1749fedca3a0efdd47918f8b588f7c7abb4e5bd6" },
+  "fzf-lua": { "branch": "main", "commit": "5921997472574fca3880b62949eb8679dc6f5afc" },
   "go.nvim": { "branch": "master", "commit": "421694ad11759ad22d5200cff6a8c69d223ade29" },
   "goyo.vim": { "branch": "master", "commit": "9c72fdf2d202914318581f9f0dd09fd102f8504d" },
   "inc-rename.nvim": { "branch": "main", "commit": "a2f4b564c72ea1f22cba2caa97db603618d16d6f" },
