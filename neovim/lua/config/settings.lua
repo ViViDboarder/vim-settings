@@ -33,6 +33,8 @@ if vim.fn.has("nvim-0.11") == 1 then
 end
 if vim.fn.has("nvim-0.12") == 1 then
     vim.o.pumborder = "rounded"
+    -- TODO: Add border around completion popup when this issue is completed:
+    -- https://github.com/neovim/neovim/issues/38248
 end
 
 -- vim.o.mousehide = true
