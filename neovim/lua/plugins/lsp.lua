@@ -57,6 +57,11 @@ function M.get_default_attach(override_capabilities)
             server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
         end
 
+        if client:supports_method("textDocument/completion") then
+            -- Enable native completion
+            vim.lsp.completion.enable(true, client.id, bufnr)
+        end
+
         -- Mappings
         local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr, group_desc = "LSP" })
         lsp_keymap("h", vim.lsp.buf.hover, { desc = "Display hover" })

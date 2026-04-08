@@ -169,7 +169,6 @@ end
 vim.pack.add({
     {
         src = "https://github.com/stevearc/quicker.nvim",
-        -- event = "FileType qf",
         version = vim.version.range("^1"),
     },
 })
@@ -181,11 +180,14 @@ utils.keymap_set("n", "<F7>", function()
     require("quicker").toggle({ loclist = true })
 end, { desc = "Toggle quickfix" })
 
+-- Using ui2 rather than this for now
+--[[
 -- nvim notify
 vim.pack.add({
     "https://github.com/rcarriga/nvim-notify",
 })
 require("plugins.notify")
+--]]
 
 -- HACK: Bandaid on some complicated plugin specs that I don't want to duplicate
 local lazy2pack = require("lazy2pack")
@@ -194,5 +196,6 @@ local lazy2pack = require("lazy2pack")
 -- TODO: When dropping less than 0.12 I can migrate these, or maybe migrate
 -- them and build an adapter that works the other direction
 lazy2pack.add(require("lazy_specs.obsidian"))
-lazy2pack.add(require("lazy_specs.llm_assist"))
+lazy2pack.add(require("lazy_specs.language_servers"))
+-- lazy2pack.add(require("lazy_specs.llm_assist"))
 lazy2pack.run()

@@ -37,15 +37,18 @@ local function auto_git()
             command = "git",
             args = { "pull" },
             on_exit = function(j, return_val)
-                if return_val == 0 then
-                    vim.notify("Pulled Obsidian notes", vim.log.levels.INFO, { title = "Obsidian" })
-                else
-                    vim.notify(
-                        "Failed to pull Obsidian notes. " .. vim.inspect(j:result()),
-                        vim.log.levels.ERROR,
-                        { title = "Obsidian" }
-                    )
-                end
+                -- vim.notify() can't run on main thread and exit does
+                vim.schedule(function()
+                    if return_val == 0 then
+                        vim.notify("Pulled Obsidian notes", vim.log.levels.INFO, { title = "Obsidian" })
+                    else
+                        vim.notify(
+                            "Failed to pull Obsidian notes. " .. vim.inspect(j:result()),
+                            vim.log.levels.ERROR,
+                            { title = "Obsidian" }
+                        )
+                    end
+                end)
             end,
         }):start()
     end
@@ -56,83 +59,71 @@ local function auto_git()
         group = group_id,
     })
 
-    local Job = require("plenary.job")
-
     -- Create autocommit on save
-    local auto_add = function(next_func)
-        return function(ev)
-            ---@diagnostic disable-next-line: missing-fields
-            Job:new({
-                command = "git",
-                args = { "add", ev.file },
-                on_exit = function(add_j, add_return_val)
-                    if add_return_val ~= 0 then
+    local function _auto_commit(ev)
+        local Job = require("plenary.job")
+        ---@diagnostic disable-next-line: missing-fields
+        local git_add = Job:new({
+            command = "git",
+            args = { "add", ev.file },
+            on_exit = function(add_j, add_return_val)
+                if add_return_val ~= 0 then
+                    -- vim.notify() can't run on main thread and exit does
+                    vim.schedule(function()
                         vim.notify(
                             "Failed to add file to git. " .. vim.inspect(add_j:result()),
                             vim.log.levels.ERROR,
                             { title = "Obsidian" }
                         )
-                        return
-                    end
-
-                    if next_func then
-                        next_func()
-                    end
-                end,
-            }):start()
-        end
-    end
-
-    local auto_commit = function(next_func)
-        return function()
-            local date_string = os.date("%Y-%m-%d %H:%M:%S")
-            ---@diagnostic disable-next-line: missing-fields
-            Job:new({
-                command = "git",
-                args = { "commit", "-m", "Auto commit: " .. date_string },
-                on_exit = function(commit_j, commit_return_val)
-                    if commit_return_val ~= 0 then
+                    end)
+                    return
+                end
+            end,
+        })
+        ---@diagnostic disable-next-line: missing-fields
+        local git_commit = Job:new({
+            command = "git",
+            args = { "commit", "-m", "Auto commit: " .. os.date("%Y-%m-%d %H:%M:%S") },
+            on_exit = function(commit_j, commit_return_val)
+                if commit_return_val ~= 0 then
+                    -- vim.notify() can't run on main thread and exit does
+                    vim.schedule(function()
                         vim.notify(
                             "Failed to commit file to git. " .. vim.inspect(commit_j:result()),
                             vim.log.levels.ERROR,
                             { title = "Obsidian" }
                         )
-                        return
-                    end
-                    if next_func then
-                        next_func()
-                    end
-                end,
-            }):start()
-        end
-    end
+                    end)
+                    return
+                end
+            end,
+        })
 
-    local auto_push = function(next_func)
-        return function()
-            ---@diagnostic disable-next-line: missing-fields
-            Job:new({
-                command = "git",
-                args = { "push" },
-                on_exit = function(push_j, push_return_val)
-                    if push_return_val ~= 0 then
+        ---@diagnostic disable-next-line: missing-fields
+        local git_push = Job:new({
+            command = "git",
+            args = { "push" },
+            on_exit = function(push_j, push_return_val)
+                if push_return_val ~= 0 then
+                    -- vim.notify() can't run on main thread and exit does
+                    vim.schedule(function()
                         vim.notify(
                             "Failed to push Obsidian notes. " .. vim.inspect(push_j:result()),
                             vim.log.levels.ERROR,
                             { title = "Obsidian" }
                         )
-                    end
-
-                    if next_func then
-                        next_func()
-                    end
-                end,
-            }):start()
-        end
+                    end)
+                end
+            end,
+        })
+        git_add:and_then_on_success(git_commit)
+        git_commit:and_then_on_success(git_push)
+        git_add:start()
     end
 
-    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = vault_path .. "/**",
-        callback = auto_add(auto_commit(auto_push())),
+        callback = _auto_commit,
         group = group_id,
     })
 end

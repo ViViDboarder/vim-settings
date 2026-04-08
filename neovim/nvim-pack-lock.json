@@ -26,6 +26,11 @@
       "rev": "9f0432fdd7825ab163520045831a40b6df82ea28",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
+    "lazydev.nvim": {
+      "rev": "01bc2aacd51cf9021eb19d048e70ce3dd09f7f93",
+      "src": "https://github.com/folke/lazydev.nvim",
+      "version": "1.0.0 - 2.0.0"
+    },
     "lualine.nvim": {
       "rev": "8811f3f3f4dc09d740c67e9ce399e7a541e2e5b2",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
@@ -34,9 +39,35 @@
       "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
       "src": "https://github.com/rktjmp/lush.nvim"
     },
+    "mason-lspconfig.nvim": {
+      "rev": "f2fa60409630ec2d24acf84494fb55e1d28d593c",
+      "src": "https://github.com/williamboman/mason-lspconfig.nvim",
+      "version": "2.0.0 - 3.0.0"
+    },
+    "mason.nvim": {
+      "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
+      "src": "https://github.com/williamboman/mason.nvim",
+      "version": "2.0.0 - 3.0.0"
+    },
     "minuet-ai.nvim": {
       "rev": "3d25c24487876676d29d325c01ce108cbdbd0753",
       "src": "https://github.com/ViViDboarder/minuet-ai.nvim"
+    },
+    "none-ls-extras.nvim": {
+      "rev": "14fa31ce8c0268a3b2c9cc14979ecf771982d433",
+      "src": "https://github.com/nvimtools/none-ls-extras.nvim"
+    },
+    "none-ls-shellcheck.nvim": {
+      "rev": "0f84461241e76e376a95fb7391deac82dc3efdbf",
+      "src": "https://github.com/gbprod/none-ls-shellcheck.nvim"
+    },
+    "none-ls.nvim": {
+      "rev": "7f9301e416533b5d74e2fb3b1ce5059eeaed748b",
+      "src": "https://github.com/nvimtools/none-ls.nvim"
+    },
+    "nvim-lspconfig": {
+      "rev": "c588db330592fa477a70d2fee6ba20a57194bdc3",
+      "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-notify": {
       "rev": "8701bece920b38ea289b457f902e2ad184131a5d",
@@ -64,6 +95,11 @@
       "rev": "687de727de91a63b0bff9cff4e71d73f9d40fa77",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim",
       "version": ">=0.0.0"
+    },
+    "rustaceanvim": {
+      "rev": "88575b98bb9937fb9983ddec5e532b67e75ce677",
+      "src": "https://github.com/mrcjkb/rustaceanvim",
+      "version": "6.0.0 - 7.0.0"
     },
     "startuptime.vim": {
       "rev": "dfa57f522d6f61793fe5fea65bca7484751b8ca2",

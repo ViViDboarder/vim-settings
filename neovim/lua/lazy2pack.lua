@@ -34,14 +34,12 @@ end
 function M.add(lazy_spec)
     -- Simple string spec
     if type(lazy_spec) == "string" then
-        M.log("Spec str " .. lazy_spec)
         vim.list_extend(M.specs, { lazy_spec })
         return
     end
 
     -- List of specs
     if type(lazy_spec) == "table" and #lazy_spec > 1 then
-        M.log("Spec list " .. vim.inspect(lazy_spec))
         for _, spec in ipairs(lazy_spec) do
             M.add(spec)
         end
@@ -78,10 +76,15 @@ function M.add(lazy_spec)
 
     local lazy_config = lazy_spec["config"]
     local lazy_opts = lazy_spec["opts"]
+    if lazy_opts ~= nil and lazy_config == nil then
+        lazy_config = true
+    end
+
     -- If we have opts, we need to setup plugin
-    if lazy_opts ~= nil then
+    if lazy_config ~= nil then
         -- If we have a config func, then we use that
-        if lazy_config ~= nil and type(lazy_config) ~= "bool" then
+        if type(lazy_config) ~= "boolean" then
+            M.log("Adding custom config after for: " .. pack_spec.src)
             vim.list_extend(M.after, {
                 function()
                     M.log("Running after for: " .. pack_spec.src)
@@ -90,6 +93,7 @@ function M.add(lazy_spec)
             })
         else
             local module_name = lazy_spec["main"] or get_module_name(pack_spec.src)
+            M.log("Adding default config after for: " .. pack_spec.src)
             vim.list_extend(M.after, {
                 function()
                     M.log("Running after for: " .. pack_spec.src)
