@@ -248,6 +248,7 @@ table.insert(specs, {
     "https://github.com/milanglacier/minuet-ai.nvim",
     branch = "initial-preset",
     opts = minuet_config({
+        before_cursor_filter_length = 10,
         virtualtext = {
             keymap = {
                 accept = "<A-A>",

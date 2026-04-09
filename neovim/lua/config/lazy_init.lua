@@ -20,10 +20,10 @@ require("lazy").setup({
     root = vim.fn.stdpath("data") .. "/lazy" .. (vim.g.minimal and "_minimal" or ""),
     spec = {
         {
-            import = "lazy_minimal",
+            import = "config.lazy_minimal",
         },
         {
-            import = "lazy_plugins",
+            import = "config.lazy_plugins",
             enabled = not vim.g.minimal,
         },
     },

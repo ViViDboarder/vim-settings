@@ -204,7 +204,7 @@ return {
         -- Custom start screen
         "https://github.com/mhinz/vim-startify",
         config = function()
-            require("utils").require_with_local("plugins.startify")
+            require("utils").require_with_local("config.plugins.startify")
         end,
         dependencies = {
             -- Plenary isn't used by startify, but it is used in my config
@@ -296,7 +296,7 @@ return {
             ["==0.9.0"] = "0.9.0",
         }),
         config = function()
-            require("utils").require_with_local("plugins.treesitter").setup()
+            require("utils").require_with_local("config.plugins.treesitter").setup()
         end,
         dependencies = {
             { "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
