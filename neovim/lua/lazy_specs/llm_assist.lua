@@ -251,13 +251,37 @@ table.insert(specs, {
         virtualtext = {
             keymap = {
                 accept = "<A-A>",
-                accept_line = "<C-F>",
                 dismiss = "<C-C>",
             },
         },
     }),
     config = function(_, opts)
         require("minuet").setup(opts)
+
+        -- Map accept line to <C-F> and <Right>
+        -- Make sure vim-rsi is loaded so it doesn't overwrite this keymap
+        vim.cmd.packadd("vim-rsi")
+        local minuet_accept = function()
+            local vt_action = require("minuet.virtualtext").action
+            if vt_action.is_visible() then
+                vt_action.accept_line()
+                return
+            else
+                return utils.t("<Right>")
+            end
+        end
+        utils.keymap_set(
+            "i",
+            "<C-F>",
+            minuet_accept,
+            { desc = "minuet accept line", expr = true, replace_keycodes = false, noremap = true }
+        )
+        utils.keymap_set(
+            "i",
+            "<Right>",
+            minuet_accept,
+            { desc = "minuet accept line", expr = true, replace_keycodes = false, noremap = true }
+        )
 
         -- Create autocmd to disable completion for certain filetypes that may contain sensitive information
         vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {

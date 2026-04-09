@@ -260,4 +260,16 @@ function M.curry_keymap(mode, prefix, default_opts)
     end
 end
 
+--- Get a keymap by mode and left-hand side
+---@param mode string The mode
+---@param lhs string The left-hand side of the mapping
+---@return table|nil The keymap or nil if not found
+function M.get_keymap(mode, lhs)
+    for _, keymap in ipairs(vim.api.nvim_get_keymap(mode)) do
+        if keymap.lhs == lhs then
+            return keymap
+        end
+    end
+end
+
 return M
