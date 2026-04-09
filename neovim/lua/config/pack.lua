@@ -274,6 +274,7 @@ local lazy2pack = require("lazy2pack")
 -- them and build an adapter that works the other direction
 packle.add(lazy2pack.convert(require("lazy_specs.obsidian")))
 packle.add(lazy2pack.convert(require("lazy_specs.language_servers")))
+packle.add(lazy2pack.convert(require("lazy_specs.dap")))
 packle.add(lazy2pack.convert(require("lazy_specs.llm_assist")))
 
 packle.apply()

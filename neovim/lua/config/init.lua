@@ -11,6 +11,8 @@ if vim.g.neovide then
 end
 
 -- Plugins
--- TODO: I might add an if statement here for parallel support of v0.12
--- require("config.lazy_init")
-require("config.pack")
+if vim.fn.has("nvim-0.12.0") == 1 then
+    require("config.pack")
+else
+    require("config.lazy_init")
+end

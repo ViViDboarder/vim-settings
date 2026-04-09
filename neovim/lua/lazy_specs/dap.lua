@@ -27,7 +27,7 @@ return {
             -- dap_mapping("r", dap.repl.open, { desc = "Open REPL" })
             -- dap_mapping("R", dap.repl.run_last, { desc = "Run last" })
 
-            local icons = require("icons")
+            local icons = require("config.icons")
 
             -- Set dap signs
             vim.fn.sign_define(
@@ -60,12 +60,12 @@ return {
         lazy = true,
         opts = {
             icons = {
-                expanded = require("icons").fold.open,
-                collapsed = require("icons").fold.closed,
+                expanded = require("config.icons").fold.open,
+                collapsed = require("config.icons").fold.closed,
                 current_frame = ">",
             },
             controls = {
-                icons = require("icons").debug_control_icons,
+                icons = require("config.icons").debug_control_icons,
             },
         },
         config = function(_, opts)

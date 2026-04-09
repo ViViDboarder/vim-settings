@@ -126,6 +126,40 @@ local function minuet_preset()
     return "unknown"
 end
 
+local function minuet_config(config)
+    local presets = {
+        claude = {
+            provider = "claude",
+            n_completions = 1,
+            context_window = 20000,
+            provider_options = {
+                claude = {
+                    model = vim.g.llm_completion_model or vim.g.llm_chat_model,
+                    end_point = vim.g.llm_anthropic_url,
+                },
+            },
+        },
+        ollama = {
+            provider = "openai_fim_compatible",
+            n_completions = 1,
+            context_window = 4096,
+            provider_options = {
+                openai_fim_compatible = {
+                    api_key = "TERM",
+                    name = "Ollama",
+                    end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
+                    model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
+                },
+            },
+        },
+    }
+
+    config = vim.tbl_extend("force", config, presets[minuet_preset()] or {})
+    config.presets = presets
+
+    return config
+end
+
 vim.list_extend(specs, {
     {
         -- CodeCompanion tool will be lazy loaded
@@ -211,10 +245,9 @@ vim.list_extend(specs, {
 
 -- For local llms, we use minuet-ai.nvim since it will talk to Ollama
 table.insert(specs, {
-    -- "https://github.com/milanglacier/minuet-ai.nvim",
-    "https://github.com/ViViDboarder/minuet-ai.nvim",
+    "https://github.com/milanglacier/minuet-ai.nvim",
     branch = "initial-preset",
-    opts = {
+    opts = minuet_config({
         virtualtext = {
             keymap = {
                 accept = "<A-A>",
@@ -222,40 +255,12 @@ table.insert(specs, {
                 dismiss = "<C-C>",
             },
         },
-        initial_preset = minuet_preset(),
-        presets = {
-            claude = {
-                provider = "claude",
-                n_completions = 1,
-                context_window = 20000,
-                provider_options = {
-                    claude = {
-                        model = vim.g.llm_completion_model or vim.g.llm_chat_model,
-                        end_point = vim.g.llm_anthropic_url,
-                    },
-                },
-            },
-            ollama = {
-                provider = "openai_fim_compatible",
-                n_completions = 1,
-                context_window = 4096,
-                provider_options = {
-                    openai_fim_compatible = {
-                        api_key = "TERM",
-                        name = "Ollama",
-                        end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
-                        model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
-                    },
-                },
-            },
-        },
-    },
+    }),
     config = function(_, opts)
         require("minuet").setup(opts)
 
         -- Create autocmd to disable completion for certain filetypes that may contain sensitive information
         vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-            -- pattern = { ".env*", "*secret*", "*API_KEY*", "*TOKEN*" },
             callback = function(args)
                 if
                     args.file:match("%.env")

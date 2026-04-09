@@ -16,11 +16,12 @@ function M.config_lsp_ui()
             { "│", "FloatBorder" },
         }
         local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-        function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        local function floating_preview_with_border(contents, syntax, opts, ...)
             opts = opts or {}
             opts.border = opts.border or border
             return orig_util_open_floating_preview(contents, syntax, opts, ...)
         end
+        vim.lsp.util.open_floating_preview = floating_preview_with_border
     end
 
     -- Diagnostics signs
@@ -45,6 +46,7 @@ function M.config_lsp_ui()
     end
 end
 
+-- TODO: Simplify signature when min version is 0.11
 function M.get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Disable gutentags since we have an LSP
@@ -160,6 +162,7 @@ function M.get_default_attach(override_capabilities)
             vim.api.nvim_set_hl(0, "LspReferenceRead", { link = "MatchParen" })
             vim.api.nvim_set_hl(0, "LspReferenceText", { link = "MatchParen" })
             vim.api.nvim_set_hl(0, "LspReferenceWrite", { link = "MatchParen" })
+
             local hl_group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
             vim.api.nvim_create_autocmd(
                 { "CursorHold" },
@@ -308,9 +311,15 @@ function M.config_lsp()
         end)
 
         -- Config null-ls after lsps so we can disable for languages that have language servers
-        require("config.plugins.null-ls-config").configure({ on_attach = M.get_default_attach() })
+        require("config.plugins.null-ls-config").configure({})
 
         -- Set up attach functions
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(ev)
+                local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                M.get_default_attach()(client, ev.buf)
+            end,
+        })
         vim.lsp.handlers["client/registerCapability"] = (function(overridden)
             return function(err, res, ctx)
                 local result = overridden(err, res, ctx)

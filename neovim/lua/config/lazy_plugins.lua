@@ -8,7 +8,7 @@ return {
             -- Ignore warnings about config. Turn these on when switching major versions
             notify = false,
             icons = {
-                mappings = require("icons").nerd_font,
+                mappings = require("config.icons").nerd_font,
             },
         },
         version = utils.map_version_rule({
@@ -316,7 +316,7 @@ return {
         },
         config = function()
             require("go").setup({
-                icons = require("icons").nerd_font,
+                icons = require("config.icons").nerd_font,
                 -- I don't like the normal mode keymap because it overrides `w`
                 dap_debug_keymap = false,
                 -- Disable gui setup becuase this is set up with dap-ui
@@ -354,7 +354,7 @@ return {
                     icon = "🩹",
                 },
                 TODO = {
-                    icon = require("icons").diagnostic_signs.Pencil,
+                    icon = require("config.icons").diagnostic_signs.Pencil,
                 },
                 HACK = {
                     icon = "🙈",
@@ -366,7 +366,7 @@ return {
                     icon = "📓",
                 },
                 WARNING = {
-                    icon = require("icons").diagnostic_signs.Warn,
+                    icon = require("config.icons").diagnostic_signs.Warn,
                 },
             },
         },
