@@ -216,6 +216,8 @@ packle.add({
             -- NOTE: This could possibly move into ftplugin files
             local enable_fts = utils.require_with_local("config.plugins.treesitter").ensure_installed
             local ts_gid = vim.api.nvim_create_augroup("treesitter_fts", { clear = true })
+            vim.opt.foldlevel = 99
+            vim.opt.foldlevelstart = 2
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = enable_fts,
                 callback = function()
