@@ -34,7 +34,7 @@ return {
         -- Custom status line
         "https://github.com/nvim-lualine/lualine.nvim",
         config = function()
-            require("plugins.lualine").config_lualine()
+            require("config.plugins.lualine").config_lualine()
         end,
         event = "VeryLazy",
     },
@@ -44,7 +44,7 @@ return {
         "https://github.com/ibhagwan/fzf-lua",
         version = "0.0.x",
         opts = {},
-        config = require("plugins.fzf-lua").setup,
+        config = require("config.plugins.fzf-lua").setup,
         keys = {
             { "<C-t>", desc = "Find files" },
             { "<leader>b", desc = "Find buffers" },

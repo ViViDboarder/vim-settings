@@ -11,9 +11,6 @@ return {
             [">=0.6.1"] = "v0.1.2",
             [">=0.6.0"] = "v0.1.0",
         }),
-        config = function()
-            require("plugins.lsp").setup()
-        end,
     },
     {
         -- Language server installer
@@ -34,6 +31,7 @@ return {
             "MasonUninstallAll",
             "MasonUpdate",
         },
+        cond = false,
     },
     {
         -- Neovim language server config
@@ -79,7 +77,7 @@ return {
             end
 
             -- TODO: Remove when min version is 0.11
-            local lsp = require("plugins.lsp")
+            local lsp = require("config.plugins.lsp")
             vim.g.rustaceanvim = {
                 server = {
                     capabilities = lsp.merged_capabilities(),
@@ -111,5 +109,9 @@ return {
             { "https://github.com/nvim-lua/plenary.nvim" },
             { "https://github.com/neovim/nvim-lspconfig" },
         },
+        config = function()
+            -- This should run after all the LSP plugins are installed
+            require("config.plugins.lsp").setup()
+        end,
     },
 }

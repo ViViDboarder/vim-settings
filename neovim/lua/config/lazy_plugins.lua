@@ -195,7 +195,7 @@ return {
         -- Download latest release on install
         build = "cargo install --git https://github.com/cormacrelf/dark-notify --rev 0d8501ca027b4355ed958b937ed51b37632c60cf",
         config = function()
-            require("plugins.darknotify").run()
+            require("config.plugins.darknotify").run()
         end,
         dependencies = { { "https://github.com/nvim-lualine/lualine.nvim" } },
         event = "VeryLazy",
@@ -272,7 +272,7 @@ return {
         "https://github.com/junegunn/goyo.vim",
         cmd = { "Goyo", "Zen" },
         config = function()
-            require("plugins.goyo-limelight")
+            require("config.plugins.goyo-limelight")
         end,
         dependencies = {
             { "https://github.com/junegunn/limelight.vim", cmd = "Limelight" },
@@ -381,7 +381,7 @@ return {
             ["<0.10.0"] = "3.13.5",
         }),
         config = function()
-            require("plugins.notify")
+            require("config.plugins.notify")
         end,
     },
 

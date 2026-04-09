@@ -1,4 +1,6 @@
 local utils = require("utils")
+local packle = require("packle")
+packle.debug = true
 
 -- Pack helpers
 local function pack_clean()
@@ -44,18 +46,20 @@ local function get_wombat_ansi_colors_name()
         return "ghostty"
     end
 end
-vim.pack.add({
+packle.add({
     {
         src = "https://github.com/ViViDboarder/wombat.nvim",
         version = "pack-support",
+        dependencies = { { src = "https://github.com/rktjmp/lush.nvim" } },
+        after = function()
+            vim.g.wombat_ansi_colors_name = get_wombat_ansi_colors_name()
+            require("config.colors").init()
+        end,
     },
-    { src = "https://github.com/rktjmp/lush.nvim" },
 })
-vim.g.wombat_ansi_colors_name = get_wombat_ansi_colors_name()
-require("config.colors").init()
 
 -- Oldies but goodies
-vim.pack.add({
+packle.add({
     "https://github.com/tpope/vim-endwise",
     -- Unix commands from vim? Yup!
     "https://github.com/tpope/vim-eunuch",
@@ -76,14 +80,14 @@ vim.pack.add({
 })
 
 -- tcomment and keys
-vim.pack.add({
+packle.add({
     "https://github.com/tomtom/tcomment_vim",
 })
 utils.keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
 utils.keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
 
 -- argwrapping
-vim.pack.add({
+packle.add({
     "https://git.sr.ht/~foosoft/argonaut.nvim",
 })
 utils.keymap_set("n", "<Leader>a", function()
@@ -91,10 +95,12 @@ utils.keymap_set("n", "<Leader>a", function()
 end, { desc = "Wrap or unwrap arguments" })
 
 -- FZF lua
-vim.pack.add({
-    "https://github.com/ibhagwan/fzf-lua",
+packle.add({
+    src = "https://github.com/ibhagwan/fzf-lua",
+    after = function()
+        require("config.plugins.fzf-lua").setup()
+    end,
 })
-require("plugins.fzf-lua").setup()
 
 -- Polyglot
 if not vim.g.minimal then
@@ -111,18 +117,22 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     command = "set filetype=gomod",
     group = polyglot_fts_gid,
 })
-vim.pack.add({
+packle.add({
     "https://github.com/sheerun/vim-polyglot",
 })
 
 -- Lualine
-vim.pack.add({ "https://github.com/nvim-lualine/lualine.nvim" })
-require("plugins.lualine").config_lualine()
+packle.add({
+    src = "https://github.com/nvim-lualine/lualine.nvim",
+    after = function()
+        require("config.plugins.lualine").config_lualine()
+    end,
+})
 
 -- A little less minimial
 
 -- Fugitive
-vim.pack.add({
+packle.add({
     {
         src = "https://github.com/tpope/vim-fugitive",
         version = utils.map_version_rule({
@@ -131,16 +141,18 @@ vim.pack.add({
             -- when used in status line.
             ["<0.9.2"] = vim.version.range("3.6"),
         }),
+        after = function()
+            utils.keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
+            utils.keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })
+            utils.keymap_set("n", "gd", "<cmd>Git diff<CR>", { desc = "Git diff" })
+            utils.keymap_set("n", "gs", "<cmd>Git<CR>", { desc = "Git status" })
+            utils.keymap_set("n", "gw", "<cmd>Git write<CR>", { desc = "Git write" })
+        end,
     },
 })
-utils.keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
-utils.keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })
-utils.keymap_set("n", "gd", "<cmd>Git diff<CR>", { desc = "Git diff" })
-utils.keymap_set("n", "gs", "<cmd>Git<CR>", { desc = "Git status" })
-utils.keymap_set("n", "gw", "<cmd>Git write<CR>", { desc = "Git write" })
 
 -- Grepper
-vim.pack.add({ "https://github.com/mhinz/vim-grepper" })
+packle.add({ "https://github.com/mhinz/vim-grepper" })
 -- Grepper settings and shortcuts
 vim.g.grepper = {
     quickfix = 1,
@@ -166,27 +178,29 @@ if vim.fn.executable("ack") == 1 then
 end
 
 -- quicklist customization
-vim.pack.add({
+packle.add({
     {
         src = "https://github.com/stevearc/quicker.nvim",
         version = vim.version.range("^1"),
+        after = function()
+            require("quicker").setup()
+            utils.keymap_set("n", "<F6>", function()
+                require("quicker").toggle()
+            end, { desc = "Toggle quickfix" })
+            utils.keymap_set("n", "<F7>", function()
+                require("quicker").toggle({ loclist = true })
+            end, { desc = "Toggle quickfix" })
+        end,
     },
 })
-require("quicker").setup()
-utils.keymap_set("n", "<F6>", function()
-    require("quicker").toggle()
-end, { desc = "Toggle quickfix" })
-utils.keymap_set("n", "<F7>", function()
-    require("quicker").toggle({ loclist = true })
-end, { desc = "Toggle quickfix" })
 
 -- Using ui2 rather than this for now
 --[[
 -- nvim notify
-vim.pack.add({
+packle.add({
     "https://github.com/rcarriga/nvim-notify",
 })
-require("plugins.notify")
+require("config.plugins.notify")
 --]]
 
 -- HACK: Bandaid on some complicated plugin specs that I don't want to duplicate
@@ -195,7 +209,10 @@ local lazy2pack = require("lazy2pack")
 --
 -- TODO: When dropping less than 0.12 I can migrate these, or maybe migrate
 -- them and build an adapter that works the other direction
-lazy2pack.add(require("lazy_specs.obsidian"))
-lazy2pack.add(require("lazy_specs.language_servers"))
+packle.add(lazy2pack.convert(require("lazy_specs.obsidian")))
+local ls_specs = lazy2pack.convert(require("lazy_specs.language_servers"))
+print(vim.inspect(ls_specs))
+packle.add(ls_specs)
 -- lazy2pack.add(require("lazy_specs.llm_assist"))
-lazy2pack.run()
+
+packle.apply()

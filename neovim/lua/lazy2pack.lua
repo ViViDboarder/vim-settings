@@ -1,9 +1,6 @@
 local M = {}
 
 M.debug = false
-M.specs = {}
-M.before = {}
-M.after = {}
 
 local function get_module_name(repo)
     -- normalize (remove protocol if present)
@@ -31,32 +28,38 @@ function M.log(value)
     end
 end
 
-function M.add(lazy_spec)
+function M.convert(lazy_spec)
+    if lazy_spec == nil then
+        return nil
+    end
+
     -- Simple string spec
     if type(lazy_spec) == "string" then
-        vim.list_extend(M.specs, { lazy_spec })
-        return
+        M.log("Converting string lazy spec " .. lazy_spec)
+        return { src = lazy_spec }
     end
 
     -- List of specs
     if type(lazy_spec) == "table" and #lazy_spec > 1 then
+        local spec_list = {}
         for _, spec in ipairs(lazy_spec) do
-            M.add(spec)
+            local pack_spec = M.convert(spec)
+            if pack_spec ~= nil then
+                spec_list = vim.list_extend(spec_list, { pack_spec })
+            end
         end
-        return
+
+        if #spec_list == 0 then
+            return nil
+        end
+
+        return spec_list
     end
 
     -- Ignore disabled
     if lazy_spec.cond == false or lazy_spec.enabled == false then
-        return
-    end
-
-    -- First add deps
-    local lazy_deps = lazy_spec["dependencies"]
-    if lazy_deps ~= nil then
-        for _, dep in ipairs(lazy_deps) do
-            M.add(dep)
-        end
+        M.log("Spec " .. lazy_spec[1] .. " is nil")
+        return nil
     end
 
     -- Convert spec
@@ -66,13 +69,9 @@ function M.add(lazy_spec)
     local lazy_version = lazy_spec["version"]
     if lazy_version ~= nil then
         pack_spec.version = vim.version.range(lazy_version)
+    else
+        pack_spec.version = lazy_spec["commit"] or lazy_spec["branch"]
     end
-
-    M.log("Adding pack spec")
-    M.log(vim.inspect(pack_spec))
-
-    -- Add new pack spec to spec list
-    vim.list_extend(M.specs, { pack_spec })
 
     local lazy_config = lazy_spec["config"]
     local lazy_opts = lazy_spec["opts"]
@@ -84,53 +83,36 @@ function M.add(lazy_spec)
     if lazy_config ~= nil then
         -- If we have a config func, then we use that
         if type(lazy_config) ~= "boolean" then
-            M.log("Adding custom config after for: " .. pack_spec.src)
-            vim.list_extend(M.after, {
-                function()
-                    M.log("Running after for: " .. pack_spec.src)
-                    lazy_config(nil, lazy_opts)
-                end,
-            })
+            M.log("Creating custom config after for: " .. pack_spec.src)
+            pack_spec.after = function()
+                M.log("Running after for: " .. pack_spec.src)
+                lazy_config(nil, lazy_opts)
+            end
         else
             local module_name = lazy_spec["main"] or get_module_name(pack_spec.src)
-            M.log("Adding default config after for: " .. pack_spec.src)
-            vim.list_extend(M.after, {
-                function()
-                    M.log("Running after for: " .. pack_spec.src)
-                    local status, module = pcall(require, module_name)
-                    if not status then
-                        vim.notify(
-                            "Could not import " .. module_name .. " from " .. pack_spec.src,
-                            vim.log.levels.ERROR
-                        )
-                        return
-                    end
+            M.log("Creating default config after for: " .. pack_spec.src)
+            pack_spec.after = function()
+                M.log("Running after for: " .. pack_spec.src)
+                local status, module = pcall(require, module_name)
+                if not status then
+                    vim.notify("Could not import " .. module_name .. " from " .. pack_spec.src, vim.log.levels.ERROR)
+                    return
+                end
 
-                    local setup = module["setup"] or module["init"]
-                    if setup == nil then
-                        vim.notify("Could not find setup function for " .. module_name, vim.log.levels.ERROR)
-                        return
-                    end
+                local setup = module["setup"] or module["init"]
+                if setup == nil then
+                    vim.notify("Could not find setup function for " .. module_name, vim.log.levels.ERROR)
+                    return
+                end
 
-                    setup(lazy_opts)
-                end,
-            })
+                setup(lazy_opts)
+            end
         end
     end
-end
 
-function M.run()
-    for _, before in ipairs(M.before) do
-        before()
-    end
+    M.log("Converted lazy spec to " .. vim.inspect(pack_spec))
 
-    M.log("Loading specs")
-    M.log(vim.inspect(M.specs))
-    vim.pack.add(M.specs)
-
-    for _, after in ipairs(M.after) do
-        after()
-    end
+    return pack_spec
 end
 
 return M

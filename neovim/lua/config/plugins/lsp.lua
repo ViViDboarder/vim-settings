@@ -308,7 +308,7 @@ function M.config_lsp()
         end)
 
         -- Config null-ls after lsps so we can disable for languages that have language servers
-        require("plugins.null-ls").configure({ on_attach = M.get_default_attach() })
+        require("config.plugins.null-ls-config").configure({ on_attach = M.get_default_attach() })
 
         -- Set up attach functions
         vim.lsp.handlers["client/registerCapability"] = (function(overridden)
@@ -432,7 +432,7 @@ function M.config_lsp()
             end)
 
             -- Config null-ls after lsps so we can disable for languages that have language servers
-            require("plugins.null-ls").configure(default_setup)
+            require("config.plugins.null-ls-config").configure(default_setup)
         end)
     end
 end

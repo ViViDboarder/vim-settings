@@ -53,7 +53,7 @@ function M.update_colors()
     -- Update status line theme
     if change then
         if utils.is_plugin_loaded("lualine.nvim") then
-            require("plugins.lualine").config_lualine()
+            require("config.plugins.lualine").config_lualine()
         end
     end
 
