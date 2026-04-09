@@ -200,6 +200,23 @@ packle.add({
             utils.keymap_set("n", "<F7>", function()
                 require("quicker").toggle({ loclist = true })
             end, { desc = "Toggle quickfix" })
+
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = "qf",
+                callback = function()
+                    utils.try_require("quicker", function(quicker)
+                        utils.keymap_set("n", ">", function()
+                            quicker.expand({ before = 2, after = 2, add_to_existing = true })
+                        end, { desc = "Expand quickfix context", buffer = true })
+                        utils.keymap_set("n", "<", function()
+                            quicker.collapse()
+                        end, { desc = "Collapse quickfix context", buffer = true })
+                        utils.keymap_set("n", "<C-r>", function()
+                            quicker.refresh()
+                        end, { desc = "Refresh quickfix context", buffer = true })
+                    end)
+                end,
+            })
         end,
     },
 })
