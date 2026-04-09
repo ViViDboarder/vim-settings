@@ -65,6 +65,7 @@ function M.convert(lazy_spec)
     -- Convert spec
     local pack_spec = {}
     pack_spec.src = lazy_spec[1]
+    pack_spec.dependencies = lazy_spec.dependencies
 
     local lazy_version = lazy_spec["version"]
     if lazy_version ~= nil then

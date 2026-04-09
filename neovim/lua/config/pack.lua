@@ -1,6 +1,6 @@
 local utils = require("utils")
 local packle = require("packle")
-packle.debug = true
+-- packle.debug = true
 
 -- Pack helpers
 local function pack_clean()
@@ -33,25 +33,25 @@ vim.api.nvim_create_user_command("PackList", function()
 end, { desc = "List packs" })
 
 -- Installed packs below
-
--- Wombat colorscheme
-local function get_wombat_ansi_colors_name()
-    -- Set ansi base colors for wombat theme based on terminal program
-    local term_program = vim.env.TERM_PROGRAM
-    local term_profile = vim.env.TERM_PROFILE
-
-    if term_program == "iTerm.app" or term_profile == "Wombat-iTerm" then
-        return "iterm2"
-    elseif term_program == "ghostty" then
-        return "ghostty"
-    end
-end
 packle.add({
     {
         src = "https://github.com/ViViDboarder/wombat.nvim",
         version = "pack-support",
-        dependencies = { { src = "https://github.com/rktjmp/lush.nvim" } },
+        dependencies = { "https://github.com/rktjmp/lush.nvim" },
         after = function()
+            -- Wombat colorscheme
+            local function get_wombat_ansi_colors_name()
+                -- Set ansi base colors for wombat theme based on terminal program
+                local term_program = vim.env.TERM_PROGRAM
+                local term_profile = vim.env.TERM_PROFILE
+
+                if term_program == "iTerm.app" or term_profile == "Wombat-iTerm" then
+                    return "iterm2"
+                elseif term_program == "ghostty" then
+                    return "ghostty"
+                end
+            end
+
             vim.g.wombat_ansi_colors_name = get_wombat_ansi_colors_name()
             require("config.colors").init()
         end,
@@ -81,18 +81,22 @@ packle.add({
 
 -- tcomment and keys
 packle.add({
-    "https://github.com/tomtom/tcomment_vim",
+    src = "https://github.com/tomtom/tcomment_vim",
+    after = function()
+        utils.keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
+        utils.keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
+    end,
 })
-utils.keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
-utils.keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
 
 -- argwrapping
 packle.add({
-    "https://git.sr.ht/~foosoft/argonaut.nvim",
+    src = "https://git.sr.ht/~foosoft/argonaut.nvim",
+    after = function()
+        utils.keymap_set("n", "<Leader>a", function()
+            require("argonaut").reflow(true)
+        end, { desc = "Wrap or unwrap arguments" })
+    end,
 })
-utils.keymap_set("n", "<Leader>a", function()
-    require("argonaut").reflow(true)
-end, { desc = "Wrap or unwrap arguments" })
 
 -- FZF lua
 packle.add({
@@ -103,22 +107,24 @@ packle.add({
 })
 
 -- Polyglot
-if not vim.g.minimal then
-    vim.g.polyglot_disabled = { "go", "rust" }
-end
-local polyglot_fts_gid = vim.api.nvim_create_augroup("polyglot_fts", { clear = true })
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = { "*/playbooks/*.yml", "*/playbooks/*.yaml" },
-    command = "set filetype=yaml.ansible",
-    group = polyglot_fts_gid,
-})
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    pattern = { "go.mod", "go.sum" },
-    command = "set filetype=gomod",
-    group = polyglot_fts_gid,
-})
 packle.add({
-    "https://github.com/sheerun/vim-polyglot",
+    src = "https://github.com/sheerun/vim-polyglot",
+    after = function()
+        if not vim.g.minimal then
+            vim.g.polyglot_disabled = { "go", "rust" }
+        end
+        local polyglot_fts_gid = vim.api.nvim_create_augroup("polyglot_fts", { clear = true })
+        vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+            pattern = { "*/playbooks/*.yml", "*/playbooks/*.yaml" },
+            command = "set filetype=yaml.ansible",
+            group = polyglot_fts_gid,
+        })
+        vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+            pattern = { "go.mod", "go.sum" },
+            command = "set filetype=gomod",
+            group = polyglot_fts_gid,
+        })
+    end,
 })
 
 -- Lualine
@@ -152,30 +158,34 @@ packle.add({
 })
 
 -- Grepper
-packle.add({ "https://github.com/mhinz/vim-grepper" })
--- Grepper settings and shortcuts
-vim.g.grepper = {
-    quickfix = 1,
-    open = 1,
-    switch = 0,
-    jump = 0,
-    tools = { "git", "rg", "ag", "ack", "pt", "grep" },
-    dir = "repo,cwd",
-}
+packle.add({
+    src = "https://github.com/mhinz/vim-grepper",
+    after = function()
+        -- Grepper settings and shortcuts
+        vim.g.grepper = {
+            quickfix = 1,
+            open = 1,
+            switch = 0,
+            jump = 0,
+            tools = { "git", "rg", "ag", "ack", "pt", "grep" },
+            dir = "repo,cwd",
+        }
 
--- Override Todo command to use Grepper
-vim.api.nvim_create_user_command("Todo", ":Grepper -noprompt -query TODO", { desc = "Search for TODO tags" })
+        -- Override Todo command to use Grepper
+        vim.api.nvim_create_user_command("Todo", ":Grepper -noprompt -query TODO", { desc = "Search for TODO tags" })
 
--- Make some shortands for various grep programs
-if vim.fn.executable("rg") == 1 then
-    vim.api.nvim_create_user_command("Rg", ":GrepperRg <args>", { nargs = "+", desc = "Ripgrep" })
-end
-if vim.fn.executable("ag") == 1 then
-    vim.api.nvim_create_user_command("Ag", ":GrepperAg <args>", { nargs = "+", desc = "Silversearcher" })
-end
-if vim.fn.executable("ack") == 1 then
-    vim.api.nvim_create_user_command("Ack", ":GrepperAck <args>", { nargs = "+", desc = "Ack search" })
-end
+        -- Make some shortands for various grep programs
+        if vim.fn.executable("rg") == 1 then
+            vim.api.nvim_create_user_command("Rg", ":GrepperRg <args>", { nargs = "+", desc = "Ripgrep" })
+        end
+        if vim.fn.executable("ag") == 1 then
+            vim.api.nvim_create_user_command("Ag", ":GrepperAg <args>", { nargs = "+", desc = "Silversearcher" })
+        end
+        if vim.fn.executable("ack") == 1 then
+            vim.api.nvim_create_user_command("Ack", ":GrepperAck <args>", { nargs = "+", desc = "Ack search" })
+        end
+    end,
+})
 
 -- quicklist customization
 packle.add({
@@ -190,6 +200,55 @@ packle.add({
             utils.keymap_set("n", "<F7>", function()
                 require("quicker").toggle({ loclist = true })
             end, { desc = "Toggle quickfix" })
+        end,
+    },
+})
+
+packle.add({
+    {
+        src = "https://github.com/nvim-treesitter/nvim-treesitter",
+        -- Plugin is archived, pinning until it breaks
+        version = "4916d6592ede8c07973490d9322f187e07dfefac",
+        dependencies = {
+            "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+        },
+        after = function()
+            -- NOTE: This could possibly move into ftplugin files
+            local enabled_fts = utils.require_with_local("config.plugins.treesitter").ensure_installed
+            local ts_gid = vim.api.nvim_create_augroup("treesitter_fts", { clear = true })
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = enabled_fts,
+                callback = function()
+                    -- TODO: Maybe check installed?
+
+                    -- Enable highlighting
+                    vim.treesitter.start()
+                    -- Enable folding
+                    vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+                    vim.wo[0][0].foldmethod = "expr"
+                end,
+                group = ts_gid,
+            })
+        end,
+    },
+})
+
+packle.add({
+    {
+        -- Make it easier to discover some of my keymaps
+        src = "https://github.com/folke/which-key.nvim",
+        version = vim.version.range("^3"),
+        after = function()
+            -- Ignore warnings about config. Turn these on when switching major versions
+            require("which-key").setup({
+                notify = false,
+                icons = {
+                    mappings = require("config.icons").nerd_font,
+                },
+            })
+            utils.keymap_set("n", "<leader>?", function()
+                require("which-key").show({ global = false })
+            end, { desc = "Buffer Local Keymaps (which-key)" })
         end,
     },
 })
@@ -210,9 +269,9 @@ local lazy2pack = require("lazy2pack")
 -- TODO: When dropping less than 0.12 I can migrate these, or maybe migrate
 -- them and build an adapter that works the other direction
 packle.add(lazy2pack.convert(require("lazy_specs.obsidian")))
-local ls_specs = lazy2pack.convert(require("lazy_specs.language_servers"))
-print(vim.inspect(ls_specs))
-packle.add(ls_specs)
+packle.add(lazy2pack.convert(require("lazy_specs.language_servers")))
+-- This should run after all the LSP plugins are installed
+require("config.plugins.lsp").setup()
 -- lazy2pack.add(require("lazy_specs.llm_assist"))
 
 packle.apply()

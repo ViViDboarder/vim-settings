@@ -25,6 +25,14 @@
       "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
       "src": "https://github.com/rktjmp/lush.nvim"
     },
+    "none-ls-extras.nvim": {
+      "rev": "14fa31ce8c0268a3b2c9cc14979ecf771982d433",
+      "src": "https://github.com/nvimtools/none-ls-extras.nvim"
+    },
+    "none-ls-shellcheck.nvim": {
+      "rev": "0f84461241e76e376a95fb7391deac82dc3efdbf",
+      "src": "https://github.com/gbprod/none-ls-shellcheck.nvim"
+    },
     "none-ls.nvim": {
       "rev": "7f9301e416533b5d74e2fb3b1ce5059eeaed748b",
       "src": "https://github.com/nvimtools/none-ls.nvim"
@@ -33,10 +41,23 @@
       "rev": "c588db330592fa477a70d2fee6ba20a57194bdc3",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
+    "nvim-treesitter": {
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'4916d6592ede8c07973490d9322f187e07dfefac'"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
+    },
     "obsidian.nvim": {
       "rev": "c18b19a08035b57092384f6d28f113bae725baa1",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim",
       "version": "3.0.0 - 4.0.0"
+    },
+    "plenary.nvim": {
+      "rev": "b9fd5226c2f76c951fc8ed5923d85e4de065e509",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "quicker.nvim": {
       "rev": "fc041830fa7cf093786b0d5990d99cf3c7b0c129",
@@ -96,6 +117,11 @@
     "vim-vinegar": {
       "rev": "bb1bcddf43cfebe05eb565a84ab069b357d0b3d6",
       "src": "https://github.com/tpope/vim-vinegar"
+    },
+    "which-key.nvim": {
+      "rev": "fcbf4eea17cb299c02557d576f0d568878e354a4",
+      "src": "https://github.com/folke/which-key.nvim",
+      "version": "3.0.0 - 4.0.0"
     },
     "wombat.nvim": {
       "rev": "d8e0a3e7e4b57d92f0648c7f50ab5daa32e59f12",

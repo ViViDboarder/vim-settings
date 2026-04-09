@@ -11,6 +11,10 @@ return {
             [">=0.6.1"] = "v0.1.2",
             [">=0.6.0"] = "v0.1.0",
         }),
+        config = function()
+            -- This should run after all the LSP plugins are installed
+            require("config.plugins.lsp").setup()
+        end,
     },
     {
         -- Language server installer
@@ -109,9 +113,5 @@ return {
             { "https://github.com/nvim-lua/plenary.nvim" },
             { "https://github.com/neovim/nvim-lspconfig" },
         },
-        config = function()
-            -- This should run after all the LSP plugins are installed
-            require("config.plugins.lsp").setup()
-        end,
     },
 }

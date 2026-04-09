@@ -240,9 +240,16 @@ function M.curry_keymap(mode, prefix, default_opts)
     local group_desc = M.tbl_pop(default_opts, "group_desc")
     if group_desc ~= nil then
         M.try_require("which-key", function(wk)
-            wk.register({
-                [prefix] = "+" .. group_desc,
-            }, default_opts)
+            if wk.add ~= nil then
+                wk.add({
+                    --selene: allow(mixed_table)
+                    { prefix, group = "+" .. group_desc },
+                })
+            else
+                wk.register({
+                    [prefix] = "+" .. group_desc,
+                })
+            end
         end)
     end
 
