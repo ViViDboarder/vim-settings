@@ -36,7 +36,6 @@ end, { desc = "List packs" })
 packle.add({
     {
         src = "https://github.com/ViViDboarder/wombat.nvim",
-        version = "pack-support",
         dependencies = { "https://github.com/rktjmp/lush.nvim" },
         after = function()
             -- Wombat colorscheme
