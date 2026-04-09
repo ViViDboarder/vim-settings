@@ -1,6 +1,6 @@
 ---@class PackleSpecDetail
 ---@field src string
----@field version string|vim.VersionRange
+---@field version? string|vim.VersionRange
 ---@field before? (fun())
 ---@field after? (fun())
 ---@field dependencies? PackleSpecDetail[]|string[]
