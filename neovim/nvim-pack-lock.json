@@ -1,15 +1,25 @@
 {
   "plugins": {
+    "VectorCode": {
+      "rev": "56f21eb1371c10e720e31b5621f8c9448da78748",
+      "src": "https://github.com/Davidyz/VectorCode",
+      "version": ">=0.0.0"
+    },
     "argonaut.nvim": {
       "rev": "7f03ad8914d815d6a857158e8443dce987f4c890",
       "src": "https://git.sr.ht/~foosoft/argonaut.nvim"
+    },
+    "codecompanion.nvim": {
+      "rev": "558518f8d78a44198cd428f6bf8bf48bfa38d76d",
+      "src": "https://github.com/olimorris/codecompanion.nvim",
+      "version": "18.0.0 - 19.0.0"
     },
     "file-line": {
       "rev": "67c3590b25703444663edcd4188991147b1bc846",
       "src": "https://github.com/vim-scripts/file-line"
     },
     "fzf-lua": {
-      "rev": "9f0432fdd7825ab163520045831a40b6df82ea28",
+      "rev": "4deeecf611c0beba6455e6cf06e2c051a6169dd4",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "lazydev.nvim": {
@@ -18,12 +28,17 @@
       "version": "1.0.0 - 2.0.0"
     },
     "lualine.nvim": {
-      "rev": "8811f3f3f4dc09d740c67e9ce399e7a541e2e5b2",
+      "rev": "f5d2a8570f8b736ddb9bb4be504355bcd6e15ec8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "lush.nvim": {
       "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
       "src": "https://github.com/rktjmp/lush.nvim"
+    },
+    "minuet-ai.nvim": {
+      "rev": "dc54096e85b37f4cf00438f8315360fa863c868b",
+      "src": "https://github.com/ViViDboarder/minuet-ai.nvim",
+      "version": "'initial-preset'"
     },
     "none-ls-extras.nvim": {
       "rev": "14fa31ce8c0268a3b2c9cc14979ecf771982d433",
@@ -51,7 +66,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "obsidian.nvim": {
-      "rev": "c18b19a08035b57092384f6d28f113bae725baa1",
+      "rev": "dec6573816767eaa9596cabc1593f45a2f7821ee",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim",
       "version": "3.0.0 - 4.0.0"
     },
@@ -63,6 +78,11 @@
       "rev": "fc041830fa7cf093786b0d5990d99cf3c7b0c129",
       "src": "https://github.com/stevearc/quicker.nvim",
       "version": "1.0.0 - 2.0.0"
+    },
+    "render-markdown.nvim": {
+      "rev": "e3c18ddd27a853f85a6f513a864cf4f2982b9f26",
+      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+      "version": ">=0.0.0"
     },
     "rustaceanvim": {
       "rev": "88575b98bb9937fb9983ddec5e532b67e75ce677",

@@ -214,12 +214,16 @@ packle.add({
         },
         after = function()
             -- NOTE: This could possibly move into ftplugin files
-            local enabled_fts = utils.require_with_local("config.plugins.treesitter").ensure_installed
+            local enable_fts = utils.require_with_local("config.plugins.treesitter").ensure_installed
             local ts_gid = vim.api.nvim_create_augroup("treesitter_fts", { clear = true })
             vim.api.nvim_create_autocmd("FileType", {
-                pattern = enabled_fts,
+                pattern = enable_fts,
                 callback = function()
-                    -- TODO: Maybe check installed?
+                    local nvim_ts = require("nvim-treesitter")
+                    local installed_parsers = nvim_ts.get_installed()
+                    if not vim.list_contains(installed_parsers, vim.bo.filetype) then
+                        nvim_ts.install(vim.bo.filetype):wait(10000)
+                    end
 
                     -- Enable highlighting
                     vim.treesitter.start()
@@ -270,8 +274,9 @@ local lazy2pack = require("lazy2pack")
 -- them and build an adapter that works the other direction
 packle.add(lazy2pack.convert(require("lazy_specs.obsidian")))
 packle.add(lazy2pack.convert(require("lazy_specs.language_servers")))
--- This should run after all the LSP plugins are installed
-require("config.plugins.lsp").setup()
--- lazy2pack.add(require("lazy_specs.llm_assist"))
+packle.add(lazy2pack.convert(require("lazy_specs.llm_assist")))
 
 packle.apply()
+
+-- This should run after all the LSP plugins are installed
+require("config.plugins.lsp").setup()

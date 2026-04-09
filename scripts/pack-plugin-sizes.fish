@@ -1,7 +1,7 @@
 #! /usr/bin/env fish
 
 function _list_loc
-    for d in ~/.local/share/nvim_testing/site/pack/core/opt/*
+    for d in ~/.local/share/nvim/site/pack/core/opt/*
         set --local loc (cloc --sum-one $d | awk '/SUM/ {print $5}')
         echo "$loc $d"
     end

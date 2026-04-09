@@ -459,6 +459,25 @@ def install_fzf():
     )
 
 
+def install_treesitter():
+    """
+    Install treesitter CLI
+    """
+    _ = maybe_release_gitter(
+        {
+            "tree-sitter": [
+                "--git-url",
+                "https://github.com/tree-sitter/tree-sitter",
+                "--extract-files",
+                "tree-sitter",
+                "--exec",
+                expanduser("chmod +x ~/bin/tree-sitter"),
+                "tree-sitter-cli-{system}-{arch}.zip",
+                expanduser("~/bin/"),
+            ],
+        },
+    )
+
 
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
@@ -513,6 +532,7 @@ def main():
 
     install_linters(langs)
     install_fixers(langs)
+    install_treesitter()
 
     if not cast(bool, args.no_debuggers):
         install_debuggers(langs)
