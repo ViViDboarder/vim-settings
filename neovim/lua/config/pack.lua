@@ -36,22 +36,7 @@ end, { desc = "List packs" })
 packle.add({
     {
         src = "https://github.com/ViViDboarder/wombat.nvim",
-        dependencies = { "https://github.com/rktjmp/lush.nvim" },
         after = function()
-            -- Wombat colorscheme
-            local function get_wombat_ansi_colors_name()
-                -- Set ansi base colors for wombat theme based on terminal program
-                local term_program = vim.env.TERM_PROGRAM
-                local term_profile = vim.env.TERM_PROFILE
-
-                if term_program == "iTerm.app" or term_profile == "Wombat-iTerm" then
-                    return "iterm2"
-                elseif term_program == "ghostty" then
-                    return "ghostty"
-                end
-            end
-
-            vim.g.wombat_ansi_colors_name = get_wombat_ansi_colors_name()
             require("config.colors").init()
         end,
     },

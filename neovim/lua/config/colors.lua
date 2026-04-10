@@ -62,16 +62,16 @@ end
 
 -- Don't need the autocommand when dark-notify is installed
 local utils = require("utils")
-if not utils.is_plugin_installed("dark-notify") then
-    vim.api.nvim_create_autocmd({ "FocusGained" }, {
-        pattern = "*",
-        callback = M.update_colors,
-        group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
-    })
-end
 
 -- Initial setting of colors
 function M.init()
+    if not utils.is_plugin_installed("dark-notify") then
+        vim.api.nvim_create_autocmd({ "FocusGained" }, {
+            pattern = "*",
+            callback = M.update_colors,
+            group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
+        })
+    end
     M.update_colors()
 end
 
