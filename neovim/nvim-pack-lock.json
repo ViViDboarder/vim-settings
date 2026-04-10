@@ -162,8 +162,7 @@
     },
     "wombat.nvim": {
       "rev": "d8e0a3e7e4b57d92f0648c7f50ab5daa32e59f12",
-      "src": "https://github.com/ViViDboarder/wombat.nvim",
-      "version": "'pack-support'"
+      "src": "https://github.com/ViViDboarder/wombat.nvim"
     }
   }
 }
