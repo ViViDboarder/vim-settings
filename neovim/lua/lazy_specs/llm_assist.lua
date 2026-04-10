@@ -262,7 +262,7 @@ table.insert(specs, {
 
         -- Map accept line to <C-F> and <Right>
         -- Make sure vim-rsi is loaded so it doesn't overwrite this keymap
-        if vim.fn.has("nvim-0.12.0") == 1 then
+        if vim.fn.has("nvim-0.12.0") == 1 and vim.g.force_lazy ~= true then
             vim.cmd.packadd("vim-rsi")
         end
         local minuet_accept = function()

@@ -2,6 +2,9 @@ local utils = require("utils")
 local packle = require("packle")
 -- packle.debug = true
 
+-- Some packages not installed yet
+-- vim-android go.nvim navic todo-comments.nvim Trouble
+
 -- Pack helpers
 local function pack_clean()
     local inactive_packs = vim.iter(vim.pack.get())

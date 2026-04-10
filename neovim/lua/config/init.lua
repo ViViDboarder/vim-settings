@@ -13,7 +13,7 @@ if vim.g.neovide then
 end
 
 -- Plugins
-if vim.fn.has("nvim-0.12.0") == 1 then
+if vim.fn.has("nvim-0.12.0") == 1 and vim.g.force_lazy ~= true then
     require("config.pack")
 else
     require("config.lazy_init")
