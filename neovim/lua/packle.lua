@@ -21,7 +21,13 @@ end
 
 ---@overload fun(pack_spec: PackleSpec)
 function M.add(pack_spec)
-    M.log("Adding pack spec " .. vim.inspect(pack_spec))
+    local log = function(value)
+        M.log("packle.add: " .. value)
+    end
+
+    log("Initial spec: " .. vim.inspect(pack_spec))
+
+    -- Ignore null specs
     if pack_spec == nil then
         return
     end
@@ -31,49 +37,59 @@ function M.add(pack_spec)
         pack_spec = { src = pack_spec }
     end
 
+    -- Ignore empty specs
+    if next(pack_spec) == nil then
+        return
+    end
+
     -- List of specs
     if type(pack_spec) == "table" and #pack_spec > 0 then
+        log("Spec list: begin")
         for _, spec in ipairs(pack_spec) do
             M.add(spec)
         end
+        log("Spec list: end")
         return
     end
 
     -- First add deps
     local lazy_deps = pack_spec["dependencies"]
     if lazy_deps ~= nil then
-        for _, dep in ipairs(lazy_deps) do
-            M.add(dep)
-        end
+        log("Add deps")
+        M.add(lazy_deps)
     end
 
     local existing_spec = M.specs[pack_spec.src]
     if existing_spec ~= nil then
         local spec_src = pack_spec.src
         pack_spec["src"] = nil
-        M.log("Updating existing spec " .. spec_src)
+        log("Updating existing spec: " .. spec_src)
         -- Error if there is a key collision since merges are destructive and not recursive
         M.specs[spec_src] = vim.tbl_extend("error", existing_spec, pack_spec)
     else
-        M.log("Adding new spec " .. pack_spec.src)
+        log("Adding new spec: " .. pack_spec.src)
         M.specs[pack_spec.src] = pack_spec
         M.spec_order = vim.list_extend(M.spec_order, { pack_spec.src })
     end
 end
 
 function M.apply()
+    local log = function(value)
+        M.log("packle.apply: " .. value)
+    end
+
     for _, spec_src in ipairs(M.spec_order) do
         local pack_spec = M.specs[spec_src]
         if pack_spec ~= nil and pack_spec.before ~= nil then
-            M.log("Run before func for " .. spec_src)
+            log("Run before func for " .. spec_src)
             pack_spec.before()
         end
     end
 
-    M.log("Adding specs")
+    log("Activating specs")
     local ordered_specs = vim.iter(M.spec_order)
         :map(function(spec_src)
-            M.log("Adding spec " .. spec_src)
+            log("Activating spec " .. spec_src)
             local pack_spec = M.specs[spec_src] ---@type PackleSpecDetail
             if pack_spec == nil then
                 return nil
@@ -89,7 +105,7 @@ function M.apply()
     for _, spec_src in ipairs(M.spec_order) do
         local pack_spec = M.specs[spec_src]
         if pack_spec ~= nil and pack_spec.after ~= nil then
-            M.log("Run after func for " .. spec_src)
+            log("Run after func for " .. spec_src)
             pack_spec.after()
         end
     end
