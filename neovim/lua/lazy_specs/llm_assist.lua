@@ -248,7 +248,6 @@ vim.list_extend(specs, {
 -- For local llms, we use minuet-ai.nvim since it will talk to Ollama
 table.insert(specs, {
     "https://github.com/milanglacier/minuet-ai.nvim",
-    branch = "initial-preset",
     opts = minuet_config({
         before_cursor_filter_length = 10,
         virtualtext = {

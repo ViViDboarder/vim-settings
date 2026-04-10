@@ -32,9 +32,8 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "dc54096e85b37f4cf00438f8315360fa863c868b",
-      "src": "https://github.com/milanglacier/minuet-ai.nvim",
-      "version": "'initial-preset'"
+      "rev": "33c6f4ad809bb28347c275cffc3e5700057d1c3c",
+      "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "none-ls-extras.nvim": {
       "rev": "14fa31ce8c0268a3b2c9cc14979ecf771982d433",
