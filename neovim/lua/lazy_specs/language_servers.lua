@@ -17,27 +17,6 @@ return {
         end,
     },
     {
-        -- Language server installer
-        "https://github.com/williamboman/mason.nvim",
-        version = "^2",
-        dependencies = {
-            { "https://github.com/neovim/nvim-lspconfig" },
-            {
-                "https://github.com/williamboman/mason-lspconfig.nvim",
-                version = "^2",
-            },
-        },
-        cmd = {
-            "Mason",
-            "MasonInstall",
-            "MasonLog",
-            "MasonUninstall",
-            "MasonUninstallAll",
-            "MasonUpdate",
-        },
-        cond = false,
-    },
-    {
         -- Neovim language server config
         {
             -- TODO: Remove when min version is nvim 0.10
