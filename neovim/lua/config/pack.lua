@@ -223,6 +223,10 @@ packle.add({
 packle.add({
     {
         src = "https://github.com/nvim-treesitter/nvim-treesitter",
+        -- Consider https://github.com/arborist-ts/arborist.nvim in the future
+        -- I don't like that the plugin enables executing code downloaded from
+        -- other sources, but I guess I could pin the commit too.
+
         -- Plugin is archived, pinning until it breaks
         version = "4916d6592ede8c07973490d9322f187e07dfefac",
         dependencies = {
