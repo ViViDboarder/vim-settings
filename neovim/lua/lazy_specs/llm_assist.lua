@@ -178,6 +178,8 @@ vim.list_extend(specs, {
             sign = {
                 enabled = false, -- Turn off in the status column
             },
+            -- Only use this for codecompanion buffers
+            file_types = { "codecompanion" },
         },
     },
     {
