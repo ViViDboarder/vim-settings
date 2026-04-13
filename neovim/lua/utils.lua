@@ -272,4 +272,80 @@ function M.get_keymap(mode, lhs)
     end
 end
 
+--- Strips leading and trailing whitespace from a string
+---@param s string The string to strip whitespace from
+---@return string The stripped string
+function M.strip(s)
+    s = s:gsub("^%s+", "", 1):gsub("%s+$", "", 1)
+
+    return s
+end
+
+M.fs = {}
+
+---Move a file or directory from old_path to new_path.
+---@param old_path string
+---@param new_path string
+---@returns boolean Indicating operation success
+function M.fs.rename(old_path, new_path)
+    if not M.fs.exists(old_path) then
+        print(("Error: Could not move %s; not found"):format(old_path))
+        return false
+    end
+    local cmd = { "mv", old_path, new_path }
+    print(vim.inspect(cmd))
+    local result = vim.system(cmd):wait(100)
+    print(vim.inspect(result))
+    if result.code ~= 0 then
+        print(("Error: Could not move %s; error was '%s'"):format(old_path, result.stderr))
+        return false
+    end
+    return true
+end
+
+---Creates a symlink at new_path pointing to old_path. If the file already exists it will fail. You should use rename if you're moving a path.
+---@param src_path string
+---@param target_path string
+---@returns boolean Indicating operation success
+function M.fs.symblink(src_path, target_path)
+    if not M.fs.exists(src_path) then
+        print(("Error: Could link %s; not found"):format(src_path))
+        return false
+    end
+
+    if M.fs.exists(target_path) then
+        print(("Error: Could link to %s; file already exists"):format(target_path))
+        return false
+    end
+
+    local result = vim.system({ "ln", "-s", src_path, target_path }):wait(100)
+    if result.code ~= 0 then
+        print(("Error: Could not move %s; error was '%s'"):format(src_path, result.stderr))
+        return false
+    end
+
+    return true
+end
+
+--- Touches a file at a given path
+---@param file_path string
+---@returns boolean Indicating operation success
+function M.fs.touch(file_path)
+    local result = vim.system({ "touch", file_path }):wait(100)
+    if result.code ~= 0 then
+        print(("Error: Could not touch %s; error was '%s'"):format(file_path, result.stderr))
+        return false
+    end
+
+    return true
+end
+
+--- Reads target to stat
+---@param file_path string
+---@returns boolean Indicating operation success
+function M.fs.exists(file_path)
+    local result = vim.system({ "stat", file_path }):wait(100)
+    return result.code == 0
+end
+
 return M
