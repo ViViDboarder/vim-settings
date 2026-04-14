@@ -100,10 +100,14 @@ function M.get_default_attach(override_capabilities)
             lsp_keymap(
                 "X",
                 "<cmd>Trouble diagnostics toggle<cr>",
-                { buffer = bufnr, desc = "Show project diagnostics" }
+                { buffer = bufnr, desc = "Show workspace diagnostics" }
             )
         else
             lsp_keymap("x", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Show buffer diagnostics" })
+            lsp_keymap("X", function()
+                vim.fn.setqflist(vim.diagnostic.toqflist(vim.diagnostic.get(nil)))
+                vim.cmd.copen()
+            end, { buffer = bufnr, desc = "Show workspace diagnostics" })
         end
 
         -- Set insert keymap for signature help

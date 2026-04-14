@@ -235,7 +235,7 @@ packle.add({
             end, { desc = "Toggle quickfix" })
             utils.keymap_set("n", "<F7>", function()
                 require("quicker").toggle({ loclist = true })
-            end, { desc = "Toggle quickfix" })
+            end, { desc = "Toggle loclist" })
 
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = "qf",
