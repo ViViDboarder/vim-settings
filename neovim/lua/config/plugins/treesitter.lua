@@ -30,7 +30,10 @@ M.enable_fts = {
 function M.bootstrap()
     -- TODO: Remove when dropping nvim 0.11
     require("utils").try_require("nvim-treesitter.install", function(ts_install)
-        ts_install.ensure_installed_sync(M.enable_fts)
+        local ensure_installed = ts_install.ensure_installed_sync
+        if ensure_installed ~= nil then
+            ensure_installed(M.enable_fts)
+        end
     end)
 end
 
@@ -46,7 +49,7 @@ function M.setup()
                 enable = true,
                 disable = {},
             },
-            ensure_installed = M.ensure_installed,
+            ensure_installed = M.enable_ts,
             auto_install = false,
         })
     end, function()
