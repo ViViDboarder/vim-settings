@@ -69,7 +69,12 @@ packle.add({
         end
         local polyglot_fts_gid = vim.api.nvim_create_augroup("polyglot_fts", { clear = true })
         vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-            pattern = { "*/playbooks/*.yml", "*/playbooks/*.yaml" },
+            pattern = {
+                "*/playbooks/*.yml",
+                "*/playbooks/*.yaml",
+                "*/roles/*.yml",
+                "*/roles/*.yaml",
+            },
             command = "set filetype=yaml.ansible",
             group = polyglot_fts_gid,
         })
