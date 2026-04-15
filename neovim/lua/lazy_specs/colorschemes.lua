@@ -1,5 +1,4 @@
 -- #selene: allow(mixed_table)
-local utils = require("utils")
 return {
     {
         "https://github.com/ViViDboarder/wombat.nvim",
@@ -23,10 +22,6 @@ return {
         dependencies = {
             {
                 "https://github.com/rktjmp/lush.nvim",
-                tag = utils.map_version_rule({
-                    [">=0.7.0"] = utils.nil_val,
-                    [">=0.5.0"] = "v1.0.1",
-                }),
             },
         },
         lazy = false,

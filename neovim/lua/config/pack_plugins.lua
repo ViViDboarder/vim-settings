@@ -100,12 +100,7 @@ packle.add({
 packle.add({
     {
         src = "https://github.com/tpope/vim-fugitive",
-        version = utils.map_version_rule({
-            [">=0.9.2"] = vim.version.range("^3"),
-            -- Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
-            -- when used in status line.
-            ["<0.9.2"] = vim.version.range("3.6"),
-        }),
+        version = vim.version.range("^3"),
         after = function()
             utils.keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
             utils.keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })

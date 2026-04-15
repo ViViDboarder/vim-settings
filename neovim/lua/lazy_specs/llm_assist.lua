@@ -184,10 +184,7 @@ vim.list_extend(specs, {
     },
     {
         "https://github.com/olimorris/codecompanion.nvim",
-        version = utils.map_version_rule({
-            [">=0.11.0"] = "^19",
-            ["<0.11.0"] = "^16",
-        }),
+        version = "^19",
         opts = {
             -- TODO: Refactor to a function and dynamically set more values based on copilot or not
             -- so I can use non-default copilot models as well in the strategy config.
@@ -312,8 +309,6 @@ table.insert(specs, {
         "https://github.com/nvim-lua/plenary.nvim",
     },
     cond = vim.g.llm_provider ~= "github",
-    -- TODO: remove condition when nvim min is 0.10
-    enabled = vim.fn.has("nvim-0.10") == 1,
 })
 table.insert(specs, {
     "https://github.com/github/copilot.vim",
