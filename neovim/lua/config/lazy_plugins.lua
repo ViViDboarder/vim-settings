@@ -1,5 +1,7 @@
 -- #selene: allow(mixed_table)
 local utils = require("utils")
+local pack2lazy = require("pack2lazy")
+
 return {
     {
         -- Make it easier to discover some of my keymaps
@@ -401,7 +403,7 @@ return {
         },
     },
 
-    { import = "lazy_specs.obsidian" },
+    pack2lazy.convert(require("lazy_specs.obsidian")),
 
     -- Work things
     -- Sourcegraph
