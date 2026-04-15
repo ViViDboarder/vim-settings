@@ -104,23 +104,23 @@ packle.add({
 
 -- Oldies but goodies
 packle.add({
-    "https://github.com/tpope/vim-endwise",
+    { src = "https://github.com/tpope/vim-endwise", lock = true },
     -- Unix commands from vim? Yup!
-    "https://github.com/tpope/vim-eunuch",
+    { src = "https://github.com/tpope/vim-eunuch", lock = true },
     -- Adds repeats for custom motions
-    "https://github.com/tpope/vim-repeat",
+    { src = "https://github.com/tpope/vim-repeat", lock = true },
     -- Readline shortcuts
-    "https://github.com/tpope/vim-rsi",
+    { src = "https://github.com/tpope/vim-rsi", lock = true },
     -- Surround motions
-    "https://github.com/tpope/vim-surround",
+    { src = "https://github.com/tpope/vim-surround", lock = true },
     -- Better netrw
-    "https://github.com/tpope/vim-vinegar",
+    { src = "https://github.com/tpope/vim-vinegar", lock = true },
     -- Easier jumping to lines
-    "https://github.com/vim-scripts/file-line",
+    { src = "https://github.com/vim-scripts/file-line", lock = true },
     -- Auto ctags generation
-    "https://github.com/ludovicchabant/vim-gutentags",
+    { src = "https://github.com/ludovicchabant/vim-gutentags", lock = true },
     -- Debug startup time
-    "https://github.com/tweekmonster/startuptime.vim",
+    { src = "https://github.com/tweekmonster/startuptime.vim", lock = true },
 })
 
 -- tcomment and keys
@@ -130,6 +130,7 @@ packle.add({
         utils.keymap_set("n", "//", ":TComment<CR>", { desc = "Toggle comment" })
         utils.keymap_set("v", "//", ":TCommentBlock<CR>", { desc = "Toggle comment" })
     end,
+    lock = true,
 })
 
 -- argwrapping
