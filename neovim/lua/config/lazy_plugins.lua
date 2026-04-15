@@ -298,9 +298,6 @@ return {
         config = function()
             require("utils").require_with_local("config.plugins.treesitter").setup()
         end,
-        dependencies = {
-            { "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
-        },
     },
 
     -- Filetypes
