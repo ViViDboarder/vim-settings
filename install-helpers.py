@@ -410,7 +410,7 @@ def install_debuggers(langs: set[Language]):
 def install_acps(langs: set[Language]):
     """Install ACP clients."""
     if Language.ACP_CLAUDE_CODE in langs:
-        _ = maybe_npm_install("@zed-industries/claude-code-acp")
+        _ = maybe_npm_install("@zed-industries/claude-agent-acp")
 
 
 def install_release_gitter():
