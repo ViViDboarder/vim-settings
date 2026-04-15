@@ -27,28 +27,52 @@ M.enable_fts = {
     "yaml",
 }
 
-function M.setup()
-    -- NOTE: This could possibly move into ftplugin files
-    local ts_gid = vim.api.nvim_create_augroup("treesitter_fts", { clear = true })
-    vim.opt.foldlevel = 99
-    vim.opt.foldlevelstart = 2
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = M.enable_fts,
-        callback = function()
-            local nvim_ts = require("nvim-treesitter")
-            local installed_parsers = nvim_ts.get_installed()
-            if not vim.list_contains(installed_parsers, vim.bo.filetype) then
-                nvim_ts.install(vim.bo.filetype):wait(10000)
-            end
+function M.bootstrap()
+    -- TODO: Remove when dropping nvim 0.11
+    require("utils").try_require("nvim-treesitter.install", function(ts_install)
+        ts_install.ensure_installed_sync(M.enable_fts)
+    end)
+end
 
-            -- Enable highlighting
-            vim.treesitter.start()
-            -- Enable folding
-            vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-            vim.wo[0][0].foldmethod = "expr"
-        end,
-        group = ts_gid,
-    })
+function M.setup()
+    -- TODO: Remove when dropping nvim 0.11
+    require("utils").try_require("nvim-treesitter.configs", function(ts_configs)
+        ts_configs.setup({
+            incremental_selection = { enable = true },
+            -- Indent appears to be broken right now
+            indent = { enable = false },
+            textobjects = { enable = true },
+            highlight = {
+                enable = true,
+                disable = {},
+            },
+            ensure_installed = M.ensure_installed,
+            auto_install = false,
+        })
+    end, function()
+        -- Setup treesitter for nvim 0.12
+        -- NOTE: This could possibly move into ftplugin files
+        local ts_gid = vim.api.nvim_create_augroup("treesitter_fts", { clear = true })
+        vim.opt.foldlevel = 99
+        vim.opt.foldlevelstart = 2
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = M.enable_fts,
+            callback = function()
+                local nvim_ts = require("nvim-treesitter")
+                local installed_parsers = nvim_ts.get_installed()
+                if not vim.list_contains(installed_parsers, vim.bo.filetype) then
+                    nvim_ts.install(vim.bo.filetype):wait(10000)
+                end
+
+                -- Enable highlighting
+                vim.treesitter.start()
+                -- Enable folding
+                vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+                vim.wo[0][0].foldmethod = "expr"
+            end,
+            group = ts_gid,
+        })
+    end)
 end
 
 return M
