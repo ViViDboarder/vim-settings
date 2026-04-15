@@ -126,6 +126,10 @@ function M.apply()
             pack_spec.after()
         end
     end
+
+    -- Clear specs
+    M.specs = {}
+    M.spec_order = {}
 end
 
 return M
