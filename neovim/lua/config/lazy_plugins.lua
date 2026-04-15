@@ -403,7 +403,7 @@ return {
         },
     },
 
-    pack2lazy.convert(require("lazy_specs.obsidian")),
+    pack2lazy.convert(require("config.plugins.obsidian")),
 
     -- Work things
     -- Sourcegraph

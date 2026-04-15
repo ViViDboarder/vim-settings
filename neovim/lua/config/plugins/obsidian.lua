@@ -135,7 +135,7 @@ return {
         { "https://github.com/nvim-lua/plenary.nvim" },
         { "https://github.com/tpope/vim-fugitive" },
     },
-    version = "^3",
+    version = vim.version.range("^3"),
     after = function()
         local opts = {
             legacy_commands = false,

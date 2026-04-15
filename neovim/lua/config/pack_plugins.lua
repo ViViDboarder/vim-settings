@@ -227,7 +227,7 @@ packle.add({
 require("config.plugins.notify")
 --]]
 
-packle.add(require("lazy_specs.obsidian"))
+packle.add(require("config.plugins.obsidian"))
 
 -- HACK: Bandaid on some complicated plugin specs that I don't want to duplicate
 local lazy2pack = require("lazy2pack")

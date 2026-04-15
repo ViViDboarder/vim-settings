@@ -80,7 +80,7 @@
     "obsidian.nvim": {
       "rev": "dec6573816767eaa9596cabc1593f45a2f7821ee",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim",
-      "version": "'^3'"
+      "version": "3.0.0 - 4.0.0"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
