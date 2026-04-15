@@ -1,5 +1,7 @@
 ---@class PackleSpecDetail
 ---@field src string
+---@field name? string
+---@field lock? boolean
 ---@field version? string|vim.VersionRange
 ---@field before? (fun())
 ---@field after? (fun())
@@ -100,7 +102,16 @@ function M.apply()
             if pack_spec == nil then
                 return nil
             end
-            return { src = spec_src, version = pack_spec.version }
+            local data = nil
+            if pack_spec.lock then
+                data = { lock = true }
+            end
+            return {
+                src = spec_src,
+                name = pack_spec.name,
+                version = pack_spec.version,
+                data = data,
+            }
         end)
         :filter(function(spec)
             return spec ~= nil

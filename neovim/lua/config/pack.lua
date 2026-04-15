@@ -22,9 +22,17 @@ vim.api.nvim_create_user_command("PackClean", function()
     pack_clean()
 end, { desc = "Clean unused packs" })
 
-vim.api.nvim_create_user_command("PackUpdate", function()
-    vim.pack.update()
-end, { desc = "Update packs" })
+vim.api.nvim_create_user_command("PackUpdate", function(opts)
+    local unlocked_packs = vim.iter(vim.pack.get())
+        :filter(function(x)
+            return opts.bang or x.spec.data == nil or x.spec.data.lock ~= true
+        end)
+        :map(function(x)
+            return x.spec.name
+        end)
+        :totable()
+    vim.pack.update(unlocked_packs)
+end, { bang = true, desc = "Update packs" })
 
 vim.api.nvim_create_user_command("PackRevert", function()
     vim.pack.update(nil, { target = "lockfile" })
