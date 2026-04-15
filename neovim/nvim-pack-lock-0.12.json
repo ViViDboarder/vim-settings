@@ -10,16 +10,16 @@
       "src": "https://git.sr.ht/~foosoft/argonaut.nvim"
     },
     "codecompanion.nvim": {
-      "rev": "558518f8d78a44198cd428f6bf8bf48bfa38d76d",
+      "rev": "680c445eb357c72129d175ea5d481aa9e92ae6a5",
       "src": "https://github.com/olimorris/codecompanion.nvim",
-      "version": "18.0.0 - 19.0.0"
+      "version": "19.0.0 - 20.0.0"
     },
     "file-line": {
       "rev": "67c3590b25703444663edcd4188991147b1bc846",
       "src": "https://github.com/vim-scripts/file-line"
     },
     "fzf-lua": {
-      "rev": "4be0a6923a64dc411489b57b77a6bf6f30404e66",
+      "rev": "b9f947aa15f7f050b0032a8e03f210005aedb897",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "lazydev.nvim": {
@@ -32,7 +32,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "c843f4826fbf8b315a94264a9f291b8411b31d02",
+      "rev": "fbd2f59ec334b277ae27c4cd9587533c6e3eafd7",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "none-ls-extras.nvim": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/rcarriga/nvim-dap-ui"
     },
     "nvim-lspconfig": {
-      "rev": "8a9378a822719346a0288fa004dab302ca3c0a8f",
+      "rev": "d10ce09e42bb0ca8600fd610c3bb58676e61208d",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {

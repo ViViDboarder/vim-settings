@@ -185,7 +185,7 @@ vim.list_extend(specs, {
     {
         "https://github.com/olimorris/codecompanion.nvim",
         version = utils.map_version_rule({
-            [">=0.11.0"] = "^18",
+            [">=0.11.0"] = "^19",
             ["<0.11.0"] = "^16",
         }),
         opts = {
