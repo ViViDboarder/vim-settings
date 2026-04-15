@@ -10,7 +10,7 @@
 local M = {}
 
 M.debug = false
-M.spec_order = {} ---@type table<string>
+M.spec_order = {} ---@type string[]
 M.specs = {} ---@type table<string, PackleSpecDetail>
 
 function M.log(value)
@@ -19,7 +19,6 @@ function M.log(value)
     end
 end
 
----@overload fun(pack_spec: PackleSpec)
 function M.add(pack_spec)
     local log = function(value)
         M.log("packle.add: " .. value)
@@ -59,17 +58,24 @@ function M.add(pack_spec)
         M.add(lazy_deps)
     end
 
-    local existing_spec = M.specs[pack_spec.src]
+    if pack_spec.src == nil then
+        vim.notify("packle: spec is missing 'src' field: " .. vim.inspect(pack_spec), vim.log.levels.WARN)
+        return
+    end
+
+    local spec_src = pack_spec.src
+    local existing_spec = M.specs[spec_src]
     if existing_spec ~= nil then
-        local spec_src = pack_spec.src
-        pack_spec["src"] = nil
         log("Updating existing spec: " .. spec_src)
-        -- Error if there is a key collision since merges are destructive and not recursive
-        M.specs[spec_src] = vim.tbl_extend("error", existing_spec, pack_spec)
+        -- Copy incoming spec without 'src' to avoid key collision on merge.
+        -- Error on other collisions since merges are destructive and not recursive.
+        local incoming = vim.tbl_extend("force", {}, pack_spec)
+        incoming.src = nil
+        M.specs[spec_src] = vim.tbl_extend("error", existing_spec, incoming)
     else
-        log("Adding new spec: " .. pack_spec.src)
-        M.specs[pack_spec.src] = pack_spec
-        M.spec_order = vim.list_extend(M.spec_order, { pack_spec.src })
+        log("Adding new spec: " .. spec_src)
+        M.specs[spec_src] = pack_spec
+        table.insert(M.spec_order, spec_src)
     end
 end
 
@@ -94,7 +100,7 @@ function M.apply()
             if pack_spec == nil then
                 return nil
             end
-            return { src = pack_spec.src, version = pack_spec.version }
+            return { src = spec_src, version = pack_spec.version }
         end)
         :filter(function(spec)
             return spec ~= nil

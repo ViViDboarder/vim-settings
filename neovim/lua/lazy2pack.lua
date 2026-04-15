@@ -39,13 +39,13 @@ function M.convert(lazy_spec)
         return { src = lazy_spec }
     end
 
-    -- List of specs
-    if type(lazy_spec) == "table" and #lazy_spec > 1 then
+    -- List of specs: multiple entries, or [1] is a sub-spec table rather than a URL string
+    if type(lazy_spec) == "table" and (type(lazy_spec[1]) == "table" or #lazy_spec > 1) then
         local spec_list = {}
         for _, spec in ipairs(lazy_spec) do
             local pack_spec = M.convert(spec)
             if pack_spec ~= nil then
-                spec_list = vim.list_extend(spec_list, { pack_spec })
+                table.insert(spec_list, pack_spec)
             end
         end
 
@@ -56,16 +56,19 @@ function M.convert(lazy_spec)
         return spec_list
     end
 
-    -- Ignore disabled
+    -- Ignore disabled. Note: cond/enabled as functions are not evaluated;
+    -- only the literal boolean false is checked.
     if lazy_spec.cond == false or lazy_spec.enabled == false then
-        M.log("Spec " .. lazy_spec[1] .. " is nil")
+        M.log("Spec " .. lazy_spec[1] .. " is disabled")
         return nil
     end
 
     -- Convert spec
     local pack_spec = {}
     pack_spec.src = lazy_spec[1]
-    pack_spec.dependencies = lazy_spec.dependencies
+    if lazy_spec.dependencies ~= nil then
+        pack_spec.dependencies = M.convert(lazy_spec.dependencies)
+    end
 
     local lazy_version = lazy_spec["version"]
     if lazy_version ~= nil then
