@@ -3,7 +3,9 @@ local M = {}
 function M.setup(_, opts)
     -- Override setup and add some keymaps
     if opts == nil then
-        opts = {}
+        opts = {
+            ui_select = true,
+        }
     end
 
     local utils = require("utils")
