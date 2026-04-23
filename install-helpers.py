@@ -359,6 +359,21 @@ def install_linters(langs: set[Language]):
                 "tflint_{system}_{arch}.zip",
                 expanduser("~/bin"),
             ],
+            trivy=[
+                "--git-url",
+                "https://github.com/aquasecurity/trivy",
+                "--map-arch",
+                "x86=32bit",
+                "--map-arch",
+                "x86_64=64bit",
+                "--extract-files",
+                "trivy",
+                "--exec",
+                expanduser("chmod +x ~/bin/trivy"),
+                "trivy_{version}_{system}-{arch}.tar.gz",
+                expanduser("~/bin"),
+
+            ]
         )
     if Language.LLM in langs:
         _ = maybe_pip_install("vectorcode")
