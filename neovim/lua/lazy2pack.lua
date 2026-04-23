@@ -71,7 +71,8 @@ function M.convert(lazy_spec)
     end
 
     local lazy_version = lazy_spec["version"]
-    if lazy_version ~= nil then
+    local nil_val = require("utils").nil_val
+    if lazy_version ~= nil and lazy_version ~= nil_val then
         pack_spec.version = vim.version.range(lazy_version)
     else
         pack_spec.version = lazy_spec["commit"] or lazy_spec["branch"]

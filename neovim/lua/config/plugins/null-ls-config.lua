@@ -4,20 +4,11 @@ local utils = require("utils")
 local function disable_formatter_filetypes_for_existing_servers(sources, preserve)
     -- Aggregate filetypes with language servers
     local server_filetypes = {}
-    utils.try_require("lspconfig", function(lsp_config)
-        local available_servers
-        if vim.lsp.config == nil then
-            -- TODO: Remove when dropping support for nvim 0.10
-            available_servers = {}
-            for _, name in pairs(lsp_config.util.available_servers()) do
-                available_servers[name] = lsp_config[name]
-            end
-        else
-            -- TODO: Fix this. It doesn't work because vim.lsp.config won't resolve unless I have an override
-            -- It doesn't look like there is a way to get "enabled" servers. Might instead need to do something
-            -- less fancy and simply disable any fixers for languages I don't want them running on.
-            available_servers = vim.lsp.config
-        end
+    utils.try_require("lspconfig", function(_lsp_config)
+        -- TODO: Fix this. It doesn't work because vim.lsp.config won't resolve unless I have an override
+        -- It doesn't look like there is a way to get "enabled" servers. Might instead need to do something
+        -- less fancy and simply disable any fixers for languages I don't want them running on.
+        local available_servers = vim.lsp.config
 
         for _, server in ipairs(available_servers) do
             if server.filetypes ~= nil then

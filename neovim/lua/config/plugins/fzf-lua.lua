@@ -3,7 +3,9 @@ local M = {}
 function M.setup(_, opts)
     -- Override setup and add some keymaps
     if opts == nil then
-        opts = {}
+        opts = {
+            ui_select = true,
+        }
     end
 
     local utils = require("utils")
@@ -30,7 +32,7 @@ function M.setup(_, opts)
     finder_keymap("T", fzf.tags, { desc = "Find tags" })
 
     -- Completions
-    utils.keymap_set("i", "<C-x><C-f>", fzf.complete_file, { desc = "Completion: files" })
+    utils.keymap_set("i", "<C-x><C-f>", fzf.complete_path, { desc = "Completion: paths" })
 end
 
 return M

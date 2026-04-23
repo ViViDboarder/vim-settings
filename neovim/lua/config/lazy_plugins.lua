@@ -13,11 +13,7 @@ return {
                 mappings = require("config.icons").nerd_font,
             },
         },
-        version = utils.map_version_rule({
-            [">=0.9.4"] = "^3",
-            [">=0.9.0"] = "<3.4.0",
-            ["<0.9.0"] = "1.x.x",
-        }),
+        version = "^3",
         keys = {
             {
                 "<leader>?",
@@ -58,12 +54,7 @@ return {
     {
         -- Adds git operations to vim
         "https://github.com/tpope/vim-fugitive",
-        version = utils.map_version_rule({
-            [">=0.9.2"] = "^3",
-            -- Pinning to avoid neovim bug https://github.com/neovim/neovim/issues/10121
-            -- when used in status line.
-            ["<0.9.2"] = "3.6",
-        }),
+        version = "^3",
         keys = {
             { "gb", "<cmd>Git blame<CR>", desc = "Git blame" },
             { "gc", "<cmd>Git commit<CR>", desc = "Git commit" },
@@ -122,18 +113,6 @@ return {
         },
     },
     {
-        -- TODO: Remove when min version is 0.10
-        -- Quick toggling of Location and Quickfix lists
-        "https://github.com/milkypostman/vim-togglelist",
-        -- Stable plugin, pinning to avoid any issues stemming from possible takeover
-        commit = "48f0d30292efdf20edc883e61b121e6123e03df7",
-        keys = {
-            { "<F6>", ":call ToggleQuickfixList()<CR>", desc = "Toggle quickfix" },
-            { "<F7>", ":call ToggleLocationList()<CR>", desc = "Toggle location list" },
-        },
-        enabled = vim.fn.has("nvim-0.10") ~= 1,
-    },
-    {
         "https://github.com/stevearc/quicker.nvim",
         event = "FileType qf",
         version = "^1",
@@ -180,7 +159,6 @@ return {
                 },
             },
         },
-        enabled = vim.fn.has("nvim-0.10") == 1,
     },
     {
         -- Highlight inline colors
@@ -224,11 +202,7 @@ return {
         -- Better display of lsp diagnostics
         "https://github.com/folke/trouble.nvim",
         config = true,
-        version = utils.map_version_rule({
-            [">=0.9.2"] = "^3",
-            [">=0.7.2"] = "^2",
-            ["<0.7.2"] = "^1",
-        }),
+        version = "^3",
         cmd = {
             "Trouble",
         },
@@ -287,15 +261,7 @@ return {
         build = ":TSUpdate",
         branch = utils.map_version_rule({
             [">=0.12.0"] = "main",
-            [">=0.9.0"] = "master",
-        }),
-        version = utils.map_version_rule({
-            [">=0.11.0"] = utils.nil_val,
-            [">=0.10.0"] = "0.10.0",
-            [">=0.9.3"] = "0.9.3",
-            ["==0.9.2"] = "0.9.2",
-            ["==0.9.1"] = "0.9.1",
-            ["==0.9.0"] = "0.9.0",
+            [">=0.11.0"] = "master",
         }),
         config = function()
             require("utils").require_with_local("config.plugins.treesitter").setup()
@@ -335,10 +301,6 @@ return {
             utils.keymap_set("n", "<leader>ds", godap.stop, { desc = "Stop" })
         end,
         ft = { "go", "gomod" },
-        version = utils.map_version_rule({
-            [">=0.10.0"] = utils.nil_val,
-            ["<0.10.0"] = "v0.9.0",
-        }),
     },
     -- Fancy todo highlighting
     {
@@ -375,10 +337,7 @@ return {
     -- Fancy notifications
     {
         "https://github.com/rcarriga/nvim-notify",
-        version = utils.map_version_rule({
-            [">=0.10.0"] = "3.x.x",
-            ["<0.10.0"] = "3.13.5",
-        }),
+        version = "3.x.x",
         config = function()
             require("config.plugins.notify")
         end,
@@ -386,10 +345,7 @@ return {
 
     {
         "https://github.com/stevearc/dressing.nvim",
-        branch = utils.map_version_rule({
-            [">=0.8.0"] = utils.nil_val,
-            ["<0.8.0"] = "nvim-0.7",
-        }),
+        branch = utils.nil_val,
         config = {
             select = {
                 -- backend = { "builtin" },

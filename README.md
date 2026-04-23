@@ -18,7 +18,7 @@ You can also remove any installed plugins or uninstall this configuration using 
 
 ## Version support
 
-Vim configs are in maintenance mode and will not be updated, however are expected to be able to run anywhere. Neovim configs target the Neovim version in the latest LTS release of Ubuntu. I try to add tags to commits when I drop support for older versions of Neovim.
+Vim configs are in maintenance mode and will not be updated, however are expected to be able to run anywhere. Neovim configs target the Neovim version in the latest LTS release of Ubuntu (currently 0.11). I try to add tags to commits when I drop support for older versions of Neovim.
 
 ## Project Layout
 

@@ -51,6 +51,15 @@ utils.keymap_set("i", "<C-Space>", function()
     end
 end, { expr = true, desc = "Completion" })
 
+-- Make enter accept completion only if pum is visible
+utils.keymap_set("i", "<CR>", function()
+    if vim.fn.pumvisible() == 1 then
+        return utils.t("<C-y>")
+    else
+        return utils.t("<CR>")
+    end
+end, { expr = true, desc = "Accept completion or insert newline" })
+
 vim.api.nvim_create_user_command("TagsUpdate", "!ctags -R .", { desc = "Update ctags" })
 vim.api.nvim_create_user_command("Todo", "grep TODO", { desc = "Search for TODO tags" })
 vim.api.nvim_create_user_command("Spell", "setlocal spell! spelllang=en_us", { desc = "Toggle spelling" })

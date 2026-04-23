@@ -3,234 +3,179 @@ local M = {}
 local utils = require("utils")
 
 function M.config_lsp_ui()
-    if vim.fn.has("nvim-0.11") ~= 1 then
-        -- TODO: remove when min version is 0.11
-        local border = {
-            { "┌", "FloatBorder" },
-            { "─", "FloatBorder" },
-            { "┐", "FloatBorder" },
-            { "│", "FloatBorder" },
-            { "┘", "FloatBorder" },
-            { "─", "FloatBorder" },
-            { "└", "FloatBorder" },
-            { "│", "FloatBorder" },
-        }
-        local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-        local function floating_preview_with_border(contents, syntax, opts, ...)
-            opts = opts or {}
-            opts.border = opts.border or border
-            return orig_util_open_floating_preview(contents, syntax, opts, ...)
-        end
-        vim.lsp.util.open_floating_preview = floating_preview_with_border
-    end
-
     -- Diagnostics signs
     local signs = { text = {}, linehl = {}, numhl = {} }
     for level_name, icon in pairs(require("config.icons").diagnostic_signs) do
         local hl = "DiagnosticSign" .. level_name
-
-        if vim.fn.has("nvim-0.11") == 1 then
-            local level = vim.diagnostic.severity[string.upper(level_name)]
-            if level ~= nil then
-                signs.text[level] = icon
-                signs.linehl[level] = hl
-                signs.numhl[level] = hl
-            end
-        else
-            -- TODO: Remove else block when min version is 0.11
-            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+        local level = vim.diagnostic.severity[string.upper(level_name)]
+        if level ~= nil then
+            signs.text[level] = icon
+            signs.linehl[level] = hl
+            signs.numhl[level] = hl
         end
     end
-    if vim.fn.has("nvim-0.11") == 1 then
-        vim.diagnostic.config({ signs = signs })
-    end
+    vim.diagnostic.config({ signs = signs })
 end
 
--- TODO: Simplify signature when min version is 0.11
-function M.get_default_attach(override_capabilities)
-    return function(client, bufnr)
-        -- Disable gutentags since we have an LSP
-        vim.g.gutentags_enabled = 0
+function M.default_attach(client, bufnr, override_capabilities)
+    -- Disable gutentags since we have an LSP
+    vim.g.gutentags_enabled = 0
 
-        -- Allow overriding capabilities to avoid duplicate lsps with capabilities
+    -- Allow overriding capabilities to avoid duplicate lsps with capabilities
+    local server_capabilities = client.server_capabilities
+    if override_capabilities ~= nil then
+        server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
+    end
 
-        local server_capabilities = client.server_capabilities
-        if override_capabilities ~= nil then
-            server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
-        end
+    if client:supports_method("textDocument/completion") then
+        -- Enable native completion
+        vim.lsp.completion.enable(true, client.id, bufnr)
+    end
 
-        if client:supports_method("textDocument/completion") then
-            -- Enable native completion
-            vim.lsp.completion.enable(true, client.id, bufnr)
-        end
+    -- Mappings
+    local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr, group_desc = "LSP" })
+    lsp_keymap("h", vim.lsp.buf.hover, { desc = "Display hover" })
+    lsp_keymap("rn", vim.lsp.buf.rename, { desc = "Refactor rename" })
+    lsp_keymap("e", vim.diagnostic.open_float, { desc = "Open diagnostic float dialog" })
+    lsp_keymap("D", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+    lsp_keymap("d", vim.lsp.buf.definition, { desc = "Go to definition" })
+    lsp_keymap("t", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
+    lsp_keymap("i", vim.lsp.buf.implementation, { desc = "Show implementations" })
+    lsp_keymap("s", vim.lsp.buf.signature_help, { desc = "Show signature help" })
+    lsp_keymap("wa", vim.lsp.buf.add_workspace_folder, { desc = "Workspace: Add folder" })
+    lsp_keymap("wr", vim.lsp.buf.remove_workspace_folder, { desc = "Workspace: Remove folder" })
+    lsp_keymap("wl", function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, { desc = "Workspace: List folders" })
+    lsp_keymap("r", vim.lsp.buf.references, { desc = "References" })
+    lsp_keymap("p", function()
+        vim.diagnostic.jump({ count = -1, float = true })
+    end, { desc = "Previous diagnostic" })
+    lsp_keymap("n", function()
+        vim.diagnostic.jump({ count = 1, float = true })
+    end, { desc = "Next diagnostic" })
+    if server_capabilities.codeActionProvider then
+        lsp_keymap("A", vim.lsp.buf.code_action, { desc = "Select code actions" })
+        lsp_keymap("A", vim.lsp.buf.code_action, { mode = "v", desc = "Select code actions" })
+    end
 
-        -- Mappings
-        local lsp_keymap = utils.curry_keymap("n", "<leader>l", { buffer = bufnr, group_desc = "LSP" })
-        lsp_keymap("h", vim.lsp.buf.hover, { desc = "Display hover" })
-        lsp_keymap("rn", vim.lsp.buf.rename, { desc = "Refactor rename" })
-        lsp_keymap("e", vim.diagnostic.open_float, { desc = "Open diagnostic float dialog" })
-        lsp_keymap("D", vim.lsp.buf.declaration, { desc = "Go to declaration" })
-        lsp_keymap("d", vim.lsp.buf.definition, { desc = "Go to definition" })
-        lsp_keymap("t", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
-        lsp_keymap("i", vim.lsp.buf.implementation, { desc = "Show implementations" })
-        lsp_keymap("s", vim.lsp.buf.signature_help, { desc = "Show signature help" })
-        lsp_keymap("wa", vim.lsp.buf.add_workspace_folder, { desc = "Workspace: Add folder" })
-        lsp_keymap("wr", vim.lsp.buf.remove_workspace_folder, { desc = "Workspace: Remove folder" })
-        lsp_keymap("wl", function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, { desc = "Workspace: List folders" })
-        lsp_keymap("r", vim.lsp.buf.references, { desc = "References" })
-        lsp_keymap("p", function()
-            vim.diagnostic.jump({ count = -1, float = true })
-        end, { desc = "Previous diagnostic" })
-        lsp_keymap("n", function()
-            vim.diagnostic.jump({ count = 1, float = true })
-        end, { desc = "Next diagnostic" })
-        if server_capabilities.codeActionProvider then
-            lsp_keymap("A", vim.lsp.buf.code_action, { desc = "Select code actions" })
-            lsp_keymap("A", vim.lsp.buf.code_action, { mode = "v", desc = "Select code actions" })
-        end
+    if utils.is_plugin_installed("trouble.nvim") then
+        lsp_keymap(
+            "x",
+            "<cmd>Trouble diagnostics toggle filter.buf=" .. bufnr .. "<cr>",
+            { buffer = bufnr, desc = "Show buffer diagnostics" }
+        )
+        lsp_keymap("X", "<cmd>Trouble diagnostics toggle<cr>", { buffer = bufnr, desc = "Show workspace diagnostics" })
+    else
+        lsp_keymap("x", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Show buffer diagnostics" })
+        lsp_keymap("X", function()
+            vim.fn.setqflist(vim.diagnostic.toqflist(vim.diagnostic.get(nil)))
+            vim.cmd.copen()
+        end, { buffer = bufnr, desc = "Show workspace diagnostics" })
+    end
 
-        if utils.is_plugin_installed("trouble.nvim") then
-            lsp_keymap(
-                "x",
-                "<cmd>Trouble diagnostics toggle filter.buf=" .. bufnr .. "<cr>",
-                { buffer = bufnr, desc = "Show buffer diagnostics" }
-            )
-            lsp_keymap(
-                "X",
-                "<cmd>Trouble diagnostics toggle<cr>",
-                { buffer = bufnr, desc = "Show workspace diagnostics" }
-            )
-        else
-            lsp_keymap("x", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Show buffer diagnostics" })
-            lsp_keymap("X", function()
-                vim.fn.setqflist(vim.diagnostic.toqflist(vim.diagnostic.get(nil)))
-                vim.cmd.copen()
-            end, { buffer = bufnr, desc = "Show workspace diagnostics" })
-        end
+    -- Set insert keymap for signature help
+    utils.keymap_set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
 
-        -- Set insert keymap for signature help
-        utils.keymap_set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
+    -- Some top level aliases or remaps
+    utils.keymap_set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Display hover" })
+    utils.keymap_set("n", "gD", vim.lsp.buf.declaration, { buffer = bufnr, desc = "Go to declaration" })
+    utils.keymap_set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
+    utils.keymap_set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, desc = "Refactor rename" })
+    utils.keymap_set("n", "[d", function()
+        vim.diagnostic.jump({ count = -1, float = true })
+    end, { buffer = bufnr, desc = "Previous diagnostic" })
+    utils.keymap_set("n", "]d", function()
+        vim.diagnostic.jump({ count = 1, float = true })
+    end, { buffer = bufnr, desc = "Next diagnostic" })
 
-        -- Some top level aliases or remaps
-        utils.keymap_set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Display hover" })
-        utils.keymap_set("n", "gD", vim.lsp.buf.declaration, { buffer = bufnr, desc = "Go to declaration" })
-        utils.keymap_set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
-        utils.keymap_set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, desc = "Refactor rename" })
-        utils.keymap_set("n", "[d", function()
-            vim.diagnostic.jump({ count = -1, float = true })
-        end, { buffer = bufnr, desc = "Previous diagnostic" })
-        utils.keymap_set("n", "]d", function()
-            vim.diagnostic.jump({ count = 1, float = true })
-        end, { buffer = bufnr, desc = "Next diagnostic" })
+    -- Open diagnostic on hold
+    vim.api.nvim_create_autocmd({ "CursorHold" }, {
+        pattern = "<buffer>",
+        callback = function()
+            vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+        end,
+        group = vim.api.nvim_create_augroup("diagnostic_float", { clear = true }),
+        desc = "Open float dialog on hold",
+    })
 
-        -- Open diagnostic on hold
-        vim.api.nvim_create_autocmd({ "CursorHold" }, {
-            pattern = "<buffer>",
+    -- Use IncRename if available
+    if utils.is_plugin_installed("inc-rename.nvim") then
+        vim.keymap.set("n", "<leader>rn", function()
+            _ = require("inc_rename")
+            return ":IncRename " .. vim.fn.expand("<cword>")
+        end, { expr = true, buffer = true, desc = "Rename current symbol" })
+    end
+
+    -- Set some keybinds conditional on server capabilities
+    lsp_keymap("f", function()
+        vim.lsp.buf.format({ async = true })
+    end, { desc = "Format code" })
+    lsp_keymap("f", function()
+        vim.lsp.buf.format({ async = true })
+    end, { mode = "v", desc = "Format selected code" })
+    if server_capabilities.documentFormattingProvider then
+        vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+            pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
             callback = function()
-                vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+                vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
             end,
-            group = vim.api.nvim_create_augroup("diagnostic_float", { clear = true }),
-            desc = "Open float dialog on hold",
+            group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
+            desc = "Auto format code on save",
         })
-
-        -- Use IncRename if available
-        if utils.is_plugin_installed("inc-rename.nvim") then
-            vim.keymap.set("n", "<leader>rn", function()
-                _ = require("inc_rename")
-                return ":IncRename " .. vim.fn.expand("<cword>")
-            end, { expr = true, buffer = true, desc = "Rename current symbol" })
-        end
-
-        -- Set some keybinds conditional on server capabilities
-        lsp_keymap("f", function()
-            vim.lsp.buf.format({ async = true })
-        end, { desc = "Format code" })
-        lsp_keymap("f", function()
-            vim.lsp.buf.format({ async = true })
-        end, { mode = "v", desc = "Format selected code" })
-        if server_capabilities.documentFormattingProvider then
-            vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-                pattern = { "*.rs", "*.go", "*.sh", "*.lua" },
-                callback = function()
-                    vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
-                end,
-                group = vim.api.nvim_create_augroup("lsp_format", { clear = true }),
-                desc = "Auto format code on save",
-            })
-        end
-
-        -- Set autocommands conditional on server_capabilities
-        if server_capabilities.documentHighlightProvider then
-            vim.api.nvim_set_hl(0, "LspReferenceRead", { link = "MatchParen" })
-            vim.api.nvim_set_hl(0, "LspReferenceText", { link = "MatchParen" })
-            vim.api.nvim_set_hl(0, "LspReferenceWrite", { link = "MatchParen" })
-
-            local hl_group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
-            vim.api.nvim_create_autocmd(
-                { "CursorHold" },
-                { pattern = "<buffer>", callback = vim.lsp.buf.document_highlight, group = hl_group }
-            )
-            vim.api.nvim_create_autocmd(
-                { "CursorMoved" },
-                { pattern = "<buffer>", callback = vim.lsp.buf.clear_references, group = hl_group }
-            )
-        end
-
-        if utils.is_plugin_installed("fzf-lua") then
-            local lazy_fzf = function(method_name)
-                return function()
-                    require("fzf-lua")[method_name]()
-                end
-            end
-            -- Replace some fzf bindings with LSP versions
-            local finder_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
-            if server_capabilities.documentSymbolProvider then
-                finder_keymap("t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
-                -- Also override the default tag finder
-                utils.keymap_set("n", "<leader>t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
-            end
-            if server_capabilities.workspaceSymbolProvider then
-                finder_keymap("T", lazy_fzf("lsp_live_workspace_symbols"), { desc = "Find tags" })
-            end
-
-            -- Replace some LSP bindings with Telescope ones
-            if server_capabilities.definitionProvider then
-                lsp_keymap("d", lazy_fzf("lsp_definitions"), { desc = "Find definition" })
-            end
-            if server_capabilities.typeDefinitionProvider then
-                lsp_keymap("t", lazy_fzf("lsp_typedefs"), { desc = "Find type definition" })
-            end
-            lsp_keymap("i", lazy_fzf("lsp_implementations"), { desc = "Find implementations" })
-            lsp_keymap("r", lazy_fzf("lsp_references"), { desc = "Find references" })
-        end
-
-        -- Attach navic for statusline location
-        if server_capabilities.documentSymbolProvider then
-            utils.try_require("nvim-navic", function(navic)
-                navic.attach(client, bufnr)
-            end)
-        end
     end
-end
 
-function M.merged_capabilities()
-    -- TODO: Remove after 0.11+
+    -- Set autocommands conditional on server_capabilities
+    if server_capabilities.documentHighlightProvider then
+        vim.api.nvim_set_hl(0, "LspReferenceRead", { link = "MatchParen" })
+        vim.api.nvim_set_hl(0, "LspReferenceText", { link = "MatchParen" })
+        vim.api.nvim_set_hl(0, "LspReferenceWrite", { link = "MatchParen" })
 
-    -- Maybe update capabilities
-    local capabilities = nil
-    -- Try to load blink
-    utils.try_require("blink.cmp", function(blink_cmp)
-        capabilities = blink_cmp.get_lsp_capabilities()
-    end, function()
-        -- Fall back to cmp
-        utils.try_require("cmp-nvim-lsp", function(cmp_nvim_lsp)
-            capabilities = cmp_nvim_lsp.default_capabilities()
+        local hl_group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+        vim.api.nvim_create_autocmd(
+            { "CursorHold" },
+            { pattern = "<buffer>", callback = vim.lsp.buf.document_highlight, group = hl_group }
+        )
+        vim.api.nvim_create_autocmd(
+            { "CursorMoved" },
+            { pattern = "<buffer>", callback = vim.lsp.buf.clear_references, group = hl_group }
+        )
+    end
+
+    if utils.is_plugin_installed("fzf-lua") then
+        local lazy_fzf = function(method_name)
+            return function()
+                require("fzf-lua")[method_name]()
+            end
+        end
+        -- Replace some fzf bindings with LSP versions
+        local finder_keymap = utils.curry_keymap("n", "<leader>f", { buffer = bufnr, group_desc = "Finder" })
+        if server_capabilities.documentSymbolProvider then
+            finder_keymap("t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
+            -- Also override the default tag finder
+            utils.keymap_set("n", "<leader>t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
+        end
+        if server_capabilities.workspaceSymbolProvider then
+            finder_keymap("T", lazy_fzf("lsp_live_workspace_symbols"), { desc = "Find tags" })
+        end
+
+        -- Replace some LSP bindings with Telescope ones
+        if server_capabilities.definitionProvider then
+            lsp_keymap("d", lazy_fzf("lsp_definitions"), { desc = "Find definition" })
+        end
+        if server_capabilities.typeDefinitionProvider then
+            lsp_keymap("t", lazy_fzf("lsp_typedefs"), { desc = "Find type definition" })
+        end
+        lsp_keymap("i", lazy_fzf("lsp_implementations"), { desc = "Find implementations" })
+        lsp_keymap("r", lazy_fzf("lsp_references"), { desc = "Find references" })
+    end
+
+    -- Attach navic for statusline location
+    if server_capabilities.documentSymbolProvider then
+        utils.try_require("nvim-navic", function(navic)
+            navic.attach(client, bufnr)
         end)
-    end)
-
-    return capabilities
+    end
 end
 
 -- Function to conditionally enable LSP servers based on their configuration and availability.
@@ -267,187 +212,75 @@ local maybe_lsp_enable = function(name_or_list)
 end
 
 function M.config_lsp()
-    if vim.fn.has("nvim-0.11") == 1 then
-        vim.lsp.config("bashls", {
-            settings = {
-                bashIde = {
-                    -- Disable shellcheck linting because we have it enabled in null-ls
-                    -- Some machines I use aren't configured with npm so bashls cannot
-                    -- be relied on as the sole source of shellcheck linting.
-                    shellcheckPath = "",
+    vim.lsp.config("bashls", {
+        settings = {
+            bashIde = {
+                -- Disable shellcheck linting because we have it enabled in null-ls
+                -- Some machines I use aren't configured with npm so bashls cannot
+                -- be relied on as the sole source of shellcheck linting.
+                shellcheckPath = "",
+            },
+        },
+    })
+
+    vim.lsp.config("lua_ls", {
+        settings = {
+            Lua = {
+                format = {
+                    -- Disable because I use StyLua via null-ls
+                    enable = false,
                 },
             },
-        })
+        },
+    })
 
-        vim.lsp.config("lua_ls", {
-            settings = {
-                Lua = {
-                    format = {
-                        -- Disable because I use StyLua via null-ls
-                        enable = false,
-                    },
-                },
-            },
-        })
+    maybe_lsp_enable({
+        "bashls",
+        "gopls",
+        "lua_ls",
+    })
 
-        maybe_lsp_enable({
-            "bashls",
-            "gopls",
-            "lua_ls",
-        })
-
-        if not maybe_lsp_enable("basedpyright") then
-            -- If basedpyright is not available, enable pyright instead.
-            maybe_lsp_enable("pyright")
-        end
-
-        -- Auto setup mason installed servers
-        utils.try_require("mason-lspconfig", function(mason_lspconfig)
-            -- Get list of servers that are installed but not set up
-            local needs_setup = vim.tbl_filter(function(server)
-                return not vim.tbl_contains(vim.lsp.config, server)
-            end, mason_lspconfig.get_installed_servers())
-
-            -- Setup each server with default config
-            vim.tbl_map(function(server)
-                vim.lsp.enable(server)
-            end, needs_setup)
-        end)
-
-        -- Config null-ls after lsps so we can disable for languages that have language servers
-        require("config.plugins.null-ls-config").configure({})
-
-        -- Set up attach functions
-        vim.api.nvim_create_autocmd("LspAttach", {
-            callback = function(ev)
-                local client = vim.lsp.get_client_by_id(ev.data.client_id)
-                M.get_default_attach()(client, ev.buf)
-            end,
-        })
-        vim.lsp.handlers["client/registerCapability"] = (function(overridden)
-            return function(err, res, ctx)
-                local result = overridden(err, res, ctx)
-                local client = vim.lsp.get_client_by_id(ctx.client_id)
-                if not client then
-                    return
-                end
-
-                M.get_default_attach()(client, vim.api.nvim_get_current_buf())
-
-                return result
-            end
-        end)(vim.lsp.handlers["client/registerCapability"])
-    else
-        -- TODO: Delete when min version is 0.11
-        utils.try_require("lspconfig", function(lsp_config)
-            local capabilities = M.merged_capabilities()
-            local default_attach = M.get_default_attach()
-            local default_setup = { capabilities = capabilities, on_attach = default_attach }
-
-            local maybe_setup = function(config, options)
-                -- Setup LSP config if the lsp command exists
-                if vim.fn.executable(config.document_config.default_config.cmd[1]) == 1 then
-                    config.setup(options)
-                    return true
-                end
-
-                return false
-            end
-
-            -- Configure each server
-            maybe_setup(lsp_config.gopls, default_setup)
-            if not maybe_setup(lsp_config.basedpyright, default_setup) then
-                maybe_setup(lsp_config.pyright, default_setup)
-            end
-            maybe_setup(lsp_config.bashls, {
-                capabilities = capabilities,
-                on_attach = default_attach,
-                settings = {
-                    bashIde = {
-                        -- Disable shellcheck linting because we have it enabled in null-ls
-                        -- Some machines I use aren't configured with npm so bashls cannot
-                        -- be relied on as the sole source of shellcheck linting.
-                        shellcheckPath = "",
-                    },
-                },
-            })
-
-            -- Set up rust analyzer (preferred) or rls
-            -- TODO: Remove this after min version is 0.10
-            -- NOTE: For version 0.10 or higher, rustaceanvim is initialized in ftconfig
-            -- Maybe all lsp configs should be set up as part of their ftconfig
-            if not utils.is_plugin_installed("rustaceanvim") then
-                maybe_setup(lsp_config.rust_analyzer, {
-                    capabilities = capabilities,
-                    on_attach = default_attach,
-                    settings = {
-                        ["rust-analyzer"] = {
-                            cargo = {
-                                features = "all",
-                            },
-                        },
-                    },
-                })
-                maybe_setup(lsp_config.rls, default_setup)
-            end
-
-            -- Configure neodev for when lua-languge-server is installed
-            -- TODO: Remove when min version is 0.10
-            utils.try_require("neodev", function(neodev)
-                local config = {}
-                utils.try_require("dapui", function()
-                    config.plugins = { "nvim-dap-ui" }
-                    config.types = true
-                end)
-                neodev.setup(config)
-            end)
-
-            -- Configure lua_ls after neodev
-            maybe_setup(lsp_config.lua_ls, {
-                capabilities = capabilities,
-                on_attach = default_attach,
-                settings = {
-                    Lua = {
-                        format = {
-                            enable = false,
-                        },
-                    },
-                },
-            })
-
-            -- Auto setup mason installed servers
-            utils.try_require("mason-lspconfig", function(mason_lspconfig)
-                -- Get list of servers that are installed but not set up
-                local already_setup = lsp_config.util.available_servers()
-                local needs_setup = vim.tbl_filter(function(server)
-                    return not vim.tbl_contains(already_setup, server)
-                end, mason_lspconfig.get_installed_servers())
-
-                -- Setup each server with default config
-                vim.tbl_map(function(server)
-                    vim.lsp.enable(server)
-                    if server == "lua_ls" then
-                        -- Disable formatting with lua_ls because I use stylua
-                        local config = vim.tbl_extend("force", default_setup, {
-                            settings = {
-                                Lua = {
-                                    format = {
-                                        enable = false,
-                                    },
-                                },
-                            },
-                        })
-                        lsp_config[server].setup(config)
-                    else
-                        lsp_config[server].setup(default_setup)
-                    end
-                end, needs_setup)
-            end)
-
-            -- Config null-ls after lsps so we can disable for languages that have language servers
-            require("config.plugins.null-ls-config").configure(default_setup)
-        end)
+    if not maybe_lsp_enable("basedpyright") then
+        -- If basedpyright is not available, enable pyright instead.
+        maybe_lsp_enable("pyright")
     end
+
+    -- Auto setup mason installed servers
+    utils.try_require("mason-lspconfig", function(mason_lspconfig)
+        -- Get list of servers that are installed but not set up
+        local needs_setup = vim.tbl_filter(function(server)
+            return not vim.tbl_contains(vim.lsp.config, server)
+        end, mason_lspconfig.get_installed_servers())
+
+        -- Setup each server with default config
+        vim.tbl_map(function(server)
+            vim.lsp.enable(server)
+        end, needs_setup)
+    end)
+
+    -- Config null-ls after lsps so we can disable for languages that have language servers
+    require("config.plugins.null-ls-config").configure({})
+
+    -- Set up attach functions
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(ev)
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+            M.default_attach(client, ev.buf)
+        end,
+    })
+    vim.lsp.handlers["client/registerCapability"] = (function(overridden)
+        return function(err, res, ctx)
+            local result = overridden(err, res, ctx)
+            local client = vim.lsp.get_client_by_id(ctx.client_id)
+            if not client then
+                return
+            end
+
+            M.default_attach(client, vim.api.nvim_get_current_buf())
+
+            return result
+        end
+    end)(vim.lsp.handlers["client/registerCapability"])
 end
 
 function M.config_lsp_intaller()
