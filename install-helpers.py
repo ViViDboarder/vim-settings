@@ -498,7 +498,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser()
     _ = parser.add_argument("--ignore-missing", action="store_true")
-    _ = parser.add_argument("langs", nargs="*", type=Language)
+    _ = parser.add_argument("langs", nargs="*", choices=[lang.value for lang in Language])
     _ = parser.add_argument("--no-language-servers", action="store_true")
     _ = parser.add_argument("--no-debuggers", action="store_true")
     _ = parser.add_argument("--ai", action="store_true")
@@ -523,7 +523,7 @@ def get_langs(langs: list[Language]) -> set[Language]:
 
 def main():
     args = parse_args()
-    langs = get_langs(cast(list[Language], args.langs))
+    langs = get_langs(cast(list[Language], [Language(lang) for lang in args.langs]))
 
     # Try to upgrade pipx
     maybe_upgrade_pipx()
