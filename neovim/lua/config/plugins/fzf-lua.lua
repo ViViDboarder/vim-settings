@@ -30,7 +30,7 @@ function M.setup(_, opts)
     finder_keymap("T", fzf.tags, { desc = "Find tags" })
 
     -- Completions
-    utils.keymap_set("i", "<C-x><C-f>", fzf.complete_file, { desc = "Completion: files" })
+    utils.keymap_set("i", "<C-x><C-f>", fzf.complete_path, { desc = "Completion: paths" })
 end
 
 return M
