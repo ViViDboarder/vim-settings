@@ -227,7 +227,6 @@ def maybe_release_gitter(
 def install_language_servers(langs: set[Language], upgrade: bool = False):
     """Install language servers for requested languages."""
     if Language.PYTHON in langs:
-        _ = maybe_npm_install("pyright", upgrade=upgrade)
         _ = maybe_pip_install("basedpyright", upgrade=upgrade)
     if Language.RUST in langs:
         _ = maybe_run(
@@ -358,14 +357,6 @@ def install_linters(langs: set[Language], upgrade: bool = False):
         )
     if Language.TERRAFORM in langs:
         _ = maybe_release_gitter(
-            tfsec=[
-                "--git-url",
-                "https://github.com/aquasecurity/tfsec",
-                "--exec",
-                expanduser("mv ~/bin/{} ~/bin/tfsec && chmod +x ~/bin/tfsec"),
-                "tfsec-{system}-{arch}",
-                expanduser("~/bin"),
-            ],
             tflint=[
                 "--git-url",
                 "https://github.com/terraform-linters/tflint",
