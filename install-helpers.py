@@ -76,7 +76,7 @@ def maybe_run(*args: str) -> bool:
         return False
 
 
-def should_install_user(command: str) -> bool:
+def should_install_user(command: str, upgrade_user: bool = False) -> bool:
     """
     Indicates if a local user version of a command should be installed.
 
@@ -87,12 +87,18 @@ def should_install_user(command: str) -> bool:
     """
     bin_path = shutil.which(command)
     if not bin_path:
+        print(f"INFO: {command} not found. Will install to user.")
         return True
+
+    if not upgrade_user:
+        print(f"WARNING: Already installed. Skipping installation of {command}")
+        return False
 
     if bin_path.startswith(expanduser("~")):
         return True
 
-    print(f"WARNING: Already installed by system. Skipping installation of {command}")
+    print(f"WARNING: Already installed by system. Skipping installation of {command} to avoid shadowing")
+
     return False
 
 
@@ -115,20 +121,24 @@ def maybe_upgrade_pipx():
         return
 
 
-def maybe_pip_install(*args: str, library: bool = False) -> bool:
+def maybe_pip_install(*packages: str, cmd_packages: dict[str, str]|None = None, library: bool = False, upgrade: bool = False) -> bool:
     """
     Install user packages using pip.
+
+    args can either be package names or a kwargs cmd=package to handle cases where the pip package name differs from the command name.
 
     Installation will be skipped if there is a system install, or if none of
     pipx, pip3, or pip are present.
     """
-    user_bins = [arg for arg in args if should_install_user(arg)]
-    if not user_bins:
+    user_packages = [pack for pack in packages if should_install_user(pack, upgrade_user=upgrade)]
+    if cmd_packages:
+        user_packages.extend([pack for cmd, pack in cmd_packages.items() if should_install_user(cmd, upgrade_user=upgrade)])
+    if not user_packages:
         return True
 
     if not library and command_exists("pipx"):
         return all(
-            [maybe_run("pipx", "upgrade", "--install", bin) for bin in user_bins]
+            [maybe_run("pipx", "upgrade", "--install", package) for package in user_packages]
         )
     elif command_exists("pip3"):
         return maybe_run(
@@ -137,7 +147,7 @@ def maybe_pip_install(*args: str, library: bool = False) -> bool:
             "--user",
             "--upgrade",
             "--break-system-packages",
-            *user_bins,
+            *user_packages,
         )
     else:
         return maybe_run(
@@ -146,43 +156,43 @@ def maybe_pip_install(*args: str, library: bool = False) -> bool:
             "--user",
             "--upgrade",
             "--break-system-packages",
-            *user_bins,
+            *user_packages,
         )
 
 
-def maybe_npm_install(*args: str) -> bool:
+def maybe_npm_install(*args: str, upgrade: bool = False) -> bool:
     """
     Install user packages using npm.
 
     Installation will be skipped if there is a system install or npm is missing.
     """
-    user_bins = [arg for arg in args if should_install_user(arg)]
+    user_bins = [arg for arg in args if should_install_user(arg, upgrade_user=upgrade)]
     if not user_bins:
         return True
 
     return maybe_run("npm", "install", "-g", *user_bins)
 
 
-def maybe_go_install(**kwargs: str) -> bool:
+def maybe_go_install(upgrade: bool = False, **kwargs: str) -> bool:
     """
     Install user packages using go.
 
     Installation will be skipped if there is a system install or go is missing.
     """
-    urls = [url for name, url in kwargs.items() if should_install_user(name)]
+    urls = [url for name, url in kwargs.items() if should_install_user(name, upgrade_user=upgrade)]
     if not urls:
         return True
 
     return maybe_run("go", "install", *urls)
 
 
-def maybe_cargo_install(*args: str) -> bool:
+def maybe_cargo_install(*args: str, upgrade: bool = False) -> bool:
     """
     Install user packages using cargo.
 
     Installation will be skipped if there is a system install or cargo is missing.
     """
-    user_bins = [arg for arg in args if should_install_user(arg)]
+    user_bins = [arg for arg in args if should_install_user(arg, upgrade_user=upgrade)]
     if not user_bins:
         return True
 
@@ -190,7 +200,7 @@ def maybe_cargo_install(*args: str) -> bool:
 
 
 def maybe_release_gitter(
-    commands_arg: dict[str, list[str]] | None = None, _force: bool = True, **commands_kwargs: list[str]
+    commands_arg: dict[str, list[str]] | None = None, _force: bool = False, upgrade: bool = False, **commands_kwargs: list[str]
 ) -> bool:
     """
     Try to install user binary using release-gitter.
@@ -202,7 +212,7 @@ def maybe_release_gitter(
 
     commands = commands_arg | commands_kwargs
 
-    command_names = [key for key in commands.keys() if _force or should_install_user(key)]
+    command_names = [key for key in commands.keys() if _force or should_install_user(key, upgrade_user=upgrade)]
     if not command_names:
         return True
 
@@ -214,11 +224,11 @@ def maybe_release_gitter(
     return result
 
 
-def install_language_servers(langs: set[Language]):
+def install_language_servers(langs: set[Language], upgrade: bool = False):
     """Install language servers for requested languages."""
     if Language.PYTHON in langs:
-        _ = maybe_npm_install("pyright")
-        _ = maybe_pip_install("basedpyright")
+        _ = maybe_npm_install("pyright", upgrade=upgrade)
+        _ = maybe_pip_install("basedpyright", upgrade=upgrade)
     if Language.RUST in langs:
         _ = maybe_run(
             "rustup",
@@ -230,36 +240,38 @@ def install_language_servers(langs: set[Language]):
             "rust-analyzer",
         )
     if Language.GO in langs:
-        _ = maybe_go_install(gopls="golang.org/x/tools/gopls@latest")
+        _ = maybe_go_install(gopls="golang.org/x/tools/gopls@latest", upgrade=upgrade)
     if Language.LUA in langs:
-        lua_ls_share = expanduser("~/.local/share/lua-language-server")
-        shutil.rmtree(lua_ls_share, ignore_errors=True)
-        os.mkdir(lua_ls_share)
-        _ = maybe_release_gitter(
-            {
-                "lua-language-server": [
-                    "--git-url",
-                    "https://github.com/LuaLS/lua-language-server",
-                    "--version",
-                    "3.16.4",  # Pin version due to bug with lazydev.nvim https://github.com/folke/lazydev.nvim/issues/136
-                    "--map-arch",
-                    "x86_64=x64",
-                    "--extract-all",
-                    "--exec",
-                    expanduser(
-                        "echo -e '#!/bin/sh\\n"
-                        + 'exec "$HOME/.local/share/lua-language-server/bin/lua-language-server" "$@"\' >'
-                        + " ~/.local/bin/lua-language-server &&"
-                        + " chmod +x ~/.local/bin/lua-language-server"
-                    ),
-                    "lua-language-server-{version}-{system}-{arch}.tar.gz",
-                    lua_ls_share,
-                ],
-            }
-        )
+        if not command_exists("lua-language-server") or upgrade:
+            lua_ls_share = expanduser("~/.local/share/lua-language-server")
+            shutil.rmtree(lua_ls_share, ignore_errors=True)
+            os.mkdir(lua_ls_share)
+            _ = maybe_release_gitter(
+                {
+                    "lua-language-server": [
+                        "--git-url",
+                        "https://github.com/LuaLS/lua-language-server",
+                        "--version",
+                        "3.16.4",  # Pin version due to bug with lazydev.nvim https://github.com/folke/lazydev.nvim/issues/136
+                        "--map-arch",
+                        "x86_64=x64",
+                        "--extract-all",
+                        "--exec",
+                        expanduser(
+                            "echo -e '#!/bin/sh\\n"
+                            + 'exec "$HOME/.local/share/lua-language-server/bin/lua-language-server" "$@"\' >'
+                            + " ~/.local/bin/lua-language-server &&"
+                            + " chmod +x ~/.local/bin/lua-language-server"
+                        ),
+                        "lua-language-server-{version}-{system}-{arch}.tar.gz",
+                        lua_ls_share,
+                    ],
+                },
+                upgrade=upgrade,
+            )
 
 
-def install_linters(langs: set[Language]):
+def install_linters(langs: set[Language], upgrade: bool = False):
     """Install linters for requested languages."""
     if Language.BASH in langs:
         _ = maybe_release_gitter(
@@ -274,22 +286,23 @@ def install_linters(langs: set[Language]):
                 ),
                 "--use-temp-dir",
                 "shellcheck-{version}.{system}.{arch}.tar.xz",
-            ]
+            ],
+            upgrade=upgrade,
         )
 
     if Language.PYTHON in langs:
-        _ = maybe_pip_install("mypy")
+        _ = maybe_pip_install("mypy", upgrade=upgrade)
     if Language.CSS in langs:
-        _ = maybe_npm_install("csslint")
+        _ = maybe_npm_install("csslint", upgrade=upgrade)
     if Language.VIM in langs:
-        _ = maybe_pip_install("vim-vint")
+        _ = maybe_pip_install(cmd_packages={"vint": "vim-vint"}, upgrade=upgrade)
     if Language.YAML in langs:
-        _ = maybe_pip_install("yamllint")
+        _ = maybe_pip_install("yamllint", upgrade=upgrade)
     if Language.TEXT in langs:
-        _ = maybe_npm_install("alex", "write-good")
-        _ = maybe_pip_install("proselint")
+        _ = maybe_npm_install("alex", "write-good", upgrade=upgrade)
+        _ = maybe_pip_install("proselint", upgrade=upgrade)
     if Language.ANSIBLE in langs:
-        _ = maybe_pip_install("ansible-lint")
+        _ = maybe_pip_install("ansible-lint", upgrade=upgrade)
     if Language.GO in langs:
         _ = maybe_release_gitter(
             {
@@ -305,7 +318,8 @@ def install_linters(langs: set[Language]):
                     "--use-temp-dir",
                     "golangci-lint-{version}-{system}-{arch}.tar.gz",
                 ]
-            }
+            },
+            upgrade=upgrade,
         )
     if Language.LUA in langs:
         _ = maybe_release_gitter(
@@ -318,7 +332,8 @@ def install_linters(langs: set[Language]):
                 "selene",
                 "selene-{version}-{system}.zip",
                 expanduser("~/bin"),
-            ]
+            ],
+            upgrade=upgrade,
         )
     if Language.DOCKER in langs:
         hadolint_arm64 = "arm64"
@@ -338,7 +353,8 @@ def install_linters(langs: set[Language]):
                 ),
                 "hadolint-{system}-{arch}",
                 expanduser("~/bin"),
-            ]
+            ],
+            upgrade=upgrade,
         )
     if Language.TERRAFORM in langs:
         _ = maybe_release_gitter(
@@ -373,13 +389,14 @@ def install_linters(langs: set[Language]):
                 "trivy_{version}_{system}-{arch}.tar.gz",
                 expanduser("~/bin"),
 
-            ]
+            ],
+            upgrade=upgrade,
         )
     if Language.LLM in langs:
-        _ = maybe_pip_install("vectorcode")
+        _ = maybe_pip_install("vectorcode", upgrade=upgrade)
 
 
-def install_fixers(langs: set[Language]):
+def install_fixers(langs: set[Language], upgrade: bool = False):
     """Install fixers for requested languages."""
     if {
         Language.PYTHON,
@@ -388,9 +405,9 @@ def install_fixers(langs: set[Language]):
         Language.WEB,
         Language.JSON,
     } & langs:
-        _ = maybe_npm_install("prettier")
+        _ = maybe_npm_install("prettier", upgrade=upgrade)
     if Language.PYTHON in langs:
-        _ = maybe_pip_install("black", "reorder-python-imports", "isort")
+        _ = maybe_pip_install("black", "reorder-python-imports", "isort", upgrade=upgrade)
     if Language.RUST in langs:
         _ = maybe_run("rustup", "component", "add", "rustfmt")
     if Language.LUA in langs:
@@ -404,28 +421,30 @@ def install_fixers(langs: set[Language]):
                 expanduser("chmod +x ~/bin/stylua"),
                 "stylua-{system}-{arch}.zip",
                 expanduser("~/bin"),
-            ]
-        ) or maybe_cargo_install("stylua")
+            ],
+            upgrade=upgrade,
+        ) or maybe_cargo_install("stylua", upgrade=upgrade)
 
     if Language.GO in langs:
         _ = maybe_go_install(
             gofumpt="mvdan.cc/gofumpt@latest",
             goimports="golang.org/x/tools/cmd/goimports@latest",
+            upgrade=upgrade,
         )
 
 
-def install_debuggers(langs: set[Language]):
+def install_debuggers(langs: set[Language], upgrade: bool = False):
     """Install debuggers for the requested languages."""
     if Language.PYTHON in langs:
-        _ = maybe_pip_install("debugpy")
+        _ = maybe_pip_install("debugpy", upgrade=upgrade)
     if Language.GO in langs:
-        _ = maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest")
+        _ = maybe_go_install(dlv="github.com/go-delve/delve/cmd/dlv@latest", upgrade=upgrade)
 
 
-def install_acps(langs: set[Language]):
+def install_acps(langs: set[Language], upgrade: bool = False):
     """Install ACP clients."""
     if Language.ACP_CLAUDE_CODE in langs:
-        _ = maybe_npm_install("@zed-industries/claude-agent-acp")
+        _ = maybe_npm_install("@zed-industries/claude-agent-acp", upgrade=upgrade)
 
 
 def install_release_gitter():
@@ -474,7 +493,7 @@ def install_fzf():
     )
 
 
-def install_treesitter():
+def install_treesitter(upgrade: bool = False):
     """
     Install treesitter CLI
     """
@@ -491,6 +510,7 @@ def install_treesitter():
                 expanduser("~/bin/"),
             ],
         },
+        upgrade=upgrade,
     )
 
 
@@ -502,6 +522,7 @@ def parse_args() -> argparse.Namespace:
     _ = parser.add_argument("--no-language-servers", action="store_true")
     _ = parser.add_argument("--no-debuggers", action="store_true")
     _ = parser.add_argument("--ai", action="store_true")
+    _ = parser.add_argument("--upgrade", action="store_true")
     return parser.parse_args()
 
 
@@ -524,6 +545,7 @@ def get_langs(langs: list[Language]) -> set[Language]:
 def main():
     args = parse_args()
     langs = get_langs(cast(list[Language], [Language(lang) for lang in args.langs]))
+    upgrade = cast(bool, args.upgrade)
 
     # Try to upgrade pipx
     maybe_upgrade_pipx()
@@ -543,17 +565,17 @@ def main():
         os.environ["set"] = "-e"
 
     if not cast(bool, args.no_language_servers):
-        install_language_servers(langs)
+        install_language_servers(langs, upgrade=upgrade)
 
-    install_linters(langs)
-    install_fixers(langs)
-    install_treesitter()
+    install_linters(langs, upgrade=upgrade)
+    install_fixers(langs, upgrade=upgrade)
+    install_treesitter(upgrade=upgrade)
 
     if not cast(bool, args.no_debuggers):
-        install_debuggers(langs)
+        install_debuggers(langs, upgrade=upgrade)
 
     if cast(bool, args.ai):
-        install_acps(langs)
+        install_acps(langs, upgrade=upgrade)
 
     print("DONE")
 
