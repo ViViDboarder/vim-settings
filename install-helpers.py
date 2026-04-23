@@ -239,9 +239,9 @@ def install_language_servers(langs: set[Language]):
             {
                 "lua-language-server": [
                     "--git-url",
+                    "https://github.com/LuaLS/lua-language-server",
                     "--version",
                     "3.16.4",  # Pin version due to bug with lazydev.nvim https://github.com/folke/lazydev.nvim/issues/136
-                    "https://github.com/LuaLS/lua-language-server",
                     "--map-arch",
                     "x86_64=x64",
                     "--extract-all",
@@ -410,7 +410,7 @@ def install_debuggers(langs: set[Language]):
 def install_acps(langs: set[Language]):
     """Install ACP clients."""
     if Language.ACP_CLAUDE_CODE in langs:
-        _ = maybe_npm_install("@zed-industries/claude-code-acp")
+        _ = maybe_npm_install("@zed-industries/claude-agent-acp")
 
 
 def install_release_gitter():
@@ -458,6 +458,25 @@ def install_fzf():
         _force=force_fzf_user
     )
 
+
+def install_treesitter():
+    """
+    Install treesitter CLI
+    """
+    _ = maybe_release_gitter(
+        {
+            "tree-sitter": [
+                "--git-url",
+                "https://github.com/tree-sitter/tree-sitter",
+                "--extract-files",
+                "tree-sitter",
+                "--exec",
+                expanduser("chmod +x ~/bin/tree-sitter"),
+                "tree-sitter-cli-{system}-{arch}.zip",
+                expanduser("~/bin/"),
+            ],
+        },
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -513,6 +532,7 @@ def main():
 
     install_linters(langs)
     install_fixers(langs)
+    install_treesitter()
 
     if not cast(bool, args.no_debuggers):
         install_debuggers(langs)

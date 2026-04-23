@@ -43,7 +43,7 @@ function M.require_with_local(name)
     return rmod
 end
 
---- Returns whether or not lazy plugin is installed
+--- Returns whether or not plugin is installed
 ---@param name string The plugin name
 ---@return boolean Whether the plugin is installed
 function M.is_plugin_installed(name)
@@ -53,12 +53,21 @@ function M.is_plugin_installed(name)
         if plugin ~= nil then
             is_installed = plugin._.installed
         end
+    end, function()
+        local status, pack_infos = pcall(vim.pack.get, { name }, { info = false })
+        if not status then
+            return
+        end
+
+        for _, _ in ipairs(pack_infos) do
+            is_installed = true
+        end
     end)
 
     return is_installed
 end
 
---- Returns whether or not lazy plugin is loaded
+--- Returns whether or not plugin is loaded
 ---@param name string The plugin name
 ---@return boolean Whether the plugin is loaded
 function M.is_plugin_loaded(name)
@@ -67,6 +76,15 @@ function M.is_plugin_loaded(name)
         local plugin = config.plugins[name]
         if plugin ~= nil then
             is_loaded = plugin._.loaded ~= nil
+        end
+    end, function()
+        local status, pack_infos = pcall(vim.pack.get, { name }, { info = false })
+        if not status then
+            return
+        end
+
+        for _, info in ipairs(pack_infos) do
+            is_loaded = info.active
         end
     end)
 
@@ -222,9 +240,16 @@ function M.curry_keymap(mode, prefix, default_opts)
     local group_desc = M.tbl_pop(default_opts, "group_desc")
     if group_desc ~= nil then
         M.try_require("which-key", function(wk)
-            wk.register({
-                [prefix] = "+" .. group_desc,
-            }, default_opts)
+            if wk.add ~= nil then
+                wk.add({
+                    --selene: allow(mixed_table)
+                    { prefix, group = "+" .. group_desc },
+                })
+            else
+                wk.register({
+                    [prefix] = "+" .. group_desc,
+                })
+            end
         end)
     end
 
@@ -233,6 +258,94 @@ function M.curry_keymap(mode, prefix, default_opts)
         local opt_mode = M.tbl_pop(opts, "mode")
         vim.keymap.set(opt_mode or mode, prefix .. lhs, rhs, opts)
     end
+end
+
+--- Get a keymap by mode and left-hand side
+---@param mode string The mode
+---@param lhs string The left-hand side of the mapping
+---@return table|nil The keymap or nil if not found
+function M.get_keymap(mode, lhs)
+    for _, keymap in ipairs(vim.api.nvim_get_keymap(mode)) do
+        if keymap.lhs == lhs then
+            return keymap
+        end
+    end
+end
+
+--- Strips leading and trailing whitespace from a string
+---@param s string The string to strip whitespace from
+---@return string The stripped string
+function M.strip(s)
+    s = s:gsub("^%s+", "", 1):gsub("%s+$", "", 1)
+
+    return s
+end
+
+M.fs = {}
+
+---Move a file or directory from old_path to new_path.
+---@param old_path string
+---@param new_path string
+---@returns boolean Indicating operation success
+function M.fs.rename(old_path, new_path)
+    if not M.fs.exists(old_path) then
+        print(("Error: Could not move %s; not found"):format(old_path))
+        return false
+    end
+    local cmd = { "mv", old_path, new_path }
+    print(vim.inspect(cmd))
+    local result = vim.system(cmd):wait(100)
+    print(vim.inspect(result))
+    if result.code ~= 0 then
+        print(("Error: Could not move %s; error was '%s'"):format(old_path, result.stderr))
+        return false
+    end
+    return true
+end
+
+---Creates a symlink at new_path pointing to old_path. If the file already exists it will fail. You should use rename if you're moving a path.
+---@param src_path string
+---@param target_path string
+---@returns boolean Indicating operation success
+function M.fs.symblink(src_path, target_path)
+    if not M.fs.exists(src_path) then
+        print(("Error: Could link %s; not found"):format(src_path))
+        return false
+    end
+
+    if M.fs.exists(target_path) then
+        print(("Error: Could link to %s; file already exists"):format(target_path))
+        return false
+    end
+
+    local result = vim.system({ "ln", "-s", src_path, target_path }):wait(100)
+    if result.code ~= 0 then
+        print(("Error: Could not move %s; error was '%s'"):format(src_path, result.stderr))
+        return false
+    end
+
+    return true
+end
+
+--- Touches a file at a given path
+---@param file_path string
+---@returns boolean Indicating operation success
+function M.fs.touch(file_path)
+    local result = vim.system({ "touch", file_path }):wait(100)
+    if result.code ~= 0 then
+        print(("Error: Could not touch %s; error was '%s'"):format(file_path, result.stderr))
+        return false
+    end
+
+    return true
+end
+
+--- Reads target to stat
+---@param file_path string
+---@returns boolean Indicating operation success
+function M.fs.exists(file_path)
+    local result = vim.system({ "stat", file_path }):wait(100)
+    return result.code == 0
 end
 
 return M

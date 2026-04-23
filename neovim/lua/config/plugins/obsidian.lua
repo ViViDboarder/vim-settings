@@ -1,0 +1,188 @@
+-- #selene: allow(mixed_table)
+
+-- Obsidian notes
+-- This loads an Obsidian plugin for better vault interraction as well as auto pulls
+-- and commits to my vault git repo. On iOS devices, I use Working Copy to sync the
+-- repo and use Shortcuts to automate pulling on open and auto committing and pushing
+-- after closing Obsidian.
+
+local vault_path = vim.fn.expand("~/Documents/Obsidian")
+
+--- project_note creates or opens a note for a project based on it's git repo
+---
+--- Using fugitive for identifying the remote, it will create or open a note
+--- for the project in the vault.
+local function project_note()
+    local remote = vim.fn.FugitiveRemote()
+    if remote == nil or remote["path"] == nil then
+        vim.notify("Could not identify repo name")
+        return
+    end
+
+    local project_name = remote["path"]:gsub("%.git$", "")
+
+    vim.cmd(":Obsidian new " .. "Projects/" .. project_name .. ".md")
+end
+
+local function auto_git()
+    -- Set up auto pull and commit
+    local group_id = vim.api.nvim_create_augroup("obsidian-git", { clear = true })
+
+    -- Create auto pull on open
+    local autopull = function()
+        local Job = require("plenary.job")
+        vim.notify("Pulling Obsidian notes", vim.log.levels.DEBUG, { title = "Obsidian" })
+        ---@diagnostic disable-next-line: missing-fields
+        Job:new({
+            command = "git",
+            args = { "pull" },
+            on_exit = function(j, return_val)
+                -- vim.notify() can't run on main thread and exit does
+                vim.schedule(function()
+                    if return_val == 0 then
+                        vim.notify("Pulled Obsidian notes", vim.log.levels.INFO, { title = "Obsidian" })
+                    else
+                        vim.notify(
+                            "Failed to pull Obsidian notes. " .. vim.inspect(j:result()),
+                            vim.log.levels.ERROR,
+                            { title = "Obsidian" }
+                        )
+                    end
+                end)
+            end,
+        }):start()
+    end
+
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = vault_path .. "/**",
+        callback = autopull,
+        group = group_id,
+    })
+
+    -- Create autocommit on save
+    local function _auto_commit(ev)
+        local Job = require("plenary.job")
+        ---@diagnostic disable-next-line: missing-fields
+        local git_add = Job:new({
+            command = "git",
+            args = { "add", ev.file },
+            on_exit = function(add_j, add_return_val)
+                if add_return_val ~= 0 then
+                    -- vim.notify() can't run on main thread and exit does
+                    vim.schedule(function()
+                        vim.notify(
+                            "Failed to add file to git. " .. vim.inspect(add_j:result()),
+                            vim.log.levels.ERROR,
+                            { title = "Obsidian" }
+                        )
+                    end)
+                    return
+                end
+            end,
+        })
+        ---@diagnostic disable-next-line: missing-fields
+        local git_commit = Job:new({
+            command = "git",
+            args = { "commit", "-m", "Auto commit: " .. os.date("%Y-%m-%d %H:%M:%S") },
+            on_exit = function(commit_j, commit_return_val)
+                if commit_return_val ~= 0 then
+                    -- vim.notify() can't run on main thread and exit does
+                    vim.schedule(function()
+                        vim.notify(
+                            "Failed to commit file to git. " .. vim.inspect(commit_j:result()),
+                            vim.log.levels.ERROR,
+                            { title = "Obsidian" }
+                        )
+                    end)
+                    return
+                end
+            end,
+        })
+
+        ---@diagnostic disable-next-line: missing-fields
+        local git_push = Job:new({
+            command = "git",
+            args = { "push" },
+            on_exit = function(push_j, push_return_val)
+                if push_return_val ~= 0 then
+                    -- vim.notify() can't run on main thread and exit does
+                    vim.schedule(function()
+                        vim.notify(
+                            "Failed to push Obsidian notes. " .. vim.inspect(push_j:result()),
+                            vim.log.levels.ERROR,
+                            { title = "Obsidian" }
+                        )
+                    end)
+                end
+            end,
+        })
+        git_add:and_then_on_success(git_commit)
+        git_commit:and_then_on_success(git_push)
+        git_add:start()
+    end
+
+    vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = vault_path .. "/**",
+        callback = _auto_commit,
+        group = group_id,
+    })
+end
+
+-- Return plugin spec
+return {
+    src = "https://github.com/obsidian-nvim/obsidian.nvim",
+    dependencies = {
+        { "https://github.com/nvim-lua/plenary.nvim" },
+        { "https://github.com/tpope/vim-fugitive" },
+    },
+    version = vim.version.range("^3"),
+    after = function()
+        local opts = {
+            legacy_commands = false,
+            workspaces = {
+                { name = "personal", path = vault_path },
+            },
+            checkbox = {
+                order = { " ", "x" },
+            },
+            ui = {
+                external_link_icon = { char = "🔗", hl_group = "ObsidianExtLinkIcon" },
+            },
+            templates = {
+                folder = "Templates",
+                substitutions = {
+                    next_monday = function()
+                        local current_time = os.time()
+                        -- 1 = Sunday, 2 = Monday, ..., 7 = Saturday
+                        local current_weekday = os.date("*t", current_time).wday
+
+                        -- Calculate the number of days to add to reach next Monday
+                        local days_to_add = (9 - current_weekday) % 7
+                        if days_to_add == 0 then
+                            days_to_add = 7 -- If today is Monday, get the next Monday
+                        end
+
+                        -- Get the timestamp for the next Monday
+                        local next_monday_time = current_time + (days_to_add * 24 * 60 * 60)
+
+                        -- Return the formatted date
+                        return os.date("%Y-%m-%d", next_monday_time)
+                    end,
+                },
+            },
+            completion = {
+                nvim_cmp = require("utils").is_plugin_installed("cmp"),
+                blink = require("utils").is_plugin_installed("blink.cmp"),
+            },
+        }
+        require("obsidian").setup(opts)
+
+        auto_git()
+
+        vim.api.nvim_create_user_command(
+            "ProjectNote",
+            project_note,
+            { desc = "Open a note for this project in Obsidian" }
+        )
+    end,
+}

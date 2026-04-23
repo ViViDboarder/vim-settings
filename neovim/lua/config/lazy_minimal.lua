@@ -2,26 +2,6 @@
 return {
     { import = "lazy_specs.colorschemes" },
     -- Some helpers
-    -- Auto and ends to some ifs and dos
-    { "https://github.com/tpope/vim-endwise" },
-
-    -- Unix commands from vim? Yup!
-    { "https://github.com/tpope/vim-eunuch" },
-
-    -- Adds repeats for custom motions
-    { "https://github.com/tpope/vim-repeat" },
-
-    -- Readline shortcuts
-    { "https://github.com/tpope/vim-rsi" },
-
-    -- Surround motions
-    { "https://github.com/tpope/vim-surround" },
-
-    -- Better netrw
-    { "https://github.com/tpope/vim-vinegar" },
-
-    -- Easier jumping to lines
-    { "https://github.com/vim-scripts/file-line" },
 
     -- Auto ctags generation
     {
@@ -54,7 +34,7 @@ return {
         -- Custom status line
         "https://github.com/nvim-lualine/lualine.nvim",
         config = function()
-            require("plugins.lualine").config_lualine()
+            require("config.plugins.lualine").config_lualine()
         end,
         event = "VeryLazy",
     },
@@ -64,7 +44,7 @@ return {
         "https://github.com/ibhagwan/fzf-lua",
         version = "0.0.x",
         opts = {},
-        config = require("plugins.fzf-lua").setup,
+        config = require("config.plugins.fzf-lua").setup,
         keys = {
             { "<C-t>", desc = "Find files" },
             { "<leader>b", desc = "Find buffers" },

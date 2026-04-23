@@ -1,6 +1,8 @@
 -- Update colors based on environment variables
 local M = {}
 
+-- TODO: Maybe put vim.pack.add(...) for colorschemes in here
+
 function M.update_colors()
     local function maybe_set(scope, name, val, force)
         force = force or false
@@ -50,8 +52,8 @@ function M.update_colors()
 
     -- Update status line theme
     if change then
-        if utils.is_plugin_installed("lualine.nvim") then
-            require("plugins.lualine").config_lualine()
+        if utils.is_plugin_loaded("lualine.nvim") then
+            require("config.plugins.lualine").config_lualine()
         end
     end
 
@@ -60,16 +62,16 @@ end
 
 -- Don't need the autocommand when dark-notify is installed
 local utils = require("utils")
-if not utils.is_plugin_installed("dark-notify") then
-    vim.api.nvim_create_autocmd({ "FocusGained" }, {
-        pattern = "*",
-        callback = M.update_colors,
-        group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
-    })
-end
 
 -- Initial setting of colors
 function M.init()
+    if not utils.is_plugin_installed("dark-notify") then
+        vim.api.nvim_create_autocmd({ "FocusGained" }, {
+            pattern = "*",
+            callback = M.update_colors,
+            group = vim.api.nvim_create_augroup("auto_colors", { clear = true }),
+        })
+    end
     M.update_colors()
 end
 

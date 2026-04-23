@@ -21,3 +21,4 @@ vim/tmp/
 vim/tmp/viminfo.*
 vim/view/
 vim/pack/
+neovim/nvim-pack-lock.json

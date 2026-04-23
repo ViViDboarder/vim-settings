@@ -16,16 +16,17 @@ function M.config_lsp_ui()
             { "│", "FloatBorder" },
         }
         local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-        function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        local function floating_preview_with_border(contents, syntax, opts, ...)
             opts = opts or {}
             opts.border = opts.border or border
             return orig_util_open_floating_preview(contents, syntax, opts, ...)
         end
+        vim.lsp.util.open_floating_preview = floating_preview_with_border
     end
 
     -- Diagnostics signs
     local signs = { text = {}, linehl = {}, numhl = {} }
-    for level_name, icon in pairs(require("icons").diagnostic_signs) do
+    for level_name, icon in pairs(require("config.icons").diagnostic_signs) do
         local hl = "DiagnosticSign" .. level_name
 
         if vim.fn.has("nvim-0.11") == 1 then
@@ -45,6 +46,7 @@ function M.config_lsp_ui()
     end
 end
 
+-- TODO: Simplify signature when min version is 0.11
 function M.get_default_attach(override_capabilities)
     return function(client, bufnr)
         -- Disable gutentags since we have an LSP
@@ -55,6 +57,11 @@ function M.get_default_attach(override_capabilities)
         local server_capabilities = client.server_capabilities
         if override_capabilities ~= nil then
             server_capabilities = vim.tbl_extend("force", server_capabilities, override_capabilities or {})
+        end
+
+        if client:supports_method("textDocument/completion") then
+            -- Enable native completion
+            vim.lsp.completion.enable(true, client.id, bufnr)
         end
 
         -- Mappings
@@ -93,10 +100,14 @@ function M.get_default_attach(override_capabilities)
             lsp_keymap(
                 "X",
                 "<cmd>Trouble diagnostics toggle<cr>",
-                { buffer = bufnr, desc = "Show project diagnostics" }
+                { buffer = bufnr, desc = "Show workspace diagnostics" }
             )
         else
             lsp_keymap("x", vim.diagnostic.setloclist, { buffer = bufnr, desc = "Show buffer diagnostics" })
+            lsp_keymap("X", function()
+                vim.fn.setqflist(vim.diagnostic.toqflist(vim.diagnostic.get(nil)))
+                vim.cmd.copen()
+            end, { buffer = bufnr, desc = "Show workspace diagnostics" })
         end
 
         -- Set insert keymap for signature help
@@ -155,6 +166,7 @@ function M.get_default_attach(override_capabilities)
             vim.api.nvim_set_hl(0, "LspReferenceRead", { link = "MatchParen" })
             vim.api.nvim_set_hl(0, "LspReferenceText", { link = "MatchParen" })
             vim.api.nvim_set_hl(0, "LspReferenceWrite", { link = "MatchParen" })
+
             local hl_group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
             vim.api.nvim_create_autocmd(
                 { "CursorHold" },
@@ -303,9 +315,15 @@ function M.config_lsp()
         end)
 
         -- Config null-ls after lsps so we can disable for languages that have language servers
-        require("plugins.null-ls").configure({ on_attach = M.get_default_attach() })
+        require("config.plugins.null-ls-config").configure({})
 
         -- Set up attach functions
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(ev)
+                local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                M.get_default_attach()(client, ev.buf)
+            end,
+        })
         vim.lsp.handlers["client/registerCapability"] = (function(overridden)
             return function(err, res, ctx)
                 local result = overridden(err, res, ctx)
@@ -427,7 +445,7 @@ function M.config_lsp()
             end)
 
             -- Config null-ls after lsps so we can disable for languages that have language servers
-            require("plugins.null-ls").configure(default_setup)
+            require("config.plugins.null-ls-config").configure(default_setup)
         end)
     end
 end

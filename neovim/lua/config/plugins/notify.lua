@@ -1,5 +1,5 @@
 local notify = require("notify")
-local icons = require("icons")
+local icons = require("config.icons")
 
 notify.setup({
     icons = {

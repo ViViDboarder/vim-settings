@@ -126,6 +126,40 @@ local function minuet_preset()
     return "unknown"
 end
 
+local function minuet_config(config)
+    local presets = {
+        claude = {
+            provider = "claude",
+            n_completions = 1,
+            context_window = 20000,
+            provider_options = {
+                claude = {
+                    model = vim.g.llm_completion_model or vim.g.llm_chat_model,
+                    end_point = vim.g.llm_anthropic_url,
+                },
+            },
+        },
+        ollama = {
+            provider = "openai_fim_compatible",
+            n_completions = 1,
+            context_window = 4096,
+            provider_options = {
+                openai_fim_compatible = {
+                    api_key = "TERM",
+                    name = "Ollama",
+                    end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
+                    model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
+                },
+            },
+        },
+    }
+
+    config = vim.tbl_extend("force", config, presets[minuet_preset()] or {})
+    config.presets = presets
+
+    return config
+end
+
 vim.list_extend(specs, {
     {
         -- CodeCompanion tool will be lazy loaded
@@ -144,12 +178,14 @@ vim.list_extend(specs, {
             sign = {
                 enabled = false, -- Turn off in the status column
             },
+            -- Only use this for codecompanion buffers
+            file_types = { "codecompanion" },
         },
     },
     {
         "https://github.com/olimorris/codecompanion.nvim",
         version = utils.map_version_rule({
-            [">=0.11.0"] = "^18",
+            [">=0.11.0"] = "^19",
             ["<0.11.0"] = "^16",
         }),
         opts = {
@@ -211,51 +247,48 @@ vim.list_extend(specs, {
 
 -- For local llms, we use minuet-ai.nvim since it will talk to Ollama
 table.insert(specs, {
-    -- "https://github.com/milanglacier/minuet-ai.nvim",
-    "https://github.com/ViViDboarder/minuet-ai.nvim",
-    branch = "initial-preset",
-    opts = {
+    "https://github.com/milanglacier/minuet-ai.nvim",
+    opts = minuet_config({
+        before_cursor_filter_length = 10,
         virtualtext = {
             keymap = {
                 accept = "<A-A>",
-                accept_line = "<C-F>",
                 dismiss = "<C-C>",
             },
         },
-        initial_preset = minuet_preset(),
-        presets = {
-            claude = {
-                provider = "claude",
-                n_completions = 1,
-                context_window = 20000,
-                provider_options = {
-                    claude = {
-                        model = vim.g.llm_completion_model or vim.g.llm_chat_model,
-                        end_point = vim.g.llm_anthropic_url,
-                    },
-                },
-            },
-            ollama = {
-                provider = "openai_fim_compatible",
-                n_completions = 1,
-                context_window = 4096,
-                provider_options = {
-                    openai_fim_compatible = {
-                        api_key = "TERM",
-                        name = "Ollama",
-                        end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
-                        model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
-                    },
-                },
-            },
-        },
-    },
+    }),
     config = function(_, opts)
         require("minuet").setup(opts)
 
+        -- Map accept line to <C-F> and <Right>
+        -- Make sure vim-rsi is loaded so it doesn't overwrite this keymap
+        if vim.fn.has("nvim-0.12.0") == 1 and vim.g.force_lazy ~= true then
+            vim.cmd.packadd("vim-rsi")
+        end
+        local minuet_accept = function()
+            local vt_action = require("minuet.virtualtext").action
+            if vt_action.is_visible() then
+                vt_action.accept_line()
+                return
+            else
+                return utils.t("<Right>")
+            end
+        end
+        utils.keymap_set(
+            "i",
+            "<C-F>",
+            minuet_accept,
+            { desc = "minuet accept line", expr = true, replace_keycodes = false, noremap = true }
+        )
+        utils.keymap_set(
+            "i",
+            "<Right>",
+            minuet_accept,
+            { desc = "minuet accept line", expr = true, replace_keycodes = false, noremap = true }
+        )
+
         -- Create autocmd to disable completion for certain filetypes that may contain sensitive information
         vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-            -- pattern = { ".env*", "*secret*", "*API_KEY*", "*TOKEN*" },
             callback = function(args)
                 if
                     args.file:match("%.env")

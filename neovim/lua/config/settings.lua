@@ -31,12 +31,17 @@ vim.o.scrolloff = 3
 if vim.fn.has("nvim-0.11") == 1 then
     vim.o.winborder = "rounded"
 end
+if vim.fn.has("nvim-0.12") == 1 then
+    vim.o.pumborder = "rounded"
+    -- TODO: Add border around completion popup when this issue is completed:
+    -- https://github.com/neovim/neovim/issues/38248
+end
 
 -- vim.o.mousehide = true
 vim.o.mouse = "a"
 
 -- Autocomplete options
-vim.o.completeopt = "menuone,noinsert,noselect,preview"
+vim.o.completeopt = "menuone,noinsert,noselect,popup"
 vim.api.nvim_create_autocmd({ "CompleteDone" }, {
     pattern = "*",
     command = "if pumvisible() == 0 | pclose | endif",

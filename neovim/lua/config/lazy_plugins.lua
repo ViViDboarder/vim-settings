@@ -1,5 +1,7 @@
 -- #selene: allow(mixed_table)
 local utils = require("utils")
+local pack2lazy = require("pack2lazy")
+
 return {
     {
         -- Make it easier to discover some of my keymaps
@@ -8,7 +10,7 @@ return {
             -- Ignore warnings about config. Turn these on when switching major versions
             notify = false,
             icons = {
-                mappings = require("icons").nerd_font,
+                mappings = require("config.icons").nerd_font,
             },
         },
         version = utils.map_version_rule({
@@ -195,7 +197,7 @@ return {
         -- Download latest release on install
         build = "cargo install --git https://github.com/cormacrelf/dark-notify --rev 0d8501ca027b4355ed958b937ed51b37632c60cf",
         config = function()
-            require("plugins.darknotify").run()
+            require("config.plugins.darknotify").run()
         end,
         dependencies = { { "https://github.com/nvim-lualine/lualine.nvim" } },
         event = "VeryLazy",
@@ -204,7 +206,7 @@ return {
         -- Custom start screen
         "https://github.com/mhinz/vim-startify",
         config = function()
-            require("utils").require_with_local("plugins.startify")
+            require("utils").require_with_local("config.plugins.startify")
         end,
         dependencies = {
             -- Plenary isn't used by startify, but it is used in my config
@@ -272,7 +274,7 @@ return {
         "https://github.com/junegunn/goyo.vim",
         cmd = { "Goyo", "Zen" },
         config = function()
-            require("plugins.goyo-limelight")
+            require("config.plugins.goyo-limelight")
         end,
         dependencies = {
             { "https://github.com/junegunn/limelight.vim", cmd = "Limelight" },
@@ -296,11 +298,8 @@ return {
             ["==0.9.0"] = "0.9.0",
         }),
         config = function()
-            require("utils").require_with_local("plugins.treesitter").setup()
+            require("utils").require_with_local("config.plugins.treesitter").setup()
         end,
-        dependencies = {
-            { "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
-        },
     },
 
     -- Filetypes
@@ -316,7 +315,7 @@ return {
         },
         config = function()
             require("go").setup({
-                icons = require("icons").nerd_font,
+                icons = require("config.icons").nerd_font,
                 -- I don't like the normal mode keymap because it overrides `w`
                 dap_debug_keymap = false,
                 -- Disable gui setup becuase this is set up with dap-ui
@@ -354,7 +353,7 @@ return {
                     icon = "🩹",
                 },
                 TODO = {
-                    icon = require("icons").diagnostic_signs.Pencil,
+                    icon = require("config.icons").diagnostic_signs.Pencil,
                 },
                 HACK = {
                     icon = "🙈",
@@ -366,7 +365,7 @@ return {
                     icon = "📓",
                 },
                 WARNING = {
-                    icon = require("icons").diagnostic_signs.Warn,
+                    icon = require("config.icons").diagnostic_signs.Warn,
                 },
             },
         },
@@ -381,7 +380,7 @@ return {
             ["<0.10.0"] = "3.13.5",
         }),
         config = function()
-            require("plugins.notify")
+            require("config.plugins.notify")
         end,
     },
 
@@ -404,7 +403,7 @@ return {
         },
     },
 
-    { import = "lazy_specs.obsidian" },
+    pack2lazy.convert(require("config.plugins.obsidian")),
 
     -- Work things
     -- Sourcegraph
