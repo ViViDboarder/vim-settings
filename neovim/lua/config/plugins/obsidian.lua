@@ -142,7 +142,7 @@ return {
             workspaces = {
                 { name = "personal", path = vault_path },
             },
-            note_id_func = require("obsidian.builtin").title_id,
+            note_id_func = require("obsidian.builtin").title_to_slug,
             checkbox = {
                 order = { " ", "x" },
             },
