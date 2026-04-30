@@ -373,6 +373,8 @@ def install_linters(langs: set[Language], upgrade: bool = False):
                 "x86=32bit",
                 "--map-arch",
                 "x86_64=64bit",
+                "--map-arch",
+                "arm64=ARM64",
                 "--extract-files",
                 "trivy",
                 "--exec",
