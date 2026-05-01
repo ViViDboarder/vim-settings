@@ -26,6 +26,8 @@ let g:airline_right_alt_sep=''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
+" Disable tagbar extension
+let g:airline#extensions#tagbar#enabled = 0
 " Slimmer section z
 let g:airline_section_z = '%2l/%L:%2v'
 " Skip most common encoding
