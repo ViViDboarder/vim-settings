@@ -390,6 +390,7 @@ def install_linters(langs: set[Language], upgrade: bool = False):
             ],
             upgrade=upgrade,
         )
+        _ = maybe_go_install({"terraform-ls": "github.com/hashicorp/terraform-ls@latest"}, upgrade=upgrade)
     if Language.LLM in langs:
         _ = maybe_pip_install("vectorcode", upgrade=upgrade)
 
