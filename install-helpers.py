@@ -173,13 +173,18 @@ def maybe_npm_install(*args: str, upgrade: bool = False) -> bool:
     return maybe_run("npm", "install", "-g", *user_bins)
 
 
-def maybe_go_install(upgrade: bool = False, **kwargs: str) -> bool:
+def maybe_go_install(commands_arg: dict[str, str] | None = None, upgrade: bool = False, **commands_kwargs: str) -> bool:
     """
     Install user packages using go.
 
     Installation will be skipped if there is a system install or go is missing.
     """
-    urls = [url for name, url in kwargs.items() if should_install_user(name, upgrade_user=upgrade)]
+    if commands_arg is not None:
+        commands = commands_arg | commands_kwargs
+    else:
+        commands = commands_kwargs
+
+    urls = [url for name, url in commands.items() if should_install_user(name, upgrade_user=upgrade)]
     if not urls:
         return True
 
