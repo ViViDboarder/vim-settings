@@ -193,7 +193,7 @@ return {
     },
 
     -- LSP
-    { import = "lazy_specs.language_servers" },
+    pack2lazy.convert(require("config.plugins.language_servers")),
 
     -- Debug adapter protocol
     pack2lazy.convert(require("config.plugins.dap")),
