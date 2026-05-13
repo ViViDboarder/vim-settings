@@ -1,10 +1,11 @@
 -- #selene: allow(mixed_table)
 local utils = require("utils")
+
 return {
     {
-        "https://github.com/mfussenegger/nvim-dap",
-        version = "^0.9",
-        config = function()
+        src = "https://github.com/mfussenegger/nvim-dap",
+        version = vim.version.range("^0.9"),
+        after = function()
             local dap = require("dap")
             local dap_mapping = utils.curry_keymap("n", "<leader>d", {
                 group_desc = "Debugging",
@@ -49,27 +50,24 @@ return {
                 { text = icons.debug_icons.breakpoint_rejected, texthl = "", linehl = "", numhl = "" }
             )
         end,
-        lazy = true,
     },
     {
-        "https://github.com/rcarriga/nvim-dap-ui",
+        src = "https://github.com/rcarriga/nvim-dap-ui",
         dependencies = {
             { "https://github.com/mfussenegger/nvim-dap" },
             { "https://github.com/nvim-neotest/nvim-nio" },
         },
-        lazy = true,
-        opts = {
-            icons = {
-                expanded = require("config.icons").fold.open,
-                collapsed = require("config.icons").fold.closed,
-                current_frame = ">",
-            },
-            controls = {
-                icons = require("config.icons").debug_control_icons,
-            },
-        },
-        config = function(_, opts)
-            require("dapui").setup(opts)
+        after = function()
+            require("dapui").setup({
+                icons = {
+                    expanded = require("config.icons").fold.open,
+                    collapsed = require("config.icons").fold.closed,
+                    current_frame = ">",
+                },
+                controls = {
+                    icons = require("config.icons").debug_control_icons,
+                },
+            })
 
             local dap, dapui = require("dap"), require("dapui")
             dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -88,12 +86,12 @@ return {
     },
 
     {
-        "https://github.com/mfussenegger/nvim-dap-python",
+        src = "https://github.com/mfussenegger/nvim-dap-python",
         dependencies = {
             { "https://github.com/rcarriga/nvim-dap-ui" },
             { "https://github.com/mfussenegger/nvim-dap" },
         },
-        config = function()
+        after = function()
             -- This is where pipx is installing debugpy via ./install-helpers.py
             -- Could maybe detect by doing a which debugpy and then reading the interpreter
             -- from the shebang line.
@@ -143,6 +141,5 @@ return {
                 -- See https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
             })
         end,
-        ft = { "python" },
     },
 }
