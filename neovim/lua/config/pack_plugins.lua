@@ -216,7 +216,14 @@ packle.add({
 packle.add({
     src = "https://github.com/paradoxical-dev/zeal.nvim",
     after = function()
-        require("zeal").setup()
+        require("zeal").setup({
+            ft_map = {
+                go = { "go" },
+                lua = { "lua_5.5" },
+                python = { "python_3" },
+                rust = { "rust" },
+            },
+        })
     end,
 })
 
