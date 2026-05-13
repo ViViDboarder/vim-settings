@@ -387,5 +387,5 @@ return {
 
     { import = "lazy_specs.completion" },
 
-    { import = "lazy_specs.llm_assist" },
+    pack2lazy.convert(require("config.plugins.llm_assist")),
 }

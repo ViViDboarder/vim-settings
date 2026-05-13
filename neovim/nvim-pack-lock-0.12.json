@@ -94,7 +94,7 @@
     "render-markdown.nvim": {
       "rev": "e3c18ddd27a853f85a6f513a864cf4f2982b9f26",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim",
-      "version": ">=0.0.0"
+      "version": "8.0.0 - 9.0.0"
     },
     "rustaceanvim": {
       "rev": "88575b98bb9937fb9983ddec5e532b67e75ce677",

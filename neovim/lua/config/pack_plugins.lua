@@ -230,16 +230,9 @@ require("config.plugins.notify")
 --]]
 
 packle.add(require("config.plugins.obsidian"))
-packle.add(require("lazy_specs.language_servers"))
+packle.add(require("config.plugins.language_servers"))
 packle.add(require("config.plugins.dap"))
-
--- HACK: Bandaid on some complicated plugin specs that I don't want to duplicate
-local lazy2pack = require("lazy2pack")
--- lazy2pack.debug = true
-
--- TODO: When dropping less than 0.12 I can migrate these, or maybe migrate
--- them and build an adapter that works the other direction
-packle.add(lazy2pack.convert(require("lazy_specs.llm_assist")))
+packle.add(require("config.plugins.llm_assist"))
 
 packle.apply()
 
