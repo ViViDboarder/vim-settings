@@ -213,6 +213,13 @@ packle.add({
     },
 })
 
+packle.add({
+    src = "https://github.com/paradoxical-dev/zeal.nvim",
+    after = function()
+        require("zeal").setup()
+    end,
+})
+
 -- Using ui2 rather than this for now
 --[[
 -- nvim notify

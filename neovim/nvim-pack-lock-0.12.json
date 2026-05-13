@@ -158,6 +158,10 @@
     "wombat.nvim": {
       "rev": "87df740a14deb59e6ee58a1b9802daf34ff6a9e8",
       "src": "https://github.com/ViViDboarder/wombat.nvim"
+    },
+    "zeal.nvim": {
+      "rev": "8751cdb735513ac38e409989eea6355e01746ec8",
+      "src": "https://github.com/paradoxical-dev/zeal.nvim"
     }
   }
 }
