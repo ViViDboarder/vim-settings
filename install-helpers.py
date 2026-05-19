@@ -31,6 +31,7 @@ class Language(Enum):
 
     ACP_CLAUDE_CODE = "claude_code"
     AI = "ai"
+    ALL = "all"
     ANSIBLE = "ansible"
     BASH = "bash"
     CSS = "css"
@@ -54,6 +55,7 @@ class Language(Enum):
 
 # Meta langs are for platforms that consist of multiple languages
 META_LANGS: dict[Language, set[Language]] = {
+    Language.ALL: { lang for lang in Language},
     Language.AI: {Language.ACP_CLAUDE_CODE},
     Language.NEOVIM: {Language.VIM, Language.LUA},
     Language.WEB: {Language.CSS, Language.JAVASCRIPT, Language.HTML},
