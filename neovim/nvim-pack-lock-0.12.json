@@ -43,9 +43,9 @@
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
     "nvim-dap": {
-      "rev": "04ce47fc5a6ef2b717f33c320fc003091cebac40",
+      "rev": "6a5bba0ddea5d419a783e170c20988046376090d",
       "src": "https://github.com/mfussenegger/nvim-dap",
-      "version": "0.9.0 - 0.10.0"
+      "version": "0.10.0 - 0.11.0"
     },
     "nvim-dap-python": {
       "rev": "1808458eba2b18f178f990e01376941a42c7f93b",

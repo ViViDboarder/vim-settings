@@ -4,7 +4,7 @@ local utils = require("utils")
 return {
     {
         src = "https://github.com/mfussenegger/nvim-dap",
-        version = vim.version.range("^0.9"),
+        version = vim.version.range("^0.10"),
         after = function()
             local dap = require("dap")
             local dap_mapping = utils.curry_keymap("n", "<leader>d", {
