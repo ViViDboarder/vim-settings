@@ -1,11 +1,12 @@
 -- #selene: allow(mixed_table)
 --
--- Supported llm_providers = copilot | ollama | claude_code | anthropic
+-- Supported llm_providers = copilot | ollama | open_webui | claude_code | anthropic
 
 -- Relies on the following variable:
 --      vim.g.llm_provider set to "github" for GitHub Copilot, "ollama" for local LLM (Ollama), or nil/undefined for none
 --      vim.g.llm_completion_provider: provider name for llm completions only. Defaults to vim.g.llm_provider
 --      vim.g.llm_ollama_url to change the URL for the local llm
+--      vim.g.llm_open_webui_url change the url for an OpenAI compatible server
 --      vim.g.llm_anthropic_url: url to use for anthropic API
 --      vim.g.llm_chat_model to change the chat model used by the local llm
 --      vim.g.llm_completion_model to change the completion model used by the local llm, defaults to llm_chat_model
@@ -45,29 +46,42 @@ local function ollama_chat_adapter(model, num_ctx)
     end
 end
 
+-- Helper function to create a local openai adapter
+local function open_webui_chat_adapter(model)
+    return function()
+        return require("codecompanion.adapters").extend("openai_compatible", {
+            env = {
+                url = vim.g.llm_open_webui_url or "https://chat.thefij.rocks/api",
+                api_key = "OWUI_API_KEY",
+            },
+            schema = {
+                model = {
+                    default = model,
+                },
+            },
+        })
+    end
+end
+
 --- Helper function to return an anthropic adapter for CodeCompanion
 local function anthropic_chat_adapter(model)
     if model == nil then
         model = vim.g.llm_chat_model or "opus"
     end
 
-    local opts = {
-        -- has_token_efficient_tools = false,
-        env = {
-            api_key = "ANTHROPIC_API_KEY",
-        },
-        schema = {
-            model = {
-                default = model,
-            },
-        },
-    }
-    if vim.g.llm_anthropic_url ~= nil then
-        opts.url = vim.g.llm_anthropic_url
-    end
-
     return function()
-        return require("codecompanion.adapters").extend("anthropic", opts)
+        return require("codecompanion.adapters").extend("anthropic", {
+            -- has_token_efficient_tools = false,
+            env = {
+                url = vim.g.llm_anthropic_url,
+                api_key = "ANTHROPIC_API_KEY",
+            },
+            schema = {
+                model = {
+                    default = model,
+                },
+            },
+        })
     end
 end
 
@@ -97,6 +111,8 @@ local function codecompanion_adapter()
         return "anthropic"
     elseif vim.g.llm_provider == "ollama" then
         return "ollama"
+    elseif vim.g.llm_provider == "open_webui" then
+        return "open_webui"
     end
 
     vim.notify("Unknown llm_provider: " .. tostring(vim.g.llm_provider), vim.log.levels.WARN)
@@ -119,6 +135,8 @@ local function minuet_preset()
         return "claude"
     elseif provider == "ollama" then
         return "ollama"
+    elseif provider == "open_webui" then
+        return "open_webui"
     end
 
     vim.notify("Unknown llm_provider: " .. tostring(provider), vim.log.levels.WARN)
@@ -148,6 +166,19 @@ local function minuet_config(config)
                     api_key = "TERM",
                     name = "Ollama",
                     end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
+                    model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
+                },
+            },
+        },
+        open_webui = {
+            provider = "openai_fim_compatible",
+            n_completions = 1,
+            context_window = 4096,
+            provider_options = {
+                openai_fim_compatible = {
+                    api_key = "OWUI_API_KEY",
+                    name = "Open WebUI",
+                    end_point = (vim.g.llm_open_webui_url or "https://chat.thefij.rocks") .. "/api/completions",
                     model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
                 },
             },
@@ -197,6 +228,7 @@ vim.list_extend(specs, {
                         ollama_qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
                         ollama_gptoss = ollama_chat_adapter("gpt-oss:20b", 100000),
                         anthropic = anthropic_chat_adapter(vim.g.llm_chat_model),
+                        open_webui = open_webui_chat_adapter("unsloth/Qwen3.5-9B-GGUF:Q4_K_M"),
                         opts = {
                             show_presets = false,
                         },
