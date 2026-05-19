@@ -501,6 +501,8 @@ def install_treesitter(upgrade: bool = False):
             "tree-sitter": [
                 "--git-url",
                 "https://github.com/tree-sitter/tree-sitter",
+                "--map-arch",
+                "x86_64=x64",
                 "--extract-files",
                 "tree-sitter",
                 "--exec",
