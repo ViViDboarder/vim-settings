@@ -1,15 +1,16 @@
 -- #selene: allow(mixed_table)
 --
--- Supported llm_providers = copilot | ollama | open_webui | claude_code | anthropic
+-- Supported values for vim.g.llm_provider: github | ollama | open_webui | claude_code | opencode | anthropic | claude | none
 
--- Relies on the following variable:
---      vim.g.llm_provider set to "github" for GitHub Copilot, "ollama" for local LLM (Ollama), or nil/undefined for none
---      vim.g.llm_completion_provider: provider name for llm completions only. Defaults to vim.g.llm_provider
---      vim.g.llm_ollama_url to change the URL for the local llm
---      vim.g.llm_open_webui_url change the url for an OpenAI compatible server
---      vim.g.llm_anthropic_url: url to use for anthropic API
---      vim.g.llm_chat_model to change the chat model used by the local llm
---      vim.g.llm_completion_model to change the completion model used by the local llm, defaults to llm_chat_model
+-- Relies on the following global variables:
+--      vim.g.llm_provider           - Provider name: "github", "ollama", "open_webui", "claude_code", "opencode", "anthropic", "claude", or "none"
+--      vim.g.llm_completion_provider - Provider for completions only (Minuet). Defaults to vim.g.llm_provider
+--      vim.g.llm_ollama_url          - URL for Ollama server (default: "http://localhost:11434")
+--      vim.g.llm_open_webui_url      - URL for OpenAI-compatible server (default: "https://chat.thefij.rocks/api")
+--      vim.g.llm_open_webui_api_key  - API key for the OpenAI-compatible server
+--      vim.g.llm_anthropic_url       - URL for Anthropic API (uses official endpoint if not set)
+--      vim.g.llm_chat_model          - Default chat model (used by adapters; e.g. "qwen3-coder:30b", "opus")
+--      vim.g.llm_completion_model    - Default completion model (defaults to vim.g.llm_chat_model)
 
 local utils = require("utils")
 local specs = {}
@@ -57,7 +58,7 @@ local function open_webui_chat_adapter(model)
         return require("codecompanion.adapters").extend("openai_compatible", {
             env = {
                 url = vim.g.llm_open_webui_url or "https://chat.thefij.rocks/api",
-                api_key = "OWUI_API_KEY",
+                api_key = vim.g.llm_open_webui_api_key or "OWUI_API_KEY",
             },
             schema = {
                 model = {
@@ -112,20 +113,21 @@ end
 --- Returns the CodeCompanion adapter name based on vim.g.llm_provider
 ---@return string the adapter name
 local function codecompanion_adapter()
-    if vim.g.llm_provider == "github" then
+    local provider = vim.g.llm_provider
+    if provider == "github" then
         return "copilot"
-    elseif vim.g.llm_provider == "claude_code" then
-        return "claude_code"
-    elseif vim.g.llm_provider == "anthropic" or vim.g.llm_provider == "claude" then
-        return "anthropic"
-    elseif vim.g.llm_provider == "ollama" then
-        return "ollama"
-    elseif vim.g.llm_provider == "open_webui" then
-        return "open_webui"
+    elseif
+        provider == "ollama"
+        or provider == "open_webui"
+        or provider == "claude_code"
+        or provider == "opencode"
+        or provider == "anthropic"
+        or provider == "claude"
+    then
+        return provider
     end
 
-    vim.notify("Unknown llm_provider: " .. tostring(vim.g.llm_provider), vim.log.levels.WARN)
-
+    vim.notify("Unknown llm_provider: " .. tostring(provider), vim.log.levels.WARN)
     return "unknown"
 end
 
@@ -140,6 +142,8 @@ local function minuet_preset()
     elseif provider == "claude_code" then
         -- Might not be strictly compatible, but worth a shot
         return "claude"
+    elseif provider == "opencode" then
+        return "open_webui"
     elseif provider == "anthropic" or provider == "claude" then
         return "claude"
     elseif provider == "ollama" then
@@ -185,7 +189,7 @@ local function minuet_config(config)
             context_window = 4096,
             provider_options = {
                 openai_fim_compatible = {
-                    api_key = "OWUI_API_KEY",
+                    api_key = vim.g.llm_open_webui_api_key or "OWUI_API_KEY",
                     name = "Open WebUI",
                     end_point = (vim.g.llm_open_webui_url or "https://chat.thefij.rocks") .. "/api/completions",
                     model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
