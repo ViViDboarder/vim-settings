@@ -57,7 +57,7 @@ local function open_webui_chat_adapter(model)
     return function()
         return require("codecompanion.adapters").extend("openai_compatible", {
             env = {
-                url = vim.g.llm_open_webui_url or "https://chat.thefij.rocks/api",
+                url = (vim.g.llm_open_webui_url or "https://chat.thefij.rocks") .. "/api",
                 api_key = vim.g.llm_open_webui_api_key or "OWUI_API_KEY",
             },
             schema = {
@@ -241,7 +241,7 @@ vim.list_extend(specs, {
                         ollama_qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
                         ollama_gptoss = ollama_chat_adapter("gpt-oss:20b", 100000),
                         anthropic = anthropic_chat_adapter(vim.g.llm_chat_model),
-                        open_webui = open_webui_chat_adapter("unsloth/Qwen3.5-9B-GGUF:Q4_K_M"),
+                        open_webui = open_webui_chat_adapter("qwen3.6-coding"),
                         opts = {
                             show_presets = false,
                         },
