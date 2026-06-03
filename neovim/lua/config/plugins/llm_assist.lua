@@ -19,7 +19,10 @@ if not vim.g.llm_provider or vim.g.llm_provider == "none" then
     return specs
 end
 
--- Helper function to create local model adapters for Ollama
+--- Helper function to create local model adapters for Ollama
+---@param model? string the Ollama model to use (defaults to "qwen3-coder:30b")
+---@param num_ctx? number the context window size (defaults to 8192)
+---@return function adapter factory function
 local function ollama_chat_adapter(model, num_ctx)
     if model == nil then
         model = "qwen3-coder:30b"
@@ -46,7 +49,9 @@ local function ollama_chat_adapter(model, num_ctx)
     end
 end
 
--- Helper function to create a local openai adapter
+--- Helper function to create a local OpenAI-compatible adapter (e.g. Open WebUI)
+---@param model string the model to use
+---@return function adapter factory function
 local function open_webui_chat_adapter(model)
     return function()
         return require("codecompanion.adapters").extend("openai_compatible", {
@@ -64,6 +69,8 @@ local function open_webui_chat_adapter(model)
 end
 
 --- Helper function to return an anthropic adapter for CodeCompanion
+---@param model? string the Anthropic model to use (defaults to vim.g.llm_chat_model or "opus")
+---@return function adapter factory function
 local function anthropic_chat_adapter(model)
     if model == nil then
         model = vim.g.llm_chat_model or "opus"
@@ -85,7 +92,9 @@ local function anthropic_chat_adapter(model)
     end
 end
 
--- Helper function to return a claude code adapter with a provided model
+--- Helper function to return a Claude Code adapter with a provided model
+---@param model? string the Claude Code model to use (defaults to vim.g.llm_chat_model or "opus")
+---@return function adapter factory function
 local function claude_code_adapter(model)
     if model == nil then
         model = vim.g.llm_chat_model or "opus"
@@ -100,8 +109,8 @@ local function claude_code_adapter(model)
     end
 end
 
---- Helper that returns the adapter for CodeCompanion to use
----@return string|table the name of the LLM adapter to use
+--- Returns the CodeCompanion adapter name based on vim.g.llm_provider
+---@return string the adapter name
 local function codecompanion_adapter()
     if vim.g.llm_provider == "github" then
         return "copilot"
@@ -120,8 +129,8 @@ local function codecompanion_adapter()
     return "unknown"
 end
 
---- Helper that returns provider name for Minuet
----@return string the name of the preset
+--- Determines which Minuet preset to use based on vim.g.llm_completion_provider or vim.g.llm_provider
+---@return string the name of the Minuet preset ("claude", "ollama", "open_webui", or "unknown")
 local function minuet_preset()
     local provider = vim.g.llm_completion_provider or vim.g.llm_provider
 
