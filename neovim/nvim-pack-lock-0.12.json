@@ -14,7 +14,7 @@
       "src": "https://github.com/vim-scripts/file-line"
     },
     "fzf-lua": {
-      "rev": "3ff77862f6c62f7b850668435ae43aa026de8758",
+      "rev": "988416cc782dfe28bff3f0da9b8c943b236cd86a",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "lazydev.nvim": {
@@ -23,11 +23,11 @@
       "version": "1.0.0 - 2.0.0"
     },
     "lualine.nvim": {
-      "rev": "131a558e13f9f28b15cd235557150ccb23f89286",
+      "rev": "221ce6b2d999187044529f49da6554a92f740a96",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "449cf6ac16fbc5529f834c10e5fc1be7c75c3ffb",
+      "rev": "d29dec4c36be2b41aa10e70938b7b09a03f0bdba",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "none-ls-extras.nvim": {
@@ -39,7 +39,7 @@
       "src": "https://github.com/gbprod/none-ls-shellcheck.nvim"
     },
     "none-ls.nvim": {
-      "rev": "f9d557ac7cd28a3a993b5ea49716498bd540b01f",
+      "rev": "01f8e62ea11603e59ad9ff7afcfa94fd183f76d6",
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
     "nvim-dap": {
@@ -56,7 +56,7 @@
       "src": "https://github.com/rcarriga/nvim-dap-ui"
     },
     "nvim-lspconfig": {
-      "rev": "246572944c2a1e2a646c2e7609ff619b0fe74c18",
+      "rev": "07dff35e7c95288861200b788ef32d6103f107f0",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "quicker.nvim": {
-      "rev": "fc041830fa7cf093786b0d5990d99cf3c7b0c129",
+      "rev": "4a6883cb13fe097a20a046eb55f6dffd239276e3",
       "src": "https://github.com/stevearc/quicker.nvim",
       "version": "1.0.0 - 2.0.0"
     },
