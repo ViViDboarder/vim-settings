@@ -79,11 +79,22 @@ function M.navic()
     return code_loc
 end
 
+function M.minuet_virtual_text()
+    if vim.b.minuet_virtual_text_auto_trigger then
+        return "AI(on)"
+    end
+
+    return ""
+end
+
 -- Add dynamic minuet fidget
-function M.minuet()
+function M.minuet_fidget()
     local minuet_status = { "" }
     utils.try_require("minuet.lualine", function(minuet_line)
-        minuet_status = { minuet_line }
+        minuet_status = {
+            minuet_line,
+            display_on_idle = true,
+        }
     end)
 
     return minuet_status
@@ -193,9 +204,10 @@ function M.config_lualine(theme_name)
             },
             lualine_b = { "FugitiveHead", "diff", M.codecompanion() },
             lualine_c = { { "filename", path = 1 }, M.navic(), M.csv_col },
-            lualine_x = { M.minuet(), M.codecompanion(), M.custom_ffenc, "filetype" },
+            lualine_x = { M.minuet_fidget(), M.codecompanion(), M.custom_ffenc, "filetype" },
             lualine_y = { "progress", "location" },
             lualine_z = {
+                { M.minuet_virtual_text, color = { fg = "#de4f1f" } },
                 { "diagnostics", sources = { "nvim_diagnostic" } },
                 { M.mixed_indent, color = { bg = "#de4f1f" } },
                 { M.trailing_whitespace, color = { bg = "#de4f1f" } },
