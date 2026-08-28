@@ -171,10 +171,6 @@ return {
                     end,
                 },
             },
-            completion = {
-                nvim_cmp = require("utils").is_plugin_installed("cmp"),
-                blink = require("utils").is_plugin_installed("blink.cmp"),
-            },
         }
         require("obsidian").setup(opts)
 
