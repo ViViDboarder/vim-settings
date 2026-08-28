@@ -348,4 +348,16 @@ function M.fs.exists(file_path)
     return result.code == 0
 end
 
+--- Checks if a file is a link and returns the linked path
+---@param file_path string
+---@returns string|nil Returns the target path or nil, if the target is not a link
+function M.fs.readlink(file_path)
+    local result = vim.system({ "readlink", file_path }):wait(100)
+    if result.code ~= 0 then
+        return nil
+    end
+
+    return M.strip(result.stdout)
+end
+
 return M

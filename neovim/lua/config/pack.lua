@@ -51,7 +51,7 @@ local function link_lockfile()
 
     -- Make sure a version_lockfile exists
     if not utils.fs.exists(version_lockfile) then
-        if utils.fs.exists(actual_lockfile) then
+        if utils.fs.exists(actual_lockfile) and utils.fs.readlink(actual_lockfile) == nil then
             print("Warning: Version lockfile does not exist, but actual does. Renaming...")
             if not utils.fs.rename(actual_lockfile, version_lockfile) then
                 return
@@ -65,13 +65,12 @@ local function link_lockfile()
 
     -- Make sure the actual lockfile links to the version lockfile
     if utils.fs.exists(actual_lockfile) then
-        local result = vim.system({ "readlink", actual_lockfile }):wait(100)
-        if result.code ~= 0 or result.stdout == "" then
+        local link_target = utils.fs.readlink(actual_lockfile)
+        if link_target == nil or link_target == "" then
             print("Error: Lockfile was not a link. Check the " .. actual_lockfile)
             return
         end
 
-        local link_target = utils.strip(result.stdout)
         if link_target == version_lockfile then
             -- Lockfile is already pointing to the appropriate place, we can exit
             return
