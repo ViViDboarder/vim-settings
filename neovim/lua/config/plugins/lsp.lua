@@ -18,9 +18,6 @@ function M.config_lsp_ui()
 end
 
 function M.default_attach(client, bufnr, override_capabilities)
-    -- Disable gutentags since we have an LSP
-    vim.g.gutentags_enabled = 0
-
     -- Allow overriding capabilities to avoid duplicate lsps with capabilities
     local server_capabilities = client.server_capabilities
     if override_capabilities ~= nil then
@@ -156,6 +153,9 @@ function M.default_attach(client, bufnr, override_capabilities)
             utils.keymap_set("n", "<leader>t", lazy_fzf("lsp_document_symbols"), { desc = "Find buffer tags" })
         end
         if server_capabilities.workspaceSymbolProvider then
+            -- Disable gutentags since we have an LSP
+            vim.g.gutentags_enabled = 0
+
             finder_keymap("T", lazy_fzf("lsp_live_workspace_symbols"), { desc = "Find tags" })
         end
 
