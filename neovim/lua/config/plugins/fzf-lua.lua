@@ -4,7 +4,7 @@ function M.setup(_, opts)
     -- Override setup and add some keymaps
     if opts == nil then
         opts = {
-            ui_select = true,
+            ui_select = {},
         }
     end
 
