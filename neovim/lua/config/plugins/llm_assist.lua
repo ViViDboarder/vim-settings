@@ -192,7 +192,25 @@ local function minuet_config(config)
                     api_key = vim.g.llm_open_webui_api_key or "OWUI_API_KEY",
                     name = "Open WebUI",
                     end_point = (vim.g.llm_open_webui_url or "https://chat.thefij.rocks") .. "/api/completions",
-                    model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
+                    model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder-7B-instruct",
+                },
+                optional = {
+                    max_tokens = 56,
+                    top_p = 0.9,
+                },
+                -- Llama.cpp does not support the `suffix` option in FIM completion.
+                -- Therefore, we must disable it and manually populate the special
+                -- tokens required for FIM completion.
+                template = {
+                    -- NOTE: Specific fields for qwen2.5-coder
+                    prompt = function(context_before_cursor, context_after_cursor, _)
+                        return "<|fim_prefix|>"
+                            .. context_before_cursor
+                            .. "<|fim_suffix|>"
+                            .. context_after_cursor
+                            .. "<|fim_middle|>"
+                    end,
+                    suffix = false,
                 },
             },
         },
