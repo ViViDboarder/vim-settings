@@ -250,7 +250,7 @@ vim.list_extend(specs, {
                         claude_code_sonnet = claude_code_adapter("sonnet-latest"),
                         claude_code_haiku = claude_code_adapter("haiku-latest"),
                         opts = {
-                            show_presets = false,
+                            show_presets = true,
                         },
                     },
                     http = {
