@@ -143,7 +143,7 @@ local function code_companion_spinner()
     function cc:update_status()
         if self.processing then
             self.spinner_index = (self.spinner_index % spinner_symbols_len) + 1
-            return spinner_symbols[self.spinner_index]
+            return "Agent " .. spinner_symbols[self.spinner_index]
         else
             return nil
         end
@@ -155,7 +155,7 @@ end
 -- Add dynamic CodeCompanion fidget
 function M.codecompanion()
     local codecompanion_status = { "" }
-    utils.try_require("codecompanion.lualine", function(_)
+    utils.try_require("codecompanion", function(_)
         codecompanion_status = { code_companion_spinner() }
     end)
 
