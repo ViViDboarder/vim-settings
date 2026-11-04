@@ -239,6 +239,7 @@ function M.config_lsp()
         "gopls",
         "lua_ls",
         "terraformls",
+        "ty",
     })
 
     if not maybe_lsp_enable("basedpyright") then
