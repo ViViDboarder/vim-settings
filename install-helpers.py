@@ -106,13 +106,13 @@ def should_install_user(command: str, upgrade_user: bool = False) -> bool:
 
 def maybe_upgrade_pipx():
     """
-    Try to upgrade pipx if it's installed.
+    Try to upgrade pipx if it's installed and uv isn't
 
     To simplify installation, I use `pipx upgrade --install`, but some
     systems don't have a new enough version of pipx. If pipx is present,
     this will ensure there is an updated version of pipx installed.
     """
-    if not command_exists("pipx"):
+    if command_exists("uv") or not command_exists("pipx"):
         return
 
     if maybe_run("pipx", "upgrade", "--install", "pipx"):
