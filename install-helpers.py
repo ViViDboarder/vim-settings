@@ -138,6 +138,10 @@ def maybe_pip_install(*packages: str, cmd_packages: dict[str, str]|None = None, 
     if not user_packages:
         return True
 
+    if not library and command_exists("uv"):
+        return all(
+            [maybe_run("uv", "tool", "install", "--upgrade", package) for package in user_packages]
+        )
     if not library and command_exists("pipx"):
         return all(
             [maybe_run("pipx", "upgrade", "--install", package) for package in user_packages]
