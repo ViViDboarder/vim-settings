@@ -238,7 +238,7 @@ def maybe_release_gitter(
 def install_language_servers(langs: set[Language], upgrade: bool = False):
     """Install language servers for requested languages."""
     if Language.PYTHON in langs:
-        _ = maybe_pip_install("basedpyright", upgrade=upgrade)
+        _ = maybe_pip_install("basedpyright", "ty", upgrade=upgrade)
     if Language.RUST in langs:
         _ = maybe_run(
             "rustup",
@@ -301,7 +301,7 @@ def install_linters(langs: set[Language], upgrade: bool = False):
         )
 
     if Language.PYTHON in langs:
-        _ = maybe_pip_install("mypy", upgrade=upgrade)
+        _ = maybe_pip_install("mypy", "ruff", "ty", upgrade=upgrade)
     if Language.CSS in langs:
         _ = maybe_npm_install("csslint", upgrade=upgrade)
     if Language.VIM in langs:
@@ -412,7 +412,7 @@ def install_fixers(langs: set[Language], upgrade: bool = False):
     } & langs:
         _ = maybe_npm_install("prettier", upgrade=upgrade)
     if Language.PYTHON in langs:
-        _ = maybe_pip_install("black", "reorder-python-imports", "isort", upgrade=upgrade)
+        _ = maybe_pip_install("black", "reorder-python-imports", "isort", "ruff", upgrade=upgrade)
     if Language.RUST in langs:
         _ = maybe_run("rustup", "component", "add", "rustfmt")
     if Language.LUA in langs:

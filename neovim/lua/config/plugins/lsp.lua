@@ -204,10 +204,14 @@ local maybe_lsp_enable = function(name_or_list)
         -- Enable a single LSP server.
         return maybe_enable_one(name_or_list)
     else
+        -- Returns if all were enabled rather than any
+        local enabled = true
         -- Handle a list of LSP server names.
         for _, name in ipairs(name_or_list) do
-            maybe_enable_one(name)
+            enabled = enabled and maybe_enable_one(name)
         end
+
+        return enabled
     end
 end
 
@@ -239,12 +243,15 @@ function M.config_lsp()
         "gopls",
         "lua_ls",
         "terraformls",
-        "ty",
     })
 
-    if not maybe_lsp_enable("basedpyright") then
-        -- If basedpyright is not available, enable pyright instead.
-        maybe_lsp_enable("pyright")
+    -- Python LSPs
+    if not maybe_lsp_enable({ "ty", "ruff" }) then
+        -- If ty and ruff aren't available, try basedpyright
+        if not maybe_lsp_enable("basedpyright") then
+            -- If basedpyright is not available, enable pyright instead.
+            maybe_lsp_enable("pyright")
+        end
     end
 
     -- Auto setup mason installed servers
