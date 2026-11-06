@@ -18,6 +18,7 @@ local function get_bookmarks()
         "~/workspace/shoestrap",
         "~/.config/fish",
         "~/Nextcloud/Notes",
+        "~/.config/opencode",
     }
 
     local bookmarks = {}
