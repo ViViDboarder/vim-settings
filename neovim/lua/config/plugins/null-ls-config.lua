@@ -1,25 +1,20 @@
 local M = {}
 local utils = require("utils")
 
-local function disable_formatter_filetypes_for_existing_servers(sources, preserve)
+local function disable_formatter_filetypes_for_existing_servers(sources, override)
     -- Aggregate filetypes with language servers
     local server_filetypes = {}
-    utils.try_require("lspconfig", function(_lsp_config)
-        -- TODO: Fix this. It doesn't work because vim.lsp.config won't resolve unless I have an override
-        -- It doesn't look like there is a way to get "enabled" servers. Might instead need to do something
-        -- less fancy and simply disable any fixers for languages I don't want them running on.
-        local available_servers = vim.lsp.config
+    local available_servers = utils.enabled_lsp_configs()
 
-        for _, server in ipairs(available_servers) do
-            if server.filetypes ~= nil then
-                vim.list_extend(server_filetypes, server.filetypes)
-            end
+    for _, server in ipairs(available_servers) do
+        if server.filetypes ~= nil and not vim.tbl_contains(override or {}, server.name) then
+            vim.list_extend(server_filetypes, server.filetypes)
         end
-    end)
+    end
 
-    -- Remove filetypes for formatters I want to preserve
+    -- Remove filetypes for formatters I want to override
     server_filetypes = vim.tbl_filter(function(ft)
-        return not vim.tbl_contains(preserve or {}, ft)
+        return not vim.tbl_contains(override or {}, ft)
     end, server_filetypes)
 
     local NULL_LS_FORMATTING = require("null-ls").methods.FORMATTING
@@ -77,7 +72,8 @@ function M.configure(options)
             null_ls.builtins.diagnostics.hadolint,
         }
 
-        sources = disable_formatter_filetypes_for_existing_servers(sources, { "python", "lua" })
+        local override = { "pyright", "basedpyright", "lua_ls" }
+        sources = disable_formatter_filetypes_for_existing_servers(sources, override)
 
         -- Setup or configure null_ls
         options.sources = sources

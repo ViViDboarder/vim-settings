@@ -360,4 +360,15 @@ function M.fs.readlink(file_path)
     return M.strip(result.stdout)
 end
 
+function M.enabled_lsp_configs()
+    -- TODO: Can just use `get_configs()` when >= neovim 0.12.6
+    if vim.lsp["get_configs"] ~= nil then
+        return vim.lsp.get_configs({ enabled = true })
+    else
+        return vim.tbl_map(function(v, _)
+            return v.resolved_config
+        end, vim.lsp._enabled_configs)
+    end
+end
+
 return M

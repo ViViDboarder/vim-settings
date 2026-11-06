@@ -258,7 +258,7 @@ function M.config_lsp()
     utils.try_require("mason-lspconfig", function(mason_lspconfig)
         -- Get list of servers that are installed but not set up
         local needs_setup = vim.tbl_filter(function(server)
-            return not vim.tbl_contains(vim.lsp.config, server)
+            return not vim.tbl_contains(utils.enabled_lsp_configs(), server)
         end, mason_lspconfig.get_installed_servers())
 
         -- Setup each server with default config
