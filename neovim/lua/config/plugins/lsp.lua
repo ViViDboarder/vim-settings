@@ -208,7 +208,7 @@ local maybe_lsp_enable = function(name_or_list)
         local enabled = true
         -- Handle a list of LSP server names.
         for _, name in ipairs(name_or_list) do
-            enabled = enabled and maybe_enable_one(name)
+            enabled = maybe_enable_one(name) and enabled
         end
 
         return enabled
