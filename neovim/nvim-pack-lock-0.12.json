@@ -1,11 +1,11 @@
 {
   "plugins": {
     "argonaut.nvim": {
-      "rev": "7f03ad8914d815d6a857158e8443dce987f4c890",
+      "rev": "b4d6b72e6030b590bd2f415e4097cab63804844c",
       "src": "https://git.sr.ht/~foosoft/argonaut.nvim"
     },
     "codecompanion.nvim": {
-      "rev": "fd07e440c115e318031c5f3f8c746f01eb4cac56",
+      "rev": "6794c8bcbe9e8614588749cafb5de29d7fa57c3b",
       "src": "https://github.com/olimorris/codecompanion.nvim",
       "version": "19.0.0 - 20.0.0"
     },
@@ -14,7 +14,7 @@
       "src": "https://github.com/vim-scripts/file-line"
     },
     "fzf-lua": {
-      "rev": "05e44d38de0a79c11fba5f7bf8138791b1dbdd1e",
+      "rev": "11357ee24a9f092b1db503237eb57e2a11e48434",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "lazydev.nvim": {
@@ -27,7 +27,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "minuet-ai.nvim": {
-      "rev": "3b0a4c5f97b7124d94302c608fbe01c0270d4fbe",
+      "rev": "50bf63b031c0391e926fdf0b3d044d37846e6e34",
       "src": "https://github.com/milanglacier/minuet-ai.nvim"
     },
     "none-ls-extras.nvim": {
@@ -39,7 +39,7 @@
       "src": "https://github.com/gbprod/none-ls-shellcheck.nvim"
     },
     "none-ls.nvim": {
-      "rev": "c4b82bb63b13856ba4d6b971b7aad3bb38fc6fe2",
+      "rev": "0b281893e36fe147077b49f022bf9cd78af3ad12",
       "src": "https://github.com/nvimtools/none-ls.nvim"
     },
     "nvim-dap": {
@@ -56,7 +56,7 @@
       "src": "https://github.com/rcarriga/nvim-dap-ui"
     },
     "nvim-lspconfig": {
-      "rev": "684cb45c2faa24ce463b4fe9aaf011bfe1e0fb26",
+      "rev": "993d048db0d83d8e8ba3f9cb376456321acdcce3",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {
@@ -69,11 +69,11 @@
       "version": "'4916d6592ede8c07973490d9322f187e07dfefac'"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "898ee307df58f854d11cd7edd06472574d48014e",
+      "rev": "5c7b0263797dfd1bd6202f2b219f3b53a80b2187",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "obsidian.nvim": {
-      "rev": "69fe7c6bf61a5222b5061a9a9dfc5023f2ec0fdc",
+      "rev": "15af492b64f4677959fe95008f1d5b782fe1f86a",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim",
       "version": "3.0.0 - 4.0.0"
     },
@@ -87,7 +87,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "render-markdown.nvim": {
-      "rev": "f422cb5c6855f150e2ddcfaf44e7157b98b34f6a",
+      "rev": "640a3ec6d538bad17c328be373c7cad0293d9589",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim",
       "version": "8.0.0 - 9.0.0"
     },
@@ -115,7 +115,7 @@
     "vim-fugitive": {
       "rev": "96c1009fcf8ce60161cc938d149dd5a66d570756",
       "src": "https://github.com/tpope/vim-fugitive",
-      "version": "3.0.0 - 4.0.0"
+      "version": "'v3.7'"
     },
     "vim-grepper": {
       "rev": "74284df0abf7c3f9d57e3416129dbeeba36dc86b",
