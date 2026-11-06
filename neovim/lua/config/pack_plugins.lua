@@ -100,7 +100,8 @@ packle.add({
 packle.add({
     {
         src = "https://github.com/tpope/vim-fugitive",
-        version = vim.version.range("^3"),
+        -- version = vim.version.range("^3"),
+        version = "v3.7",
         after = function()
             utils.keymap_set("n", "gb", "<cmd>Git blame<CR>", { desc = "Git blame" })
             utils.keymap_set("n", "gc", "<cmd>Git commit<CR>", { desc = "Git commit" })
