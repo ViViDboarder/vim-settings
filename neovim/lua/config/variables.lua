@@ -2,7 +2,7 @@
 vim.g.minimal = false
 vim.g.install_sourcegraph = false
 
--- See neovim/lua/lazy_specs/llm_assist.lua for explanations
+-- See neovim/lua/config/plugins/llm_assist.lua for explanations
 vim.g.llm_provider = nil
 vim.g.llm_completion_provider = nil
 vim.g.llm_chat_model = nil

@@ -1,15 +1,14 @@
 -- #selene: allow(mixed_table)
 --
--- Supported values for vim.g.llm_provider: github | ollama | open_webui | claude_code | opencode | anthropic | claude | none
+-- Supported values for vim.g.llm_provider: github | open_webui | claude_code | opencode | anthropic | claude | none
 
 -- Relies on the following global variables:
---      vim.g.llm_provider           - Provider name: "github", "ollama", "open_webui", "claude_code", "opencode", "anthropic", "claude", or "none"
+--      vim.g.llm_provider            - Provider name: "github", "open_webui", "claude_code", "opencode", "anthropic", "claude", or "none"
 --      vim.g.llm_completion_provider - Provider for completions only (Minuet). Defaults to vim.g.llm_provider
---      vim.g.llm_ollama_url          - URL for Ollama server (default: "http://localhost:11434")
 --      vim.g.llm_open_webui_url      - URL for OpenAI-compatible server (default: "https://chat.thefij.rocks/api")
 --      vim.g.llm_open_webui_api_key  - API key for the OpenAI-compatible server
 --      vim.g.llm_anthropic_url       - URL for Anthropic API (uses official endpoint if not set)
---      vim.g.llm_chat_model          - Default chat model (used by adapters; e.g. "qwen3-coder:30b", "opus")
+--      vim.g.llm_chat_model          - Default chat model (used by adapters; e.g. "opus")
 --      vim.g.llm_completion_model    - Default completion model (defaults to vim.g.llm_chat_model)
 
 local utils = require("utils")
@@ -18,36 +17,6 @@ local specs = {}
 -- Only proceed if a provider is set
 if not vim.g.llm_provider or vim.g.llm_provider == "none" then
     return specs
-end
-
---- Helper function to create local model adapters for Ollama
----@param model? string the Ollama model to use (defaults to "qwen3-coder:30b")
----@param num_ctx? number the context window size (defaults to 8192)
----@return function adapter factory function
-local function ollama_chat_adapter(model, num_ctx)
-    if model == nil then
-        model = "qwen3-coder:30b"
-    end
-    if num_ctx == nil then
-        num_ctx = 8192
-    end
-
-    return function()
-        return require("codecompanion.adapters").extend("ollama", {
-            env = {
-                url = vim.g.llm_ollama_url or "http://localhost:11434",
-            },
-            opts = {
-                stream = true,
-            },
-            schema = {
-                model = {
-                    default = model,
-                    num_ctx = { default = num_ctx },
-                },
-            },
-        })
-    end
 end
 
 --- Helper function to create a local OpenAI-compatible adapter (e.g. Open WebUI)
@@ -117,8 +86,7 @@ local function codecompanion_adapter()
     if provider == "github" then
         return "copilot"
     elseif
-        provider == "ollama"
-        or provider == "open_webui"
+        provider == "open_webui"
         or provider == "claude_code"
         or provider == "opencode"
         or provider == "anthropic"
@@ -132,7 +100,7 @@ local function codecompanion_adapter()
 end
 
 --- Determines which Minuet preset to use based on vim.g.llm_completion_provider or vim.g.llm_provider
----@return string the name of the Minuet preset ("claude", "ollama", "open_webui", or "unknown")
+---@return string the name of the Minuet preset ("claude", "open_webui", or "unknown")
 local function minuet_preset()
     local provider = vim.g.llm_completion_provider or vim.g.llm_provider
 
@@ -146,8 +114,6 @@ local function minuet_preset()
         return "open_webui"
     elseif provider == "anthropic" or provider == "claude" then
         return "claude"
-    elseif provider == "ollama" then
-        return "ollama"
     elseif provider == "open_webui" then
         return "open_webui"
     end
@@ -167,19 +133,6 @@ local function minuet_config(config)
                 claude = {
                     model = vim.g.llm_completion_model or vim.g.llm_chat_model,
                     end_point = vim.g.llm_anthropic_url,
-                },
-            },
-        },
-        ollama = {
-            provider = "openai_fim_compatible",
-            n_completions = 1,
-            context_window = 4096,
-            provider_options = {
-                openai_fim_compatible = {
-                    api_key = "TERM",
-                    name = "Ollama",
-                    end_point = (vim.g.llm_ollama_url or "http://localhost:11434") .. "/v1/completions",
-                    model = vim.g.llm_completion_model or vim.g.llm_chat_model or "qwen2.5-coder:7b",
                 },
             },
         },
@@ -254,10 +207,6 @@ vim.list_extend(specs, {
                         },
                     },
                     http = {
-                        ollama = ollama_chat_adapter(vim.g.llm_chat_model),
-                        ollama_qwen2_5_coder = ollama_chat_adapter("qwen2.5-coder:7b", 16384),
-                        ollama_qwen3_coder = ollama_chat_adapter("qwen3-coder:30b", 100000),
-                        ollama_gptoss = ollama_chat_adapter("gpt-oss:20b", 100000),
                         anthropic = anthropic_chat_adapter(vim.g.llm_chat_model),
                         open_webui = open_webui_chat_adapter("qwen3.6-coding"),
                         opts = {
@@ -279,7 +228,7 @@ vim.list_extend(specs, {
     },
 })
 
--- For local llms, we use minuet-ai.nvim since it will talk to Ollama
+-- For non-GitHub providers, use minuet-ai.nvim for completions
 if vim.g.llm_provider ~= "github" then
     table.insert(specs, {
         src = "https://github.com/milanglacier/minuet-ai.nvim",
@@ -360,12 +309,6 @@ else
                     return utils.t("<Right>")
                 end
             end
-
-            --[[
-            -- Point to local copilot proxy if using ollama
-            vim.g.copilot_proxy = "http://localhost:11435"
-            vim.g.copilot_proxy_strict_ssl = false
-            --]]
 
             vim.g.copilot_no_tab_map = false
             utils.keymap_set("i", "<C-F>", copilot_accept, { expr = true, replace_keycodes = false, noremap = true })
